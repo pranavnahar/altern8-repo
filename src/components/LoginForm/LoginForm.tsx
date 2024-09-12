@@ -33,12 +33,11 @@ const LoginForm = () => {
 
   const handleLogin = async () => {
     const cokkieStatus = await create(formFields);
-    
+
     if (cokkieStatus === "success") {
       router.push("/");
     }
   };
-
 
   return (
     <motion.div className="flex flex-col justify-center items-center min-h-screen">
@@ -54,9 +53,7 @@ const LoginForm = () => {
         whileHover={{ scale: 1.03, opacity: 1 }}
         className="h-[75vh] w-full rounded-3xl py-10 px-8 flex flex-col justify-around max-w-sm [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] shadow-md"
       >
-        <div className=" self-center">
-          <AnimatedLogo />
-        </div>
+        <AnimatedLogo />
 
         <div className="h-[65%] flex flex-col justify-between">
           <div className="mb-5">
@@ -116,7 +113,7 @@ const LoginForm = () => {
 
           <div className="mt-4 text-center text-white text-sm">
             <span>Not registered yet? </span>
-            <a href="#" className="text-blue-600 hover:underline">
+            <a href="/register" className="text-blue-600 hover:underline">
               Register Here
             </a>
           </div>

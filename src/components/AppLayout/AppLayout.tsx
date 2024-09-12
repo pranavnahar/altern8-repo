@@ -14,7 +14,7 @@ const AppLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <RecoilRoot>
       <div className="[background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] min-h-[100vh]">
-        {pathName !== "/login" && <Header />}
+        {pathName !== "/login" && pathName !== "/register" ? <Header /> : null}
         {children}
         <Toaster />
       </div>

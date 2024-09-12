@@ -14,7 +14,7 @@ const AnimatedLogo: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className=" self-center">
       <Link
         className="[text-decoration:none] relative tracking-[6px] font-semibold text-5xl sm:text-21xl lg:text-10xl header_font font-exo"
         href="/"
