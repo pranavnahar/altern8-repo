@@ -1,11 +1,16 @@
 "use client";
 import { motion } from "framer-motion";
-import React, { useState } from "react";
+import React from "react";
 import AnimatedLogo from "../Header/AnimatedLogo";
 import Stepper from "./Stepper";
-import RegisterField from "./RegisterField";
+//import RegisterField from "./RegisterField";
+//import { getUserState } from "@/hooks/useUserState";
+//import BankDetails from "../Steps/SelectPrimaryBankAccount";
+import Pan from "../Steps/Pan";
 
 const Register = () => {
+  // const state = getUserState()
+
   return (
     <motion.div className="flex flex-col justify-center items-center min-h-screen ">
       <motion.div
@@ -22,7 +27,7 @@ const Register = () => {
       >
         <AnimatedLogo />
         <Stepper currentStep={1} />
-        <RegisterField />
+        <Pan />
       </motion.div>
     </motion.div>
   );

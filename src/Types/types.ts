@@ -1,6 +1,6 @@
 export interface authTypes {
-  first_name: string;
-  phone_number: string;
+  firstName: string;
+  phoneNumber: string;
   password: string;
   password2: string;
 }
@@ -8,4 +8,10 @@ export interface authTypes {
 export interface authSVGProps {
   showPassword: boolean;
   setShowPassword: (s: boolean) => void;
+}
+
+export interface UserCredentials {
+  phoneNumber: string;
+  password: string;
+  otp: string;
 }

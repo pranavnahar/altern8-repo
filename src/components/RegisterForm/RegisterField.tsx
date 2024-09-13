@@ -4,19 +4,94 @@ import ToggleSVG from "./ToggleSVG";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "../ui/checkbox";
 import Link from "next/link";
+import {
+  nameValidation,
+  passwordValidation,
+  validatePhoneNumber,
+} from "@/Utils/Validators";
+import { showToast } from "@/Utils/showToast";
+//import { apiUrl } from "@/Utils/auth";
 
 const RegisterField = () => {
   const [userData, setUserData] = useState<authTypes>({
-    first_name: "",
-    phone_number: "",
+    firstName: "",
+    phoneNumber: "",
     password: "",
     password2: "",
   });
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password2Visible, setPassword2Visible] = useState(false);
-  const handleChange = (e: any) => {
+  const [loading, Setloading] = useState<boolean>(false);
+  console.log(loading);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
+  };
+
+  const handlesubmit = async () => {
+    if (!nameValidation(userData.firstName))
+      return showToast("Name not validated");
+    if (!validatePhoneNumber(userData.phoneNumber))
+      return showToast("Number must be of 10 digits");
+    if (
+      !passwordValidation(userData.password) &&
+      !passwordValidation(userData.password2)
+    )
+      return showToast("Password is not validated");
+
+    try {
+      const body = {
+        first_name: userData.firstName,
+        phone_number: userData.phoneNumber,
+        password: userData.password,
+        reenter_password: userData.password2,
+      };
+      Setloading(true);
+      const response = await fetch(`http://127.0.0.1:8000/user-api/register/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      // if phone number is already registered
+      if (response.status === 409) {
+        showToast(`Phone number is already registered. Please login`, "info");
+
+        // Hold for 3 seconds before redirecting to /login
+        setTimeout(() => {
+          window.location.replace("/login");
+        }, 3000);
+      } else if (response.ok) {
+        let server_message = await response.json();
+        console.log(
+          `Register Form data submitted successfully!`,
+          server_message
+        );
+
+        showToast(`Submission Successful`, "info");
+      } else {
+        let server_error = await response.json();
+        console.error(`Failed to submit register form data.`, server_error);
+
+        console.log(server_error.message);
+        showToast(`${server_error.message.phone_number[0]}`, "info");
+
+        if (!server_error.message.phone_number) {
+          showToast(`Submission Failed`, "info");
+        }
+      }
+    } catch (error) {
+      console.error(
+        `Error submitting register form data, Error in fetching api) :`,
+        error
+      );
+      showToast(`Submission failed, system error!`, "info");
+    } finally {
+      Setloading(false);
+    }
   };
 
   return (
@@ -27,8 +102,8 @@ const RegisterField = () => {
       <div className="mt-2 py-1 flex text-gray-200">
         <input
           onChange={handleChange}
-          value={userData["first_name"] || ""}
-          name="first_name"
+          value={userData["firstName"] || ""}
+          name="firstName"
           placeholder="First Name"
           className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
           type="text"
@@ -41,8 +116,8 @@ const RegisterField = () => {
       <div className="mt-2 py-1 flex text-gray-200">
         <input
           onChange={handleChange}
-          value={userData["phone_number"] || ""}
-          name="phone_number"
+          value={userData["phoneNumber"] || ""}
+          name="phoneNumber"
           placeholder="Phone Number"
           className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
           type="text"
@@ -107,9 +182,10 @@ const RegisterField = () => {
           htmlFor="terms"
           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
-          I agree to the{" "}
-          <span className=" text-indigo-600">terms and conditions</span> and{" "}
-          <span className=" text-indigo-600"> privacy policy</span>
+          I agree to the
+          <span className=" text-indigo-600">
+            terms and conditions
+          </span> and <span className=" text-indigo-600"> privacy policy</span>
         </label>
       </div>
       <div className=" flex justify-around items-center mt-2">
@@ -122,6 +198,7 @@ const RegisterField = () => {
         <Button
           variant="secondary"
           className=" mt-4 bg-blue-500 hover:bg-blue-800 text-white"
+          onClick={() => handlesubmit()}
         >
           CONFIRM
         </Button>
