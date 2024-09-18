@@ -1,3 +1,6 @@
+import { apiUrl } from "@/Utils/auth";
+import { useRouter } from "next/navigation";
+import { parseCookies } from "nookies";
 import { createContext, useContext, useState, ReactNode } from "react";
 
 interface StepperContextType {
@@ -9,7 +12,7 @@ interface StepperContextType {
   showHelpPage: boolean;
   setShowHelpPage: (show: boolean) => void;
   handleClickHelp: () => void;
-  getRegistrationState: () => void;
+  getRegistrationState: (stateName?: string, currentPage?: string) => void;
   apiFailedIcon: boolean;
   setApiFailedIcon: (failed: boolean) => void;
 }
@@ -45,13 +48,74 @@ export const StepperProvider = ({ children }: StepperProviderProps) => {
   const [loading, setLoading] = useState(false);
   const [showHelpPage, setShowHelpPage] = useState(false);
   const [apiFailedIcon, setApiFailedIcon] = useState(false);
+  const router = useRouter();
 
   const handleClickHelp = () => {
-    // Your logic for handling help click
+    setShowHelpPage(true);
   };
 
-  const getRegistrationState = () => {
-    // Your logic for getting registration state
+  const setRegistrationState = async (
+    stateName?: string,
+    currentPage?: string
+  ) => {
+    if (stateName === "selectedPages") {
+      const selectedPages = JSON.parse(localStorage.getItem("selectedPages")!);
+      if (selectedPages && currentPage) {
+        const currentPageIndex = selectedPages.indexOf(currentPage);
+        const nextPage = selectedPages[currentPageIndex + 1];
+
+        if (nextPage) {
+          return setRegistrationState(nextPage);
+        } else {
+          return setRegistrationState("Final");
+        }
+      }
+    }
+
+    let accessToken = parseCookies().accessTokenForRegister;
+    if (!accessToken || accessToken.length < 5) {
+      setCurrentStep(1);
+    } else {
+      try {
+        setLoading(true);
+        const response = await fetch(`${apiUrl}/user-api/states/`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        if (response.status === 401) {
+          router.push("/login");
+        }
+
+        if (response.ok) {
+          let server_message = await response.json();
+          const registration_step = server_message.user_state;
+          console.log(
+            `user step fetched successfully! ${registration_step}`,
+            server_message
+          );
+          setRegistrationState(registration_step);
+        } else {
+          let server_error = await response.json();
+          console.error(
+            `Failed to fetch user state from backend`,
+            server_error
+          );
+        }
+      } catch (error) {
+        console.error(`Failed to fetch user state from backend`, error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const getRegistrationState = async (
+    stateName?: string,
+    currentPage?: string
+  ) => {
+    await setRegistrationState(stateName, currentPage);
   };
 
   return (

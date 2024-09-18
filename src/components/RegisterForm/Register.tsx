@@ -13,21 +13,16 @@ import SelectPrimaryBankAccount from "../../components/Steps/SelectPrimaryBankAc
 import ITR from "../../components/Steps/ITR";
 import PAN from "../../components/Steps/Pan";
 import GST from "../../components/Steps/GST";
-//import BureauReport from "../components/register/steps/BureauReport";
-//import Accounting from "../components/register/steps/Accounting";
-//import Ecommerce from "../components/register/steps/Ecommerce";
-//import Pos from "../components/register/steps/Pos";
-//import Youtube from "../components/register/steps/Youtube";
-//import UploadContract from "../components/register/steps/UploadContract";
-//import Questions from "../components/register/steps/Questions";
-//import Udyam from "../components/register/steps/Udyam";
-//import ExporterUpload from "../components/register/steps/ExporterUpload";
-//import Pending from "../components/register/steps/Pending";
-import { ToastContainer } from "react-toastify"; // for alert message
+//import { ToastContainer } from "react-toastify"; // for alert message
 import { motion } from "framer-motion"; // for animation
-//import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import LinearBuffer from "../../components/LinearBuffer"; //for progress animation
+import POC from "../Steps/POC";
+import BureauReport from "../Steps/BereauReport";
+import AuthorizationCompliance from "../Steps/AuthorizationCompliance";
+import UploadContract from "../Steps/UploadContract";
+import BankDetails from "../Steps/BankDetails";
+import HelpPage from "@/app/help/page";
 //import HelpPage from "../components/help/HelpPage";
 //import AuthorizationCompliance from "@/components/register/steps/AuthorizationCompliance";
 
@@ -36,28 +31,29 @@ const Register = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [apiFailedIcon, setApiFailedIcon] = useState(false); //to display cross instead of tick in stepper , where any api failed and manually upload require
   const [showHelpPage, setShowHelpPage] = useState(false); // display help page
-  const [loading, setLoading] = useState(false); //for loading animation
+  const [loading, setLoading] = useState(false); //for loading animation;
 
   const steps = [
     "Register",
     "POC",
-    "Questions",
     "Bank Details",
     "Select Bank",
     "PAN",
     "ITR",
     "Bureau Report",
     "GST",
-    "Select Invoice",
     "Accounting Data",
-    "Ecommerce",
-    "POS",
-    "Youtube",
+    "RERA",
     "Udyam",
     "Upload Contract",
-    "Exporter Upload",
     "Authorization Compliance",
-    "Final",
+    // "Ecommerce",
+    // "POS",
+    // "Youtube",
+
+    // "Exporter Upload",
+
+    // "Final",
   ]; //registration steps
 
   // set current page state if stepName is provided
@@ -130,7 +126,7 @@ const Register = () => {
 
           if (response.ok) {
             let server_message = await response.json();
-            const registration_step = server_message.seller_state;
+            const registration_step = server_message.user_state;
             console.log(
               `Seller step fetched successfully! ${registration_step}`,
               server_message
@@ -163,24 +159,18 @@ const Register = () => {
       case 1:
         return <RegisterField />;
       case 2:
-        // return <POC />;
-        return <></>;
+        return <POC />;
       case 3:
-        // return <Questions />;
-        return <></>;
+        return <BankDetails />;
       case 4:
-        // return <AccountAggregator />;
-        return <></>;
-      case 5:
         return <SelectPrimaryBankAccount />;
-      case 6:
+      case 5:
         return <PAN />;
-      case 7:
+      case 6:
         return <ITR />;
+      case 7:
+        return <BureauReport />;
       case 8:
-        // return <BureauReport />;
-        return <></>;
-      case 9:
         return <GST />;
       // case 10:
       //   return <SelectInvoice />;
@@ -194,12 +184,12 @@ const Register = () => {
       //   return <Youtube />;
       // case 15:
       //   return <Udyam />;
-      // case 16:
-      //   return <UploadContract />;
+      case 16:
+        return <UploadContract />;
       // case 17:
       //   return <ExporterUpload />;
-      // case 18:
-      //   return <AuthorizationCompliance />;
+      case 18:
+        return <AuthorizationCompliance />;
       // case 19:
       //   return <Pending />;
       default:
@@ -260,19 +250,19 @@ const Register = () => {
                 {displayStep(currentStep)}
               </div>
             </div>
-
-            <ToastContainer />
+            {/* 
+            <ToastContainer /> */}
           </StepperContext.Provider>
         </motion.div>
       </div>
       {/* )} */}
 
-      {/* {showHelpPage && (
+      {showHelpPage && (
         <HelpPage
-          showHelpPage={showHelpPage}
-          setShowHelpPage={setShowHelpPage}
+        // showHelpPage={showHelpPage}
+        // setShowHelpPage={setShowHelpPage}
         />
-      )} */}
+      )}
     </div>
   );
 };

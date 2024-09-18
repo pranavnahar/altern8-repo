@@ -7,6 +7,7 @@ import { StepperContext } from "../../Contexts/StepperContext";
 import Cookies from "js-cookie";
 import { Button } from "@mui/material";
 import { showToast } from "../../Utils/showToast";
+import { useSearchParams } from "next/navigation";
 
 const Register = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -15,20 +16,19 @@ const Register = () => {
     phoneNumber: "",
     password: "",
     password2: "",
-    //referredBy: "",
+    referredBy: "",
   });
   const { currentStep, steps, setLoading, getRegistrationState } =
     useContext(StepperContext);
-  // const router = useRouter();
+  const search = useSearchParams();
   const [termsAccepted, setTermsAccepted] = useState(true);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password2Visible, setPassword2Visible] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showWarningText, setShowWarningText] = useState(false);
 
-  // getting referral code from url
-  // userData.referredBy = router.query.referal_code
-
+  //getting referral code from url
+  userData.referredBy = search.get("referal_code")!;
   // handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -60,7 +60,7 @@ const Register = () => {
         phone_number: userData.phoneNumber ? userData.phoneNumber.trim() : "",
         password: userData.password ? userData.password.trim() : "",
         reenter_password: userData.password2 ? userData.password2.trim() : "",
-        //referred_by: userData.referredBy ? userData.referredBy.trim() : "",
+        referred_by: userData.referredBy ? userData.referredBy.trim() : "",
       };
 
       // password validation

@@ -16,7 +16,7 @@ const SelectPrimaryBankAccount = () => {
     setCurrentStep,
     steps,
     setLoading,
-    // getRegistrationState,
+    getRegistrationState,
   } = useContext(StepperContext);
 
   // Handle token
@@ -122,7 +122,7 @@ const SelectPrimaryBankAccount = () => {
             showToast(`Submission Successful`, "info");
 
             // change the step after click and submitting the data
-            //getRegistrationState();
+            getRegistrationState();
           } else {
             let server_error = await response.json();
             console.error(

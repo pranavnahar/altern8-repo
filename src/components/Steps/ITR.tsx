@@ -22,8 +22,8 @@ const ITR = () => {
     setCurrentStep,
     steps,
     setLoading,
-    //getRegistrationState,
-    //setApiFailedIcon,
+    getRegistrationState,
+    setApiFailedIcon,
   } = useContext(StepperContext);
 
   // if the system fails to get ITR via api
@@ -87,7 +87,7 @@ const ITR = () => {
 
     if (direction !== "next") {
       newStep--;
-      //setApiFailedIcon(false);
+      setApiFailedIcon(false);
       setCurrentStep(newStep);
     } else if (direction === "next") {
       if (!needManualUpload) {
@@ -137,7 +137,7 @@ const ITR = () => {
               showToast(`Submission Successful`, "info");
 
               // change the step after click and submitting the data
-              //getRegistrationState();
+              getRegistrationState();
             } else {
               let server_error = await response.json();
               console.error(`Failed to submit ITR data`, server_error);
@@ -148,7 +148,7 @@ const ITR = () => {
 
               if (externalApiErrorCounts > 1) {
                 setNeedManualUpload(true);
-                //setApiFailedIcon(true);
+                setApiFailedIcon(true);
               }
             }
           }
@@ -160,7 +160,7 @@ const ITR = () => {
           showToast(`Submission failed, system error!`, "info");
 
           setNeedManualUpload(true);
-          //setApiFailedIcon(true);
+          setApiFailedIcon(true);
         } finally {
           setLoading(false);
         }
@@ -251,10 +251,10 @@ const ITR = () => {
           showToast(`Files uploaded successfully`, "info");
 
           // add a tick in the stepper instead of red cross
-          //setApiFailedIcon(false);
+          setApiFailedIcon(false);
 
           // change the step after click and submitting the data
-          //getRegistrationState();
+          getRegistrationState();
         } else {
           const responseData = await response.json();
           console.log(responseData);

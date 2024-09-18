@@ -28,7 +28,7 @@ const GST = () => {
     setCurrentStep,
     steps,
     setLoading,
-    //getRegistrationState,
+    getRegistrationState,
   } = useContext(StepperContext);
   const [otpSent, setOtpSent] = useState(false);
   const [otpTimer, setOtpTimer] = useState(10);
@@ -259,7 +259,7 @@ const GST = () => {
         setAtleastOneGstinSubmitted(true);
 
         if (atleastOneGstinSubmitted) {
-          //getRegistrationState();
+          getRegistrationState();
         }
       } else {
         let server_error = await response.json();

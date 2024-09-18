@@ -21,7 +21,7 @@ const PAN = () => {
     setCurrentStep,
     steps,
     setLoading,
-    //getRegistrationState,
+    getRegistrationState,
   } = useContext(StepperContext);
 
   // Handle token
@@ -126,7 +126,7 @@ const PAN = () => {
             showToast(`Submission Successful`, "info");
 
             // change the step after click and submitting the data
-            //getRegistrationState();
+            getRegistrationState();
           } else {
             let server_error = await response.json();
             console.error(`PAN page data submission failed`, server_error);
