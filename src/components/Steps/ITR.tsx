@@ -6,7 +6,7 @@ import { StepperContext } from "../../Contexts/StepperContext";
 import { parseCookies } from "nookies";
 import { useDropzone } from "react-dropzone";
 import { showToast } from "../../Utils/showToast";
-//import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const ITR = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -30,9 +30,11 @@ const ITR = () => {
   // then user will manually uploads the data
   const [needManualUpload, setNeedManualUpload] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
-  const [filePasswords, setFilePasswords] = useState<{ fileName: string }>({
-    fileName: "",
-  });
+  const [filePasswords, setFilePasswords] = useState<{ [key: string]: string }>(
+    {
+      fileName: "",
+    }
+  );
   const [externalApiErrorCounts, setExternalApiErrorCounts] = useState(0);
 
   // Handle token
@@ -45,6 +47,7 @@ const ITR = () => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
+  const router = useRouter();
 
   const GetItrUsername = async () => {
     try {
@@ -57,7 +60,7 @@ const ITR = () => {
 
       // if unauthorized then push to login page
       if (response.status === 401) {
-        window.location.replace("/login");
+        router.push("/login");
       }
 
       if (response.ok) {
@@ -65,7 +68,7 @@ const ITR = () => {
         const panNumber = responseData.data;
         setUserData((prevData) => ({
           ...prevData,
-          itr_username: panNumber,
+          itrUsername: panNumber,
         }));
       } else {
         console.log("Unable to fetch itr username");
@@ -127,7 +130,7 @@ const ITR = () => {
 
             // if unauthorized then push to login page
             if (response.status === 401) {
-              window.location.replace("/login");
+              router.push("/login");
             }
 
             if (response.ok) {
@@ -241,7 +244,7 @@ const ITR = () => {
 
         // if unauthorized then push to login page
         if (response.status === 401) {
-          window.location.replace("/login");
+          router.push("/login");
         }
 
         if (response.ok) {
@@ -290,7 +293,7 @@ const ITR = () => {
               <input
                 onChange={handleChange}
                 value={userData.itrUsername || ""}
-                name="itr_username"
+                name="itrUsername"
                 placeholder="ITR Username"
                 className="py-1   uppercase w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
                 type="text"
@@ -436,15 +439,8 @@ const ITR = () => {
       {/* Navigation controls  */}
       {currentStep !== steps.length && (
         <div className="container flex flex-col ">
-          <div className="flex justify-around mt-4 mb-8">
+          <div className="flex justify-center items-center mt-4 mb-8">
             {/* back button  */}
-            <button
-              onClick={() => handleClick()}
-              className="bg-white text-slate-600 uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer border-2 border-slate-300 hover:bg-slate-700 hover:text-white transition duration-200 ease-in-out ${
-                            "
-            >
-              Back
-            </button>
 
             {/* next button  */}
             <button

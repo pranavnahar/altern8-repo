@@ -82,15 +82,9 @@ const POC = () => {
       if (response.ok) {
         const responseData = await response.json();
         console.log(responseData);
-        const newPocDetails: {
-          id: string;
-          name: string;
-          email: string;
-          phoneNumber: string;
-          designation: string;
-        }[] = responseData.map(
+        const newPocDetails = responseData.map(
           (poc: {
-            id: number;
+            id: string;
             name: string;
             email: string;
             phone_number: string;
@@ -107,10 +101,7 @@ const POC = () => {
         if (newPocDetails.length < 1) {
           setShowAddDetails(true);
         }
-        setPocDetails((prevPocDetails) => [
-          ...prevPocDetails,
-          ...newPocDetails,
-        ]);
+        setPocDetails(() => [...newPocDetails]);
       } else {
         console.log("user don't have any poc details");
       }
@@ -356,7 +347,7 @@ const POC = () => {
     if (pocDetails && pocDetails.length === 0) {
       await submitAddedPOC();
     } else if (pocDetails && pocDetails.length > 0) {
-      getRegistrationState("Questions");
+      getRegistrationState("Bank Details");
     } else {
       showToast(`Please add atleast one point of contact detail`, "info");
     }

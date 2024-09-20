@@ -8,13 +8,8 @@ import { showToast } from "../../Utils/showToast";
 
 const UploadContract = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const {
-    currentStep,
-    setCurrentStep,
-    steps,
-    setLoading,
-    getRegistrationState,
-  } = useContext(StepperContext);
+  const { currentStep, steps, setLoading, getRegistrationState } =
+    useContext(StepperContext);
 
   const [contractFiles, setContractFiles] = useState<File[]>([]);
   const [pdcFiles, setPdcFiles] = useState<File[]>([]);
@@ -26,31 +21,25 @@ const UploadContract = () => {
     setCheckbox(!checkbox);
   };
 
-  const handleBackClick = () => {
-    let newStep = currentStep;
-    newStep--;
-    setCurrentStep(newStep);
-  };
-
   const handleNextClick = async () => {
     try {
       if (contractFiles.length > 0) {
         await handleFileUpload(
           contractFiles,
-          `${apiUrl}/seller-api/upload-contract/`
+          `${apiUrl}/user-api/upload-contract/`
         );
       }
       if (pdcFiles.length > 0) {
-        await handleFileUpload(pdcFiles, `${apiUrl}/seller-api/upload-pdc/`);
+        await handleFileUpload(pdcFiles, `${apiUrl}/user-api/upload-pdc/`);
       }
       if (checkbox === true) {
-        await handleCheckboxSubmit(`${apiUrl}/seller-api/referral-checkbox/`);
+        await handleCheckboxSubmit(`${apiUrl}/user-api/referral-checkbox/`);
       }
     } catch (error) {
       console.error(`Error uploading files, (${currentStep}) :`, error);
       showToast(`Error uploading files`, "info");
     } finally {
-      getRegistrationState("selectedPages", "Upload Contract");
+      getRegistrationState();
     }
   };
 
@@ -146,7 +135,7 @@ const UploadContract = () => {
         "info"
       );
     }
-    setContractFiles(filteredFiles);
+    setContractFiles((prevFiles) => [...prevFiles, ...filteredFiles]);
   }, []);
 
   const onDropPdcFiles = useCallback((acceptedFiles: File[]) => {
@@ -162,7 +151,7 @@ const UploadContract = () => {
         "info"
       );
     }
-    setPdcFiles(filteredFiles);
+    setPdcFiles((prevFiles) => [...prevFiles, ...filteredFiles]);
   }, []);
 
   const {
@@ -178,6 +167,14 @@ const UploadContract = () => {
   } = useDropzone({
     onDrop: onDropPdcFiles,
   });
+
+  const removeFile = (file: File, type: "contract" | "pdc") => {
+    if (type === "contract") {
+      setContractFiles((prevFiles) => prevFiles.filter((f) => f !== file));
+    } else {
+      setPdcFiles((prevFiles) => prevFiles.filter((f) => f !== file));
+    }
+  };
 
   return (
     <div className="flex flex-col">
@@ -200,6 +197,24 @@ const UploadContract = () => {
               <p>Drag 'n' drop some files here, or click to select files</p>
             )}
           </div>
+          {contractFiles.length > 0 && (
+            <div className="mt-2">
+              {contractFiles.map((file) => (
+                <div
+                  key={file.name}
+                  className="flex items-center justify-between"
+                >
+                  <span className="text-gray-300">{file.name}</span>
+                  <button
+                    onClick={() => removeFile(file, "contract")}
+                    className="text-red-500 ml-2"
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -226,6 +241,24 @@ const UploadContract = () => {
               <p>Drag 'n' drop some files here, or click to select files</p>
             )}
           </div>
+          {pdcFiles.length > 0 && (
+            <div className="mt-2">
+              {pdcFiles.map((file) => (
+                <div
+                  key={file.name}
+                  className="flex items-center justify-between"
+                >
+                  <span className="text-gray-300">{file.name}</span>
+                  <button
+                    onClick={() => removeFile(file, "pdc")}
+                    className="text-red-500 ml-2"
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -249,15 +282,7 @@ const UploadContract = () => {
 
       {currentStep !== steps.length && (
         <div className="mt-4 container flex flex-col">
-          <div className="flex justify-around mt-4 mb-8">
-            <button
-              onClick={() => handleBackClick()}
-              className="bg-white text-slate-600 uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer border-2 border-slate-300 hover:bg-slate-700 hover:text-white transition duration-200 ease-in-out ${
-                                "
-            >
-              Back
-            </button>
-
+          <div className="flex justify-center items-center mt-4 mb-8">
             <button
               onClick={handleNextClick}
               className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"

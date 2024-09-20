@@ -5,6 +5,7 @@ import { StepperContext } from "../../Contexts/StepperContext";
 //import HelpAndLogin from "./stepsComponents/HelpAndLogin";
 import { parseCookies } from "nookies";
 import { showToast } from "../../Utils/showToast";
+import { useRouter } from "next/navigation";
 
 const SelectPrimaryBankAccount = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -18,9 +19,10 @@ const SelectPrimaryBankAccount = () => {
     setLoading,
     getRegistrationState,
   } = useContext(StepperContext);
-
+  const router = useRouter();
   // Handle token
-  let accessToken = parseCookies().accessTokenForRegister;
+  let accessToken =
+    parseCookies().accessTokenForRegister || localStorage.getItem("token");
 
   // handle input change
   // const handleChange = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,7 +41,7 @@ const SelectPrimaryBankAccount = () => {
 
       // if unauthorized then push to login page
       if (response.status === 401) {
-        window.location.replace("/login");
+        router.push("/login");
       }
 
       if (response.ok) {
@@ -109,7 +111,7 @@ const SelectPrimaryBankAccount = () => {
 
           // if unauthorized then push to login page
           if (response.status === 401) {
-            window.location.replace("/login");
+            router.push("/login");
           }
 
           if (response.ok) {

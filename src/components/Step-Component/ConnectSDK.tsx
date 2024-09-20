@@ -7,6 +7,28 @@ import { parseCookies } from "nookies";
 import { showToast } from "../../Utils/showToast";
 import { IntegrationCategory, IntegrationType } from "rootfi-api/api";
 
+type InviteLinkData = {
+  data: {
+    invite_link_id: string;
+    rootfi_company_id?: string;
+  };
+};
+
+declare global {
+  interface Window {
+    RootfiLink: {
+      initialize: (config: {
+        linkToken: string;
+        onSuccess: () => void;
+        onReady: () => void;
+        onExit: () => void;
+      }) => void;
+      openLink: () => void;
+      closeLink: () => void;
+    };
+  }
+}
+
 const ConnectSDK: React.FC<{
   integration: string;
   category: string;
@@ -18,7 +40,7 @@ const ConnectSDK: React.FC<{
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   console.log(loadingSpinner);
 
-  const [rootFiID, setRootFiID] = useState(null);
+  const [rootFiID, setRootFiID] = useState<string>();
 
   const SendRootfiRespToDB = async () => {
     // trim the fields before send
@@ -96,7 +118,7 @@ const ConnectSDK: React.FC<{
 
   async function createLink() {
     try {
-      const data = await rootfi.core.inviteLinks.create({
+      const data: InviteLinkData = await rootfi.core.inviteLinks.create({
         company_name: "NAHAR", //pending for an company name fetch
         integration_categories: [category as IntegrationCategory],
         integrations: [integration as IntegrationType],

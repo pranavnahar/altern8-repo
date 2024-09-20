@@ -34,7 +34,8 @@ export const removeTokenCookie = () => {
 // get new access token from a refresh token
 export const getAccessToken = async () => {
   const cookies = parseCookies();
-  const refreshToken = cookies.refreshToken;
+  const refreshToken = cookies.refreshToken || localStorage.getItem("Rtoken");
+
   let accessToken = "";
   const body = { refresh: refreshToken };
 
@@ -64,7 +65,7 @@ export const isAuthenticated = async (cookies: Cookies) => {
   }
 
   try {
-    const response = await fetch(`${apiUrl}/seller-api/validate-token/`, {
+    const response = await fetch(`${apiUrl}/user-api/validate-token/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

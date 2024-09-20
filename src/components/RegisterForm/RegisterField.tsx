@@ -7,16 +7,24 @@ import { StepperContext } from "../../Contexts/StepperContext";
 import Cookies from "js-cookie";
 import { Button } from "@mui/material";
 import { showToast } from "../../Utils/showToast";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const Register = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const entityType = [
+    "Company",
+    "Partnership",
+    "Sole Proprietorship",
+    "Individual",
+    "Trust",
+  ];
   const [userData, setUserData] = useState({
     firstName: "",
     phoneNumber: "",
     password: "",
     password2: "",
     referredBy: "",
+    entityType: "",
   });
   const { currentStep, steps, setLoading, getRegistrationState } =
     useContext(StepperContext);
@@ -26,7 +34,8 @@ const Register = () => {
   const [password2Visible, setPassword2Visible] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showWarningText, setShowWarningText] = useState(false);
-
+  const [currentEntity, setCurrentEntity] = useState("");
+  const router = useRouter();
   //getting referral code from url
   userData.referredBy = search.get("referal_code")!;
   // handle input change
@@ -40,7 +49,7 @@ const Register = () => {
     if (userData.phoneNumber) {
       setUserData((prevUserData) => ({
         ...prevUserData,
-        phone_number: "",
+        phoneNumber: "",
       }));
     }
     setShowWarningText(true);
@@ -53,7 +62,7 @@ const Register = () => {
 
   const handleSubmission = async (direction?: string) => {
     if (direction !== "next") {
-      window.location.replace("/");
+      router.push("/");
     } else if (direction === "next") {
       const updatedRecord = {
         first_name: userData.firstName ? userData.firstName.trim() : "",
@@ -61,6 +70,7 @@ const Register = () => {
         password: userData.password ? userData.password.trim() : "",
         reenter_password: userData.password2 ? userData.password2.trim() : "",
         referred_by: userData.referredBy ? userData.referredBy.trim() : "",
+        entity_type: currentEntity ? currentEntity.trim() : "",
       };
 
       // password validation
@@ -71,19 +81,29 @@ const Register = () => {
       if (updatedRecord.first_name.length < 3) {
         showToast(`Please enter a valid name`, "info");
         return;
-      } else if (updatedRecord.phone_number.length !== 10) {
+      }
+      if (updatedRecord.phone_number.length !== 10) {
         showToast(`Phone number must be a 10-digit number`, "info");
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          phoneNumber: "",
+        }));
         return;
-      } else if (!isValidPassword) {
+      }
+      if (!updatedRecord.entity_type)
+        return showToast("Select entity type", "info");
+      if (!isValidPassword) {
         showToast(
           `Password must be at least 8 characters long and include at least one letter, one digit, and one special character. Allowed special characters are: @$!%*?&#:`,
           "info"
         );
         return;
-      } else if (updatedRecord.password !== updatedRecord.reenter_password) {
+      }
+      if (updatedRecord.password !== updatedRecord.reenter_password) {
         showToast(`Both password should match`, "info");
         return;
-      } else if (!termsAccepted) {
+      }
+      if (!termsAccepted) {
         showToast(`You must accept the terms and conditions`, "info");
         return;
       }
@@ -105,7 +125,7 @@ const Register = () => {
 
           // Hold for 3 seconds before redirecting to /login
           setTimeout(() => {
-            window.location.replace("/login");
+            router.push("/login");
           }, 3000);
         } else if (response.ok) {
           let serverMessage = await response.json();
@@ -161,11 +181,24 @@ const Register = () => {
   };
 
   const handleConfirmButtonClick = async () => {
-    if (userData.phoneNumber && userData.phoneNumber.length == 10) {
+    if (
+      userData.phoneNumber &&
+      userData.phoneNumber.length == 10 &&
+      userData.entityType &&
+      userData.password &&
+      userData.password2
+    ) {
       setShowConfirmationModal(true);
     } else {
       await handleSubmission("next");
     }
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    // console.log("jo", value);
+
+    setCurrentEntity(value);
   };
 
   return (
@@ -232,6 +265,33 @@ const Register = () => {
         <ul>
           <li>Please keep this mobile number accessible for OTPs</li>
         </ul>
+      </div>
+
+      <div className="flex py-1 my-2 ml-2 ">
+        <select
+          onChange={handleSelectChange}
+          value={currentEntity || ""}
+          name="primary account"
+          className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none focus:outline-none focus:border-purple-600"
+          required
+        >
+          <option
+            className="bg-[#2c173c] text-gray-100 w-full rounded-md outline-none hover:bg-[#602b4c]"
+            value=""
+            disabled
+          >
+            Select an Entity
+          </option>
+          {entityType.map((item, index) => (
+            <option
+              className="bg-[#2c173c] text-gray-100 tracking-wider rounded-md outline-none hover:bg-[#602b4c]"
+              key={index}
+              value={item}
+            >
+              {item}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* password field  */}

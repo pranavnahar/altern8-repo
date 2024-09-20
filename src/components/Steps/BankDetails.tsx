@@ -1,463 +1,453 @@
-// This is a dashboard page component for showing users bank details
+// For Account Aggregator
+// Purpose :
+// 1. connect with rootfi to collect data
+// 2. if it fails then manually upload bank statement
 
-import React, { useState, useEffect } from "react";
-import { showToast } from "../../Utils/showToast";
-import { useRouter } from "next/router";
+import { useContext, useState, useCallback, useEffect } from "react";
+import { StepperContext } from "../../Contexts/StepperContext";
+import HelpAndLogin from "../Step-Component/HelpAndLogin";
+import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
-import { getAccessToken } from "../../Utils/auth";
-import LoadingSpinner from "../LoadingSpinner";
-import Button from "@mui/material/Button";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
-import { Check } from "lucide-react";
+import { useDropzone } from "react-dropzone";
+//import "slick-carousel/slick/slick.css";
+//import "slick-carousel/slick/slick-theme.css";
+import ImageSlider from "./Account Aggregator/ImageSlider";
+import { AA_videos } from "./Account Aggregator/AA_Videos";
+import axios from "axios";
+import { showToast } from "../../Utils/showToast";
 
 const BankDetails = () => {
-  const [bankAccountsList, setBankAccountsList] = useState<
-    {
-      bankName: string;
-      accountNumber: string;
-      ifscCode: string;
-      status: string;
-      isPrimary: boolean;
-    }[]
-  >([]);
-  const [loadingSpinner, setLoadingSpinner] = useState(true);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [currentPrimaryAccount, setCurrentPrimaryAccount] = useState("");
-  const [formData, setFormData] = useState({
-    bankName: "",
-    accountNumber: "",
-    ifscCode: "",
-  });
+  const [needManualUpload, setNeedManualUpload] = useState(true);
+  const {
+    currentStep,
+    setCurrentStep,
+    steps,
+    setLoading,
+    getRegistrationState,
+    setApiFailedIcon,
+  } = useContext(StepperContext);
+  const [files, setFiles] = useState<{ file: File; password: string }[]>([]); // state for file upload
+  const [showFileBasedInputFields, setShowFileBasedInputFields] =
+    useState(false);
+  console.log(showFileBasedInputFields);
+
+  const [showKnowMore, setShowKnowMore] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const iframeUrl = "";
+  // Handle token
+  let accessToken = parseCookies().accessTokenForRegister;
+
   const router = useRouter();
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    // console.log("jo", value);
+  // to handle click on next and back button
+  const handleClick = async (direction?: string) => {
+    // change the step after click for back button
+    let newStep = currentStep;
 
-    setCurrentPrimaryAccount(value);
-  };
-  // handle input change
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+    if (direction !== "next") {
+      newStep--;
+      // add a tick in the stepper instead of red cross
+      setApiFailedIcon(false);
+      setCurrentStep(newStep);
+    }
+    // if button is next the submit data to backend api
+    else if (direction === "next") {
+      const bodyData = {};
 
-  // Handle token
-  let accessToken = parseCookies().accessToken; //access token from cookies
+      if (!needManualUpload) {
+        try {
+          if (bodyData) {
+            const body = bodyData;
+            setLoading(true);
+            const response = await fetch(
+              `${apiUrl}/user-api/account-aggregator/`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(body),
+              }
+            );
 
-  // if not accessToken then ask for refresh token
-  const ReplaceTokenOrRedirect = async () => {
-    // get new access token with help of Refresh token
-    const token = await getAccessToken();
-    // if not able to get the token then redirect to login
-    if (!token) {
-      router.push("/login");
-    } else {
-      accessToken = token;
+            // if unauthorized then push to login page
+            if (response.status === 401) {
+              router.push("/login");
+            }
+
+            if (response.ok) {
+              let server_message = await response.json();
+              console.log(`AA data submitted successfully`, server_message);
+
+              showToast(`Submission Successful`, "info");
+
+              // change the step after click and submitting the data
+              getRegistrationState();
+            } else {
+              let server_error = await response.json();
+              console.error(`failed to submit AA data`, server_error);
+
+              // if api fails then go for manaual upload
+              setNeedManualUpload(true);
+              // add a cross in the stepper instead of tick
+              setApiFailedIcon(true);
+
+              showToast(`Submission failed!`, "info");
+            }
+          }
+        } catch (error) {
+          console.error(
+            `Error submitting AA data, Error in fetching api (${currentStep}) :`,
+            error
+          );
+
+          // if api fails then go for manaual upload
+          setNeedManualUpload(true);
+          // add a cross in the stepper instead of tick
+          setApiFailedIcon(true);
+
+          showToast(`Submission failed, system error!`, "info");
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      if (needManualUpload) {
+        try {
+          await handleFileChange();
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   };
 
-  // get the Bank details from backend
-  const GetBankDetails = async () => {
-    try {
-      if (!accessToken) {
-        await ReplaceTokenOrRedirect();
+  // handle input field changes
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const { name, value } = e.target;
+    const updatedFiles = [...files];
+
+    // Update the specific file object at the given index
+    updatedFiles[index] = {
+      ...updatedFiles[index],
+      [name]: value,
+    };
+
+    // Update the 'files' state with the modified array
+    setFiles(updatedFiles);
+  };
+
+  // handle file upload and drag and drop
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    // Construct an array with objects containing file and additional fields
+    const updatedFiles = acceptedFiles.map((file: File) => ({
+      file: file,
+      password: "",
+    }));
+
+    setShowFileBasedInputFields(true);
+
+    // Update 'files' state with the array of files along with additional fields
+    setFiles([]);
+    setFiles(updatedFiles);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  // handle file change
+  const handleFileChange = async () => {
+    if (files && files.length > 0) {
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        const fileObject = files[i];
+        console.log(fileObject);
+        const file = fileObject.file;
+        const password = fileObject.password;
+
+        // file type and size validations
+        if (
+          file.type === "application/pdf" || // Check if the file is a PDF
+          file.type ===
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        ) {
+          if (file.size <= 5 * 1024 * 1024) {
+            // Check if the file size is below 5MB
+            formData.append(`file[${i}]`, file);
+
+            // Append other fields individually
+            formData.append(`password[${i}]`, password);
+
+            console.log(formData);
+          } else {
+            alert("File size exceeds 5MB limit. Please choose a smaller file.");
+            return; // Stop processing files if size limit exceeded
+          }
+        } else {
+          alert("Please choose PDF or Excel files only.");
+          return; // Stop processing files if file type is not supported
+        }
       }
 
-      let response = await fetch(`${apiUrl}/user-dashboard-api/bank-account/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      try {
+        setLoading(true);
 
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        // Again try to fetch the data
-        response = await fetch(`${apiUrl}/user-dashboard-api/bank-account/`, {
+        for (const [key, value] of formData.entries()) {
+          console.log(`${key}: ${value}`);
+        }
+        let response = await fetch(`${apiUrl}/user-api/bank-document/`, {
+          method: "POST",
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
+          body: formData,
         });
-      }
 
-      if (response.ok) {
-        const responseData = await response.json();
-        const newBanks: {
-          bankName: string;
-          accountNumber: string;
-          ifscCode: string;
-          status: string;
-          isPrimary: boolean;
-        }[] = [];
-        for (let i = 0; i < responseData.length; i++) {
-          const newData = {
-            bankName: responseData[i]["bank_name"],
-            accountNumber: responseData[i]["account_number"],
-            ifscCode: responseData[i]["IFSC_code"],
-            status: responseData[i]["status"],
-            isPrimary: responseData[i]["is_primary"],
-          };
-          newBanks.push(newData);
+        // if unauthorized then push to login page
+        if (response.status === 401) {
+          router.push("/login");
         }
-        // console.log(newBanks);
 
-        setBankAccountsList(newBanks);
-      } else {
-        console.log("error during getting bank details");
+        if (response.ok) {
+          await response.json();
+          showToast(`Files uploaded successfully`, "info");
+          console.log("Files uploaded successfully:");
+
+          // add a tick in the stepper instead of red cross
+          setApiFailedIcon(false);
+          // change the step after click and submitting the data
+          getRegistrationState();
+        } else {
+          const responseData = await response.json();
+          console.log(responseData);
+          console.error("Error uploading files:");
+          showToast("Files upload failed!", "info");
+        }
+      } catch (error) {
+        console.log(`Error uploading files  (${currentStep}) :`, error);
+        showToast(`Files upload failed!`, "info");
+      } finally {
+        setLoading(false);
       }
+    } else {
+      showToast(`Please drag and drop files to upload.`, "info");
+    }
+  };
+
+  // to show "know more" text
+  const handleKnowMoreButtonClick = () => {
+    setShowKnowMore((prevState) => !prevState);
+  };
+
+  //Digitap SDK PART
+  const handleConnectClick = async () => {
+    setIsLoading(true);
+
+    try {
+      // Call Generate URL API
+      const response = await axios.post("/api/generate-url", {
+        destination: "accountaggregator",
+        return_url: "http://localhost:3000/register",
+      });
+
+      //console.log(response.data.url);
+
+      // Redirect the user to the generated URL
+      router.push(response.data.url);
+      //setIframeUrl(response.data.url);
     } catch (error) {
-      console.log("server error during getting bank details");
-    } finally {
-      setLoadingSpinner(false);
+      console.error(`Error generating URL, (${currentStep}) :`, error);
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    GetBankDetails();
-  }, []);
+    const timer = setTimeout(() => {
+      setShowKnowMore(false);
+    }, 10000); // 10 seconds in milliseconds
 
-  const handleChangePrimaryAccount = async () => {
-    // trim the fields before send
-    let newRecord = {
-      account_number: currentPrimaryAccount.trim(),
+    return () => {
+      clearTimeout(timer);
     };
-
-    if (currentPrimaryAccount.length < 5) {
-      console.log("Please select a bank account for primary account");
-      showToast(`Please select a bank account for primary account`, "info");
-      return;
-    }
-
-    // submitting the data to backend
-    try {
-      // Set loading to true when starting the fetch
-      setLoadingSpinner(true);
-
-      let body = newRecord;
-      // console.log(body);
-      let response = await fetch(
-        `${apiUrl}/user-dashboard-api/change-primary-account/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-
-          body: JSON.stringify(body),
-        }
-      );
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        // Again try to fetch the data
-        response = await fetch(
-          `${apiUrl}/user-dashboard-api/change-primary-account/`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-
-            body: JSON.stringify(body),
-          }
-        );
-      }
-
-      if (response.ok) {
-        await response.json();
-        await GetBankDetails();
-        console.log("Primary account updated successfully");
-      } else {
-        let server_error = await response.json();
-
-        console.error("Failed to updated primary account", server_error);
-        showToast(`${server_error.message} `, "info");
-      }
-    } catch (error) {
-      console.error(
-        "Server Connection Error updating primary bank account:",
-        error
-      );
-      showToast(`Failed to send otp, system error`, "info");
-    } finally {
-      setLoadingSpinner(false);
-    }
-  };
-
-  const handleAddBankAccount = async () => {
-    if (formData["bankName"].length < 5) {
-      console.log("Please enter a valid bank name");
-      showToast(`Please enter a valid bank name`, "info");
-      return;
-    } else if (formData["accountNumber"].length < 5) {
-      console.log("Please enter a valid bank account number");
-      showToast(`Please enter a valid bank account number`, "info");
-      return;
-    } else if (formData["ifscCode"].length < 3) {
-      console.log("Please enter valid ifsc code");
-      showToast(`Please enter a valid IFSC code`, "info");
-      return;
-    } else if (formData["ifscCode"].length > 11) {
-      console.log("Please enter valid ifsc code");
-      showToast(`Please enter a valid IFSC code`, "info");
-      return;
-    }
-
-    // trim the fields before send
-    let newRecord = {
-      bank_name: formData["bankName"].trim(),
-      account_number: formData["accountNumber"].trim(),
-      IFSC_code: formData["ifscCode"].toUpperCase().trim(),
-    };
-
-    // submitting the data to backend
-    try {
-      setLoadingSpinner(true);
-
-      let body = newRecord;
-      let response = await fetch(`${apiUrl}/user-dashboard-api/bank-account/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-
-        body: JSON.stringify(body),
-      });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-dashboard-api/bank-account/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify(body),
-        });
-      }
-
-      if (response.ok) {
-        await response.json();
-        await GetBankDetails();
-        setFormData({
-          bankName: "",
-          accountNumber: "",
-          ifscCode: "",
-        });
-        console.log("Bank account added successfully");
-      } else {
-        let server_error = await response.json();
-
-        console.error("Bank account add got failed!", server_error.message);
-
-        showToast(`${server_error.message}`, "info");
-      }
-    } catch (error) {
-      console.error("Failed to add bank account, server error:", error);
-      showToast(`Failed to add bank account, server error`, "info");
-    } finally {
-      setLoadingSpinner(false);
-    }
-  };
+  }, [showKnowMore]);
 
   return (
-    <div className="max-w-2xl mx-auto mt-8">
-      {loadingSpinner && (
-        <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-gray-600 bg-opacity-50 ">
-          <div className="relative">
-            <LoadingSpinner />
+    <div className="flex flex-col">
+      {!needManualUpload && (
+        <div className="mb-10">
+          <div className="w-full mx-2  flex-1 flex flex-row items-center justify-center">
+            <div className="font-semibold   text-gray-300 text-sm text-center leading-8 uppercase">
+              Unified Bank Interface
+            </div>
+            <div>
+              <button
+                onClick={handleKnowMoreButtonClick}
+                className="text-indigo-600 font-medium mx-2 mr-5"
+              >
+                Know more
+              </button>
+            </div>
+          </div>
+          {showKnowMore && (
+            <div className="text-gray-300 flex flex-row items-center text-base p-2 mx-auto  rounded-lg ">
+              <div>
+                In September 2016, the RBI has proposed setting up of an Account
+                Aggregator (AA) that would act as a common platform which
+                enables easy sharing of data from various entities with user
+                consent. The Account Aggregator will help individuals share
+                their financial data with third parties in a safe and secure
+                manner, and give them greater control over how their data is
+                being used. AA does not and cannot store any user’s data - thus,
+                the potential for leakage and misuse of user’s data is
+                prevented. Aggregators (AA) use technology to assist you in
+                simple and secure exchange of your data between financial
+                institutions like banks. This information cannot be shared
+                without your consent. With AA, you can use your financial data
+                to access a vast array of financial services for your personal
+                or business needs.
+              </div>
+            </div>
+          )}
+
+          {iframeUrl ? (
+            <iframe
+              src={iframeUrl}
+              width="100%"
+              height="600px"
+              className="border-0"
+              title="Account Aggregator"
+            ></iframe>
+          ) : (
+            <div>
+              <ImageSlider />
+              <AA_videos />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* if backend fails to get bank statements from the account aggregator then ask user to upload  */}
+      {/* upload bank statements  */}
+      {needManualUpload && (
+        <div className="mb-5 mt-3 flex flex-col justify-center ">
+          <div className="text-gray-200 flex flex-row items-center text-base2 p-2 mx-auto  rounded-lg ">
+            <div>
+              <svg
+                className="w-5 h-5  mr-1"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </div>
+            <div>
+              Account Aggregator Data Fetch Failed. Please upload 3 year Bank
+              Statements of all your business accounts (xls,csv, pdf)
+            </div>
+          </div>
+          {/* upload bank statements files  */}
+          <div className="mb-5 mt-10 text-center ">
+            <div className="text-start font-medium text-base2 text-gray-300">
+              Upload your Bank Statements:
+            </div>
+            {/* dropzone (drag and drop box ) */}
+            <div
+              className="p-16 mt-3  mb-5 text-base2  text-gray-300 border border-dashed border-neutral-200"
+              {...getRootProps()}
+            >
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <p>Drop the files here ...</p>
+              ) : (
+                <p>Drag 'n' drop some files here, or click to select files</p>
+              )}
+            </div>
+
+            {/* bank statements table  */}
+            {files && files.length > 0 && (
+              <div className="flex justify-center">
+                <table>
+                  <thead className="border-b border-gray-200">
+                    <tr>
+                      <th className="p-3 text-sm text-gray-300 font-medium text-left">
+                        File Name
+                      </th>
+                      <th className="p-3 text-sm text-gray-300 font-medium text-left">
+                        Password
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {files.map((file, i) => (
+                      <tr key={i}>
+                        <td className="p-3 text-sm text-gray-300 font-medium text-left">
+                          {file.file.name}
+                        </td>
+
+                        <td className="p-3 text-sm text-gray-200 font-medium">
+                          <input
+                            onChange={(e) => handleChange(e, i)}
+                            value={file.password || ""}
+                            name="password"
+                            placeholder="Enter password if any"
+                            className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:border-purple-600 transition-colors"
+                            type="text"
+                            autoComplete="new-password"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
       )}
-      <div className="pt-6 pb-8 mb-2 rounded ">
-        <div className="mb-3 text-lg font-medium text-center text-gray-200">
-          Bank Accounts
-        </div>
-        {bankAccountsList.length !== 0 &&
-          bankAccountsList.map((bankDetail, index) => (
-            <div
-              key={index}
-              className="px-3 py-2 mb-6 text-center rounded-lg [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]"
-            >
-              <div className="flex mt-3 item-center">
-                <p className="text-base font-semibold text-gray-200">
-                  Bank Name:
-                </p>
-                <p className="pl-3 text-base text-gray-300">
-                  {bankDetail.bankName}
-                </p>
-              </div>
-              <div className="flex mt-3 item-center">
-                <p className="text-base font-semibold text-gray-200">
-                  Account Number:
-                </p>
-                <p className="pl-3 text-base text-gray-700">
-                  {bankDetail.accountNumber}
-                </p>
-              </div>
-              <div className="flex mt-3 item-center">
-                <p className="text-base font-semibold text-gray-200">
-                  IFSC Code:
-                </p>
-                <p className="pl-3 text-base text-gray-700">
-                  {bankDetail.ifscCode}
-                </p>
-              </div>
-              {bankDetail.isPrimary && (
-                <div className="flex mt-3 item-center">
-                  <p className="text-base font-semibold text-gray-200">
-                    Primary:
-                  </p>
-                  <p className="pl-3 text-base text-gray-700">
-                    <span className="font-bold text-green-600"> &#x2713;</span>
-                  </p>
-                </div>
-              )}
 
-              <div>
-                {bankDetail.status === "Verified" ? (
-                  <span className="flex items-center justify-center py-2 my-2 text-sm rounded-lg bg-primary text-white-font">
-                    <Check
-                      className="p-1 my-auto mr-2 rounded-full size-5 bg-white/20"
-                      strokeWidth={2}
-                    />
-                    Verified
-                  </span>
-                ) : (
-                  <span className="flex items-center justify-center py-2 my-2 text-sm rounded-lg bg-primary/70 text-white-font">
-                    Not Verified
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-
-        {/* change primary bank account  */}
-        {bankAccountsList.length !== 0 && (
-          <div>
-            <div className="h-6 mt-10 text-base font-medium leading-8 text-gray-300 ">
-              Change primary bank account:
-            </div>
-            <div className="flex py-1 my-2 ">
-              <select
-                onChange={handleSelectChange}
-                value={currentPrimaryAccount || ""}
-                name="primary account"
-                className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none focus:outline-none focus:border-purple-600"
-                required
-              >
-                <option
-                  className="bg-[#2c173c] text-gray-100 w-full rounded-md outline-none hover:bg-[#602b4c]"
-                  value=""
-                  disabled
+      {/* Navigation controls  */}
+      {currentStep !== steps.length && (
+        <div className="container flex flex-col ">
+          <div className="flex justify-center items-center mt-4 mb-8">
+            {/* back button  */}
+            {/* DIGITAP GENERATION OF URL */}
+            {!needManualUpload && (
+              <div className="flex justify-center items-center">
+                <button
+                  onClick={handleConnectClick}
+                  className=" bg-teal-400 text-white px-4 py-2 rounded-full transition-transform transform hover:scale-110"
+                  disabled={isLoading}
                 >
-                  Select a bank account
-                </option>
-                {bankAccountsList
-                  .filter((account) => !account.isPrimary) // Filter out primary accounts
-                  .map((account, index) => (
-                    <option
-                      className="bg-[#2c173c] text-gray-100 tracking-wider rounded-md outline-none hover:bg-[#602b4c]"
-                      key={index}
-                      value={account.accountNumber}
-                    >
-                      {account.bankName} - {account.accountNumber}
-                    </option>
-                  ))}
-              </select>
-            </div>
-            <div className="flex justify-center pt-5">
-              <Button
-                onClick={handleChangePrimaryAccount}
-                style={{
-                  backgroundColor: "#1565c0",
-                  borderRadius: "25px", // Adjust the pixel value for the desired border radius
-                }}
-                variant="contained"
-                type="submit"
-                endIcon={<ArrowForwardIcon />}
-              >
-                Proceed
-              </Button>
-            </div>
-          </div>
-        )}
+                  {isLoading ? "Loading..." : "Connect Bank Accounts"}
+                </button>
+              </div>
+            )}
 
-        <div className="pt-6 pb-8 mb-4 rounded">
-          <div className="h-6 mt-5 text-base font-medium leading-8 text-gray-300 ">
-            Add new bank account:
-          </div>
-          <div className="flex-1 w-full">
-            <div className="h-6 mt-3 text-xs font-bold leading-8 text-gray-400 uppercase">
-              Bank Name
-            </div>
-            <div className="flex py-1 my-2">
-              <input
-                onChange={handleChange}
-                value={formData["bankName"] || ""}
-                name="bankName"
-                placeholder="Bank name"
-                className="w-full py-1 text-gray-200 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
-                type="text"
-                required
-              />
-            </div>
-          </div>
-          <div className="flex-1 w-full">
-            <div className="h-6 mt-3 text-xs font-bold leading-8 text-gray-400 uppercase">
-              Account Number
-            </div>
-            <div className="flex py-1 my-2">
-              <input
-                onChange={handleChange}
-                value={formData["accountNumber"] || ""}
-                name="accountNumber"
-                placeholder="Account number"
-                className="w-full py-1 text-gray-200 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
-                type="text"
-                required
-              />
-            </div>
-          </div>
-          <div className="flex-1 w-full">
-            <div className="h-6 mt-3 text-xs font-bold leading-8 text-gray-400 uppercase">
-              IFSC Code
-            </div>
-            <div className="flex py-1 my-2">
-              <input
-                onChange={handleChange}
-                value={formData["ifscCode"] || ""}
-                name="ifscCode"
-                placeholder="IFSC code"
-                className="w-full py-1 text-gray-200 uppercase transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
-                type="text"
-                required
-              />
-            </div>
-          </div>
-          <div className="flex justify-center pt-5">
-            <Button
-              onClick={handleAddBankAccount}
-              style={{
-                backgroundColor: "#1565c0",
-                borderRadius: "25px", // Adjust the pixel value for the desired border radius
-              }}
-              variant="contained"
-              type="submit"
-              endIcon={<ArrowUpwardOutlinedIcon />}
+            {/* next button  */}
+            <button
+              onClick={() => handleClick("next")}
+              className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
             >
-              Add
-            </Button>
+              Next
+            </button>
           </div>
+          <HelpAndLogin />
         </div>
-      </div>
+      )}
     </div>
   );
 };

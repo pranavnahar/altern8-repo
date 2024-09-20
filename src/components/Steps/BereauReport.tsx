@@ -5,7 +5,7 @@ import { StepperContext } from "../../Contexts/StepperContext";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { parseCookies } from "nookies";
 import { showToast } from "../../Utils/showToast";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
 
 interface DocumentFiles {
@@ -20,9 +20,9 @@ const BureauReport = () => {
   const [otpForm, setOtpForm] = useState({
     otp: "",
   });
-  const [otpSent, setOtpSent] = useState(false);
+  const [otpSent, setOtpSent] = useState(true);
   const [manualBureauReportNeeded, setManualBureauReportNeeded] =
-    useState(true);
+    useState(false);
   const [entityType, setEntityType] = useState("");
   const [otpTimer, setOtpTimer] = useState(60);
 
@@ -75,7 +75,7 @@ const BureauReport = () => {
         }
       } else {
         console.log("Unable to fetch reference id for Bureau report");
-        getRegistrationState();
+        //getRegistrationState();
       }
     } catch (error) {
       console.log(

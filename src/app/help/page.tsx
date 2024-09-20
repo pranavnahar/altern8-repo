@@ -28,7 +28,6 @@ const HelpPage = () => {
   const [problem, setProblem] = useState<{
     [key: string]: string;
   }>({});
-
   const [loadingSpinner, setLoadingSpinner] = useState(true); // for loading animation
   //const [color, setColor] = useState("#ffffff");
   // number of unread messages in chat box
@@ -116,7 +115,7 @@ const HelpPage = () => {
   };
 
   const handleClickRegister = () => {
-    window.location.replace("/register");
+    router.push("/register");
   };
 
   return (

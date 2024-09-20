@@ -96,6 +96,7 @@ export const StepperProvider = ({ children }: StepperProviderProps) => {
             server_message
           );
           setRegistrationState(registration_step);
+          console.log(registration_step);
         } else {
           let server_error = await response.json();
           console.error(

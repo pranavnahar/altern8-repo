@@ -5,6 +5,7 @@ import { StepperContext } from "../../Contexts/StepperContext";
 //import HelpAndLogin from "./stepsComponents/HelpAndLogin";
 import { parseCookies } from "nookies";
 import { showToast } from "../../Utils/showToast";
+import { useRouter } from "next/navigation";
 
 const GST = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -14,10 +15,11 @@ const GST = () => {
     gstPassword: "",
     otp: "",
   });
+  const router = useRouter();
   const [alreadyHaveGstin, setAlreadyHaveGstin] = useState(false);
   const [atleastOneGstinSubmitted, setAtleastOneGstinSubmitted] =
     useState(false);
-  const [isIasEnabled, setIsIasEnabled] = useState(false);
+  const [isIasEnabled, setIsIasEnabled] = useState(true);
   const [currentGstinList, setCurrentGstinList] = useState([
     "123321123321",
     "gjkgj1232jkgh",
@@ -64,7 +66,7 @@ const GST = () => {
 
       // if unauthorized then push to login page
       if (response.status === 401) {
-        window.location.replace("/login");
+        router.push("/login");
       }
 
       if (response.ok) {

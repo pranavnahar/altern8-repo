@@ -16,6 +16,7 @@ import {
   removeTokenCookie,
 } from "../../Utils/auth";
 import AnimatedLogo from "../Header/AnimatedLogo";
+import { useRouter } from "next/navigation";
 let accessToken = parseCookies().accessToken;
 
 const login = () => {
@@ -33,7 +34,7 @@ const login = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [otpTimer, setOtpTimer] = useState(60);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
-
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   // handle form input
@@ -67,7 +68,7 @@ const login = () => {
       // if profile is approved then allowed to dashboard
       const registrationStep = sellerData.seller_state;
       if (registrationStep === "Approved") {
-        window.location.replace("/dashboard");
+        router.push("/dashboard");
       } else {
         // if the registration process is not completed yet
         // redirect to register page
@@ -83,7 +84,7 @@ const login = () => {
         Cookies.remove("refreshToken", {
           path: "/",
         });
-        window.location.replace("/register");
+        router.push("/register");
         showToast(`Please complete the registration`, "info");
       }
     } catch (error) {
@@ -133,7 +134,9 @@ const login = () => {
 
         // Set the access token in a cookie
         setAccessTokenCookie(data.access);
+        localStorage.setItem("token", data.access);
         setRefreshTokenCookie(data.refresh);
+        localStorage.setItem("Rtoken", data.refresh);
         accessToken = data.access;
         await getUserState();
       } else {
@@ -259,7 +262,7 @@ const login = () => {
 
   // login with password link click
   const handleForgotPasswordClick = () => {
-    window.location.replace("/reset-password");
+    router.push("/reset-password");
   };
 
   useEffect(() => {
@@ -289,7 +292,7 @@ const login = () => {
 
   // on click on ethyx club redirect to landing page
   const handleClickLogo = () => {
-    window.location.replace("/");
+    router.push("/");
   };
 
   // handle password visibility

@@ -23,6 +23,11 @@ import AuthorizationCompliance from "../Steps/AuthorizationCompliance";
 import UploadContract from "../Steps/UploadContract";
 import BankDetails from "../Steps/BankDetails";
 import HelpPage from "@/app/help/page";
+import Accounting from "../Steps/Accounting";
+import RERA from "../Steps/RERA";
+import Udyam from "../Steps/Udyam";
+import Pending from "../Steps/Pending";
+import { useRouter } from "next/navigation";
 //import HelpPage from "../components/help/HelpPage";
 //import AuthorizationCompliance from "@/components/register/steps/AuthorizationCompliance";
 
@@ -32,6 +37,7 @@ const Register = () => {
   const [apiFailedIcon, setApiFailedIcon] = useState(false); //to display cross instead of tick in stepper , where any api failed and manually upload require
   const [showHelpPage, setShowHelpPage] = useState(false); // display help page
   const [loading, setLoading] = useState(false); //for loading animation;
+  const router = useRouter();
 
   const steps = [
     "Register",
@@ -47,13 +53,7 @@ const Register = () => {
     "Udyam",
     "Upload Contract",
     "Authorization Compliance",
-    // "Ecommerce",
-    // "POS",
-    // "Youtube",
-
-    // "Exporter Upload",
-
-    // "Final",
+    "Pending",
   ]; //registration steps
 
   // set current page state if stepName is provided
@@ -85,6 +85,9 @@ const Register = () => {
     } else {
       // If "registration_step" is not found in the steps array
       console.log("got invalid state name", stateName);
+      if (stateName === "Approved") {
+        return router.push("/dashboard");
+      }
       if (
         stateName === "Pending for Maker" ||
         stateName === "Pending for Checker"
@@ -121,7 +124,7 @@ const Register = () => {
 
           // if unauthorized then push to login page
           if (response.status === 401) {
-            window.location.replace("/login");
+            router.push("/login");
           }
 
           if (response.ok) {
@@ -131,6 +134,8 @@ const Register = () => {
               `Seller step fetched successfully! ${registration_step}`,
               server_message
             );
+            if (registration_step === "Approved")
+              return router.push("/dashboard");
             setRegistrationState(registration_step);
           } else {
             let server_error = await response.json();
@@ -172,26 +177,18 @@ const Register = () => {
         return <BureauReport />;
       case 8:
         return <GST />;
-      // case 10:
-      //   return <SelectInvoice />;
-      // case 11:
-      //   return <Accounting />;
-      // case 12:
-      //   return <Ecommerce />;
-      // case 13:
-      //   return <Pos />;
-      // case 14:
-      //   return <Youtube />;
-      // case 15:
-      //   return <Udyam />;
-      case 16:
+      case 9:
+        return <Accounting />;
+      case 10:
+        return <RERA />;
+      case 11:
+        return <Udyam />;
+      case 12:
         return <UploadContract />;
-      // case 17:
-      //   return <ExporterUpload />;
-      case 18:
+      case 13:
         return <AuthorizationCompliance />;
-      // case 19:
-      //   return <Pending />;
+      case 14:
+        return <Pending />;
       default:
         // when there is no step or undefined step
         setCurrentStep(1);
