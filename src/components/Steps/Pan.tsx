@@ -1,11 +1,8 @@
-// either the user select the pan number from the  list or he enter the pan number
-
 import { useContext, useState, useEffect } from "react";
 import { StepperContext } from "../../Contexts/StepperContext";
-//import HelpAndLogin from "./stepsComponents/HelpAndLogin";
-//import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import { showToast } from "../../Utils/showToast";
+import { useRouter } from "next/router";
 
 const PAN = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -16,24 +13,26 @@ const PAN = () => {
   }>({
     panNumber: "",
   });
+  const router = useRouter();
   const {
     currentStep,
     setCurrentStep,
     steps,
     setLoading,
-    //getRegistrationState,
+    getRegistrationState,
   } = useContext(StepperContext);
+  const [showInput, setShowInput] = useState(false);
 
   // Handle token
   let accessToken = parseCookies().accessTokenForRegister;
 
-  // handle input change
+  // Handle select change
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
     setUserData({ ...userData, panNumber: value });
   };
 
-  // handle input change
+  // Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
@@ -48,9 +47,9 @@ const PAN = () => {
         },
       });
 
-      // if unauthorized then push to login page
+      // If unauthorized then push to login page
       if (response.status === 401) {
-        window.location.replace("/login");
+        router.push("/login");
       }
 
       if (response.ok) {
@@ -59,11 +58,11 @@ const PAN = () => {
         const panNumbers = responseData.data;
         setPanNumberList(panNumbers);
       } else {
-        console.log("Unable to fetch pan numbers list");
+        console.log("Unable to fetch PAN numbers list");
       }
     } catch (error) {
       console.log(
-        `Unable to fetch pan numbers list, (${currentStep}) :`,
+        `Unable to fetch PAN numbers list, (${currentStep}) :`,
         error
       );
     } finally {
@@ -75,7 +74,7 @@ const PAN = () => {
     GetPanList();
   }, []);
 
-  // to handle click on next and back button
+  // Handle click on next and back button
   const handleClick = async (direction?: string) => {
     let newStep = currentStep;
 
@@ -83,12 +82,12 @@ const PAN = () => {
       newStep--;
       setCurrentStep(newStep);
     } else if (direction === "next") {
-      let newRecord: { panNumber: string } = {
-        panNumber: "",
+      let newRecord: { pan_number: string } = {
+        pan_number: "",
       };
-      newRecord.panNumber = userData.panNumber!;
+      newRecord.pan_number = userData.panNumber!;
 
-      if (!/^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$/.test(newRecord.panNumber)) {
+      if (!/^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$/.test(newRecord.pan_number)) {
         showToast(
           "PAN Number must be exactly 10 characters long, with the format: 5 letters, 4 digits, 1 letter.",
           "info"
@@ -102,7 +101,7 @@ const PAN = () => {
         if (newRecord) {
           const body = newRecord;
           setLoading(true);
-          const response = await fetch(`${apiUrl}/seller-api/select-pan/`, {
+          const response = await fetch(`${apiUrl}/user-api/select-pan/`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -111,9 +110,9 @@ const PAN = () => {
             body: JSON.stringify(body),
           });
 
-          // if unauthorized then push to login page
+          // If unauthorized then push to login page
           if (response.status === 401) {
-            window.location.replace("/login");
+            router.push("/login");
           }
 
           if (response.ok) {
@@ -125,8 +124,8 @@ const PAN = () => {
 
             showToast(`Submission Successful`, "info");
 
-            // change the step after click and submitting the data
-            //getRegistrationState();
+            // Change the step after click and submitting the data
+            getRegistrationState();
           } else {
             let server_error = await response.json();
             console.error(`PAN page data submission failed`, server_error);
@@ -147,18 +146,18 @@ const PAN = () => {
 
   return (
     <div className="flex flex-col">
-      {/* Pan number select field */}
-      {panNumberList.length > 0 && (
+      {/* PAN number select field */}
+      {!showInput && panNumberList.length > 0 && (
         <div className="w-full mx-2 flex-1">
           <div className="font-bold h-6 mt-3 text-gray-300 text-sm leading-8 uppercase">
             Select a PAN Number
           </div>
-          <div className=" my-2 py-1 flex">
+          <div className="my-2 py-1 flex">
             <select
               onChange={handleSelectChange}
               value={userData.panNumber || ""}
               name="panNumber"
-              className="py-1 w-full text-gray-100 border-b-2 bg-transparent  outline-none  focus:outline-none focus:border-purple-600 transition-colors"
+              className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
               required
             >
               <option
@@ -166,7 +165,7 @@ const PAN = () => {
                 value=""
                 disabled
               >
-                Select Pan Number
+                Select PAN Number
               </option>
               {panNumberList.map((panNumber, index) => (
                 <option
@@ -182,18 +181,19 @@ const PAN = () => {
         </div>
       )}
 
-      {panNumberList.length == 0 && (
+      {/* PAN number input field */}
+      {showInput && (
         <div className="w-full mx-2 flex-1">
           <div className="font-semibold h-6 mt-3 text-gray-300 text-sm leading-8 uppercase">
-            Entity PAN Number
+            Enter PAN Number
           </div>
-          <div className=" my-2 py-1 flex">
+          <div className="my-2 py-1 flex">
             <input
               onChange={handleChange}
               value={userData.panNumber || ""}
-              name="pan_number"
-              placeholder="Entity PAN number"
-              className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
+              name="panNumber"
+              placeholder="Enter PAN number"
+              className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
               type="text"
               autoComplete="new-password"
               required
@@ -202,28 +202,28 @@ const PAN = () => {
         </div>
       )}
 
-      {/* Navigation controls  */}
+      {/* Navigation controls */}
       {currentStep !== steps.length && (
-        <div className="container flex flex-col ">
-          <div className="flex justify-around mt-4 mb-8">
-            {/* back button  */}
-            <button
-              onClick={() => handleClick()}
-              className="bg-white text-slate-600 uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer border-2 border-slate-300 hover:bg-slate-700 hover:text-white transition duration-200 ease-in-out ${
-                            "
-            >
-              Back
-            </button>
+        <div className="container flex flex-col">
+          <div className="flex justify-center items-center mt-4 mb-8 space-x-4">
+            {/* Add button */}
+            {!showInput && (
+              <button
+                onClick={() => setShowInput(true)}
+                className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
+              >
+                Add PAN Number
+              </button>
+            )}
 
-            {/* next button  */}
+            {/* Next button */}
             <button
               onClick={() => handleClick("next")}
-              className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
+              className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
             >
               Next
             </button>
           </div>
-          {/* <HelpAndLogin /> */}
         </div>
       )}
     </div>

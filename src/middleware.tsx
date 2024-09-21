@@ -5,9 +5,16 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // change public pages, if you want to add or edit some public routes
-  const publicPages = ["/login", "/register"];
+  const publicPages = [
+    "/login",
+    "/register",
+    "/dashboard",
+    "/help",
+    "/reset-password",
+    "/referral",
+  ];
   if (!cookie && !publicPages.includes(pathname)) {
-    return NextResponse.redirect(new URL("/register", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   if (cookie && publicPages.includes(pathname)) {
