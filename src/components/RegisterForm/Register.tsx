@@ -37,6 +37,8 @@ const Register = () => {
   const [apiFailedIcon, setApiFailedIcon] = useState(false); //to display cross instead of tick in stepper , where any api failed and manually upload require
   const [showHelpPage, setShowHelpPage] = useState(false); // display help page
   const [loading, setLoading] = useState(false); //for loading animation;
+  const [pageLoading, setPageLoading] = useState(true);
+  console.log(pageLoading);
   const router = useRouter();
 
   const steps = [
@@ -85,9 +87,6 @@ const Register = () => {
     } else {
       // If "registration_step" is not found in the steps array
       console.log("got invalid state name", stateName);
-      if (stateName === "Approved") {
-        return router.push("/dashboard");
-      }
       if (
         stateName === "Pending for Maker" ||
         stateName === "Pending for Checker"
@@ -124,18 +123,18 @@ const Register = () => {
 
           // if unauthorized then push to login page
           if (response.status === 401) {
-            router.push("/login");
+            return router.push("/login");
           }
 
           if (response.ok) {
             let server_message = await response.json();
             const registration_step = server_message.user_state;
+            if (registration_step === "Approved")
+              return router.push("/dashboard");
             console.log(
               `Seller step fetched successfully! ${registration_step}`,
               server_message
             );
-            if (registration_step === "Approved")
-              return router.push("/dashboard");
             setRegistrationState(registration_step);
           } else {
             let server_error = await response.json();
@@ -148,6 +147,7 @@ const Register = () => {
           console.error(`Failed to fetch seller state from backend`, error);
         } finally {
           setLoading(false);
+          setPageLoading(false);
         }
       }
     }

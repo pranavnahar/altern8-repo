@@ -126,19 +126,28 @@ const BankDetails = () => {
 
   // handle input field changes
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    e: React.ChangeEvent<HTMLInputElement>
+    //index?: number
   ) => {
-    const { name, value } = e.target;
-    const updatedFiles = [...files];
+    // const { name, value } = e.target;
+    // const updatedFiles = [...files];
 
-    // Update the specific file object at the given index
-    updatedFiles[index] = {
-      ...updatedFiles[index],
-      [name]: value,
-    };
+    // // Update the specific file object at the given index
+    // updatedFiles[index] = {
+    //   ...updatedFiles[index],
+    //   [name]: value,
+    // };
 
-    // Update the 'files' state with the modified array
+    // // Update the 'files' state with the modified array
+    // setFiles(updatedFiles);
+    const { value } = e.target;
+
+    // Update the password for all files
+    const updatedFiles = files.map((file) => ({
+      ...file,
+      password: value,
+    }));
+
     setFiles(updatedFiles);
   };
 
@@ -322,14 +331,13 @@ const BankDetails = () => {
               title="Account Aggregator"
             ></iframe>
           ) : (
-            <div>
+            <>
               <ImageSlider />
               <AA_videos />
-            </div>
+            </>
           )}
         </div>
       )}
-
       {/* if backend fails to get bank statements from the account aggregator then ask user to upload  */}
       {/* upload bank statements  */}
       {needManualUpload && (
@@ -400,10 +408,10 @@ const BankDetails = () => {
 
                         <td className="p-3 text-sm text-gray-200 font-medium">
                           <input
-                            onChange={(e) => handleChange(e, i)}
-                            value={file.password || ""}
+                            onChange={(e) => handleChange(e)}
+                            //value={file.password || ""}
                             name="password"
-                            placeholder="Enter password if any"
+                            placeholder={file.password || "Enter password"}
                             className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:border-purple-600 transition-colors"
                             type="text"
                             autoComplete="new-password"
@@ -429,7 +437,7 @@ const BankDetails = () => {
               <div className="flex justify-center items-center">
                 <button
                   onClick={handleConnectClick}
-                  className=" bg-teal-400 text-white px-4 py-2 rounded-full transition-transform transform hover:scale-110"
+                  className=" bg-teal-400 text-white px-4 mx-3 py-2 rounded-full transition-transform transform hover:scale-110"
                   disabled={isLoading}
                 >
                   {isLoading ? "Loading..." : "Connect Bank Accounts"}
@@ -440,7 +448,7 @@ const BankDetails = () => {
             {/* next button  */}
             <button
               onClick={() => handleClick("next")}
-              className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
+              className="bg-[#1565c0] mx-3 text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
             >
               Next
             </button>

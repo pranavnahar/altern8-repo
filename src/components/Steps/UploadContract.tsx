@@ -202,7 +202,7 @@ const UploadContract = () => {
               {contractFiles.map((file) => (
                 <div
                   key={file.name}
-                  className="flex items-center justify-between"
+                  className="flex items-center justify-start"
                 >
                   <span className="text-gray-300">{file.name}</span>
                   <button
@@ -246,7 +246,7 @@ const UploadContract = () => {
               {pdcFiles.map((file) => (
                 <div
                   key={file.name}
-                  className="flex items-center justify-between"
+                  className="flex items-center justify-start"
                 >
                   <span className="text-gray-300">{file.name}</span>
                   <button

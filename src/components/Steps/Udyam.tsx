@@ -122,7 +122,7 @@ const Udyam = () => {
 
       {/* Navigation controls  */}
       <div className="container flex flex-col ">
-        <div className="flex justify-center items-center mt-4 mb-8">
+        <div className="flex flex-row-reverse justify-center items-center gap-5 mt-4 mb-8">
           {/* back button  */}
 
           {/* next button  */}
@@ -131,6 +131,14 @@ const Udyam = () => {
             className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
           >
             Next
+          </button>
+          <button
+            onClick={() => {
+              getRegistrationState("Upload Contract");
+            }}
+            className="bg-gray-500 text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-gray-700 hover:text-white transition duration-200 ease-in-out"
+          >
+            Skip
           </button>
         </div>
         <HelpAndLogin />

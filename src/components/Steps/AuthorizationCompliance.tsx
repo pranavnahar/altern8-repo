@@ -299,6 +299,68 @@ const AuthorizationCompliance = () => {
           </label>
         </div>
       </div>
+      <div className="font-semibold h-6 mt-6 mb-3 text-gray-300 text-sm leading-8 uppercase">
+        Additional Documents
+      </div>
+      <div>
+        <div className="px-5 py-2">
+          <span className="text-gray-200">
+            Furthermore, being an authorized beneficial owner/manager/ officer
+            of the Company I confirm to have with me and to submit the following
+            documents:
+          </span>
+          <ul className="text-gray-200 space-y-1 mt-2">
+            <li>
+              1. The Aadhaar number and proof of possession of Aadhaar number
+            </li>
+            <li>
+              2. The Permanent Account Number or the equivalent e-document
+              thereof or Form No. 60 as defined in Income-tax Rules, 1962
+            </li>
+          </ul>
+          <label className="flex items-center space-x-2 my-2">
+            <input
+              type="checkbox"
+              name="additionalDocsConfirmed"
+              checked={userData.additionalDocsConfirmed}
+              onChange={handleChange}
+              className="h-4 w-4"
+            />
+
+            <span className="text-gray-200">
+              I confirm that the above mentioned documents related to individual
+              holding an attorney to transact on behalf of the company have been
+              submitted.
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div className="font-semibold h-6 my-3 text-gray-300 text-sm leading-8 uppercase">
+        Acknowledgment and Agreement
+      </div>
+
+      <div className="px-5 py-2">
+        <span className="text-gray-200">
+          By signing below, I acknowledge and confirm that:
+        </span>
+        <ol className="text-gray-200 space-y-1 mt-2">
+          <li>
+            1. All information provided is accurate and truthful to my best
+            knowledge.
+          </li>
+          <li>2. The documents uploaded are authentic and valid.</li>
+          <li>
+            3. I understand that the platform reserves the right to verify the
+            information and documents provided.
+          </li>
+          <li>
+            4. That any falsification of information and submission of
+            misleading documents is liable to penal or other actions under law
+            and equity.{" "}
+          </li>
+        </ol>
+      </div>
 
       <div className="w-full">
         <div className="font-semibold h-6 my-3 text-gray-300 text-sm leading-8 uppercase">
@@ -325,18 +387,31 @@ const AuthorizationCompliance = () => {
             <h3 className="text-lg font-medium text-gray-200">
               Selected Files
             </h3>
-            <ul className="list-disc pl-5 text-gray-200">
+            <ul className="list-disc text-gray-200">
               {files.map((file) => (
                 <li
                   key={file.name}
-                  className="flex justify-between items-center"
+                  className="flex justify-start items-center gap-2"
                 >
                   <span>{file.name}</span>
                   <button
                     onClick={() => removeFile(file.name)}
                     className="text-red-500 hover:text-red-700"
                   >
-                    Remove
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
                   </button>
                 </li>
               ))}
