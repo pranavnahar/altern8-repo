@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { StepperContext } from "../../Contexts/StepperContext";
 import { parseCookies } from "nookies";
 import { showToast } from "../../Utils/showToast";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const PAN = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;

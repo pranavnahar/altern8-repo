@@ -62,7 +62,6 @@ export const images = [
   "Protean.png",
   "puduvai pay.png",
   "punjab and sind.png",
-  "punjab gramin bank.png",
   "Raheja qbe.png",
   "Rajasthan marudhara bank.png",
   "sarva haryana gramin bank.png",

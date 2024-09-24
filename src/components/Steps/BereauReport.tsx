@@ -1,6 +1,4 @@
-// For Bureau Report
-
-import { useContext, useState, useEffect, useCallback } from "react";
+import { useContext, useState, useEffect } from "react";
 import { StepperContext } from "../../Contexts/StepperContext";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { parseCookies } from "nookies";
@@ -24,7 +22,9 @@ const BureauReport = () => {
   const [manualBureauReportNeeded, setManualBureauReportNeeded] =
     useState(false);
   const [entityType, setEntityType] = useState("");
+  console.log(entityType);
   const [otpTimer, setOtpTimer] = useState(60);
+  const [documentFiles, setDocumentFiles] = useState<DocumentFiles>({});
 
   // Handle token
   let accessToken = parseCookies().accessTokenForRegister;
@@ -265,123 +265,71 @@ const BureauReport = () => {
     return () => clearInterval(intervalId);
   }, [otpSent]);
 
-  let documentTypes;
-
-  if (entityType === "Partnership") {
-    documentTypes = [
-      "Address Proof",
-      "Copy of Partnership Deed",
-      "List of Authorized Signatories",
-      "ID Proof",
-      "Company Pan",
-    ];
-  } else {
-    documentTypes = [
-      "Address Proof",
-      "Copy of Board Resolution",
-      "Company Pan",
-      "ID Proof",
-    ];
-  }
-
   const documentDictionary: { [key: string]: string } = {
     AddressProof:
       "Telephone or Electricity Bill, Bank Passbook or Account Statement, Registered Lease/Sale Agreement of office premises, Proof of Address issued by Scheduled Commercial Banks/Multinational Foreign Banks, Registration Certificate issued under Shops and Establishment Act",
     "Copy of Partnership Deed":
-      "Copy of Partnership Deed or Certificate of Registration",
+      "Copy of Partnership Deed which is mandatory to submit in case of Partnership",
     "List of Authorized Signatories":
-      "List of Authorized Signatories with specimen signatures/Authority Letter signed by any Partner with PAN number and Company Stamp",
+      "A list of authorized signatories is mandatory to submit in case of Partnership",
+    IDProof: "PAN Card, Driving License, Passport, Voter ID card, Aadhaar Card",
+    CompanyPan:
+      "Copy of Company PAN which is mandatory to submit in case of Partnership",
     "Copy of Board Resolution":
-      "Copy of Board Resolution along with authorized signatory list and specimen signature OR Authority letter signed by Company Secretary/Managing Director/Director with DIN number and Company stamp",
-    "ID Proof":
-      "ID Proof of Partner requesting for CCR (Any one) (PAN / Driving License / Passport) ",
-    "Company Pan": "Company or firm Pan",
+      "Copy of Board Resolution which is mandatory to submit in case of Partnership",
   };
 
-  const [documentFiles, setDocumentFiles] = useState<DocumentFiles>({});
+  // Define all potential document types regardless of entityType
+  const allDocumentTypes = [
+    "Address Proof",
+    "Copy of Partnership Deed",
+    "List of Authorized Signatories",
+    "ID Proof",
+    "Company Pan",
+    "Copy of Board Resolution",
+  ];
 
-  const handleFileDrop = useCallback(
-    (documentType: string | number, acceptedFiles: File[]) => {
-      const validExtensions = [
-        ".pdf",
-        ".jpg",
-        ".jpeg",
-        ".png",
-        ".gif",
-        ".xlsx",
-      ];
-
-      // Filter files based on valid extensions
-      const filteredFiles = acceptedFiles.filter((file: File) =>
-        validExtensions.includes(
-          file.name.slice(file.name.lastIndexOf(".")).toLowerCase()
-        )
-      );
-
-      if (filteredFiles.length !== acceptedFiles.length) {
-        showToast(
-          `Invalid file extension provided. Please upload only PDF, Excel, JPG, JPEG, PNG, or GIF files.`,
-          "info"
-        );
-        return;
-      }
-
-      setDocumentFiles((prevState) => {
-        const existingFiles = prevState.documentType || [];
-        const combinedFiles = existingFiles.concat(filteredFiles).slice(0, 10);
-
-        // Calculate total file size
-        const totalSize = combinedFiles.reduce(
-          (sum, file) => sum + file.size,
-          0
-        );
-
-        if (totalSize > 20 * 1024 * 1024) {
-          showToast(
-            `Total file size exceeds 20MB limit. Please choose smaller files.`,
-            "info"
-          );
-          return prevState;
-        }
-
-        return {
-          ...prevState,
-          [documentType]: combinedFiles,
-        };
-      });
-    },
-    []
-  );
+  // Create hooks for all document types
+  const dropzoneHooks = allDocumentTypes.reduce((acc, documentType) => {
+    acc[documentType] = useDropzone({
+      onDrop: (acceptedFiles: File[]) =>
+        setDocumentFiles((prevFiles) => ({
+          ...prevFiles,
+          [documentType]: acceptedFiles,
+        })),
+    });
+    return acc;
+  }, {} as { [key: string]: ReturnType<typeof useDropzone> });
 
   const renderDropzones = () => {
-    return documentTypes.map((documentType) => {
-      const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop: (files) => handleFileDrop(documentType, files),
-      });
+    // Only render dropzones for the current document types
+    return allDocumentTypes.map((documentType, index) => {
+      const { getRootProps, getInputProps } = dropzoneHooks[documentType];
 
       return (
-        <div
-          key={documentType}
-          className="mb-3 mt-2 flex flex-col justify-center"
-        >
-          <div className="text-start font-medium text-base2 text-gray-300">
-            {documentType}:
-          </div>
-          <div className="text-start font-medium text-base text-gray-300">
-            {documentDictionary[documentType]}
-          </div>
-          <div
-            className="p-16 mt-3 mb-5 text-base2 text-gray-300 border border-dashed border-neutral-200"
-            {...getRootProps()}
-          >
+        <div key={index}>
+          <h3 className="font-bold my-2 text-white">{documentType}</h3>
+          <div {...getRootProps()}>
             <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the files here ...</p>
-            ) : (
-              <p className="text-center">
-                Drag 'n' drop some files here, or click to select files
-              </p>
+            <p className="border-dashed border-2 border-gray-400 py-6 text-center cursor-pointer text-gray-300">
+              Drag and drop files here, or click to select files
+            </p>
+            {documentFiles[documentType] && (
+              <div className=" text-gray-200">
+                <h4>Selected files:</h4>
+                <ul>
+                  {documentFiles[documentType].map((file, index) => (
+                    <li key={index}>{file.name}</li>
+                  ))}
+                </ul>
+              </div>
             )}
+          </div>
+          <div className="my-4">
+            <h4 className="text-sm text-gray-400">Allowed Document Types:</h4>
+            <p className="text-xs text-gray-300">
+              {documentDictionary[documentType.replace(/\s+/g, "")]}
+            </p>
           </div>
         </div>
       );
@@ -389,110 +337,63 @@ const BureauReport = () => {
   };
 
   return (
-    <div className="flex flex-col">
-      {!manualBureauReportNeeded && (
+    <>
+      <div className="p-4">
         <div className="">
-          <div className="flex flex-col">
-            {/* otp  */}
-            {otpSent && (
-              // otp field
-              <div className="w-full mx-2 flex-1">
-                <div className="font-semibold h-6 mt-3 text-gray-300 text-sm leading-8 uppercase ">
-                  OTP for Bureau Report
+          <div className="grid grid-cols-1 gap-6">
+            {manualBureauReportNeeded ? (
+              <div>{renderDropzones()}</div>
+            ) : (
+              <div>
+                <div className="w-full mx-2 flex-1">
+                  <div className="font-semibold h-6 mt-3 text-gray-300 text-sm leading-8 uppercase ">
+                    OTP for Bureau Report
+                  </div>
+                  <div className=" my-2 py-1 flex ">
+                    <input
+                      onChange={handleInput}
+                      value={otpForm.otp || ""}
+                      name="otp"
+                      placeholder="OTP"
+                      className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
+                      type="text"
+                      required
+                      autoComplete="new-password"
+                    />
+                  </div>
                 </div>
-                <div className=" my-2 py-1 flex ">
-                  <input
-                    onChange={handleInput}
-                    value={otpForm.otp || ""}
-                    name="otp"
-                    placeholder="OTP"
-                    className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
-                    type="text"
-                    required
-                    autoComplete="new-password"
-                  />
-                </div>
+
+                {otpSent && (
+                  <div>
+                    <p className="text-sm text-white">
+                      Resend OTP in {otpTimer} seconds
+                    </p>
+                  </div>
+                )}
+                {!otpSent && (
+                  <button
+                    onClick={handleSendOtp}
+                    className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md"
+                  >
+                    Resend OTP
+                  </button>
+                )}
               </div>
             )}
-          </div>
 
-          {/* send otp button  */}
-
-          {otpSent ? (
             <div className="flex justify-center items-center">
-              <div className="flex justify-center items-center text-gray-300 mt-5 p-3   rounded-xl">
-                Time left: {Math.floor(otpTimer / 60)}:
-                {(otpTimer % 60).toLocaleString("en-US", {
-                  minimumIntegerDigits: 2,
-                })}
-              </div>
-            </div>
-          ) : (
-            <div className="text-center">
               <button
-                onClick={handleSendOtp}
-                className="bg-[#1565c0] text-white  py-2 px-4 rounded-xl font-medium cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
+                onClick={() => handleClick("next")}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md"
               >
-                Resend OTP
+                Next
               </button>
             </div>
-          )}
-        </div>
-      )}
-
-      {/* manual bureau report submission  */}
-
-      {manualBureauReportNeeded && (
-        <div className="">
-          <div className="flex flex-col">
-            <div className="mb-3 mt-2 flex flex-col justify-center">
-              <div className="text-center font-medium text-xl text-gray-300">
-                Document Signature
-              </div>
-              <div className="text-center font-medium text-base text-gray-300">
-                Please sign the below document for fetching Bureau report
-              </div>
-              <div className="text-center font-medium text-base text-gray-300 py-3">
-                <a href="#" className="text-blue-600">
-                  Click Here
-                </a>
-              </div>
-            </div>
-
-            {/* drag and drop  */}
-            {entityType === "Partnership" && renderDropzones()}
-            {(entityType === "Company" ||
-              (entityType !== "Sole Proprietorship" &&
-                entityType !== "Partnership")) &&
-              renderDropzones()}
           </div>
         </div>
-      )}
-
-      {/* Navigation controls  */}
-
-      <div className="container flex flex-col ">
-        <div className="flex justify-around mt-4 mb-8">
-          {/* back button  */}
-          <button
-            onClick={() => handleClick()}
-            className="bg-white text-slate-600 uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer border-2 border-slate-300 hover:bg-slate-700 hover:text-white transition duration-200 ease-in-out ${
-                            "
-          >
-            Back
-          </button>
-
-          {/* next button  */}
-          <button
-            onClick={() => handleClick("next")}
-            className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
-          >
-            Next
-          </button>
-        </div>
-        <HelpAndLogin />
       </div>
-    </div>
+      <HelpAndLogin />
+    </>
   );
 };
 

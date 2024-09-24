@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { Button } from "@mui/material";
 import { showToast } from "../../Utils/showToast";
 import { useSearchParams, useRouter } from "next/navigation";
+import HelpAndLogin from "../Step-Component/HelpAndLogin";
 
 const Register = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -59,6 +60,8 @@ const Register = () => {
     setShowConfirmationModal(false);
     await handleSubmission("next");
   };
+
+  console.log(showConfirmationModal);
 
   const handleSubmission = async (direction?: string) => {
     if (direction !== "next") {
@@ -182,11 +185,11 @@ const Register = () => {
 
   const handleConfirmButtonClick = async () => {
     if (
-      userData.phoneNumber &&
-      userData.phoneNumber.length == 10 &&
-      userData.entityType &&
-      userData.password &&
-      userData.password2
+      userData.firstName.length &&
+      userData.phoneNumber.length &&
+      userData.entityType.length &&
+      userData.password.length &&
+      userData.password2.length
     ) {
       setShowConfirmationModal(true);
     } else {
@@ -208,6 +211,7 @@ const Register = () => {
           <div className="mx-3">
             <img className="w-[30px]" alt="" src="/ballons.png" />
           </div>
+          <div className="text-xl text-white">Welcome to Altern8</div>
           <div className="mx-3">
             <img className="w-[30px]" alt="" src="/ballons.png" />
           </div>
@@ -527,7 +531,7 @@ const Register = () => {
               </div>
             )}
           </div>
-          {/* <HelpAndLogin /> */}
+          <HelpAndLogin />
         </div>
       )}
     </div>

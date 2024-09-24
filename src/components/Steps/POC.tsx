@@ -28,13 +28,8 @@ const POC = () => {
     phoneNumber: "",
     designation: "",
   });
-  const {
-    currentStep,
-    setCurrentStep,
-    steps,
-    setLoading,
-    getRegistrationState,
-  } = useContext(StepperContext);
+  const { currentStep, steps, setLoading, getRegistrationState } =
+    useContext(StepperContext);
   const router = useRouter();
 
   // Handle token
@@ -156,13 +151,13 @@ const POC = () => {
     GetPoc();
   }, []);
 
-  const handleClick = async (direction?: string) => {
-    let newStep = currentStep;
-    if (direction !== "next") {
-      newStep--;
-      setCurrentStep(newStep);
-    }
-  };
+  // const handleClick = async (direction?: string) => {
+  //   let newStep = currentStep;
+  //   if (direction !== "next") {
+  //     newStep--;
+  //     setCurrentStep(newStep);
+  //   }
+  // };
 
   const handleEditButtonClick = (id: string) => {
     // show edit poc details fields
@@ -446,8 +441,8 @@ const POC = () => {
                   onChange={handleChange}
                   value={userData["name"] || ""}
                   name="name"
-                  placeholder="Name"
-                  className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
+                  placeholder="name"
+                  className="py-1 placeholder:text-white  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
                   type="text"
                   required
                 />
@@ -533,7 +528,7 @@ const POC = () => {
                   onChange={handleChange}
                   value={userData["name"] || ""}
                   name="name"
-                  placeholder="Name"
+                  placeholder="name"
                   className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
                   type="text"
                   required
@@ -612,16 +607,8 @@ const POC = () => {
       {/* Navigation controls  */}
       {currentStep !== steps.length && (
         <div className="container flex flex-col  mt-10">
-          <div className="flex justify-around mt-4 mb-8">
+          <div className="flex justify-center items-center mt-4 mb-8">
             {/* back button  */}
-            <button
-              onClick={() => handleClick()}
-              className="bg-white text-slate-600 uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer border-2 border-slate-300 hover:bg-slate-700 hover:text-white transition duration-200 ease-in-out ${
-                            "
-            >
-              Back
-            </button>
-
             <div>
               <button
                 onClick={() => handleNextButtonClick()}
