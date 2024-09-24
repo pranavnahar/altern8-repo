@@ -2,7 +2,7 @@
 // all the components for this page are located at ->
 // ../components/register
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { StepperContext } from "../../Contexts/StepperContext";
 import Stepper from "../../components/RegisterForm/Stepper";
 import RegisterField from "../../components/RegisterForm/RegisterField";
@@ -162,7 +162,11 @@ const Register = () => {
   const displayStep = (step: number) => {
     switch (step) {
       case 1:
-        return <RegisterField />;
+        return (
+          <Suspense>
+            <RegisterField />;
+          </Suspense>
+        );
       case 2:
         return <POC />;
       case 3:

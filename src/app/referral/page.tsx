@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useContext } from "react";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
