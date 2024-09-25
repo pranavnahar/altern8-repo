@@ -1,4 +1,4 @@
-import { apiUrl } from "@/Utils/auth";
+import { apiUrl } from "../Utils/auth";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { createContext, useContext, useState, ReactNode } from "react";
@@ -20,16 +20,16 @@ interface StepperContextType {
 // Create a default context value
 const defaultStepperContext: StepperContextType = {
   currentStep: 0,
-  setCurrentStep: () => {},
+  setCurrentStep: () => { },
   steps: [],
   loading: false,
-  setLoading: () => {},
+  setLoading: () => { },
   showHelpPage: false,
-  setShowHelpPage: () => {},
-  handleClickHelp: () => {},
-  getRegistrationState: () => {},
+  setShowHelpPage: () => { },
+  handleClickHelp: () => { },
+  getRegistrationState: () => { },
   apiFailedIcon: false,
-  setApiFailedIcon: () => {},
+  setApiFailedIcon: () => { },
 };
 
 export const StepperContext = createContext<StepperContextType>(

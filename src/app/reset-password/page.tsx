@@ -9,7 +9,7 @@ import { parseCookies } from "nookies";
 import LinearBuffer from "../../components/LinearBuffer"; //for progress animation
 import { showToast } from "../../Utils/showToast";
 import { setAccessTokenCookie, setRefreshTokenCookie } from "../../Utils/auth";
-import AnimatedLogo from "@/components/Header/AnimatedLogo";
+import AnimatedLogo from "../../components/Header/AnimatedLogo";
 let accessToken = parseCookies().accessToken;
 
 const page = () => {

@@ -17,7 +17,7 @@ import { parseCookies } from "nookies";
 //import { getAccessToken } from "../auth";
 //import { StepperContext } from "../../Contexts/StepperContext";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import AnimatedLogo from "@/components/Header/AnimatedLogo";
+import AnimatedLogo from "../../components/Header/AnimatedLogo";
 
 // Main function return
 const HelpPage = () => {
@@ -165,7 +165,7 @@ const HelpPage = () => {
                       }}
                       variant="contained"
                       startIcon={<SendOutlinedIcon />}
-                      //onClick={handleChatClick}
+                    //onClick={handleChatClick}
                     >
                       Chat With Admin
                     </Button>
@@ -218,7 +218,7 @@ const HelpPage = () => {
                     }}
                     variant="contained"
                     startIcon={<SendOutlinedIcon />}
-                    //onClick={handleChatClick}
+                  //onClick={handleChatClick}
                   >
                     Chat With Admin
                   </Button>
