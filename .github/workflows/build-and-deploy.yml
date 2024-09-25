@@ -15,7 +15,7 @@ on:
 
 # 2
 env:
-  REGISTRY: "registry.digitalocean.com/altern8-project-container"
+  REGISTRY: "registry.digitalocean.com/id-project-container"
   NEXTJS_IMAGE_NAME: "altern8-project-frontend-user"
 
 # 3
