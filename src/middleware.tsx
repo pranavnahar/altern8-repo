@@ -11,7 +11,11 @@ export function middleware(request: NextRequest) {
     "/dashboard",
     "/help",
     "/reset-password",
-    "/referral",
+    "/dashboard/referral",
+    "/dashboard/upload-file",
+    "/dashboard/help",
+    "/dashboard/rera-template",
+    "/",
   ];
   if (!cookie && !publicPages.includes(pathname)) {
     return NextResponse.redirect(new URL("/login", request.url));

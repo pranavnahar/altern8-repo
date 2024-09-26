@@ -1,12 +1,22 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import { jwtDecode } from "jwt-decode";
+import { parseCookies } from "nookies";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 interface DashboardContextType {
   chatCount: number;
   setChatCount: (count: number) => void;
   newMessage: string;
   setNewMessage: (message: string) => void;
-  messages: { text: string; sender: string }[];
-  setMessages: (messages: { text: string; sender: string }[]) => void;
+  messages: { text: string; sender: string; file?: string | null }[];
+  setMessages: (
+    messages: { text: string; sender: string; file?: string | null }[]
+  ) => void;
   uId: string;
   setUId: (id: string) => void;
 }
@@ -40,6 +50,36 @@ export const DashboardProvider = ({ children }: DashboardProviderProps) => {
     { text: "How may I help you?", sender: "admin" },
   ]);
   const [uId, setUId] = useState("");
+
+  useEffect(() => {
+    const fetchTokenAndSetUserId = async () => {
+      try {
+        // Retrieve the JWT token from cookies
+        const accessToken = parseCookies().accessToken;
+        const token = accessToken;
+
+        if (token) {
+          // Decode the token to extract information
+          const decodedToken: { uid: string } = jwtDecode(token);
+
+          // Extract the user ID (assuming it's stored in the 'sub' claim)
+          console.log(decodedToken.uid);
+
+          const userId = decodedToken.uid;
+
+          // Introduce a delay of 1000 milliseconds (1 second)
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
+          // Set the user ID in state after the delay
+          setUId(userId);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchTokenAndSetUserId();
+  }, []);
 
   return (
     <DashboardContext.Provider
