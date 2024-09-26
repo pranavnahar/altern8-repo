@@ -3,13 +3,14 @@ import React, { useState, useContext } from "react";
 import Button from "@mui/material/Button";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
-import { getAccessToken } from "../../Utils/auth";
-import { DashboardContext } from "../../Contexts/DashboardContext";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import { showToast } from "../../Utils/showToast";
+import { getAccessToken } from "../../../Utils/auth";
+import { DashboardContext } from "../../../Contexts/DashboardContext";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import { showToast } from "../../../Utils/showToast";
 import { SendHorizonal, Upload } from "lucide-react";
+import { jwtDecode } from "jwt-decode";
 
-const Referral = () => {
+const page = () => {
   const [formData, setFormData] = useState({ email: "" });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   console.log(selectedFile);
@@ -18,10 +19,22 @@ const Referral = () => {
   const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL;
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   const router = useRouter();
-  let referralLink = `${frontendUrl}/register?referal_code=${uId}`;
+  console.log(uId);
 
   let accessToken = parseCookies().accessToken;
+  let userId = "";
+  const token = accessToken;
 
+  if (token) {
+    // Decode the token to extract information
+    const decodedToken: { uid: string } = jwtDecode(token);
+
+    // Extract the user ID (assuming it's stored in the 'sub' claim)
+    console.log(decodedToken.uid);
+
+    userId = decodedToken.uid;
+  }
+  let referralLink = `${frontendUrl}/register?referal_code=${userId}`;
   const ReplaceTokenOrRedirect = async () => {
     const token = await getAccessToken();
     if (!token) {
@@ -41,7 +54,7 @@ const Referral = () => {
     return emailRegex.test(email.trim());
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateEmail(formData.email)) {
@@ -59,20 +72,23 @@ const Referral = () => {
 
       console.log(bodyData);
 
-      let response = await fetch(`${apiUrl}/user-api/referral-email/`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bodyData),
-      });
+      let response = await fetch(
+        `${apiUrl}/user-dashboard-api/referral-email/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bodyData),
+        }
+      );
 
       console.log(response);
 
       if (response.status === 401) {
         await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-api/referral-email/`, {
+        response = await fetch(`${apiUrl}/user-dashboard-api/referral-email/`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -98,14 +114,14 @@ const Referral = () => {
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const fileInput = event.target;
+    const fileInput = event.target as HTMLInputElement;
     const file = fileInput.files?.[0];
 
     // Check if the file is an Excel file based on its extension
     const allowedExtensions = ["xlsx", "xls"];
-    const fileExtension = file?.name.split(".").pop()?.toLowerCase() ?? "";
+    const fileExtension = file?.name.split(".").pop()?.toLowerCase();
 
-    if (!allowedExtensions.includes(fileExtension)) {
+    if (!allowedExtensions.includes(fileExtension!)) {
       showToast("Please upload a valid Excel file (.xlsx or .xls)", "info");
       fileInput.value = ""; // Reset the file input
       return;
@@ -139,13 +155,16 @@ const Referral = () => {
 
     try {
       setLoadingSpinner(true);
-      const response = await fetch(`${apiUrl}/user-api/referral-email-bulk/`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        `${apiUrl}/user-dashboard-api/referral-email-bulk/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         const responseData = await response.json();
@@ -183,7 +202,7 @@ const Referral = () => {
       )}
 
       <div className="w-4/5">
-        <div className="py-5 text-5xl font-semibold text-center text-white-font">
+        <div className="py-5 text-3xl text-white font-semibold text-center text-white-font">
           Invite New user
         </div>
 
@@ -222,27 +241,28 @@ const Referral = () => {
                     required
                   />
                 </div>
-                <Button
-                  style={{
-                    backgroundColor: "#1565c0",
-                    borderRadius: "25px",
-                    width: "200px",
-                  }}
-                  variant="contained"
-                  type="submit"
-                  endIcon={
-                    <SendHorizonal
-                      className="text-gray-200 size-4"
-                      strokeWidth={1.75}
-                    />
-                  }
-                >
-                  Send Invite
-                </Button>
               </form>
             </div>
 
             <div className="flex flex-col items-center justify-center pt-8">
+              <Button
+                onClick={handleSubmit}
+                style={{
+                  backgroundColor: "#1565c0",
+                  borderRadius: "25px",
+                  width: "200px",
+                }}
+                variant="contained"
+                type="submit"
+                endIcon={
+                  <SendHorizonal
+                    className="text-gray-200 size-4"
+                    strokeWidth={1.75}
+                  />
+                }
+              >
+                Send Invite
+              </Button>
               <div className="pt-8">
                 <input
                   type="file"
@@ -275,4 +295,4 @@ const Referral = () => {
   );
 };
 
-export default Referral;
+export default page;
