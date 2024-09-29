@@ -15,6 +15,7 @@ export function middleware(request: NextRequest) {
     "/dashboard/upload-file",
     "/dashboard/help",
     "/dashboard/rera-template",
+    "/calendar",
     "/",
   ];
   if (!cookie && !publicPages.includes(pathname)) {
