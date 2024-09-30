@@ -22,7 +22,7 @@ const Header: React.FC = () => {
 
   return (
     <motion.div
-      className="p-3 py-4 app-header flex items-center sticky z-[50] top-0 justify-between"
+      className="mr-10 p-3 py-4 app-header flex items-center sticky z-[50] top-0 justify-between"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -34,7 +34,7 @@ const Header: React.FC = () => {
           <Button>Chat with Admin</Button>
         </div>
 
-        <DropdownMenu >
+        <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <p className="cursor-pointer flex items-center justify-center">
               Lefin Singh <ChevronDown className="ml-1" size={15} />
