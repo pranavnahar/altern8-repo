@@ -4,7 +4,7 @@
 // 2. if it fails then manually upload bank statement
 
 import { useContext, useState, useCallback, useEffect } from "react";
-import { StepperContext } from "../../Contexts/StepperContext";
+import { StepperContext } from "../../contexts/StepperContext";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
@@ -14,7 +14,7 @@ import { useDropzone } from "react-dropzone";
 import ImageSlider from "./Account Aggregator/ImageSlider";
 import { AA_videos } from "./Account Aggregator/AA_Videos";
 import axios from "axios";
-import { showToast } from "../../Utils/showToast";
+import { showToast } from "../../utils/showToast";
 
 const BankDetails = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;

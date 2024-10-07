@@ -1,4 +1,4 @@
-import { fetchWithAuth } from "../../../Utils/fetch-with-auth";
+import { fetchWithAuth } from "../../../utils/fetch-with-auth";
 import { Button } from "../../../components/ui/button";
 import {
   Sheet,
@@ -10,6 +10,7 @@ import {
 } from "../../../components/ui/sheet";
 import { CheckCheck, CircleAlert, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { IconNotification } from "@tabler/icons-react";
 
 export function NotificationSheet() {
   const [notifications, setNotifications] = useState<
@@ -82,8 +83,7 @@ export function NotificationSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button className="text-white bg-primary hover:bg-primary/90" size="sm">
-          <CircleAlert className="mr-2 size-4" strokeWidth={2.5} />
+        <Button iconPlacement="right" size="sm" Icon={IconNotification} className="text-white bg-primary hover:bg-primary/90">
           Notifications{" "}
           <span className="m-auto ml-2 text-xs rounded-full bg-white/10 size-4">
             {notifications.length}

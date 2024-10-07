@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   createAccountsTypes,
   getAccountsTypes,
-} from "../../../Utils/ledger/accounts/account-service";
+} from "../../../utils/ledger/accounts/account-service";
 import { AccountType } from "@/components/ledger/accounts/types";
 
 export const useAccountTypes = (

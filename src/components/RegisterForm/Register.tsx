@@ -3,7 +3,7 @@
 // ../components/register
 "use client";
 import React, { useState, useEffect, Suspense } from "react";
-import { StepperContext } from "../../Contexts/StepperContext";
+import { StepperContext } from "../../contexts/StepperContext";
 import Stepper from "../../components/RegisterForm/Stepper";
 import RegisterField from "../../components/RegisterForm/RegisterField";
 //import POC from "../components/register/steps/POC";

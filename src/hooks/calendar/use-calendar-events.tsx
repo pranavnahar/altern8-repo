@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { fetchEvents } from '../../Utils/calendar/calendar-service';
+import { fetchEvents } from '../../utils/calendar/calendar-service';
 import { useState, useEffect } from 'react';
 
 // Define the structure of the event data returned by the fetchEvents function

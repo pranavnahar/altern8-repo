@@ -9,9 +9,9 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import CloseIcon from "@mui/icons-material/Close";
-import { showToast } from "../../Utils/showToast";
+import { showToast } from "../../utils/showToast";
 import { parseCookies } from "nookies";
-import { getAccessToken } from "../../Utils/auth";
+import { getAccessToken } from "../../utils/auth";
 import { useRouter } from "next/navigation";
 
 type Message = {

@@ -1,4 +1,4 @@
-import { getAccessToken } from "../../../Utils/auth";
+import { getAccessToken } from "../../auth";
 import { parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 

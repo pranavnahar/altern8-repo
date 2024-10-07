@@ -17,6 +17,7 @@ import CalendarField from "./fields/calender-field";
 import FileField from "./fields/file-field";
 import { fieldData } from "./field-data";
 import { Account } from "../accounts/types";
+import { IconPlus } from "@tabler/icons-react";
 //import { ScrollAreaScrollbar } from "@radix-ui/react-scroll-area";
 
 interface TransactionSheetProps {
@@ -169,8 +170,7 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       {!isEditMode && (
         <SheetTrigger asChild>
-          <Button className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-md bg-primary hover:bg-primary/90">
-            <Plus className="my-auto mr-2 size-4" />
+          <Button iconPlacement="right" size="sm" Icon={IconPlus} variant="expandIcon" className="text-sm max-h-max">
             Add Transaction
           </Button>
         </SheetTrigger>

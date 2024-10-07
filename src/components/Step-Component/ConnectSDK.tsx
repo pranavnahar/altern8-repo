@@ -4,7 +4,7 @@ import { RootFiEnvironment } from "rootfi-api";
 import Image from "next/image";
 import { Box, CircularProgress } from "@mui/material";
 import { parseCookies } from "nookies";
-import { showToast } from "../../Utils/showToast";
+import { showToast } from "../../utils/showToast";
 import { IntegrationCategory, IntegrationType } from "rootfi-api/api";
 
 type InviteLinkData = {

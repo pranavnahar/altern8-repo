@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { showToast } from "../../../Utils/showToast";
+import { showToast } from "../../../utils/showToast";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
-import { getAccessToken } from "../../../Utils/auth";
+import { getAccessToken } from "../../../utils/auth";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const Page = () => {

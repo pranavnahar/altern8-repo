@@ -1,6 +1,6 @@
 import { useContext, useState, useCallback, useEffect } from "react";
-import { showToast } from "../../Utils/showToast";
-import { StepperContext } from "../../Contexts/StepperContext";
+import { showToast } from "../../utils/showToast";
+import { StepperContext } from "../../contexts/StepperContext";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { parseCookies } from "nookies";
 import { useRouter } from "next/navigation";

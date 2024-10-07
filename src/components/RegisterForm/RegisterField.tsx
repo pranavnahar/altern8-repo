@@ -1,12 +1,12 @@
 // get phone number and password and register the user
 
 import React, { useContext, useState } from "react";
-import { StepperContext } from "../../Contexts/StepperContext";
+import { StepperContext } from "../../contexts/StepperContext";
 //import HelpAndLogin from "./stepsComponents/HelpAndLogin";
 //import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { Button } from "@mui/material";
-import { showToast } from "../../Utils/showToast";
+import { showToast } from "../../utils/showToast";
 import { useSearchParams, useRouter } from "next/navigation";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 

@@ -8,10 +8,11 @@ import {
   DialogTrigger,
 } from "../../../components/ui/dialog";
 import { Button } from "../../../components/ui/button";
-import { uploadBulkTransactions } from "../../../Utils/ledger/transactions/transactions-service";
+import { uploadBulkTransactions } from "../../../utils/ledger/transactions/transactions-service";
 import { Input } from "../../../components/ui/input";
 import { Upload } from "lucide-react";
-import { showToast } from "../../../Utils/showToast";
+import { showToast } from "../../../utils/showToast";
+import { IconUpload } from "@tabler/icons-react";
 
 const TransactionUpload: React.FC<{
   onUploadSuccess: (data: object) => void;
@@ -51,8 +52,7 @@ const TransactionUpload: React.FC<{
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-primary hover:bg-primary/90">
-          <Upload strokeWidth={1.75} className="my-auto mr-2 size-4" />
+        <Button iconPlacement="right" size="sm" Icon={IconUpload} variant="expandIcon" className="text-sm max-h-max">
           Upload File
         </Button>
       </DialogTrigger>

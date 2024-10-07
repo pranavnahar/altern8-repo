@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 //import { ToastContainer } from "react-toastify"; // for alert messages
 import { motion } from "framer-motion";
 import { parseCookies } from "nookies";
-import { showToast } from "@/Utils/showToast";
-import { setAccessTokenCookie, setRefreshTokenCookie } from "@/Utils/auth";
+import { showToast } from "@/utils/showToast";
+import { setAccessTokenCookie, setRefreshTokenCookie } from "@/utils/auth";
 import LinearBuffer from "@/components/LinearBuffer";
 import AnimatedLogo from "@/components/Header/AnimatedLogo";
 let accessToken = parseCookies().altern8_useraccess;

@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Figtree } from "next/font/google";
 import "./globals.css";
-import AppLayout from "../components/AppLayout/AppLayout";
-import { ToastContainer } from "react-toastify";
+import { Toaster } from 'sonner';
 import "react-toastify/dist/ReactToastify.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const figtree = Figtree({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Altern8",
@@ -22,9 +21,9 @@ export default function RootLayout({
       <head>
         <title>Altern8</title>
       </head>
-      <body className={`${inter.className}`}>
-        <AppLayout>{children}</AppLayout>
-        <ToastContainer />
+      <body className={`${figtree.className}`}>
+        {children}
+        <Toaster />
       </body>
     </html>
   );

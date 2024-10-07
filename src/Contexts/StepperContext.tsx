@@ -1,4 +1,4 @@
-import { apiUrl } from "../Utils/auth";
+import { apiUrl } from "../utils/auth";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { createContext, useContext, useState, ReactNode } from "react";
