@@ -30,7 +30,6 @@ const SideBar: React.FC<SideBarProps> = ({
   const router = useRouter();
   const cookies = parseCookies();
   const accessToken = cookies.altern8_useraccess;
-  console.log("lol", accessToken)
 
   if (!accessToken) {
     router.push('/login')

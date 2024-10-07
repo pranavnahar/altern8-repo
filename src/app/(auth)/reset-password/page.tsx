@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 //import { ToastContainer } from "react-toastify"; // for alert messages
 import { motion } from "framer-motion";
 import { parseCookies } from "nookies";
-import LinearBuffer from "../../components/LinearBuffer"; //for progress animation
-import { showToast } from "../../Utils/showToast";
-import { setAccessTokenCookie, setRefreshTokenCookie } from "../../Utils/auth";
-import AnimatedLogo from "../../components/Header/AnimatedLogo";
+import { showToast } from "@/Utils/showToast";
+import { setAccessTokenCookie, setRefreshTokenCookie } from "@/Utils/auth";
+import LinearBuffer from "@/components/LinearBuffer";
+import AnimatedLogo from "@/components/Header/AnimatedLogo";
 let accessToken = parseCookies().altern8_useraccess;
 
 const page = () => {

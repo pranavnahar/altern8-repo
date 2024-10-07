@@ -1,9 +1,5 @@
-// This is main login page for the website
-// All the components of this page are located at->
-// ../components/login
 
 import React, { useState, useEffect } from "react";
-//import { ToastContainer } from "react-toastify";
 import { showToast } from "../../Utils/showToast";
 import { motion } from "framer-motion"; // for animations
 import Link from "next/link";

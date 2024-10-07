@@ -1,3 +1,5 @@
+"use client"
+
 import { parseCookies } from "nookies";
 import { getAccessToken } from "../../../Utils/auth";
 import axios from "axios";
