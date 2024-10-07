@@ -55,7 +55,7 @@ export const DashboardProvider = ({ children }: DashboardProviderProps) => {
     const fetchTokenAndSetUserId = async () => {
       try {
         // Retrieve the JWT token from cookies
-        const accessToken = parseCookies().accessToken;
+        const accessToken = parseCookies().altern8_useraccess;
         const token = accessToken;
 
         if (token) {

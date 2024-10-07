@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronRight, UserRound } from "lucide-react";
 import { menuItemsLogos } from "../global/menu-items";
 import { parseCookies } from "nookies";
+import { useRouter } from "next/navigation";
 
 interface SideBarProps {
   currentPath: string;
@@ -26,19 +27,21 @@ const SideBar: React.FC<SideBarProps> = ({
     uid: string;
   } | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const router = useRouter();
+  const cookies = parseCookies();
+  const accessToken = cookies.altern8_useraccess;
+  console.log("lol", accessToken)
+
+  if (!accessToken) {
+    router.push('/login')
+    return;
+  }
 
   const fetchAdminData = async () => {
-    const cookies = parseCookies();
-    const accessToken = cookies.accessTokenAdmin;
-
-    if (!accessToken) {
-      setErrorMessage("Access token not found");
-      return;
-    }
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin-api/get-uid/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/user-dashboard-api/get-uid/`,
         {
           method: "GET",
           headers: {
@@ -63,24 +66,17 @@ const SideBar: React.FC<SideBarProps> = ({
   useEffect(() => {
     fetchAdminData();
   }, []);
-  
+
 
   const MenuItems = [
-    { name: "Dashboard", link: "/" },
-    { name: "Borrowers List", link: "/borrowers" },
-    { name: "Projects List", link: "/projects" },
-    { name: "Chat Box", link: "/chat-box" },
-    { name: "Ledger", link: "/ledger" },
+    { name: "Dashboard", link: "/dashboard" },
+    { name: "Company Details", link: "/company-details"},
     { name: "Calendar", link: "/calendar" },
-    { name: "Channel Partners", link: "/channel-partners" },
-    { name: "Lead Generation", link: "/lead-generation" },
-    { name: "Products", link: "/products" },
-    { name: "Reports", link: "/reports" },
-    { name: "Email Templates", link: "/email-templates" },
-    { name: "Contact Us", link: "/contact-us" },
-    { name: "Probe Companies", link: "/companies" },
-    { name: "Rera Templates", link: "/rera-templates" },
-    { name: "Admin Profile", link: "/admin-profile" },
+    { name: "Projects List", link: "/projects-list" },
+    { name: "Ledger", link: "/ledger" },
+    { name: "Referral", link: "/referral" },
+    { name: "Upload Files", link: "/upload-files" },
+    { name: "Help", link: "/help"},
   ];
 
   useEffect(() => {

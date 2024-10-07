@@ -15,7 +15,7 @@ const RERA = () => {
     Rera_username: "",
     Rera_password: "",
   });
-  let accessToken = parseCookies().accessTokenForRegister;
+  let accessToken = parseCookies().altern8_useraccessForRegister;
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

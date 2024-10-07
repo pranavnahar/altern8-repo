@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next lint && next dev ",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -26,6 +26,7 @@
     "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
+    "@tabler/icons-react": "^3.19.0",
     "@tanstack/react-table": "^8.20.5",
     "@types/jwt-decode": "^3.1.0",
     "@types/react-slick": "^0.23.13",

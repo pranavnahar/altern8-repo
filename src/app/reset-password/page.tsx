@@ -10,7 +10,7 @@ import LinearBuffer from "../../components/LinearBuffer"; //for progress animati
 import { showToast } from "../../Utils/showToast";
 import { setAccessTokenCookie, setRefreshTokenCookie } from "../../Utils/auth";
 import AnimatedLogo from "../../components/Header/AnimatedLogo";
-let accessToken = parseCookies().accessToken;
+let accessToken = parseCookies().altern8_useraccess;
 
 const page = () => {
   const [otpForm, setOtpForm] = useState({

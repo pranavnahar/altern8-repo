@@ -58,7 +58,7 @@ export default function page() {
   };
 
   // Handle token
-  let accessToken = parseCookies().accessToken; //access token from cookies
+  let accessToken = parseCookies().altern8_useraccess; //access token from cookies
 
   // if not accessToken then ask for refresh token
   const ReplaceTokenOrRedirect = async () => {

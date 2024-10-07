@@ -37,7 +37,7 @@ const GST = () => {
   console.log(otpTimer);
 
   // Handle token
-  let accessToken = parseCookies().accessTokenForRegister;
+  let accessToken = parseCookies().altern8_useraccessForRegister;
 
   // handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -3,7 +3,7 @@ import { getAccessToken } from "../../auth";
 import { parseCookies } from "nookies";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
-let accessToken = parseCookies().accessTokenAdmin;
+let accessToken = parseCookies().altern8_useraccessAdmin;
 
 interface FetchOptions extends RequestInit {
   headers?: Record<string, string>;

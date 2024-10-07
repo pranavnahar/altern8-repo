@@ -22,7 +22,7 @@ const SelectPrimaryBankAccount = () => {
   const router = useRouter();
   // Handle token
   let accessToken =
-    parseCookies().accessTokenForRegister || localStorage.getItem("token");
+    parseCookies().altern8_useraccessForRegister || localStorage.getItem("token");
 
   // handle input change
   // const handleChange = (e: React.MouseEvent<HTMLButtonElement>) => {

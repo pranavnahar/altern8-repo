@@ -1,4 +1,22 @@
+import React from 'react'
 
-export default function Home() {
-  return <>hi</>;
+type Props = {}
+
+const Page = (props: Props) => {
+  return (
+    <div>
+
+      Home page
+      {/*
+        <Hero />
+        <Statistics />
+        <FlipCard />
+        <Testimonials />
+        <ContactUS />
+        <Footer />
+      */}
+    </div>
+  )
 }
+
+export default Page

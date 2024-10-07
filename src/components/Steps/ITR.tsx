@@ -38,7 +38,7 @@ const ITR = () => {
   const [externalApiErrorCounts, setExternalApiErrorCounts] = useState(0);
 
   // Handle token
-  let accessToken = parseCookies().accessTokenForRegister;
+  let accessToken = parseCookies().altern8_useraccessForRegister;
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 

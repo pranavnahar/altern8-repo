@@ -2,6 +2,6 @@
 import { cookies } from "next/headers";
 
 export async function logout() {
-  cookies().delete("accessAltern8User");
+  cookies().delete("altern8_useraccess");
   return "success";
 }

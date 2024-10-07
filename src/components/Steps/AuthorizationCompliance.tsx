@@ -37,7 +37,7 @@ const AuthorizationCompliance = () => {
     additionalDocsConfirmed: true,
   });
   const [files, setFiles] = useState<File[]>([]);
-  let accessToken = parseCookies().accessTokenForRegister;
+  let accessToken = parseCookies().altern8_useraccessForRegister;
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -35,7 +35,7 @@ const ConnectSDK: React.FC<{
   onEventChange: (s: string) => void;
 }> = ({ integration, category, onEventChange }) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  let accessToken = parseCookies().accessTokenForRegister;
+  let accessToken = parseCookies().altern8_useraccessForRegister;
 
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   console.log(loadingSpinner);
