@@ -2,13 +2,12 @@
 import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { showToast } from "../../../utils/showToast";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { getAccessToken } from "../../../utils/auth";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import { IconCloudUpload, IconFileText } from "@tabler/icons-react";
 
 const Page = () => {
   const [file, setFile] = useState<File>(); // state for file upload
@@ -151,31 +150,31 @@ const Page = () => {
         {/* previous file uploads */}
         <div className="grid grid-cols-5 gap-4 mx-6">
           <div className="text-center cursor-pointer">
-            <PictureAsPdfIcon
+            <IconFileText
               style={{ fill: "#C3E1EF", width: "90px", height: "90px" }}
             />
             <div className="text-icon-light-blue text-base2">Accounts.pdf</div>
           </div>
           <div className="text-center cursor-pointer">
-            <PictureAsPdfIcon
+            <IconFileText
               style={{ fill: "#C3E1EF", width: "90px", height: "90px" }}
             />
             <div className="text-icon-light-blue text-base2">Accounts.pdf</div>
           </div>
           <div className="text-center cursor-pointer">
-            <PictureAsPdfIcon
+            <IconFileText
               style={{ fill: "#C3E1EF", width: "90px", height: "90px" }}
             />
             <div className="text-icon-light-blue text-base2">Accounts.pdf</div>
           </div>
           <div className="text-center cursor-pointer">
-            <PictureAsPdfIcon
+            <IconFileText
               style={{ fill: "#C3E1EF", width: "90px", height: "90px" }}
             />
             <div className="text-icon-light-blue text-base2">Accounts.pdf</div>
           </div>
           <div className="text-center cursor-pointer">
-            <PictureAsPdfIcon
+            <IconFileText
               style={{ fill: "#C3E1EF", width: "90px", height: "90px" }}
             />
             <div className="text-icon-light-blue text-base2">Accounts.pdf</div>
@@ -191,7 +190,7 @@ const Page = () => {
             }}
             component="label"
             variant="contained"
-            startIcon={<CloudUploadIcon />}
+            startIcon={<IconCloudUpload />}
           >
             Upload file
             <VisuallyHiddenInput type="file" onChange={handleFileChange} />
