@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Altern8 Dashboard help",
-  description: "Dashboard help",
+  title: "Altern8 Help page",
+  description: "Help",
 };
 
 export default function ProductLayout({
