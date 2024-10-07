@@ -21,7 +21,7 @@ const page = () => {
   const router = useRouter();
   console.log(uId);
 
-  let accessToken = parseCookies().accessToken;
+  let accessToken = parseCookies().altern8_useraccess;
   let userId = "";
   const token = accessToken;
 

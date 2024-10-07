@@ -4,8 +4,8 @@ import FullCalendar from "@fullcalendar/react";
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { EventClickArg, EventApi } from "@fullcalendar/core";
-import EventModal from "../../components/Calendar/event-modal";
-import useCalendarEvents from "../../hooks/calendar/use-calendar-events";
+import EventModal from "@/components/Calendar/event-modal";
+import useCalendarEvents from "@/hooks/calendar/use-calendar-events";
 
 const CalendarPage = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);

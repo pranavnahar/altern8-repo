@@ -17,7 +17,7 @@ import {
 } from "../../Utils/auth";
 import AnimatedLogo from "../Header/AnimatedLogo";
 import { useRouter } from "next/navigation";
-let accessToken = parseCookies().accessToken;
+let accessToken = parseCookies().altern8_useraccess;
 
 const login = () => {
   const [LoginForm, setLoginForm] = useState<{
@@ -66,22 +66,23 @@ const login = () => {
       const sellerData = await sellerDataResponse.json();
 
       // if profile is approved then allowed to dashboard
-      const registrationStep = sellerData.seller_state;
+      const registrationStep = sellerData.user_state;
+      console.log("resgius", registrationStep)
       if (registrationStep === "Approved") {
         router.push("/dashboard");
       } else {
         // if the registration process is not completed yet
         // redirect to register page
         // Set the access token for register steps in a cookie
-        Cookies.set("accessTokenForRegister", accessToken, {
+        Cookies.set("altern8_registeruseraccess", accessToken, {
           expires: 30,
           path: "/",
         });
         // delete the existing dashboard access and refresh token
-        Cookies.remove("accessToken", {
+        Cookies.remove("altern8_useraccess", {
           path: "/",
         });
-        Cookies.remove("refreshToken", {
+        Cookies.remove("altern8_userrefresh", {
           path: "/",
         });
         router.push("/register");

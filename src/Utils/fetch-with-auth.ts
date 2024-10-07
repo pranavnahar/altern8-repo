@@ -54,7 +54,7 @@ export const fetchWithAuth = async (
   url: string,
   options: FetchOptions = {}
 ) => {
-  let accessToken = parseCookies().accessToken;
+  let accessToken = parseCookies().altern8_useraccess;
 
   let response = await fetch(`${API_URL}${url}`, {
     ...options,

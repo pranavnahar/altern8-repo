@@ -41,7 +41,7 @@ const HelpPage = () => {
 
   const router = useRouter();
 
-  let accessToken = parseCookies().accessTokenForRegister; //access token from cookies
+  let accessToken = parseCookies().altern8_useraccess; //access token from cookies
 
   // get the FAQs from backend
   useEffect(() => {
@@ -49,6 +49,8 @@ const HelpPage = () => {
       try {
         setLoadingSpinner(true);
         let response = await fetch(`${apiUrl}/user-api/faq/`, {});
+
+        console.log("first", response)
 
         if (response.ok) {
           const responseData = await response.json();

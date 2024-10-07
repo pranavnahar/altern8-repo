@@ -24,7 +24,7 @@ const PAN = () => {
   const [showInput, setShowInput] = useState(false);
 
   // Handle token
-  let accessToken = parseCookies().accessTokenForRegister;
+  let accessToken = parseCookies().altern8_useraccessForRegister;
 
   // Handle select change
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

@@ -9,7 +9,7 @@ interface FetchOptions extends RequestInit {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-let accessToken = parseCookies().accessTokenAdmin;
+let accessToken = parseCookies().altern8_useraccessAdmin;
 
 const fetchWithAuth = async (url: string, options: FetchOptions = {}) => {
   const response = await fetch(`${API_URL}${url}`, {

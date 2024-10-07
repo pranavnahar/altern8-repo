@@ -27,7 +27,7 @@ const BureauReport = () => {
   const [documentFiles, setDocumentFiles] = useState<DocumentFiles>({});
 
   // Handle token
-  let accessToken = parseCookies().accessTokenForRegister;
+  let accessToken = parseCookies().altern8_useraccessForRegister;
   const router = useRouter();
 
   // handle form input for phone number and otp

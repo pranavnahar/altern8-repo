@@ -14,7 +14,7 @@ const Udyam = () => {
     udyam_number: "",
     uam_number: "",
   });
-  let accessToken = parseCookies().accessTokenForRegister;
+  let accessToken = parseCookies().altern8_useraccessForRegister;
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

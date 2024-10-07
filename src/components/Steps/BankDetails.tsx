@@ -36,7 +36,7 @@ const BankDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const iframeUrl = "";
   // Handle token
-  let accessToken = parseCookies().accessTokenForRegister;
+  let accessToken = parseCookies().altern8_useraccessForRegister;
 
   const router = useRouter();
 

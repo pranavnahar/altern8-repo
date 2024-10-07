@@ -1,7 +1,7 @@
 import { parseCookies, setCookie } from "nookies";
 
 export const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
-export const accessToken = parseCookies().accessToken;
+export const accessToken = parseCookies().altern8_useraccess;
 
 interface Cookies {
   accessToken?: string;
@@ -10,7 +10,7 @@ interface Cookies {
 }
 
 export const setAccessTokenCookie = (accessToken: string) => {
-  setCookie(null, "accessToken", accessToken, {
+  setCookie(null, "altern8_useraccess", accessToken, {
     maxAge: 30 * 24 * 60 * 60, // Max age in seconds (e.g., 30 days)
     path: "/", // Path accessible across the entire site
     httpOnly: false, // HTTP only, cannot be accessed by JavaScript
@@ -18,7 +18,7 @@ export const setAccessTokenCookie = (accessToken: string) => {
 };
 
 export const setRefreshTokenCookie = (refreshToken: string) => {
-  setCookie(null, "refreshToken", refreshToken, {
+  setCookie(null, "altern8_userrefresh", refreshToken, {
     maxAge: 30 * 24 * 60 * 60, // Max age in seconds (e.g., 30 days)
     path: "/", // Path accessible across the entire site
     httpOnly: false, // HTTP only, cannot be accessed by JavaScript
@@ -26,15 +26,15 @@ export const setRefreshTokenCookie = (refreshToken: string) => {
 };
 
 export const removeTokenCookie = () => {
-  document.cookie = "accessToken=; Max-Age=0; path=/;";
-  document.cookie = "refreshToken=; Max-Age=0; path=/;";
-  document.cookie = "accessTokenForRegister=; Max-Age=0; path=/;";
+  document.cookie = "altern8_useraccess=; Max-Age=0; path=/;";
+  document.cookie = "altern8_userrefresh=; Max-Age=0; path=/;";
+  document.cookie = "altern8_registeruseraccess=; Max-Age=0; path=/;";
 };
 
 // get new access token from a refresh token
 export const getAccessToken = async () => {
   const cookies = parseCookies();
-  const refreshToken = cookies.refreshToken || localStorage.getItem("Rtoken");
+  const refreshToken = cookies.altern8_userrefresh || localStorage.getItem("Rtoken");
 
   let accessToken = "";
   const body = { refresh: refreshToken };
@@ -57,7 +57,7 @@ export const getAccessToken = async () => {
 };
 
 export const isAuthenticated = async (cookies: Cookies) => {
-  const accessToken = cookies.accessToken;
+  const accessToken = cookies.altern8_useraccess;
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   if (!accessToken) {

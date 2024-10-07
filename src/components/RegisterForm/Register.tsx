@@ -103,7 +103,7 @@ const Register = () => {
     stateName?: string,
     currentPage?: string
   ) => {
-    let accessToken = parseCookies().accessTokenForRegister;
+    let accessToken = parseCookies().altern8_useraccessForRegister;
     // if the cookies don't have access token for register
     if (!accessToken || accessToken.length < 5) {
       setCurrentStep(1);
@@ -251,7 +251,7 @@ const Register = () => {
                 {displayStep(currentStep)}
               </div>
             </div>
-            {/* 
+            {/*
             <ToastContainer /> */}
           </StepperContext.Provider>
         </motion.div>

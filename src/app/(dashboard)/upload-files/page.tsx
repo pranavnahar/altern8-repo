@@ -14,7 +14,7 @@ const Page = () => {
   const [file, setFile] = useState<File>(); // state for file upload
   console.log(file);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [loadingSpinner, setLoadingSpinner] = useState(false); // for loading animation
+  const [loadingSpinner, setLoadingSpinner] = useState<boolean>(false); // for loading animation
 
   // mui default styles for the upload button
   const VisuallyHiddenInput = styled("input")({
@@ -32,7 +32,7 @@ const Page = () => {
   const router = useRouter();
 
   // Handle token
-  let accessToken = parseCookies().accessToken; //access token from cookies
+  let accessToken = parseCookies().altern8_useraccess; //access token from cookies
 
   // if not accessToken then ask for refresh token
   const ReplaceTokenOrRedirect = async () => {
