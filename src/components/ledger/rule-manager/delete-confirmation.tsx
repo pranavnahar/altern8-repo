@@ -10,7 +10,7 @@ import {
 } from "../../../components/ui/dialog";
 import { Button } from "../../../components/ui/button";
 
-const DeleteConfirmation: React.FC<{ onConfirm: () => void }> = ({
+const DeleteConfirmation: React.FC<{ onConfirm: () => Promise<void> }> = ({
   onConfirm,
   ...props
 }) => {

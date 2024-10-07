@@ -1,5 +1,10 @@
 import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import {
+  Control,
+  FieldErrors,
+  useForm,
+  UseFormRegister,
+} from "react-hook-form";
 import {
   SheetHeader,
   SheetTitle,
@@ -100,9 +105,15 @@ const RuleForm: React.FC<{
         className="w-full mt-4 space-y-4"
       >
         <FormFields
-          register={register}
-          control={control}
-          errors={errors}
+          register={
+            register as unknown as
+              | UseFormRegister<Record<string, string>>
+              | undefined
+          }
+          control={
+            control as unknown as Control<Record<string, string>> | undefined
+          }
+          errors={errors as unknown as FieldErrors<Record<string, string>>}
           name=""
           placeholder=""
         />

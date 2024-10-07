@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
-import BasicTable from "../../../components/dashboard/table/BasicTable";
+import BasicTable from "../../../../components/dashboard/BasicTable";
 import useAccounts from "../../../../hooks/ledger/accounts/use-accounts";
 import { useAccountTypes } from "../../../../hooks/ledger/accounts/use-account-types";
-import { getColumns } from "../../../config/ledger/accounts/constants";
+import { getColumns } from "./constant";
 import AddAccountButton from "../../../../components/ledger/accounts/add-account-button";
-import TableSkeleton from "@/components/dashboard/ledger/_components/table-skeleton";
+import TableSkeleton from "../../../../components/ledger/_components/table-skeleton";
+import { Column } from "@/components/dashboard/types";
 
 const Index = () => {
   const [isVirtual, setIsVirtual] = useState(false);
-  const [isVirtualAccountSelected, setIsVirtualAccountSelected] = useState();
+  const [isVirtualAccountSelected, setIsVirtualAccountSelected] =
+    useState<boolean>();
   const { accountsTypes } = useAccountTypes();
-  const [accountToEdit, setAccountToEdit] = useState(false);
+  const [accountToEdit] = useState();
   const {
-    isLoading,
+    loading,
     accounts,
     handleFetchAccounts,
     accountData,
@@ -29,27 +31,21 @@ const Index = () => {
     }
   }, [isVirtual]);
 
-  const COLUMNS = getColumns(
-    isVirtual,
-    setIsVirtual,
-    accountsTypes,
-    isVirtualAccountSelected
-  );
+  const COLUMNS = getColumns(accountsTypes);
 
   return (
     <div className="flex flex-col gap-6 py-7">
       <div className="grid grid-cols-3">
-        <div></div>
         <h1 className="text-5xl font-medium text-center text-white-font">
           Accounts
         </h1>
         <div className="flex justify-end gap-5 ml-auto max-w-max">
-          {!isLoading && (
+          {!loading && (
             <AddAccountButton
               isVirtual={isVirtual}
               setIsVirtual={setIsVirtual!}
               isVirtualAccountSelected={isVirtualAccountSelected!}
-              handleFetchAccounts={handleFetchAccounts}
+              handleFetchAccountsTypes={handleFetchAccounts}
               accounts={accounts}
               accountData={accountData!}
               setLinkedRealAccount={setLinkedRealAccount}
@@ -59,13 +55,13 @@ const Index = () => {
           )}
         </div>
       </div>
-      {isLoading ? (
+      {loading ? (
         <TableSkeleton />
       ) : (
         <BasicTable
           data={accounts}
-          columns={COLUMNS}
-          statusColors={{}}
+          columns={COLUMNS as Column[]}
+          //statusColors={{}}
           filters={[]}
         />
       )}

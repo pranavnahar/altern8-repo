@@ -12,10 +12,10 @@ const useTransactionForm = () => {
     purpose: string;
     amount: string;
     description: string;
-    approved: boolean;
+    approved: string;
     status: string;
     type?: string;
-    receipt: null;
+    receipt: string;
     timestamp: string;
     invoice_product: string;
     from_account: string;
@@ -25,10 +25,10 @@ const useTransactionForm = () => {
     purpose: "",
     amount: "",
     description: "",
-    approved: false,
+    approved: false as unknown as string,
     status: "",
     type: "",
-    receipt: null,
+    receipt: "",
     timestamp: "",
     invoice_product: "",
     from_account: "",
@@ -41,9 +41,9 @@ const useTransactionForm = () => {
       purpose: "",
       amount: "",
       description: "",
-      approved: false,
+      approved: false as unknown as string,
       status: "",
-      receipt: null,
+      receipt: "",
       timestamp: new Date().toLocaleTimeString(),
       invoice_product: "",
       from_account: "",

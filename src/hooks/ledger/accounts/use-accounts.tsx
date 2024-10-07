@@ -20,9 +20,10 @@ const useAccounts = (
   accountsTypes?: AccountType[],
   accountToEdit = null,
   isVirtual?: boolean,
-  setIsVirtual?: (s?: boolean) => void
+  setIsVirtual?: (s: boolean) => void
 ) => {
   const [accounts, setAccounts] = useState([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [accountData, setAccountData] = useState<{
     name: string;
     account_number: string;
@@ -56,6 +57,7 @@ const useAccounts = (
   };
 
   const handleAddAccount = async () => {
+    setLoading(true);
     try {
       const accountToAdd = { ...accountData };
       if (isVirtual && linkedRealAccount) {
@@ -73,26 +75,33 @@ const useAccounts = (
       console.error("Failed to add account:", error);
     } finally {
       handleFetchAccounts();
+      setLoading(false);
     }
   };
 
   const handleEditAccount = async (accountData: AccountData) => {
+    setLoading(true);
     try {
       const response = await editAccountTypes(accountData);
       const updatedAccount = await response.json();
+      setLoading(false);
       return updatedAccount;
     } catch (error) {
       console.error("Error editing account:", error);
+      setLoading(false);
       return null;
     }
   };
 
   const handleFetchAccounts = async () => {
+    setLoading(true);
     try {
       const data = await getAccounts();
       setAccounts(data);
+      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch accounts types:", error);
+      setLoading(false);
     }
   };
 
@@ -101,11 +110,14 @@ const useAccounts = (
     currentStatus: string
   ) => {
     const action = currentStatus ? "deactivate" : "activate";
+    setLoading(true);
     try {
       await changeAccountStatus(accountId, action);
       return !currentStatus;
+      setLoading(false);
     } catch (error) {
       console.error("Error updating account status:", error);
+      setLoading(false);
       return currentStatus;
     }
   };
@@ -126,6 +138,7 @@ const useAccounts = (
     handleEditAccount,
     handleFetchAccounts,
     handleToggleAccountStatus,
+    loading,
   };
 };
 

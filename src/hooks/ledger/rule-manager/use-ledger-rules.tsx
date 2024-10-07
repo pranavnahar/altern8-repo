@@ -7,7 +7,19 @@ import {
 } from "../../../Utils/ledger/rule-manager/rules-manager-service";
 
 const useLedgerRules = () => {
-  const [rules, setRules] = useState([]);
+  const [rules, setRules] = useState<
+    {
+      name: string;
+      rule: string[];
+      from_account: string;
+      to_account: string;
+      condition_type: string;
+      rule_amount: string;
+      pay_amount: string;
+      payout_date: string;
+      mode_of_payment: string;
+    }[]
+  >([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleFetchRules = async () => {

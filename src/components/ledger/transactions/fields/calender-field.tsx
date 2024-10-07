@@ -3,8 +3,8 @@ import { Calendar } from "../../../../components/ui/calendar";
 
 const CalendarField: React.FC<{
   label: string;
-  selected: Date;
-  onSelect: () => void;
+  selected: Date | string;
+  onSelect: (day: Date | undefined) => void;
 }> = ({ label, selected, onSelect }) => {
   return (
     <div className="flex-1 w-full">
@@ -13,7 +13,7 @@ const CalendarField: React.FC<{
       </div>
       <Calendar
         mode="single"
-        selected={selected}
+        selected={selected as Date}
         onSelect={onSelect}
         className="my-2 border rounded-lg"
       />

@@ -1,4 +1,3 @@
-import AccountFormButton from "./add-account-button";
 import {
   Sheet,
   SheetContent,
@@ -33,7 +32,7 @@ const EditAccountButton: React.FC<Props> = ({
     newAccountType,
     handleAddNewAccountType,
     handleNewAccountTypeChange,
-  } = useAccountTypes(handleFetchAccountsTypes);
+  } = useAccountTypes(handleFetchAccountsTypes as unknown as boolean);
   const { setLinkedRealAccount, handleEditAccount } =
     useAccounts(accountsTypes);
   const virtualText = isVirtual ? "Virtual" : "Non-Virtual";
@@ -103,6 +102,7 @@ const EditAccountButton: React.FC<Props> = ({
             <h1 className="text-neutral-100">Account type</h1>
             <Select
               onValueChange={(value) =>
+                //@ts-expect-error target is not defined
                 handleInputChange({ target: { value } }, "account_type")
               }
               defaultValue={accountData.account_type}

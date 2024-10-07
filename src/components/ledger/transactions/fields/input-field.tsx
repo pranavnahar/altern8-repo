@@ -2,10 +2,14 @@ import React from "react";
 
 const InputField: React.FC<{
   label: string;
-  value: string;
-  onChange: () => void;
+  value: string | null | undefined;
+  onChange: (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => void;
   type: string;
-  required: boolean;
+  required?: boolean;
   inputClassName: string;
 }> = ({ label, value, onChange, type, required, inputClassName, ...rest }) => {
   return (
@@ -17,7 +21,7 @@ const InputField: React.FC<{
         {type === "textarea" ? (
           <textarea
             onChange={onChange}
-            value={value}
+            value={value!}
             placeholder={label}
             className={inputClassName}
             rows={Number(1)}
@@ -26,7 +30,7 @@ const InputField: React.FC<{
         ) : (
           <input
             onChange={onChange}
-            value={value}
+            value={value!}
             placeholder={label}
             className={inputClassName}
             type={type}

@@ -1,12 +1,5 @@
 import React, { ReactNode } from "react";
-import {
-  Control,
-  Controller,
-  FieldErrors,
-  FieldValues,
-  Path,
-  RegisterOptions,
-} from "react-hook-form";
+import { Controller, FieldValues, Path } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -42,7 +35,7 @@ export const AccountSelect = <T extends FieldValues>({
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
           <SelectContent className="border-none bg-neutral-200/70 backdrop-blur-md max-h-80">
-            {items.map((item) => (
+            {items?.map((item) => (
               <SelectItem
                 key={item.id}
                 value={item.id.toString()}

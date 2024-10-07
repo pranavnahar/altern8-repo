@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { FormFieldProps } from "./types";
 import { Path } from "react-hook-form";
 
-export const InputFormField = <T extends Record<string, any>>({
+export const InputFormField = <T extends Record<string, string>>({
   register,
   name,
   placeholder,

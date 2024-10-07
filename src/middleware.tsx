@@ -17,6 +17,7 @@ export function middleware(request: NextRequest) {
     "/dashboard/rera-template",
     "/calendar",
     "/",
+    "/dashboard/ledger",
   ];
   if (!cookie && !publicPages.includes(pathname)) {
     return NextResponse.redirect(new URL("/login", request.url));

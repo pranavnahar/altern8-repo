@@ -1,26 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import TransactionsTab from "./ledger/transactions/index";
-import AccountsTab from "./ledger/accounts/index";
-import RuleManagerTab from "./ledger/rules-manager/index";
-import { NotificationSheet } from "../../components/dashboard/ledger/_components/notification-sheet";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+"use client";
+import React, { ReactNode, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import TransactionsTab from "./transactions/index";
+import AccountsTab from "./accounts/index";
+import RuleManagerTab from "./rules-manager/index";
+import { NotificationSheet } from "../../../components/ledger/_components/notification-sheet";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../../../components/ui/tabs";
 
-const TabContent = ({ value, children }) => (
-  <TabsContent value={value}>{children}</TabsContent>
-);
+const TabContent: React.FC<{ value: string; children: ReactNode }> = ({
+  value,
+  children,
+}) => <TabsContent value={value}>{children}</TabsContent>;
 
-const Index = () => {
+const page = () => {
   const router = useRouter();
-  const { tab } = router.query;
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
   const [activeTab, setActiveTab] = useState("transactions");
 
-  const handleTabChange = (value) => {
+  const handleTabChange = (value: string) => {
     setActiveTab(value);
-    router.push({
-      pathname: router.pathname,
-      query: { tab: value },
-    });
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set("tab", value);
+    router.push(newUrl.toString(), { scroll: false });
   };
 
   useEffect(() => {
@@ -73,4 +80,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default page;

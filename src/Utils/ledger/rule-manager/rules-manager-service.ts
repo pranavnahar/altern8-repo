@@ -8,8 +8,8 @@ interface FetchOptions extends RequestInit {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 let accessToken = parseCookies().accessTokenAdmin;
-const router = useRouter();
 const fetchWithAuth = async (url: string, options: FetchOptions = {}) => {
+  const router = useRouter();
   const response = await fetch(`${API_URL}${url}`, {
     ...options,
     headers: {

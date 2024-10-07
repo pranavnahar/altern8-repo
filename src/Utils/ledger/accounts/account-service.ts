@@ -1,10 +1,9 @@
 import { getAccessToken } from "../../auth";
-import { useRouter } from "next/navigation";
+//import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 let accessToken = parseCookies().accessTokenAdmin;
-const router = useRouter();
 
 interface FetchOptions extends RequestInit {
   headers?: Record<string, string>;
@@ -16,6 +15,7 @@ interface AccountData {
 }
 
 const fetchWithAuth = async (url: string, options: FetchOptions = {}) => {
+  //const router = useRouter();
   const response = await fetch(`${API_URL}${url}`, {
     ...options,
     headers: {
@@ -28,7 +28,7 @@ const fetchWithAuth = async (url: string, options: FetchOptions = {}) => {
     const token = await getAccessToken();
 
     if (!token) {
-      router.push("/login");
+      window.location.replace("/login");
     } else {
       accessToken = token;
     }

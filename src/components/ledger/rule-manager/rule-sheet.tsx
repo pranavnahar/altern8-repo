@@ -5,7 +5,7 @@ import {
   SheetTrigger,
 } from "../../../components/ui/sheet";
 import { Button } from "../../../components/ui/button";
-import { ScrollArea } from "../../../components/ui/scroll-area";
+//import { ScrollArea } from "../../../components/ui/scroll-area";
 import RuleForm from "./rule-form";
 import { Plus, Settings2 } from "lucide-react";
 
@@ -13,6 +13,7 @@ const RuleSheet: React.FC<{
   mode: string;
   rule: {
     name: string;
+    rule: string[];
     from_account: string;
     to_account: string;
     condition_type: string;
@@ -49,7 +50,7 @@ const RuleSheet: React.FC<{
         </Button>
       </SheetTrigger>
       <SheetContent className="flex flex-col min-h-screen border-none [background:linear-gradient(269.75deg,_#011049,#19112f_25.75%,#251431_51.79%,#301941_64.24%,_#6e3050)] p-4">
-        <ScrollArea>
+        <div className=" overflow-y-auto">
           <div className="pl-2 pr-3">
             <RuleForm
               mode={mode}
@@ -59,7 +60,7 @@ const RuleSheet: React.FC<{
               onClose={() => setIsSheetOpen(false)}
             />
           </div>
-        </ScrollArea>
+        </div>
       </SheetContent>
     </Sheet>
   );

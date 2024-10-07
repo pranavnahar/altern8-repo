@@ -14,7 +14,7 @@ export const CONDITION_TYPES = [
   { value: "less_than", label: "Less Than" },
 ];
 
-const FormFields = <T extends Record<string, any>>({
+const FormFields = <T extends Record<string, string>>({
   register,
   control,
   errors,

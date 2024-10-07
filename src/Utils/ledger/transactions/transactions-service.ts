@@ -2,14 +2,12 @@ import { parseCookies } from "nookies";
 import { getAccessToken } from "../../../Utils/auth";
 import axios from "axios";
 import { showToast } from "../../../Utils/showToast";
-import { useRouter } from "next/navigation";
 
 interface FetchOptions extends RequestInit {
   headers?: Record<string, string>;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const router = useRouter();
 
 let accessToken = parseCookies().accessTokenAdmin;
 
@@ -26,7 +24,7 @@ const fetchWithAuth = async (url: string, options: FetchOptions = {}) => {
     const token = await getAccessToken();
 
     if (!token) {
-      router.push("/login");
+      window.location.replace("/login");
     } else {
       accessToken = token;
     }
@@ -61,7 +59,7 @@ axiosInstance.interceptors.response.use(
         ] = `Bearer ${accessToken}`;
         return axiosInstance(error.config);
       }
-      router.push("/login");
+      window.location.replace("/login");
     }
     return Promise.reject(error);
   }

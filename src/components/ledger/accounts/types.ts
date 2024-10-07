@@ -1,7 +1,7 @@
 export type AccountData = {
   name: string;
   account_number: string;
-  balance: string;
+  balance?: string;
   account_type?: string;
 };
 
@@ -21,7 +21,7 @@ export type Account = {
 
 export type Props = {
   isVirtual: boolean;
-  setIsVirtual: (s?: boolean) => void;
+  setIsVirtual: React.Dispatch<React.SetStateAction<boolean>>;
   isVirtualAccountSelected: boolean;
   accounts: Account[];
   accountData: AccountData;

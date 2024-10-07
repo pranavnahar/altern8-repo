@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { ScrollArea } from "../../../components/ui/scroll-area";
+//import { ScrollArea } from "../../../components/ui/scroll-area";
 import { Button } from "../../../components/ui/button";
 import {
   Sheet,
@@ -16,11 +16,13 @@ import SelectField from "./fields/select-field";
 import CalendarField from "./fields/calender-field";
 import FileField from "./fields/file-field";
 import { fieldData } from "./field-data";
+import { Account } from "../accounts/types";
+//import { ScrollAreaScrollbar } from "@radix-ui/react-scroll-area";
 
 interface TransactionSheetProps {
   formData: TransactionData;
   invoiceIds: string[];
-  accounts: Array<{ id: string; name: string }>;
+  accounts: Account[];
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   mode: "edit" | "add";
@@ -29,6 +31,13 @@ interface TransactionSheetProps {
 
 interface TransactionData {
   [key: string]: string;
+}
+
+interface Field {
+  label2: string;
+  type: "text" | "textarea" | "switch" | "select" | "calendar" | "file";
+  options?: string[] | string;
+  [key: string]: string | string[] | undefined;
 }
 
 const TransactionSheet: FC<TransactionSheetProps> = ({
@@ -46,8 +55,14 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
     useTransactionForm();
   const isEditMode: boolean = mode === "edit";
 
-  const handleFieldChange = (name: string, value: any): void => {
-    setTransactionData((prevData) => ({ ...prevData, [name]: value }));
+  const handleFieldChange = (
+    name: string,
+    value: string | boolean | File | Date
+  ): void => {
+    setTransactionData((prevData) => ({
+      ...prevData,
+      [name]: value as string,
+    }));
   };
 
   const handleSubmitForm = async (): Promise<void> => {
@@ -63,14 +78,15 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
       console.error("Error submitting transaction:", error);
     }
   };
-
-  const renderField = (fieldName: string, field: any): JSX.Element | null => {
+  const renderField = (fieldName: string, field: Field): JSX.Element | null => {
     const fieldProps = {
-      label: field.label,
+      label: field.label2,
       value: fieldName.includes("account")
         ? accounts.find((a) => a.id === transactionData[fieldName])?.id
         : transactionData[fieldName] || "",
-      onChange: (value: any) => handleFieldChange(fieldName, value),
+      onChange: (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      ) => handleFieldChange(fieldName, e.target.value),
       inputClassName: `w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none ${
         isEditMode ? "focus:border-blue-600" : "focus:border-purple-600"
       }`,
@@ -83,9 +99,9 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
         return (
           <InputField
             {...fieldProps}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleFieldChange(fieldName, e.target.value)
-            }
+            onChange={(
+              e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => handleFieldChange(fieldName, e.target.value)}
           />
         );
       case "switch":
@@ -102,20 +118,24 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
         return (
           <SelectField
             {...fieldProps}
-            options={field.options?.map((option: string) => ({
-              value:
-                fieldName === "from_account"
-                  ? accounts.find((a) => a.id === option)?.id
-                  : fieldName === "to_account"
-                  ? accounts.find((a) => a.id === option)?.id
-                  : option,
-              label:
-                fieldName === "from_account"
-                  ? accounts.find((a) => a.id === option)?.name
-                  : fieldName === "to_account"
-                  ? accounts.find((a) => a.id === option)?.name
-                  : option,
-            }))}
+            //@ts-expect-error options type boolean
+            options={
+              Array.isArray(field.options) &&
+              field.options?.map((option: string) => ({
+                value:
+                  fieldName === "from_account"
+                    ? accounts.find((a) => a.id === option)?.id
+                    : fieldName === "to_account"
+                    ? accounts.find((a) => a.id === option)?.id
+                    : option,
+                label:
+                  fieldName === "from_account"
+                    ? accounts.find((a) => a.id === option)?.name
+                    : fieldName === "to_account"
+                    ? accounts.find((a) => a.id === option)?.name
+                    : option,
+              }))
+            }
           />
         );
       case "calendar":
@@ -123,7 +143,9 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
           <CalendarField
             {...fieldProps}
             selected={transactionData[fieldName]}
-            onSelect={(date: Date) => handleFieldChange(fieldName, date)}
+            onSelect={(date: Date | undefined) =>
+              handleFieldChange(fieldName, date as Date)
+            }
           />
         );
       case "file":
@@ -158,18 +180,20 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
           isEditMode ? "edit-mode-classname" : "add-mode-classname"
         }`}
       >
-        <ScrollArea>
+        <div className=" overflow-x-auto">
           <div className="pl-2 pr-3.5">
             <SheetHeader>
               <SheetTitle className="text-2xl font-normal text-gray-200">
                 {isEditMode ? "Edit Transaction" : "Add a transaction entry"}
               </SheetTitle>
             </SheetHeader>
-            <ScrollArea>
+
+            <div>
               <div className="relative flex-auto">
                 {Object.entries(fieldData).map(([fieldName, field]) =>
                   renderField(fieldName, {
                     ...field,
+                    //@ts-expect-error options types?
                     options:
                       fieldName === "invoice_product"
                         ? invoiceIds
@@ -187,9 +211,9 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
                   {isEditMode ? "Update Transaction" : "Submit"}
                 </Button>
               </div>
-            </ScrollArea>
+            </div>
           </div>
-        </ScrollArea>
+        </div>
       </SheetContent>
     </Sheet>
   );

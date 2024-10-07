@@ -3,10 +3,11 @@ import {
   createAccountsTypes,
   getAccountsTypes,
 } from "../../../Utils/ledger/accounts/account-service";
+import { AccountType } from "@/components/ledger/accounts/types";
 
 export const useAccountTypes = (
-  isVirtual: boolean,
-  setIsVirtual: () => void
+  isVirtual?: boolean,
+  setIsVirtual?: (b: boolean) => void
 ) => {
   const [newAccountType, setNewAccountType] = useState<{
     key?: string;
@@ -21,7 +22,7 @@ export const useAccountTypes = (
         description: newAccountType.description,
         is_virtual: isVirtual,
       };
-      await createAccountsTypes(data);
+      await createAccountsTypes(data as AccountType);
       setNewAccountType({ key: "", description: "" });
       setOnAccountAdd(true);
     } catch (error) {

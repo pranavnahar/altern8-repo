@@ -1,10 +1,10 @@
 import React from "react";
 import { Input } from "../../../../components/ui/input";
 
-const FileField: React.FC<{ label: string; onChange: () => void }> = ({
-  label,
-  onChange,
-}) => {
+const FileField: React.FC<{
+  label: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}> = ({ label, onChange }) => {
   return (
     <div className="flex-1 w-full mt-4">
       <div className="h-6 mt-3 text-xs font-medium leading-8 text-gray-400 uppercase">

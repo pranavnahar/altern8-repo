@@ -3,8 +3,8 @@ import { Switch } from "../../../../components/ui/switch";
 
 const SwitchField: React.FC<{
   label: string;
-  checked: boolean;
-  onCheckedChange: () => void;
+  checked: boolean | string;
+  onCheckedChange: (b: boolean) => void;
 }> = ({ label, checked, onCheckedChange }) => {
   return (
     <div className="flex-1 w-full">
@@ -12,7 +12,10 @@ const SwitchField: React.FC<{
         {label}
       </div>
       <div className="flex items-center py-1 my-2">
-        <Switch checked={checked} onCheckedChange={onCheckedChange} />
+        <Switch
+          checked={checked as boolean}
+          onCheckedChange={onCheckedChange}
+        />
         <span className="ml-2 text-gray-200">{checked ? "Yes" : "No"}</span>
       </div>
     </div>

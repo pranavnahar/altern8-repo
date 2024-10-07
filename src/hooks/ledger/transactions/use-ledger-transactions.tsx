@@ -9,9 +9,9 @@ import { useState, useEffect, useCallback } from "react";
 
 const useLedgerTransactions = () => {
   const [state, setState] = useState<{
-    transactionsList: any[];
-    accountTransactionsList: any[];
-    invoiceIds: any[];
+    transactionsList: string[];
+    accountTransactionsList: object[];
+    invoiceIds: string[];
     isDownloading: boolean;
     downloadError: null | string | Error;
   }>({
@@ -21,14 +21,17 @@ const useLedgerTransactions = () => {
     isDownloading: false,
     downloadError: null,
   });
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchData = useCallback(
     async (fetchFn: () => void, stateProp: string) => {
       try {
-        const data = await fetchFn();
+        const data = fetchFn();
         setState((prev) => ({ ...prev, [stateProp]: data }));
       } catch (error) {
         console.error(`Failed to fetch ${stateProp}:`, error);
+      } finally {
+        setLoading(false);
       }
     },
     []
@@ -59,6 +62,8 @@ const useLedgerTransactions = () => {
       return response;
     } catch (error) {
       console.error("Failed to upload transaction:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,6 +79,7 @@ const useLedgerTransactions = () => {
       }));
     } finally {
       setState((prev) => ({ ...prev, isDownloading: false }));
+      setLoading(false);
     }
   };
 
@@ -89,6 +95,7 @@ const useLedgerTransactions = () => {
     handleFetchInvoiceIds,
     handleBulkUpload,
     handleDownloadTemplate,
+    loading,
   };
 };
 
