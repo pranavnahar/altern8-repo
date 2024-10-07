@@ -5,7 +5,7 @@ import {
   ConditionSelect,
   PaymentModeSelect,
 } from "./select-form-field";
-import useAccounts from "@/hooks/ledger/accounts/use-accounts";
+import useAccounts from "../../../../hooks/ledger/accounts/use-accounts";
 import { CalendarFormField } from "./calender-form-field";
 import { FormFieldProps } from "./types";
 import { Control, Path } from "react-hook-form";

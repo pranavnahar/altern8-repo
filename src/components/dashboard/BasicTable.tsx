@@ -35,7 +35,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "../../components/ui/select";
 import { BasicTableProps, Column, DataRow } from "./types";
 import { ScrollArea } from "../ui/scroll-area";
 
@@ -94,9 +94,9 @@ const BasicTable: React.FC<BasicTableProps> = ({
       header: col.header || snakeToTitleCase(col.accessorKey!),
       accessorFn: col.accessorKey
         ? (row: DataRow) => {
-            const keys = col.accessorKey!.split(".");
-            return keys.reduce((obj, key) => obj && obj[key], row);
-          }
+          const keys = col.accessorKey!.split(".");
+          return keys.reduce((obj, key) => obj && obj[key], row);
+        }
         : col.accessorFn,
     })) as ColumnDef<DataRow, string>[],
     getCoreRowModel: getCoreRowModel(),
@@ -225,9 +225,8 @@ const BasicTable: React.FC<BasicTableProps> = ({
             <div className="flex justify-end p-1 mb-auto ml-auto rounded-md card-cover">
               <button
                 onClick={() => setShowAllColumns(!showAllColumns)}
-                className={`text-white transform transition-transform duration-300 ${
-                  showAllColumns ? "rotate-180" : ""
-                }`}
+                className={`text-white transform transition-transform duration-300 ${showAllColumns ? "rotate-180" : ""
+                  }`}
               >
                 <ChevronDown
                   className="text-gray-300 size-5"
@@ -261,11 +260,10 @@ const BasicTable: React.FC<BasicTableProps> = ({
                       >
                         <div
                           {...{
-                            className: `flex gap-2 items-center text-sm font-semibold tracking-wider justify-center select-none ${
-                              header.column.getCanSort()
+                            className: `flex gap-2 items-center text-sm font-semibold tracking-wider justify-center select-none ${header.column.getCanSort()
                                 ? "cursor-pointer select-none"
                                 : ""
-                            }`,
+                              }`,
                             onClick: header.column.getCanSort()
                               ? (header.column.getToggleSortingHandler() as React.MouseEventHandler<HTMLDivElement>)
                               : undefined,
