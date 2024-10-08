@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import Input from "../../../components/Input/input";
-import { formTemplate } from "../../../Utils/static";
+import { formTemplate } from "../../../utils/static";
 import { parseCookies } from "nookies";
-import { getAccessToken } from "../../../Utils/auth";
+import { getAccessToken } from "../../../utils/auth";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 

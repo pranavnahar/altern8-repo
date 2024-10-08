@@ -1,34 +1,53 @@
+# Stage 1: Installing dependencies with Bun
+FROM oven/bun:latest AS deps
 
-# Use the latest stable Node.js version with Alpine for a smaller image
-FROM node:20.12-alpine3.18
-
-# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the container
-COPY package*.json ./
+# Copy package and lock files
+COPY package.json bun.lockb ./
 
-# Install production dependencies (you can remove '--only=production' for development)
-RUN npm install --only=production
+# Install only production dependencies
+RUN bun install --only=production
 
-# Copy the rest of the application code
+# Stage 2: Building the Next.js project
+FROM oven/bun:latest AS builder
+
+WORKDIR /app
+
+# Copy all files
 COPY . .
 
-# Copy the production environment file
-COPY .env.production .env
-
-# Remove any local environment file to avoid conflicts
-RUN rm -f .env.local
-
-# Set the environment to production explicitly
+# Set environment variables for production
 ENV NODE_ENV=production
 
+# Copy environment production file (optional if you have it)
+COPY .env.production .env
 
-# Build the Next.js application
-RUN npm run build
+# Remove local environment file to avoid conflicts (optional)
+RUN rm -f .env.local
 
-# Expose the port the app runs on
+# Use dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+
+# Build the Next.js app
+RUN bun run build
+
+# Stage 3: Production Image
+FROM oven/bun:latest AS runner
+
+WORKDIR /app
+
+# Copy the built app from the builder stage
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/static ./.next/static
+
+# Expose port 3000
 EXPOSE 3000
 
-# Start the Next.js application
-CMD ["npm", "start"]
+# Set the PORT and HOSTNAME environment variables
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# Run the Next.js app
+CMD ["bun", "run", "server.js"]

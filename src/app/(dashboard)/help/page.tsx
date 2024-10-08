@@ -7,9 +7,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
-import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 //import { ToastContainer, toast } from "react-toastify";
 //import ChatBox from "./ChatBox";
 import { useRouter } from "next/navigation";
@@ -18,6 +16,7 @@ import { parseCookies } from "nookies";
 //import { StepperContext } from "../../Contexts/StepperContext";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import AnimatedLogo from "../../../components/Header/AnimatedLogo";
+import { IconChevronRight, IconSend2 } from "@tabler/icons-react";
 
 // Main function return
 const HelpPage = () => {
@@ -166,7 +165,7 @@ const HelpPage = () => {
                         borderRadius: "25px", // Adjust the pixel value for the desired border radius
                       }}
                       variant="contained"
-                      startIcon={<SendOutlinedIcon />}
+                      startIcon={<IconSend2 />}
                     //onClick={handleChatClick}
                     >
                       Chat With Admin
@@ -197,7 +196,7 @@ const HelpPage = () => {
                     }}
                   >
                     <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
+                      expandIcon={<IconChevronRight />}
                       aria-controls={`panel${index + 1}-content`}
                       id={`panel${index + 1}-header`}
                     >
@@ -219,7 +218,7 @@ const HelpPage = () => {
                       borderRadius: "25px", // Adjust the pixel value for the desired border radius
                     }}
                     variant="contained"
-                    startIcon={<SendOutlinedIcon />}
+                    startIcon={<IconSend2 />}
                   //onClick={handleChatClick}
                   >
                     Chat With Admin

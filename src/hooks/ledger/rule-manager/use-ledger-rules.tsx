@@ -4,7 +4,7 @@ import {
   deleteLedgerRule,
   getLedgerRules,
   updateLedgerRule,
-} from "../../../Utils/ledger/rule-manager/rules-manager-service";
+} from "../../../utils/ledger/rule-manager/rules-manager-service";
 
 const useLedgerRules = () => {
   const [rules, setRules] = useState<

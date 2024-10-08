@@ -1,10 +1,10 @@
 import { useContext, useState, useCallback } from "react";
-import { StepperContext } from "../../Contexts/StepperContext";
+import { StepperContext } from "../../contexts/StepperContext";
 import { useRouter } from "next/navigation";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { parseCookies } from "nookies";
 import { useDropzone } from "react-dropzone";
-import { showToast } from "../../Utils/showToast";
+import { showToast } from "../../utils/showToast";
 
 const UploadContract = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;

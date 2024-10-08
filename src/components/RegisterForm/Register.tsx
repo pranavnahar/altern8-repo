@@ -1,19 +1,12 @@
-// This is the main registration page for seller
-// all the components for this page are located at ->
-// ../components/register
 "use client";
 import React, { useState, useEffect, Suspense } from "react";
-import { StepperContext } from "../../Contexts/StepperContext";
+import { StepperContext } from "../../contexts/StepperContext";
 import Stepper from "../../components/RegisterForm/Stepper";
 import RegisterField from "../../components/RegisterForm/RegisterField";
-//import POC from "../components/register/steps/POC";
-//import AccountAggregator from "../components/register/steps/AccountAggregator";
 import SelectPrimaryBankAccount from "../../components/Steps/SelectPrimaryBankAccount";
-//import SelectInvoice from "../components/register/steps/SelectInvoice";
 import ITR from "../../components/Steps/ITR";
 import PAN from "../../components/Steps/Pan";
 import GST from "../../components/Steps/GST";
-//import { ToastContainer } from "react-toastify"; // for alert message
 import { motion } from "framer-motion"; // for animation
 import { parseCookies } from "nookies";
 import LinearBuffer from "../../components/LinearBuffer"; //for progress animation
@@ -28,8 +21,6 @@ import RERA from "../Steps/RERA";
 import Udyam from "../Steps/Udyam";
 import Pending from "../Steps/Pending";
 import { useRouter } from "next/navigation";
-//import HelpPage from "../components/help/HelpPage";
-//import AuthorizationCompliance from "@/components/register/steps/AuthorizationCompliance";
 
 const Register = () => {
   const [currentStep, setCurrentStep] = useState(1); // to handle multiple registration steps

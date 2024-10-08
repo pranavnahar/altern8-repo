@@ -1,7 +1,7 @@
 import useLedgerRules from "../../../../hooks/ledger/rule-manager/use-ledger-rules";
 import DeleteConfirmation from "../../../../components/ledger/rule-manager/delete-confirmation";
 import RuleSheet from "../../../../components/ledger/rule-manager/rule-sheet";
-import { showToast } from "../../../../Utils/showToast";
+import { showToast } from "../../../../utils/showToast";
 
 export const toSnakeCase = (str: string) => {
   return str

@@ -6,13 +6,11 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
-import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
-import CloseIcon from "@mui/icons-material/Close";
-import { showToast } from "../../Utils/showToast";
+import { showToast } from "../../utils/showToast";
 import { parseCookies } from "nookies";
-import { getAccessToken } from "../../Utils/auth";
+import { getAccessToken } from "../../utils/auth";
 import { useRouter } from "next/navigation";
+import { IconPaperclip, IconSend2, IconX } from "@tabler/icons-react";
 
 type Message = {
   text: string;
@@ -226,7 +224,7 @@ const ChatBox: React.FC<{
             color: "#ffffff",
           }}
         >
-          <CloseIcon />
+          <IconX />
         </IconButton>
       </DialogTitle>
       <DialogContent sx={{ width: 600, marginY: "0px" }}>
@@ -313,7 +311,7 @@ const ChatBox: React.FC<{
                   className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
                   onChange={handleFileChange}
                 />
-                <AttachFileOutlinedIcon />
+                <IconPaperclip />
               </IconButton>
             </div>
 
@@ -321,7 +319,7 @@ const ChatBox: React.FC<{
             <Button
               onClick={handleSendMessage}
               variant="contained"
-              endIcon={<SendIcon />}
+              endIcon={<IconSend2 />}
               style={{
                 backgroundColor: "#1565c0",
                 borderRadius: "25px", // Adjust the pixel value for the desired border radius

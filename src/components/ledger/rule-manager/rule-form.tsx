@@ -13,7 +13,7 @@ import {
 } from "../../../components/ui/sheet";
 import { Button } from "../../../components/ui/button";
 import useLedgerRules from "../../../hooks/ledger/rule-manager/use-ledger-rules";
-import { showToast } from "../../../Utils/showToast";
+import { showToast } from "../../../utils/showToast";
 import FormFields from "./fields/form-fields";
 
 const RuleForm: React.FC<{

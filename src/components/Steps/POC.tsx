@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
-import { StepperContext } from "../../Contexts/StepperContext";
+import { StepperContext } from "../../contexts/StepperContext";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { Button } from "@mui/material";
-import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
-import { showToast } from "../../Utils/showToast";
+import { showToast } from "../../utils/showToast";
+import { IconChevronUpRight } from "@tabler/icons-react";
 
 const POC = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -419,7 +419,7 @@ const POC = () => {
                   borderRadius: "25px", // Adjust the pixel value for the desired border radius
                 }}
                 variant="contained"
-                endIcon={<ArrowUpwardOutlinedIcon />}
+                endIcon={<IconChevronUpRight />}
               >
                 Add poc
               </Button>
@@ -506,7 +506,7 @@ const POC = () => {
                   borderRadius: "25px", // Adjust the pixel value for the desired border radius
                 }}
                 variant="contained"
-                endIcon={<ArrowUpwardOutlinedIcon />}
+                endIcon={<IconChevronUpRight />}
               >
                 Submit Details
               </Button>
@@ -594,7 +594,7 @@ const POC = () => {
                     borderRadius: "25px",
                   }}
                   variant="contained"
-                  endIcon={<ArrowUpwardOutlinedIcon />}
+                  endIcon={<IconChevronUpRight />}
                 >
                   Add Details
                 </Button>

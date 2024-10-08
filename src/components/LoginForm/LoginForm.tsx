@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { showToast } from "../../Utils/showToast";
+import { showToast } from "../../utils/showToast";
 import { motion } from "framer-motion"; // for animations
 import Link from "next/link";
 import LinearBuffer from "../LinearBuffer"; //for progress animation
@@ -10,7 +10,7 @@ import {
   setAccessTokenCookie,
   setRefreshTokenCookie,
   removeTokenCookie,
-} from "../../Utils/auth";
+} from "../../utils/auth";
 import AnimatedLogo from "../Header/AnimatedLogo";
 import { useRouter } from "next/navigation";
 let accessToken = parseCookies().altern8_useraccess;

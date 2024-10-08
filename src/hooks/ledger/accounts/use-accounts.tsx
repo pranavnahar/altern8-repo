@@ -4,7 +4,7 @@ import {
   editAccountTypes,
   getAccounts,
   changeAccountStatus,
-} from "../../../Utils/ledger/accounts/account-service";
+} from "../../../utils/ledger/accounts/account-service";
 
 interface AccountData {
   description: string;

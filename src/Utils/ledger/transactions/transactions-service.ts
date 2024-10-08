@@ -1,9 +1,9 @@
 "use client"
 
 import { parseCookies } from "nookies";
-import { getAccessToken } from "../../../Utils/auth";
+import { getAccessToken } from "../../auth";
 import axios from "axios";
-import { showToast } from "../../../Utils/showToast";
+import { showToast } from "../../showToast";
 
 interface FetchOptions extends RequestInit {
   headers?: Record<string, string>;
