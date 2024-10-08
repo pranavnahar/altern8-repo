@@ -2,16 +2,16 @@
 import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import { showToast } from "../../../utils/showToast";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { getAccessToken } from "../../../utils/auth";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { IconCloudUpload, IconFileText } from "@tabler/icons-react";
+import { useToast } from "@/utils/show-toasts";
 
 const Page = () => {
-  const [file, setFile] = useState<File>(); // state for file upload
-  console.log(file);
+  const [file, setFile] = useState<File>();
+  const { showToast } = useToast()
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [loadingSpinner, setLoadingSpinner] = useState<boolean>(false); // for loading animation
 

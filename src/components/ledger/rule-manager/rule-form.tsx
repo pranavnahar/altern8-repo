@@ -13,8 +13,8 @@ import {
 } from "../../../components/ui/sheet";
 import { Button } from "../../../components/ui/button";
 import useLedgerRules from "../../../hooks/ledger/rule-manager/use-ledger-rules";
-import { showToast } from "../../../utils/showToast";
 import FormFields from "./fields/form-fields";
+import { useToast } from "@/utils/show-toasts";
 
 const RuleForm: React.FC<{
   mode: string;
@@ -53,6 +53,7 @@ const RuleForm: React.FC<{
   });
 
   const { handleAddRules, handleUpdateRules } = useLedgerRules();
+  const { showToast } = useToast()
 
   const onFormSubmit = async (data: {
     [key: string]: string | Date | number | null;
@@ -79,7 +80,7 @@ const RuleForm: React.FC<{
         onClose();
         await handleFetchRules();
       } else {
-        showToast("Some error occurred", "false");
+        showToast("Some error occurred", "error");
       }
     } catch (error) {
       console.error("Error in onFormSubmit:", error);

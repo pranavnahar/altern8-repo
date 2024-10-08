@@ -4,12 +4,12 @@ import { useRouter } from "next/navigation";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { parseCookies } from "nookies";
 import { useDropzone } from "react-dropzone";
-import { showToast } from "../../utils/showToast";
+import { useToast } from "@/utils/show-toasts";
 
 const UploadContract = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { currentStep, steps, setLoading, getRegistrationState } =
-    useContext(StepperContext);
+  const { currentStep, steps, setLoading, getRegistrationState } = useContext(StepperContext);
+  const { showToast } = useToast()
 
   const [contractFiles, setContractFiles] = useState<File[]>([]);
   const [pdcFiles, setPdcFiles] = useState<File[]>([]);

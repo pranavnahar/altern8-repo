@@ -3,7 +3,6 @@
 import { parseCookies } from "nookies";
 import { getAccessToken } from "../../auth";
 import axios from "axios";
-import { showToast } from "../../showToast";
 
 interface FetchOptions extends RequestInit {
   headers?: Record<string, string>;
@@ -96,19 +95,12 @@ export const createTransactions = async (formData: FormData) => {
     });
 
     if (response.ok) {
-      showToast("Transaction added successfully", "true");
       return response.json();
     } else {
-      showToast(
-        "At least one of the accounts must belong to the user associated with the invoice.",
-        "false"
-      );
+      return false;
     }
   } catch (error) {
-    showToast(
-      "At least one of the accounts must belong to the user associated with the invoice.",
-      "false"
-    );
+    return;
   }
 };
 
@@ -124,21 +116,12 @@ export const approveTransactions = async (formData: FormData) => {
     );
 
     if (response.ok) {
-      showToast("Transaction added successfully", "true");
       return response.json();
     } else {
-      showToast(
-        "At least one of the accounts must belong to the user associated with the invoice.",
-        "false"
-      );
+      return false;
     }
-
-    return await response.json();
   } catch (error) {
-    showToast(
-      "At least one of the accounts must belong to the user associated with the invoice.",
-      "false"
-    );
+    return false;
   }
 };
 

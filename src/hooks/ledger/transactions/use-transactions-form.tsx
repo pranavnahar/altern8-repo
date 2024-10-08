@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
 import {
   approveTransactions,
   createTransactions,
 } from "../../../utils/ledger/transactions/transactions-service";
+import { useToast } from "@/utils/show-toasts";
 
 const useTransactionForm = () => {
-  const [showAddTransactionBox, setShowAddTransactionBox] = useState(false);
+  const [showAddTransactionBox, setShowAddTransactionBox] = useState<boolean>(false);
+  const { showToast } = useToast()
   const [formData, setFormData] = useState<{
     transaction_id: string;
     purpose: string;
@@ -60,7 +61,7 @@ const useTransactionForm = () => {
       resetFormData();
       return true;
     } catch (error) {
-      toast.error(String(error), { autoClose: false });
+      showToast("Submission error occured", "error")
       return false;
     }
   };

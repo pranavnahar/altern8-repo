@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect } from "react";
 import { StepperContext } from "../../contexts/StepperContext";
 import { parseCookies } from "nookies";
-import { showToast } from "../../utils/showToast";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/utils/show-toasts";
 
 const PAN = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -25,6 +25,7 @@ const PAN = () => {
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccessForRegister;
+  const { showToast } = useToast()
 
   // Handle select change
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

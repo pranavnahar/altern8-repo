@@ -8,12 +8,13 @@ import useAccounts from "../../../../hooks/ledger/accounts/use-accounts";
 import TableSkeleton from "../../../../components/ledger/_components/table-skeleton";
 import TransactionUpload from "../../../../components/ledger/transactions/transaction-upload";
 import TransactionDownload from "../../../../components/ledger/transactions/transaction-download";
-import { showToast } from "../../../../utils/showToast";
 import TransactionSheet from "../../../../components/ledger/transactions/transaction-sheet";
 import { Column, DataRow } from "@/components/dashboard/types";
+import { useToast } from "@/utils/show-toasts";
 
 const Index = () => {
   const { accounts } = useAccounts();
+  const { showToast } = useToast()
   const {
     accountTransactionsList = [],
     transactionsList = [],
@@ -34,7 +35,7 @@ const Index = () => {
   };
 
   const handleUploadSuccess = () => {
-    showToast(`Uploaded successfully`, "true");
+    showToast(`Uploaded successfully`, "success");
   };
 
   const combinedTransactions = useMemo(

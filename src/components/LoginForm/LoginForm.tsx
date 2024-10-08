@@ -1,11 +1,9 @@
 
 import React, { useState, useEffect } from "react";
-import { showToast } from "../../utils/showToast";
 import { motion } from "framer-motion"; // for animations
 import Link from "next/link";
 import LinearBuffer from "../LinearBuffer"; //for progress animation
-import { parseCookies } from "nookies";
-import Cookies from "js-cookie";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
 import {
   setAccessTokenCookie,
   setRefreshTokenCookie,
@@ -13,6 +11,9 @@ import {
 } from "../../utils/auth";
 import AnimatedLogo from "../Header/AnimatedLogo";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/utils/show-toasts";
+import nookies from 'nookies'
+
 let accessToken = parseCookies().altern8_useraccess;
 
 const login = () => {
@@ -32,6 +33,7 @@ const login = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { showToast } = useToast()
 
   // handle form input
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,17 +72,12 @@ const login = () => {
         // if the registration process is not completed yet
         // redirect to register page
         // Set the access token for register steps in a cookie
-        Cookies.set("altern8_registeruseraccess", accessToken, {
+        setCookie(null, "altern8_registeruseraccess", accessToken, {
           expires: 30,
           path: "/",
         });
-        // delete the existing dashboard access and refresh token
-        Cookies.remove("altern8_useraccess", {
-          path: "/",
-        });
-        Cookies.remove("altern8_userrefresh", {
-          path: "/",
-        });
+        destroyCookie(null, "altern8_useraccess");
+        destroyCookie(null, "altern8_userrefresh");
         router.push("/register");
         showToast(`Please complete the registration`, "info");
       }

@@ -1,10 +1,10 @@
 import { useContext, useState, useCallback, useEffect } from "react";
-import { showToast } from "../../utils/showToast";
 import { StepperContext } from "../../contexts/StepperContext";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
+import { useToast } from "@/utils/show-toasts";
 
 interface UserData {
   companyName: string;
@@ -21,8 +21,8 @@ interface UserData {
 
 const AuthorizationCompliance = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { currentStep, setCurrentStep, setLoading, getRegistrationState } =
-    useContext(StepperContext);
+  const { currentStep, setCurrentStep, setLoading, getRegistrationState } = useContext(StepperContext);
+  const { showToast } = useToast()
 
   const [userData, setUserData] = useState<UserData>({
     companyName: "",

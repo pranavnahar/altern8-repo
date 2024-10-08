@@ -1,7 +1,7 @@
 import useLedgerRules from "../../../../hooks/ledger/rule-manager/use-ledger-rules";
 import DeleteConfirmation from "../../../../components/ledger/rule-manager/delete-confirmation";
 import RuleSheet from "../../../../components/ledger/rule-manager/rule-sheet";
-import { showToast } from "../../../../utils/showToast";
+import { useToast } from "@/utils/show-toasts";
 
 export const toSnakeCase = (str: string) => {
   return str
@@ -105,6 +105,7 @@ export const columns = (accounts: string[], handleFetchRules: () => void) => [
       const { handleDeleteRules } = useLedgerRules();
       const ruleData = row.original;
       const ruleId = row.original.id;
+      const { showToast } = useToast()
 
       const handleDelete = async () => {
         try {
@@ -112,10 +113,10 @@ export const columns = (accounts: string[], handleFetchRules: () => void) => [
           if (success) {
             handleFetchRules();
           } else {
-            showToast("Please try later", "false");
+            showToast("Please try later", "warning");
           }
         } catch {
-          showToast("An error occurred", "false");
+          showToast("An error occurred", "error");
         }
       };
 

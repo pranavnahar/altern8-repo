@@ -2,15 +2,14 @@
 
 import { useContext, useState, useEffect } from "react";
 import { StepperContext } from "../../contexts/StepperContext";
-//import HelpAndLogin from "./stepsComponents/HelpAndLogin";
 import { parseCookies } from "nookies";
-import { showToast } from "../../utils/showToast";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/utils/show-toasts";
 
 const SelectPrimaryBankAccount = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [bankAccountsList, setBankAccountsList] =
-    useState<{ accountNumber: string; bankName: string }[]>();
+  const [bankAccountsList, setBankAccountsList] = useState<{ accountNumber: string; bankName: string }[]>();
+  const { showToast } = useToast()
   const [currentBankAccount, setCurrentBankAccount] = useState("");
   const {
     currentStep,

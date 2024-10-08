@@ -10,9 +10,8 @@ import {
 import { Button } from "../../../components/ui/button";
 import { uploadBulkTransactions } from "../../../utils/ledger/transactions/transactions-service";
 import { Input } from "../../../components/ui/input";
-import { Upload } from "lucide-react";
-import { showToast } from "../../../utils/showToast";
 import { IconUpload } from "@tabler/icons-react";
+import { useToast } from "@/utils/show-toasts";
 
 const TransactionUpload: React.FC<{
   onUploadSuccess: (data: object) => void;
@@ -20,7 +19,7 @@ const TransactionUpload: React.FC<{
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File>();
   const [uploadProgress, setUploadProgress] = useState(0);
-  console.log(uploadProgress);
+  const { showToast } = useToast()
 
   const [errorMessage, setErrorMessage] = useState("");
   console.log(errorMessage);
@@ -44,7 +43,7 @@ const TransactionUpload: React.FC<{
       setIsOpen(false);
     } catch (error) {
       setErrorMessage("");
-      showToast("An error occurred during file upload.", "false");
+      showToast("An error occurred during file upload.", "error");
       setSelectedFile(undefined);
     }
   };

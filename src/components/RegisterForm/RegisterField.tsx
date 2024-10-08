@@ -4,11 +4,11 @@ import React, { useContext, useState } from "react";
 import { StepperContext } from "../../contexts/StepperContext";
 //import HelpAndLogin from "./stepsComponents/HelpAndLogin";
 //import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 import { Button } from "@mui/material";
-import { showToast } from "../../utils/showToast";
 import { useSearchParams, useRouter } from "next/navigation";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
+import { useToast } from "@/utils/show-toasts";
+import { setCookie } from "nookies";
 
 const Register = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -27,8 +27,8 @@ const Register = () => {
     referredBy: "",
     entityType: "",
   });
-  const { currentStep, steps, setLoading, getRegistrationState } =
-    useContext(StepperContext);
+  const { currentStep, steps, setLoading, getRegistrationState } = useContext(StepperContext);
+  const { showToast } = useToast()
   const search = useSearchParams();
   const [termsAccepted, setTermsAccepted] = useState(true);
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -141,10 +141,10 @@ const Register = () => {
 
           let data = serverMessage;
 
-          // Set the access token in a cookie
-          Cookies.set("accessTokenForRegister", data.access, {
-            expires: 30,
-          });
+          setCookie(null, "accessTokenForRegister", data.access, {
+            maxAge: 60 * 60,
+            path: '/',
+          })
 
           getRegistrationState();
         } else {

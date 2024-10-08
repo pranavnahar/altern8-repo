@@ -1,15 +1,12 @@
-// reset password page
-// used on login page and inside dashboard/company details
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-//import { ToastContainer } from "react-toastify"; // for alert messages
 import { motion } from "framer-motion";
 import { parseCookies } from "nookies";
-import { showToast } from "@/utils/showToast";
 import { setAccessTokenCookie, setRefreshTokenCookie } from "@/utils/auth";
 import LinearBuffer from "@/components/LinearBuffer";
 import AnimatedLogo from "@/components/Header/AnimatedLogo";
+import { useToast } from "@/utils/show-toasts";
 let accessToken = parseCookies().altern8_useraccess;
 
 const page = () => {
@@ -31,6 +28,7 @@ const page = () => {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [loading, setLoading] = useState(false);
+  const { showToast } = useToast()
 
   // handle form input for phone number and otp
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {

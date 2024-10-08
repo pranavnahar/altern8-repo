@@ -1,5 +1,3 @@
-// This component is for registration page
-// If users need any help during registration
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
@@ -8,48 +6,29 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-//import { ToastContainer, toast } from "react-toastify";
-//import ChatBox from "./ChatBox";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
-//import { getAccessToken } from "../auth";
-//import { StepperContext } from "../../Contexts/StepperContext";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import AnimatedLogo from "../../../components/Header/AnimatedLogo";
 import { IconChevronRight, IconSend2 } from "@tabler/icons-react";
 
-// Main function return
+
 const HelpPage = () => {
-  //const [showMessageBox, setShowMessageBox] = useState(false); // to control the state of chat box
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  // FAQs
   const [problem, setProblem] = useState<{
     [key: string]: string;
   }>({});
-  const [loadingSpinner, setLoadingSpinner] = useState(true); // for loading animation
-  //const [color, setColor] = useState("#ffffff");
-  // number of unread messages in chat box
-  //const [chatCount, setChatCount] = useState(0); // total unread messages
-
-  //   const override = {
-  //     display: "block",
-  //     margin: "0 auto",
-  //     borderColor: "red",
-  //   };
+  const [loadingSpinner, setLoadingSpinner] = useState(true);
 
   const router = useRouter();
 
-  let accessToken = parseCookies().altern8_useraccess; //access token from cookies
-
-  // get the FAQs from backend
+  let accessToken = parseCookies().altern8_useraccess;
   useEffect(() => {
     const GetFaq = async () => {
       try {
         setLoadingSpinner(true);
         let response = await fetch(`${apiUrl}/user-api/faq/`, {});
-
-        console.log("first", response)
 
         if (response.ok) {
           const responseData = await response.json();
@@ -75,41 +54,6 @@ const HelpPage = () => {
 
     GetFaq();
   }, []);
-
-  // handling the chat button click
-  //   const handleChatClick = () => {
-  //     setShowMessageBox(true);
-  //     makeServerUnreadCharZero();
-  //   };
-
-  // handle close chat box
-  //   const handleCloseMessageBox = () => {
-  //     setShowMessageBox(false);
-  //   };
-
-  // const makeServerUnreadCharZero = async () => {
-  //   try {
-  //     let response = await fetch(`${apiUrl}/chat/user/read/`, {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     });
-
-  //     if (response.ok) {
-  //       await response.json();
-  //       console.log("message unread set to zero successful");
-
-  //       //setChatCount(0);
-  //     } else {
-  //       console.log("error during making server unread message zero");
-  //     }
-  //   } catch (error) {
-  //     console.log(
-  //       "catch error during making server unread message zero",
-  //       error
-  //     );
-  //   }
-  // };
 
   const handleClickLogo = () => {
     router.push("/");
@@ -215,22 +159,14 @@ const HelpPage = () => {
                   <Button
                     style={{
                       backgroundColor: "#1565c0",
-                      borderRadius: "25px", // Adjust the pixel value for the desired border radius
+                      borderRadius: "25px",
                     }}
                     variant="contained"
                     startIcon={<IconSend2 />}
-                  //onClick={handleChatClick}
                   >
                     Chat With Admin
                   </Button>
                 )}
-                {/* chatbox  */}
-
-                {/* <ChatBox
-                  open={showMessageBox}
-                  onClose={handleCloseMessageBox}
-                  showMessageBox={showMessageBox}
-                /> */}
               </div>
 
               <div className="flex flex-row justify-between pb-1 mx-6 text-sm text-gray-300 ">
