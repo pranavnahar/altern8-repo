@@ -1,11 +1,12 @@
 "use client";
+
 import { useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { EventClickArg, EventApi } from "@fullcalendar/core";
-import EventModal from "@/components/Calendar/event-modal";
-import useCalendarEvents from "@/hooks/calendar/use-calendar-events";
+import useCalendarEvents from "./hooks/use-calendar-events";
+import EventModal from "./components/event-modal";
 
 const CalendarPage = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -40,16 +41,7 @@ const CalendarPage = () => {
         />
         {modalOpen && selectedEvent && (
           <EventModal
-            event={{
-              ...selectedEvent,
-              start: selectedEvent.start || new Date(), // Fallback for start if it's null
-              end: selectedEvent.end || new Date(),     // Fallback for end if it's null
-              extendedProps: {
-                uid: selectedEvent.extendedProps?.uid || 'default-uid',
-                invoice_amount: selectedEvent.extendedProps?.invoice_amount || 0,
-                date: selectedEvent.extendedProps?.date || new Date().toISOString(),
-              }
-            }}
+            events={events}
             onClose={() => setModalOpen(false)}
           />
         )}

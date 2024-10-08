@@ -1,21 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
+import { Project } from '../types';
 
-interface EventProps {
-  id: string;
-  title: string;
-  extendedProps: {
-    uid: string;
-    invoice_amount: number;
-    date: string;
-  };
-}
-
-interface EventTableProps {
-  event: EventProps;
-}
-
-const EventTable: React.FC<EventTableProps> = ({ event }) => {
+const EventTable: React.FC<Project> = ( project ) => {
   return (
     <div className="col-span-4 pb-10 mt-3 mr-5 rounded-lg">
       <div className="rounded-lg">
@@ -42,21 +29,21 @@ const EventTable: React.FC<EventTableProps> = ({ event }) => {
           <tbody>
             <tr>
               <td className="p-3 text-sm font-medium text-blue-600">
-                <Link href={`/sellers/${event.extendedProps.uid}`}>
-                  {event.extendedProps.uid}
+                <Link href={`/sellers/${project.project_id}`}>
+                  {project.project_id}
                 </Link>
               </td>
               <td className="p-3 text-sm font-medium text-blue-600">
-                <Link href={`/invoices/${event.id}`}>{event.id}</Link>
+                <Link href={`/invoices/${project.project_id}`}>{project.project_id}</Link>
               </td>
               <td className="p-3 text-sm font-medium text-gray-300 whitespace-nowrap hover:text-gray-200">
-                {event.title}
+                {project.project_name}
               </td>
               <td className="p-3 text-sm font-medium text-gray-300 whitespace-nowrap hover:text-gray-200">
-                ₹ {event.extendedProps.invoice_amount?.toLocaleString('en-IN')}
+                ₹ {project.budget?.toLocaleString('en-IN')}
               </td>
               <td className="p-3 text-sm font-medium text-gray-300 whitespace-nowrap hover:text-gray-200">
-                {event.extendedProps.date}
+                {project.start_date}
               </td>
             </tr>
           </tbody>

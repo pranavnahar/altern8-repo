@@ -8,6 +8,7 @@ import { getAccessToken } from "../../../utils/auth";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import { IconCloudUpload, IconFileText } from "@tabler/icons-react";
 import { useToast } from "@/utils/show-toasts";
+import Pdf from "@/assets/pdf";
 
 const Page = () => {
   const [file, setFile] = useState<File>();
@@ -143,41 +144,31 @@ const Page = () => {
           </div>
         </div>
       )}
-      <div className="mt-15 w-4/5 pb-10 rounded-lg">
+      <div className="mt-15 pb-10 rounded-lg flex flex-col gap-12">
         <div className="text-3xl text-white font-semibold text-white-font text-center py-5">
           Files & Documents
         </div>
         {/* previous file uploads */}
-        <div className="grid grid-cols-5 gap-4 mx-6">
-          <div className="text-center cursor-pointer">
-            <IconFileText
-              style={{ fill: "#C3E1EF", width: "90px", height: "90px" }}
-            />
-            <div className="text-icon-light-blue text-base2">Accounts.pdf</div>
+        <div className="flex justify-center gap-20 mx-6">
+          <div className="text-center cursor-pointer grid gap-5">
+            <Pdf />
+            <div className="text-zinc-300">Accounts.pdf</div>
           </div>
-          <div className="text-center cursor-pointer">
-            <IconFileText
-              style={{ fill: "#C3E1EF", width: "90px", height: "90px" }}
-            />
-            <div className="text-icon-light-blue text-base2">Accounts.pdf</div>
+          <div className="text-center cursor-pointer grid gap-5">
+            <Pdf />
+            <div className="text-zinc-300">Accounts.pdf</div>
           </div>
-          <div className="text-center cursor-pointer">
-            <IconFileText
-              style={{ fill: "#C3E1EF", width: "90px", height: "90px" }}
-            />
-            <div className="text-icon-light-blue text-base2">Accounts.pdf</div>
+          <div className="text-center cursor-pointer grid gap-5">
+            <Pdf />
+            <div className="text-zinc-300">Accounts.pdf</div>
           </div>
-          <div className="text-center cursor-pointer">
-            <IconFileText
-              style={{ fill: "#C3E1EF", width: "90px", height: "90px" }}
-            />
-            <div className="text-icon-light-blue text-base2">Accounts.pdf</div>
+          <div className="text-center cursor-pointer grid gap-5">
+            <Pdf />
+            <div className="text-zinc-300">Accounts.pdf</div>
           </div>
-          <div className="text-center cursor-pointer">
-            <IconFileText
-              style={{ fill: "#C3E1EF", width: "90px", height: "90px" }}
-            />
-            <div className="text-icon-light-blue text-base2">Accounts.pdf</div>
+          <div className="text-center cursor-pointer grid gap-5">
+            <Pdf />
+            <div className="text-zinc-300">Accounts.pdf</div>
           </div>
         </div>
 
@@ -186,7 +177,7 @@ const Page = () => {
           <Button
             style={{
               backgroundColor: "#1565c0",
-              borderRadius: "25px", // Adjust the pixel value for the desired border radius
+              borderRadius: "25px",
             }}
             component="label"
             variant="contained"

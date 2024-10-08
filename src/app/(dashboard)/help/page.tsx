@@ -1,52 +1,62 @@
-"use client";
-import Link from "next/link";
-import React, { useState, useEffect } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { useRouter } from "next/navigation";
-import { parseCookies } from "nookies";
-import LoadingSpinner from "../../../components/LoadingSpinner";
-import AnimatedLogo from "../../../components/Header/AnimatedLogo";
-import { IconChevronRight, IconSend2 } from "@tabler/icons-react";
+"use client"
+
+import React, { useState, useContext, useEffect } from 'react';
+import { DashboardContext } from '@/contexts/DashboardContext';
+import Accordion from '@/components/ui/accordion';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import { IconSend2 } from '@tabler/icons-react';
+import { Button } from '@/components/ui/button';
+import ChatBox from '@/components/mui/Chatbox';
+import { fetchWithAuth } from '@/utils/fetch-with-auth';
+
+const dummyFaqs = [
+  {
+    id: 1,
+    question: "How do I set up my account?",
+    answer: "To set up your account, click on the 'Sign Up' button and follow the instructions. You will need to provide your email and create a password.",
+    image: null,
+  },
+  {
+    id: 2,
+    question: "What are your business hours?",
+    answer: "Our business hours are from 9:00 AM to 5:00 PM, Monday through Friday. We are closed on weekends and holidays.",
+    image: null,
+  },
+  {
+    id: 3,
+    question: "How do I contact support?",
+    answer: "You can contact our support team by clicking on the 'Chat With Admin' button or by sending an email to support@example.com.",
+    image: null,
+  },
+];
 
 
-const HelpPage = () => {
-
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [problem, setProblem] = useState<{
-    [key: string]: string;
-  }>({});
+const Help = () => {
+  const [showMessageBox, setShowMessageBox] = useState(false);
+  const [faqs, setFaqs] = useState(dummyFaqs);
   const [loadingSpinner, setLoadingSpinner] = useState(true);
 
-  const router = useRouter();
-
-  let accessToken = parseCookies().altern8_useraccess;
+  const { chatCount, setChatCount } = useContext(DashboardContext);
   useEffect(() => {
     const GetFaq = async () => {
       try {
-        setLoadingSpinner(true);
-        let response = await fetch(`${apiUrl}/user-api/faq/`, {});
+        const response = await fetchWithAuth(`/seller-api/faq/`);
 
-        if (response.ok) {
+        if (response) {
           const responseData = await response.json();
+          const newFaqs = responseData.map((faq: { id: any; question: any; answer: any; image: any }) => ({
+            id: faq.id,
+            question: faq.question,
+            answer: faq.answer,
+            image: faq.image,
+          }));
 
-          let addProblem = {};
-          for (let i = 0; i < responseData.length; i++) {
-            const additionalData = {
-              [responseData[i]["question"]]: responseData[i]["answer"],
-            };
-            addProblem = { ...addProblem, ...additionalData };
-          }
-          const newProblem = { ...problem, ...addProblem };
-          setProblem(newProblem);
+          setFaqs(newFaqs);
         } else {
-          console.error("Failed to fetch faqs:", response.status);
+          console.error('Failed to fetch FAQs');
         }
       } catch (error) {
-        console.log("error during getting faqs");
+        console.log('Error fetching FAQs:', error);
       } finally {
         setLoadingSpinner(false);
       }
@@ -55,141 +65,62 @@ const HelpPage = () => {
     GetFaq();
   }, []);
 
-  const handleClickLogo = () => {
-    router.push("/");
+  const handleChatClick = () => {
+    setShowMessageBox(true);
+    makeServerUnreadChatZero();
+  };
+  const handleCloseMessageBox = () => {
+    setShowMessageBox(false);
   };
 
-  const handleClickRegister = () => {
-    router.push("/register");
+  const makeServerUnreadChatZero = async () => {
+    try {
+      const response = await fetchWithAuth(`/chat/user/read/`);
+
+      if (response) {
+        console.log('Unread messages set to zero successfully');
+        setChatCount(0);
+      } else {
+        console.log('Error during setting unread messages to zero');
+      }
+    } catch (error) {
+      console.log('Error during setting unread messages to zero:', error);
+    }
   };
 
   return (
-    <div className="relative flex flex-row items-center justify-center [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] w-full">
-      {/* <div className="relative [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] w-full h-[5584px] overflow-hidden flex flex-col items-start justify-start py-[39px] px-[82px] box-border gap-[177px]"> */}
-
+    <div className="min-h-screen mt-10">
       {loadingSpinner && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center  bg-opacity-50 z-50   [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)]">
+        <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-gray-600 bg-opacity-50">
           <div className="relative">
             <LoadingSpinner />
           </div>
         </div>
       )}
+
       {!loadingSpinner && (
-        <div className="justify-center  max-w-[1320px]">
-          <div className="flex justify-center items-center pb-4 mt-10 text-5xl text-center sm:text-10xl lg:text-20xl text-white-font font-exo letter-spacing-2">
-            <a href="#" onClick={handleClickLogo}>
-              <AnimatedLogo />
-            </a>
+        <div className="w-4/5 mx-auto pb-10 rounded-lg mt-15">
+          <div className="py-5 text-5xl font-semibold text-center text-white">FAQs</div>
+          <div className="mx-6">
+            <Accordion
+              items={faqs.map(faq => ({
+                title: faq.question,
+                content: faq.answer,
+                isOpenByDefault: false,
+              }))}
+            />
           </div>
 
-          <div className="min-h-screen flex flex-row item-center justify-center  max-w-[1320px]">
-            <div className="w-4/5 pb-10 rounded-lg ">
-              <div className="flex items-center justify-between mx-6 ">
-                {/* register button link  */}
-                <div className="mt-5 text-center ">
-                  {accessToken && (
-                    <Button
-                      style={{
-                        backgroundColor: "#1565c0",
-                        borderRadius: "25px", // Adjust the pixel value for the desired border radius
-                      }}
-                      variant="contained"
-                      onClick={handleClickRegister}
-                    >
-                      Get Credit
-                    </Button>
-                  )}
-                </div>
-                {/* chat button  */}
-                <div className="mt-5 ">
-                  {accessToken && (
-                    <Button
-                      style={{
-                        backgroundColor: "#1565c0",
-                        borderRadius: "25px", // Adjust the pixel value for the desired border radius
-                      }}
-                      variant="contained"
-                      startIcon={<IconSend2 />}
-                    //onClick={handleChatClick}
-                    >
-                      Chat With Admin
-                    </Button>
-                  )}
-                  {/* chatbox  */}
-
-                  {/* <ChatBox
-                    onClose={handleCloseMessageBox}
-                    showMessageBox={showMessageBox}
-                  /> */}
-                </div>
-              </div>
-
-              {/* FAQs section  */}
-              <div className="py-5 text-5xl font-semibold text-center text-white-font">
-                FAQs
-              </div>
-              <div className="mx-6 ">
-                {Object.entries(problem).map(([problem, solution], index) => (
-                  <Accordion
-                    key={index}
-                    style={{
-                      backgroundColor: "#C3E1EF",
-                      borderRadius: "8px", // Adjust the pixel value for the desired border radius
-                      marginBottom: "16px", // Adjust the pixel value for the desired margin
-                      color: "#333",
-                    }}
-                  >
-                    <AccordionSummary
-                      expandIcon={<IconChevronRight />}
-                      aria-controls={`panel${index + 1}-content`}
-                      id={`panel${index + 1}-header`}
-                    >
-                      <Typography>{problem}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <Typography>{solution}</Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
-              </div>
-
-              {/* chat button  */}
-              <div className="mt-10 text-center ">
-                {accessToken && (
-                  <Button
-                    style={{
-                      backgroundColor: "#1565c0",
-                      borderRadius: "25px",
-                    }}
-                    variant="contained"
-                    startIcon={<IconSend2 />}
-                  >
-                    Chat With Admin
-                  </Button>
-                )}
-              </div>
-
-              <div className="flex flex-row justify-between pb-1 mx-6 text-sm text-gray-300 ">
-                <div>
-                  <a
-                    href="#"
-                    onClick={handleClickRegister}
-                    className="mx-2 font-medium text-indigo-500"
-                  >
-                    Register Page
-                  </a>
-                </div>
-                <div>
-                  Already registered?
-                  <Link
-                    href="/login"
-                    className="mx-2 font-medium text-indigo-600"
-                  >
-                    Login Here
-                  </Link>
-                </div>
-              </div>
-            </div>
+          <div className="mt-10 text-center">
+            <Button variant="expandIcon" Icon={IconSend2} iconPlacement="right" className="text-sm" onClick={handleChatClick}>
+              Chat With Admin
+            </Button>
+            {showMessageBox && (
+              <ChatBox
+                onClose={handleCloseMessageBox}
+                showMessageBox={showMessageBox}
+              />
+            )}
           </div>
         </div>
       )}
@@ -197,4 +128,4 @@ const HelpPage = () => {
   );
 };
 
-export default HelpPage;
+export default Help;

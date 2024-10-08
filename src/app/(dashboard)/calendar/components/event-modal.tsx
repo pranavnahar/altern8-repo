@@ -1,28 +1,16 @@
 import React from "react";
 import EventTable from "./event-table";
 import { IconButton } from "@mui/material";
-import { IconChevronLeft, IconX } from "@tabler/icons-react";
-
-interface EventType {
-  id: string;
-  title: string;
-  start: Date;
-  end: Date;
-  description?: string;
-  extendedProps: {
-    uid: string;
-    invoice_amount: number;
-    date: string;
-  };
-}
-
+import { IconChevronLeft, IconX } from "@tabler/icons-react"
+import { Project } from "../types";
 
 interface EventModalProps {
-  event: EventType;
+  events: Project[];
   onClose: () => void;
 }
 
-const EventModal: React.FC<EventModalProps> = ({ event, onClose }) => {
+const EventModal: React.FC<EventModalProps> = ({ events, onClose }) => {
+  console.log("ease", events)
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-black bg-opacity-50 outline-none focus:outline-none">
       <div className="relative w-1/2 mx-auto my-6">
@@ -40,16 +28,9 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose }) => {
             </IconButton>
           </div>
           <div className="relative flex-auto px-6 mb-5">
-            <EventTable
-              event={{
-                ...event,
-                extendedProps: event.extendedProps || {
-                  uid: "default-uid",
-                  invoice_amount: 0,
-                  date: new Date().toISOString(),
-                },
-              }}
-            />
+            {events.map((event, index) => (
+              <EventTable key={index} project_id={event.project_id} project_name={event.project_name} start_date={event.start_date} end_date={event.end_date} budget={event.budget}  />
+            ))}
           </div>
         </div>
       </div>
