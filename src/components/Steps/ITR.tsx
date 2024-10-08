@@ -5,8 +5,8 @@ import { StepperContext } from "../../contexts/StepperContext";
 //import HelpAndLogin from "./stepsComponents/HelpAndLogin";
 import { parseCookies } from "nookies";
 import { useDropzone } from "react-dropzone";
-import { showToast } from "../../utils/showToast";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/utils/show-toasts";
 
 const ITR = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -36,6 +36,7 @@ const ITR = () => {
     }
   );
   const [externalApiErrorCounts, setExternalApiErrorCounts] = useState(0);
+  const { showToast } = useToast()
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccessForRegister;

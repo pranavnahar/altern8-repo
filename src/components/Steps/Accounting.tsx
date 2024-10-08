@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { useDropzone } from "react-dropzone";
 import ConnectSDK from "../Step-Component/ConnectSDK";
-import { showToast } from "../../utils/showToast";
+import { useToast } from "@/utils/show-toasts";
 
 const Accounting = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -32,6 +32,7 @@ const Accounting = () => {
   });
 
   const [processState, setProcessState] = useState("initializing");
+  const { showToast } = useToast()
 
   function handleProcessChange(newState: string) {
     setProcessState(newState);

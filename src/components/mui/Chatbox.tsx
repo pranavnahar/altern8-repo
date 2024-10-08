@@ -6,11 +6,11 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import { showToast } from "../../utils/showToast";
 import { parseCookies } from "nookies";
 import { getAccessToken } from "../../utils/auth";
 import { useRouter } from "next/navigation";
 import { IconPaperclip, IconSend2, IconX } from "@tabler/icons-react";
+import { useToast } from "@/utils/show-toasts";
 
 type Message = {
   text: string;
@@ -26,6 +26,7 @@ const ChatBox: React.FC<{
 }> = ({ onClose, showMessageBox }) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
+  const { showToast } = useToast()
 
   const [messages, setMessages] = useState<Message[]>([
     // initial messages for the chat

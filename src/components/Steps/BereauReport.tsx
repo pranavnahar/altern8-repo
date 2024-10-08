@@ -2,9 +2,9 @@ import { useContext, useState, useEffect } from "react";
 import { StepperContext } from "../../contexts/StepperContext";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { parseCookies } from "nookies";
-import { showToast } from "../../utils/showToast";
 import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
+import { useToast } from "@/utils/show-toasts";
 
 interface DocumentFiles {
   [key: string]: File[];
@@ -25,6 +25,7 @@ const BureauReport = () => {
   console.log(entityType);
   const [otpTimer, setOtpTimer] = useState(60);
   const [documentFiles, setDocumentFiles] = useState<DocumentFiles>({});
+  const { showToast } = useToast()
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccessForRegister;

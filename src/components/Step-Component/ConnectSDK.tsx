@@ -4,8 +4,8 @@ import { RootFiEnvironment } from "rootfi-api";
 import Image from "next/image";
 import { Box, CircularProgress } from "@mui/material";
 import { parseCookies } from "nookies";
-import { showToast } from "../../utils/showToast";
 import { IntegrationCategory, IntegrationType } from "rootfi-api/api";
+import { useToast } from "@/utils/show-toasts";
 
 type InviteLinkData = {
   data: {
@@ -36,6 +36,7 @@ const ConnectSDK: React.FC<{
 }> = ({ integration, category, onEventChange }) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   let accessToken = parseCookies().altern8_useraccessForRegister;
+  const { showToast } = useToast()
 
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   console.log(loadingSpinner);
@@ -80,7 +81,7 @@ const ConnectSDK: React.FC<{
       }
     } catch (error) {
       console.error("Server Connection Error updating accounting data:", error);
-      showToast("Failed to send otp, system error", "false");
+      showToast("Failed to send otp, system error", "error");
     } finally {
       setLoadingSpinner(false);
     }

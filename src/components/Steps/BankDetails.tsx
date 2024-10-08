@@ -9,12 +9,9 @@ import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { useDropzone } from "react-dropzone";
-//import "slick-carousel/slick/slick.css";
-//import "slick-carousel/slick/slick-theme.css";
 import ImageSlider from "./Account Aggregator/ImageSlider";
 import { AA_videos } from "./Account Aggregator/AA_Videos";
-import axios from "axios";
-import { showToast } from "../../utils/showToast";
+import { useToast } from "@/utils/show-toasts";
 
 const BankDetails = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -28,9 +25,8 @@ const BankDetails = () => {
     setApiFailedIcon,
   } = useContext(StepperContext);
   const [files, setFiles] = useState<{ file: File; password: string }[]>([]); // state for file upload
-  const [showFileBasedInputFields, setShowFileBasedInputFields] =
-    useState(false);
-  console.log(showFileBasedInputFields);
+  const [showFileBasedInputFields, setShowFileBasedInputFields] = useState(false);
+  const { showToast } = useToast()
 
   const [showKnowMore, setShowKnowMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -258,19 +254,25 @@ const BankDetails = () => {
     setIsLoading(true);
 
     try {
-      // Call Generate URL API
-      const response = await axios.post("/api/generate-url", {
-        destination: "accountaggregator",
-        return_url: "http://localhost:3000/register",
+      const response = await fetch("/api/generate-url", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          destination: "accountaggregator",
+          return_url: "http://localhost:3000/register",
+        }),
       });
 
-      //console.log(response.data.url);
-
-      // Redirect the user to the generated URL
-      router.push(response.data.url);
-      //setIframeUrl(response.data.url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      router.push(data.url);
     } catch (error) {
-      console.error(`Error generating URL, (${currentStep}) :`, error);
+      console.error(`Error generating URL, (${currentStep}):`, error);
+    } finally {
       setIsLoading(false);
     }
   };
