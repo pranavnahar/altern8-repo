@@ -1,5 +1,5 @@
-import { getAccessToken } from "@/utils/auth";
-import { Project } from "../types";
+import { getAccessToken } from '../../../../utils/auth';
+import { Project } from '../types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
