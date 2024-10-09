@@ -1,18 +1,12 @@
-
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion"; // for animations
-import Link from "next/link";
-import LinearBuffer from "../LinearBuffer"; //for progress animation
-import { destroyCookie, parseCookies, setCookie } from "nookies";
-import {
-  setAccessTokenCookie,
-  setRefreshTokenCookie,
-  removeTokenCookie,
-} from "../../utils/auth";
-import AnimatedLogo from "../Header/AnimatedLogo";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/utils/show-toasts";
-import nookies from 'nookies'
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion'; // for animations
+import Link from 'next/link';
+import LinearBuffer from '../LinearBuffer'; //for progress animation
+import { destroyCookie, parseCookies, setCookie } from 'nookies';
+import { setAccessTokenCookie, setRefreshTokenCookie, removeTokenCookie } from '../../utils/auth';
+import AnimatedLogo from '../Header/AnimatedLogo';
+import { useRouter } from 'next/navigation';
+import { useToast } from '../../utils/show-toasts';
 
 let accessToken = parseCookies().altern8_useraccess;
 
@@ -22,18 +16,18 @@ const login = () => {
     password: string;
     otp: string;
   }>({
-    phoneNumber: "",
-    password: "",
-    otp: "",
+    phoneNumber: '',
+    password: '',
+    otp: '',
   });
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [pageState, setPageState] = useState("login"); //page state from login, password reset and otp
+  const [pageState, setPageState] = useState('login'); //page state from login, password reset and otp
   const [otpSent, setOtpSent] = useState(false);
   const [otpTimer, setOtpTimer] = useState(60);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
   // handle form input
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,45 +59,40 @@ const login = () => {
 
       // if profile is approved then allowed to dashboard
       const registrationStep = sellerData.user_state;
-      console.log("resgius", registrationStep)
-      if (registrationStep === "Approved") {
-        router.push("/dashboard");
+      console.log('resgius', registrationStep);
+      if (registrationStep === 'Approved') {
+        router.push('/dashboard');
       } else {
         // if the registration process is not completed yet
         // redirect to register page
         // Set the access token for register steps in a cookie
-        setCookie(null, "altern8_registeruseraccess", accessToken, {
+        setCookie(null, 'altern8_registeruseraccess', accessToken, {
           expires: 30,
-          path: "/",
+          path: '/',
         });
-        destroyCookie(null, "altern8_useraccess");
-        destroyCookie(null, "altern8_userrefresh");
-        router.push("/register");
-        showToast(`Please complete the registration`, "info");
+        destroyCookie(null, 'altern8_useraccess');
+        destroyCookie(null, 'altern8_userrefresh');
+        router.push('/register');
+        showToast(`Please complete the registration`, 'info');
       }
     } catch (error) {
-      console.log(
-        "login page, error during fetching seller registration states",
-        error
-      );
+      console.log('login page, error during fetching seller registration states', error);
     } finally {
       setLoading(false);
     }
   };
 
   // handle login with phone number & password
-  const handleLoginWithPasswordSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleLoginWithPasswordSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!validatePhoneNumber(LoginForm.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, "info");
+      showToast(`Phone number must be a 10-digit number`, 'info');
       return;
     }
 
     if (!validatePassword(LoginForm.password)) {
-      showToast(`Password must be at least 8 characters`, "info");
+      showToast(`Password must be at least 8 characters`, 'info');
       return;
     }
 
@@ -116,9 +105,9 @@ const login = () => {
       setLoading(true);
       let body = newRecord;
       const response = await fetch(`${apiUrl}/user-api/login/`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
       });
@@ -128,28 +117,26 @@ const login = () => {
 
         // Set the access token in a cookie
         setAccessTokenCookie(data.access);
-        localStorage.setItem("token", data.access);
+        localStorage.setItem('token', data.access);
         setRefreshTokenCookie(data.refresh);
-        localStorage.setItem("Rtoken", data.refresh);
+        localStorage.setItem('Rtoken', data.refresh);
         accessToken = data.access;
         await getUserState();
       } else {
         let serverError = await response.json();
-        console.error("Login failed.", serverError.message);
-        showToast(`Invalid Credentials`, "info");
+        console.error('Login failed.', serverError.message);
+        showToast(`Invalid Credentials`, 'info');
       }
     } catch (error) {
-      console.error("System Error during login:", error);
-      showToast(`Login Failed, system error`, "info");
+      console.error('System Error during login:', error);
+      showToast(`Login Failed, system error`, 'info');
     } finally {
       setLoading(false);
     }
   };
 
   // handle login with phone number & otp
-  const handleLoginWithOtpSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleLoginWithOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!otpSent) {
@@ -157,7 +144,7 @@ const login = () => {
     }
 
     if (!validatePhoneNumber(LoginForm.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, "info");
+      showToast(`Phone number must be a 10-digit number`, 'info');
       return;
     }
 
@@ -171,9 +158,9 @@ const login = () => {
       let body = newRecord;
       console.log(body);
       const response = await fetch(`${apiUrl}/user-api/verify-otp/`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
 
         body: JSON.stringify(body),
@@ -181,7 +168,7 @@ const login = () => {
 
       if (response.ok) {
         let data = await response.json();
-        console.log("otp submitted");
+        console.log('otp submitted');
         // Set the access token in a cookie
         setAccessTokenCookie(data.access);
         setRefreshTokenCookie(data.refresh);
@@ -191,29 +178,29 @@ const login = () => {
         await getUserState();
       } else {
         let server_error = await response.json();
-        console.error("Login failed.", server_error);
-        showToast(`Invalid Credentials, ${server_error.message}`, "info");
+        console.error('Login failed.', server_error);
+        showToast(`Invalid Credentials, ${server_error.message}`, 'info');
       }
     } catch (error) {
-      console.error("System Error during login:", error);
-      showToast(`Login Failed, system error`, "info");
+      console.error('System Error during login:', error);
+      showToast(`Login Failed, system error`, 'info');
     } finally {
       setLoading(false);
     }
   };
 
   const handleLoginWithPasswordClick = () => {
-    setPageState("login");
+    setPageState('login');
   };
 
   const handleLoginWithOtpClick = () => {
-    setPageState("otpLogin");
+    setPageState('otpLogin');
   };
 
   // login with otp link click
   const handleSendOtp = async () => {
     if (!validatePhoneNumber(LoginForm.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, "info");
+      showToast(`Phone number must be a 10-digit number`, 'info');
       return;
     }
 
@@ -226,29 +213,29 @@ const login = () => {
       let body = newRecord;
       console.log(body);
       const response = await fetch(`${apiUrl}/user-api/generate-otp/`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
       });
 
       if (response.ok) {
         await response.json();
-        console.log("otp sent");
+        console.log('otp sent');
         setOtpSent(true);
-        LoginForm.otp = "";
+        LoginForm.otp = '';
       } else {
         let server_error = await response.json();
-        console.error("Failed to send otp", server_error);
-        showToast(`Failed to send otp,${server_error.message}`, "info");
+        console.error('Failed to send otp', server_error);
+        showToast(`Failed to send otp,${server_error.message}`, 'info');
 
         // temp
         setOtpSent(true);
       }
     } catch (error) {
-      console.error("System Error during otp", error);
-      showToast(`Failed to send otp, system error`, "info");
+      console.error('System Error during otp', error);
+      showToast(`Failed to send otp, system error`, 'info');
     } finally {
       setLoading(false);
     }
@@ -256,7 +243,7 @@ const login = () => {
 
   // login with password link click
   const handleForgotPasswordClick = () => {
-    router.push("/reset-password");
+    router.push('/reset-password');
   };
 
   useEffect(() => {
@@ -266,7 +253,7 @@ const login = () => {
       setOtpTimer(60);
 
       intervalId = setInterval(() => {
-        setOtpTimer((prevTimer) => {
+        setOtpTimer(prevTimer => {
           if (prevTimer === 1) {
             clearInterval(intervalId);
             setOtpSent(false);
@@ -286,7 +273,7 @@ const login = () => {
 
   // on click on ethyx club redirect to landing page
   const handleClickLogo = () => {
-    router.push("/");
+    router.push('/');
   };
 
   // handle password visibility
@@ -309,9 +296,7 @@ const login = () => {
         [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]"
       >
         {/* linear buffer  */}
-        <div className="mx-5 my-5  rounded-lg">
-          {loading && <LinearBuffer />}
-        </div>
+        <div className="mx-5 my-5  rounded-lg">{loading && <LinearBuffer />}</div>
         <div className="mx-3 p-5 sm:p-6">
           <div
             className="self-center text-5xl pt-5 pb-16 sm:text-10xl text-center lg:text-20xl text-gray-300 font-exo letter-spacing-2 flex justify-center items-center"
@@ -323,7 +308,7 @@ const login = () => {
           </div>
 
           {/* login with password form  */}
-          {pageState === "login" && (
+          {pageState === 'login' && (
             <form onSubmit={handleLoginWithPasswordSubmit} className="">
               <div className="flex flex-col">
                 <div className="w-full mx-2 flex-1">
@@ -333,7 +318,7 @@ const login = () => {
                   <div className=" my-2 py-1 flex ">
                     <input
                       onChange={handleInput}
-                      value={LoginForm.phoneNumber || ""}
+                      value={LoginForm.phoneNumber || ''}
                       name="phoneNumber"
                       placeholder="Phone Number"
                       className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -352,11 +337,11 @@ const login = () => {
                   <div className=" my-2 py-1 relative ">
                     <input
                       onChange={handleInput}
-                      value={LoginForm.password || ""}
+                      value={LoginForm.password || ''}
                       name="password"
                       placeholder="Password"
                       className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
-                      type={passwordVisible ? "text" : "password"}
+                      type={passwordVisible ? 'text' : 'password'}
                       required
                       autoComplete="new-password"
                     />
@@ -463,13 +448,13 @@ const login = () => {
           )}
 
           {/* login with otp  */}
-          {pageState === "otpLogin" && (
+          {pageState === 'otpLogin' && (
             <form onSubmit={handleLoginWithOtpSubmit}>
               <div className="flex flex-col">
                 {/* phone number field  */}
 
                 {otpSent ? (
-                  ""
+                  ''
                 ) : (
                   <div className="w-full mx-2 flex-1">
                     <div className="font-bold h-6 mt-3 text-gray-300 text-xs leading-8 uppercase">
@@ -478,7 +463,7 @@ const login = () => {
                     <div className=" my-2 py-1 flex ">
                       <input
                         onChange={handleInput}
-                        value={LoginForm.phoneNumber || ""}
+                        value={LoginForm.phoneNumber || ''}
                         name="phoneNumber"
                         placeholder="Phone Number"
                         className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -499,7 +484,7 @@ const login = () => {
                     <div className=" my-2 py-1 flex ">
                       <input
                         onChange={handleInput}
-                        value={LoginForm.otp || ""}
+                        value={LoginForm.otp || ''}
                         name="otp"
                         placeholder="OTP"
                         className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -510,7 +495,7 @@ const login = () => {
                     </div>
                   </div>
                 ) : (
-                  ""
+                  ''
                 )}
               </div>
 
@@ -536,7 +521,7 @@ const login = () => {
                 <div className="flex justify-center items-center">
                   <div className="flex justify-center items-center text-gray-300 mt-5 p-3   rounded-xl">
                     Time left: {Math.floor(otpTimer / 60)}:
-                    {(otpTimer % 60).toLocaleString("en-US", {
+                    {(otpTimer % 60).toLocaleString('en-US', {
                       minimumIntegerDigits: 2,
                     })}
                   </div>

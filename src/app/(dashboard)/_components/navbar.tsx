@@ -1,32 +1,32 @@
-'use client'
+'use client';
 
-import { FC, useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import Link from "next/link"
-import { IconLogout, IconUserCircle } from "@tabler/icons-react"
-import { Separator } from "@/components/ui/separator"
-import { Button } from "@/components/ui/button"
+import { FC, useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import { IconLogout, IconUserCircle } from '@tabler/icons-react';
+import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 
 export const Navbar: FC = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen)
-  }
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false)
+        setIsDropdownOpen(false);
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="shadow-lg bg-white/10 z-20 backdrop-blur-md">
@@ -34,8 +34,7 @@ export const Navbar: FC = () => {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex items-center flex-shrink-0">
-              <Link href="/" className="text-xl font-bold text-gray-800 dark:text-white">
-              </Link>
+              <Link href="/" className="text-xl font-bold text-gray-800 dark:text-white"></Link>
             </div>
           </div>
           <div className="flex items-center">
@@ -70,14 +69,14 @@ export const Navbar: FC = () => {
                             <p className="text-sm font-medium text-zinc-500 -mt-1">oeuvars</p>
                           </div>
                         </div>
-                        <Separator className="opacity-70"/>
+                        <Separator className="opacity-70" />
                         <Link href="/developer-entry" className="w">
                           <Button
-                            size="xs"
+                            size="sm"
                             className="text-xs text-white w-full"
-                            variant="expandIcon"
-                            Icon={IconLogout}
-                            iconPlacement="right"
+                            //variant="expandIcon"
+                            //Icon={IconLogout}
+                            //iconPlacement="right"
                           >
                             Sign Out
                           </Button>
@@ -92,7 +91,7 @@ export const Navbar: FC = () => {
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
