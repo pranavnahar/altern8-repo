@@ -1,24 +1,24 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { parseCookies } from "nookies";
-import { setAccessTokenCookie, setRefreshTokenCookie } from "@/utils/auth";
-import LinearBuffer from "@/components/LinearBuffer";
-import AnimatedLogo from "@/components/Header/AnimatedLogo";
-import { useToast } from "@/utils/show-toasts";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { parseCookies } from 'nookies';
+import { setAccessTokenCookie, setRefreshTokenCookie } from '../../../utils/auth';
+import LinearBuffer from '@/components/LinearBuffer';
+import AnimatedLogo from '@/components/Header/AnimatedLogo';
+import { useToast } from '../../../utils/show-toasts';
 let accessToken = parseCookies().altern8_useraccess;
 
 const page = () => {
   const [otpForm, setOtpForm] = useState({
-    phoneNumber: "",
-    otp: "",
+    phoneNumber: '',
+    otp: '',
   });
   const [resetPassword, setResetPassword] = useState({
-    phoneNumber: "",
-    otp: "",
-    resetPassword1: "",
-    resetPassword2: "",
+    phoneNumber: '',
+    otp: '',
+    resetPassword1: '',
+    resetPassword2: '',
   });
   const [password1Visible, setPassword1Visible] = useState(false);
   const [password2Visible, setPassword2Visible] = useState(false);
@@ -28,7 +28,7 @@ const page = () => {
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [loading, setLoading] = useState(false);
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
   // handle form input for phone number and otp
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,8 +53,7 @@ const page = () => {
 
   const validatePassword = (password: string) => {
     password = password.trim();
-    const passwordRegex =
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#:])[A-Za-z\d@$!%*?&#:]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#:])[A-Za-z\d@$!%*?&#:]{8,}$/;
     const isValidPassword = passwordRegex.test(password);
     if (isValidPassword) {
       return true;
@@ -68,7 +67,7 @@ const page = () => {
     e.preventDefault();
     if (otpSent) {
       if (!validatePhoneNumber(otpForm.phoneNumber)) {
-        showToast(`Phone number must be a 10-digit number`, "info");
+        showToast(`Phone number must be a 10-digit number`, 'info');
         return;
       }
 
@@ -82,9 +81,9 @@ const page = () => {
         let body = newRecord;
         console.log(body);
         const response = await fetch(`${apiUrl}/user-api/verify-otp/`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
 
           body: JSON.stringify(body),
@@ -100,16 +99,16 @@ const page = () => {
           // update accessToken variable
           accessToken = data.access;
 
-          console.log("otp verified successfully", accessToken);
+          console.log('otp verified successfully', accessToken);
           setShowResetPasswordPage(true);
         } else {
           let server_error = await response.json();
-          console.error("Login failed.", server_error);
-          showToast(`OTP verification failed, ${server_error.message}`, "info");
+          console.error('Login failed.', server_error);
+          showToast(`OTP verification failed, ${server_error.message}`, 'info');
         }
       } catch (error) {
-        console.error("OTP verification failed", error);
-        showToast(`OTP verification failed, system error`, "info");
+        console.error('OTP verification failed', error);
+        showToast(`OTP verification failed, system error`, 'info');
       } finally {
         setLoading(false);
       }
@@ -120,16 +119,13 @@ const page = () => {
   const handleSubmitPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (
-      resetPassword.resetPassword1.trim() !==
-      resetPassword.resetPassword2.trim()
-    ) {
-      showToast(`Both password should match`, "info");
+    if (resetPassword.resetPassword1.trim() !== resetPassword.resetPassword2.trim()) {
+      showToast(`Both password should match`, 'info');
       return;
     } else if (!validatePassword(resetPassword.resetPassword1)) {
       showToast(
         `Password must be at least 8 characters long and contain at least one letter, one digit, and one special character.`,
-        "info"
+        'info',
       );
       return;
     }
@@ -145,9 +141,9 @@ const page = () => {
       let body = newRecord;
       console.log(body);
       const response = await fetch(`${apiUrl}/user-api/change-password/`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(body),
@@ -155,28 +151,28 @@ const page = () => {
 
       if (response.ok) {
         await response.json();
-        console.log("password changed successfully");
-        router.push("/login");
+        console.log('password changed successfully');
+        router.push('/login');
       } else {
         let server_error = await response.json();
-        console.error("Password change failed.", server_error);
-        showToast(`Password change failed, ${server_error.message}`, "info");
+        console.error('Password change failed.', server_error);
+        showToast(`Password change failed, ${server_error.message}`, 'info');
       }
     } catch (error) {
-      console.error("Password change failed", error);
-      showToast(`Password change failed, system error`, "info");
+      console.error('Password change failed', error);
+      showToast(`Password change failed, system error`, 'info');
     } finally {
       setLoading(false);
     }
   };
 
   const handleLoginWithPasswordClick = () => {
-    router.push("/login");
+    router.push('/login');
   };
 
   const handleSendOtp = async () => {
     if (!validatePhoneNumber(otpForm.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, "info");
+      showToast(`Phone number must be a 10-digit number`, 'info');
       return;
     }
 
@@ -189,9 +185,9 @@ const page = () => {
       let body = newRecord;
       console.log(body);
       const response = await fetch(`${apiUrl}/user-api/generate-otp/`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
       });
@@ -199,22 +195,22 @@ const page = () => {
       if (response.ok) {
         await response.json();
 
-        console.log("otp sent, get success");
+        console.log('otp sent, get success');
         setOtpSent(true);
 
-        otpForm.otp = "";
+        otpForm.otp = '';
       } else {
         let server_error = await response.json();
-        otpForm.otp = "";
-        console.error("Failed to send otp", server_error);
-        showToast(`${server_error.message} `, "info");
+        otpForm.otp = '';
+        console.error('Failed to send otp', server_error);
+        showToast(`${server_error.message} `, 'info');
 
         // temp
         // setOtpSent(true);
       }
     } catch (error) {
-      console.error("Server Connection Error during otp:", error);
-      showToast(`Failed to send otp, system error`, "info");
+      console.error('Server Connection Error during otp:', error);
+      showToast(`Failed to send otp, system error`, 'info');
     } finally {
       setLoading(false);
     }
@@ -227,7 +223,7 @@ const page = () => {
       setOtpTimer(60);
 
       intervalId = setInterval(() => {
-        setOtpTimer((prevTimer) => {
+        setOtpTimer(prevTimer => {
           if (prevTimer === 1) {
             clearInterval(intervalId);
             setOtpSent(false);
@@ -292,7 +288,7 @@ const page = () => {
                     <div className="flex py-1 my-2 ">
                       <input
                         onChange={handleInput}
-                        value={otpForm.phoneNumber || ""}
+                        value={otpForm.phoneNumber || ''}
                         name="phoneNumber"
                         placeholder="Phone Number"
                         className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
@@ -314,7 +310,7 @@ const page = () => {
                     <div className="flex py-1 my-2 ">
                       <input
                         onChange={handleInput}
-                        value={otpForm.otp || ""}
+                        value={otpForm.otp || ''}
                         name="otp"
                         placeholder="OTP"
                         className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
@@ -347,7 +343,7 @@ const page = () => {
                 <div className="flex items-center justify-center">
                   <div className="flex items-center justify-center p-3 mt-5 text-gray-300 rounded-xl">
                     Time left: {Math.floor(otpTimer / 60)}:
-                    {(otpTimer % 60).toLocaleString("en-US", {
+                    {(otpTimer % 60).toLocaleString('en-US', {
                       minimumIntegerDigits: 2,
                     })}
                   </div>
@@ -408,11 +404,11 @@ const page = () => {
                 <div className="relative py-1 my-2">
                   <input
                     onChange={handleInputPassword}
-                    value={resetPassword["resetPassword1"] || ""}
+                    value={resetPassword['resetPassword1'] || ''}
                     name="resetPassword1"
                     placeholder="Password"
                     className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
-                    type={password1Visible ? "text" : "password"}
+                    type={password1Visible ? 'text' : 'password'}
                     autoComplete="new-password"
                     required
                   />
@@ -457,11 +453,11 @@ const page = () => {
                 <div className="relative py-1 my-2">
                   <input
                     onChange={handleInputPassword}
-                    value={resetPassword["resetPassword2"] || ""}
+                    value={resetPassword['resetPassword2'] || ''}
                     name="resetPassword2"
                     placeholder="Password"
                     className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
-                    type={password2Visible ? "text" : "password"}
+                    type={password2Visible ? 'text' : 'password'}
                     autoComplete="new-password"
                     required
                   />
@@ -499,8 +495,8 @@ const page = () => {
                 </div>
               </div>
               <div className="mx-2 text-sm text-gray-400">
-                Password must be at least 8 characters long and contain at least
-                one letter, one digit, and one special character.
+                Password must be at least 8 characters long and contain at least one letter, one
+                digit, and one special character.
               </div>
 
               {/* submit button section  */}

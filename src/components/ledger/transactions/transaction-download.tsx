@@ -1,7 +1,7 @@
-import { IconDownload } from "@tabler/icons-react";
-import { Button } from "../../../components/ui/button";
-import useLedgerTransactions from "../../../hooks/ledger/transactions/use-ledger-transactions";
-import React, { ReactNode } from "react";
+import { IconDownload } from '@tabler/icons-react';
+import { Button } from '../../../components/ui/button';
+import useLedgerTransactions from '../../../hooks/ledger/transactions/use-ledger-transactions';
+import React, { ReactNode } from 'react';
 
 const TransactionDownload = () => {
   const { handleDownloadTemplate, isDownloading, downloadError } = useLedgerTransactions();
@@ -9,21 +9,20 @@ const TransactionDownload = () => {
   return (
     <div>
       <Button
-        iconPlacement="right" size="sm" Icon={IconDownload} variant="expandIcon" className="text-sm"
+        size="sm"
+        className="text-sm"
         onClick={handleDownloadTemplate}
         disabled={isDownloading}
       >
         {isDownloading ? (
-          "Downloading..."
+          'Downloading...'
         ) : (
           <>
             <h1 className="my-auto">Download</h1>
           </>
         )}
       </Button>
-      {downloadError && (
-        <div className="mt-2 text-red-500">{downloadError as ReactNode}</div>
-      )}
+      {downloadError && <div className="mt-2 text-red-500">{downloadError as ReactNode}</div>}
     </div>
   );
 };

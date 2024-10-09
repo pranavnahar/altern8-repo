@@ -1,35 +1,37 @@
-"use client"
+'use client';
 
 import React, { useState, useContext, useEffect } from 'react';
-import { DashboardContext } from '@/contexts/DashboardContext';
+import { DashboardContext } from '../../../contexts/DashboardContext';
 import Accordion from '@/components/ui/accordion';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { IconSend2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import ChatBox from '@/components/mui/Chatbox';
-import { fetchWithAuth } from '@/utils/fetch-with-auth';
+import { fetchWithAuth } from '../../../utils/fetch-with-auth';
 
 const dummyFaqs = [
   {
     id: 1,
-    question: "How do I set up my account?",
-    answer: "To set up your account, click on the 'Sign Up' button and follow the instructions. You will need to provide your email and create a password.",
+    question: 'How do I set up my account?',
+    answer:
+      "To set up your account, click on the 'Sign Up' button and follow the instructions. You will need to provide your email and create a password.",
     image: null,
   },
   {
     id: 2,
-    question: "What are your business hours?",
-    answer: "Our business hours are from 9:00 AM to 5:00 PM, Monday through Friday. We are closed on weekends and holidays.",
+    question: 'What are your business hours?',
+    answer:
+      'Our business hours are from 9:00 AM to 5:00 PM, Monday through Friday. We are closed on weekends and holidays.',
     image: null,
   },
   {
     id: 3,
-    question: "How do I contact support?",
-    answer: "You can contact our support team by clicking on the 'Chat With Admin' button or by sending an email to support@example.com.",
+    question: 'How do I contact support?',
+    answer:
+      "You can contact our support team by clicking on the 'Chat With Admin' button or by sending an email to support@example.com.",
     image: null,
   },
 ];
-
 
 const Help = () => {
   const [showMessageBox, setShowMessageBox] = useState(false);
@@ -44,12 +46,14 @@ const Help = () => {
 
         if (response) {
           const responseData = await response.json();
-          const newFaqs = responseData.map((faq: { id: any; question: any; answer: any; image: any }) => ({
-            id: faq.id,
-            question: faq.question,
-            answer: faq.answer,
-            image: faq.image,
-          }));
+          const newFaqs = responseData.map(
+            (faq: { id: any; question: any; answer: any; image: any }) => ({
+              id: faq.id,
+              question: faq.question,
+              answer: faq.answer,
+              image: faq.image,
+            }),
+          );
 
           setFaqs(newFaqs);
         } else {
@@ -112,14 +116,18 @@ const Help = () => {
           </div>
 
           <div className="mt-10 text-center">
-            <Button variant="expandIcon" Icon={IconSend2} iconPlacement="right" className="text-sm" onClick={handleChatClick}>
+            <Button
+              //@ts-expect-error variant type
+              variant="expandIcon"
+              Icon={IconSend2}
+              iconPlacement="right"
+              className="text-sm"
+              onClick={handleChatClick}
+            >
               Chat With Admin
             </Button>
             {showMessageBox && (
-              <ChatBox
-                onClose={handleCloseMessageBox}
-                showMessageBox={showMessageBox}
-              />
+              <ChatBox onClose={handleCloseMessageBox} showMessageBox={showMessageBox} />
             )}
           </div>
         </div>
