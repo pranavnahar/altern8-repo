@@ -1,16 +1,17 @@
 import Link from "next/link";
 import { FC } from "react";
+import AnimatedLogo from "../Header/AnimatedLogo";
 
 const Header: FC = () => {
     return (
         <header className="max-w-[1320px] flex flex-row items-center mx-auto px-5 2xl:px-0 pt-8 justify-between text-left text-5xl sm:text-21xl lg:text-29xl text-white-font">
             {/* logo or website name */}
-            <a
+            {/* <a
                 className="[text-decoration:none] font-exo relative font-semibold text-[inherit]"
                 href="/"
-            >
-                ETHYX
-            </a>
+            > */}
+            <AnimatedLogo />
+            {/* </a> */}
 
             {/* register button link */}
             <Link

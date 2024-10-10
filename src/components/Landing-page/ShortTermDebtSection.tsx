@@ -27,7 +27,7 @@ function ShortTermDebt({
     const isInView = useInView(ref, { once: true });
     const mainControls = useAnimation();
 
-    const [visibleItems, setVisibleItems] = useState<number>(8);
+    const [visibleItems, setVisibleItems] = useState<number>(3);
 
     useEffect(() => {
         if (isInView) {
@@ -90,14 +90,14 @@ function ShortTermDebt({
                         </div>
                     ))}
                 </div>
-                {visibleItems < data.length && (
+                {/* {visibleItems < data.length && (
                     <span
                         onClick={loadMore}
                         className="mt-5 w-fit cursor-pointer self-center text-center py-2 px-4 rounded-full font-normal text-sm lg:text-base text-white-font bg-[#1565c0] hover:contrast-150"
                     >
                         {buttonText}
                     </span>
-                )}
+                )} */}
             </div>
         </motion.div>
     );
