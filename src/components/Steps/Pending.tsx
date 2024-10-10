@@ -1,43 +1,16 @@
-// // this is the last step of registration where user submitted all the Details
-// // but his  profile is pending for approval
 "use client";
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { parseCookies, destroyCookie } from "nookies";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
+import confetti from "canvas-confetti";
 
-const colors = [
-  "bg-red-500",
-  "bg-blue-500",
-  "bg-green-500",
-  "bg-yellow-500",
-  "bg-purple-500",
-  "bg-pink-500",
-];
+type Props = {
+  demo: boolean
+}
 
-const Balloon = ({ color }: { color: string }) => (
-  <motion.div
-    className={`absolute w-16 h-20 ${color} rounded-full`}
-    initial={{ y: "100vh", x: Math.random() * 100 - 50 }}
-    animate={{
-      y: "-100vh",
-      x: Math.random() * 200 - 100,
-    }}
-    transition={{
-      duration: Math.random() * 5 + 10,
-      ease: "easeOut",
-      repeat: Infinity,
-      repeatType: "loop",
-      repeatDelay: Math.random() * 2,
-    }}
-  >
-    <div className="w-1 h-24 bg-gray-300 mx-auto mt-20" />
-  </motion.div>
-);
-
-export default function Pending() {
-  const [balloons, setBalloons] = useState<JSX.Element[]>([]);
+const Pending = ({ demo }: Props) => {
   useEffect(() => {
     const removeTokenFromCookies = () => {
       const cookies = parseCookies();
@@ -52,24 +25,63 @@ export default function Pending() {
     };
 
     // Call the function
-    removeTokenFromCookies();
-  }, []);
+    if (!demo) {
+      removeTokenFromCookies();
+    }
+  }, [demo]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (balloons.length < 20) {
-        setBalloons((prev) => [
-          ...prev,
-          <Balloon
-            key={Date.now()}
-            color={colors[Math.floor(Math.random() * colors.length)]}
-          />,
-        ]);
-      }
-    }, 500);
+    const duration = 3000; // 3 seconds
+    const interval = 500; // Interval between confetti bursts
+    let timer: NodeJS.Timeout;
+    let intervalId: NodeJS.Timeout;
 
-    return () => clearInterval(interval);
-  }, [balloons]);
+    const startConfetti = () => {
+      intervalId = setInterval(handleClick, interval);
+    };
+
+    const stopConfetti = () => {
+      clearInterval(intervalId);
+    };
+
+    timer = setTimeout(stopConfetti, duration);
+    startConfetti();
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  const handleClick = () => {
+    const end = Date.now() + 3 * 1000; // 3 seconds
+    const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+
+    const frame = () => {
+      if (Date.now() > end) return;
+
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 0, y: 0.5 },
+        colors: colors,
+      });
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 1, y: 0.5 },
+        colors: colors,
+      });
+
+      requestAnimationFrame(frame);
+    };
+
+    frame();
+  };
 
   return (
     <>
@@ -91,18 +103,20 @@ export default function Pending() {
           </div>
         </motion.h1>
         <motion.p
-          className="text-lg md:text-xl text-center text-gray-300 max-w-md"
+          className="text-balance md:text-lg text-center text-gray-300 max-w-xl"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          Your Details has been submitted for approval.
+          Your registration has been received by us and we are processing it, once confirmed you will receive a mail regarding the same.
           <br />
-          You will get notified by email once approved.
+          <br />
+          We usually take around 48 hours to process it.
         </motion.p>
-        {balloons}
       </div>
       <HelpAndLogin />
     </>
   );
 }
+
+export default Pending;

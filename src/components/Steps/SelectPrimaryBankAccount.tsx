@@ -6,7 +6,11 @@ import { parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/utils/show-toasts";
 
-const SelectPrimaryBankAccount = () => {
+type Props = {
+  demo: boolean
+}
+
+const SelectPrimaryBankAccount = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [bankAccountsList, setBankAccountsList] = useState<{ accountNumber: string; bankName: string }[]>();
   const { showToast } = useToast()
@@ -65,7 +69,9 @@ const SelectPrimaryBankAccount = () => {
   };
 
   useEffect(() => {
-    GetBankAccountList();
+    if (!demo) {
+      GetBankAccountList();
+    }
   }, []);
 
   // to handle click on next and back button
@@ -79,6 +85,10 @@ const SelectPrimaryBankAccount = () => {
     }
     // if button is next the submit data to backend api
     else if (direction === "next") {
+      if (demo) {
+        router.push('/register?demo=true&step=5')
+        return
+      }
       if (currentBankAccount == "") {
         console.log("Please select a valid bank account");
         showToast(`Please select a valid bank account`, "info");

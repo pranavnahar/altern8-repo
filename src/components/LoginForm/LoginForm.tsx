@@ -56,16 +56,10 @@ const login = () => {
         },
       });
       const sellerData = await sellerDataResponse.json();
-
-      // if profile is approved then allowed to dashboard
       const registrationStep = sellerData.user_state;
-      console.log('resgius', registrationStep);
       if (registrationStep === 'Approved') {
         router.push('/dashboard');
       } else {
-        // if the registration process is not completed yet
-        // redirect to register page
-        // Set the access token for register steps in a cookie
         setCookie(null, 'altern8_registeruseraccess', accessToken, {
           expires: 30,
           path: '/',
@@ -76,6 +70,7 @@ const login = () => {
         showToast(`Please complete the registration`, 'info');
       }
     } catch (error) {
+      showToast("Please try again later", "error")
       console.log('login page, error during fetching seller registration states', error);
     } finally {
       setLoading(false);
@@ -117,9 +112,7 @@ const login = () => {
 
         // Set the access token in a cookie
         setAccessTokenCookie(data.access);
-        localStorage.setItem('token', data.access);
         setRefreshTokenCookie(data.refresh);
-        localStorage.setItem('Rtoken', data.refresh);
         accessToken = data.access;
         await getUserState();
       } else {
@@ -168,12 +161,8 @@ const login = () => {
 
       if (response.ok) {
         let data = await response.json();
-        console.log('otp submitted');
-        // Set the access token in a cookie
         setAccessTokenCookie(data.access);
         setRefreshTokenCookie(data.refresh);
-
-        // update accessToken variable
         accessToken = data.access;
         await getUserState();
       } else {

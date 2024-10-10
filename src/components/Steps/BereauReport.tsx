@@ -6,11 +6,15 @@ import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
 import { useToast } from "@/utils/show-toasts";
 
+type Props = {
+  demo: boolean
+}
+
 interface DocumentFiles {
   [key: string]: File[];
 }
 
-const BureauReport = () => {
+const BureauReport = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const { currentStep, setCurrentStep, setLoading, getRegistrationState } =
     useContext(StepperContext);
@@ -89,7 +93,9 @@ const BureauReport = () => {
   };
 
   useEffect(() => {
-    GetBureauResponseId();
+    if (!demo) {
+      GetBureauResponseId();
+    }
   }, []);
 
   // to handle click on next and back button
@@ -100,6 +106,10 @@ const BureauReport = () => {
       newStep--;
       setCurrentStep(newStep);
     } else if (direction === "next") {
+      if (demo) {
+        router.push('/register?demo=true&step=8')
+        return
+      }
       if (!manualBureauReportNeeded) {
         const newRecord: { otp: string; referenceId: string } = {
           otp: "",

@@ -1,16 +1,17 @@
-// get phone number and password and register the user
-
 import React, { useContext, useState } from "react";
 import { StepperContext } from "../../contexts/StepperContext";
-//import HelpAndLogin from "./stepsComponents/HelpAndLogin";
-//import { useRouter } from "next/router";
 import { Button } from "@mui/material";
 import { useSearchParams, useRouter } from "next/navigation";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { useToast } from "@/utils/show-toasts";
 import { setCookie } from "nookies";
+import { IconEye, IconEyeOff } from "@tabler/icons-react";
 
-const Register = () => {
+type Props = {
+  demo: boolean;
+}
+
+const Register = ({ demo } : Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const entityType = [
     "Company",
@@ -27,7 +28,7 @@ const Register = () => {
     referredBy: "",
     entityType: "",
   });
-  const { currentStep, steps, setLoading, getRegistrationState } = useContext(StepperContext);
+  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } = useContext(StepperContext);
   const { showToast } = useToast()
   const search = useSearchParams();
   const [termsAccepted, setTermsAccepted] = useState(true);
@@ -37,9 +38,9 @@ const Register = () => {
   const [showWarningText, setShowWarningText] = useState(false);
   const [currentEntity, setCurrentEntity] = useState("");
   const router = useRouter();
-  //getting referral code from url
+
   userData.referredBy = search.get("referal_code")!;
-  // handle input change
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
@@ -61,129 +62,130 @@ const Register = () => {
     await handleSubmission("next");
   };
 
-  console.log(showConfirmationModal);
-
   const handleSubmission = async (direction?: string) => {
+    console.log("handle Submission")
     if (direction !== "next") {
       router.push("/");
     } else if (direction === "next") {
-      const updatedRecord = {
-        first_name: userData.firstName ? userData.firstName.trim() : "",
-        phone_number: userData.phoneNumber ? userData.phoneNumber.trim() : "",
-        password: userData.password ? userData.password.trim() : "",
-        reenter_password: userData.password2 ? userData.password2.trim() : "",
-        referred_by: userData.referredBy ? userData.referredBy.trim() : "",
-        entity_type: currentEntity ? currentEntity.trim() : "",
-      };
+      if (demo) {
+        router.push('/register?demo=true&step=2')
+        return
+      } else {
+        const updatedRecord = {
+          first_name: userData.firstName ? userData.firstName.trim() : "",
+          phone_number: userData.phoneNumber ? userData.phoneNumber.trim() : "",
+          password: userData.password ? userData.password.trim() : "",
+          reenter_password: userData.password2 ? userData.password2.trim() : "",
+          referred_by: userData.referredBy ? userData.referredBy.trim() : "",
+          entity_type: currentEntity ? currentEntity.trim() : "",
+        };
 
-      // password validation
-      const passwordRegex =
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#:])[A-Za-z\d@$!%*?&#:]{8,}$/;
-      const isValidPassword = passwordRegex.test(updatedRecord.password);
+        // password validation
+        const passwordRegex =
+          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#:])[A-Za-z\d@$!%*?&#:]{8,}$/;
+        const isValidPassword = passwordRegex.test(updatedRecord.password);
 
-      if (updatedRecord.first_name.length < 3) {
-        showToast(`Please enter a valid name`, "info");
-        return;
-      }
-      if (updatedRecord.phone_number.length !== 10) {
-        showToast(`Phone number must be a 10-digit number`, "info");
-        setUserData((prevUserData) => ({
-          ...prevUserData,
-          phoneNumber: "",
-        }));
-        return;
-      }
-      if (!updatedRecord.entity_type)
-        return showToast("Select entity type", "info");
-      if (!isValidPassword) {
-        showToast(
-          `Password must be at least 8 characters long and include at least one letter, one digit, and one special character. Allowed special characters are: @$!%*?&#:`,
-          "info"
-        );
-        return;
-      }
-      if (updatedRecord.password !== updatedRecord.reenter_password) {
-        showToast(`Both password should match`, "info");
-        return;
-      }
-      if (!termsAccepted) {
-        showToast(`You must accept the terms and conditions`, "info");
-        return;
-      }
-
-      try {
-        const body = updatedRecord;
-        setLoading(true);
-        const response = await fetch(`${apiUrl}/user-api/register/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        });
-
-        // if phone number is already registered
-        if (response.status === 409) {
-          showToast(`Phone number is already registered. Please login`, "info");
-
-          // Hold for 3 seconds before redirecting to /login
-          setTimeout(() => {
-            router.push("/login");
-          }, 3000);
-        } else if (response.ok) {
-          let serverMessage = await response.json();
-          console.log(
-            `Register Form data submitted successfully!-- ${currentStep}`,
-            serverMessage
-          );
-
-          showToast(`Submission Successful`, "info");
-
-          let data = serverMessage;
-
-          setCookie(null, "accessTokenForRegister", data.access, {
-            maxAge: 60 * 60,
-            path: '/',
-          })
-
-          getRegistrationState();
-        } else {
-          let server_error = await response.json();
-          console.error(
-            `Failed to submit register form data.-- ${currentStep}`,
-            server_error
-          );
-
-          console.log(server_error.message);
-          showToast(`${server_error.message.phone_number[0]}`, "info");
-
-          if (!server_error.message.phone_number) {
-            showToast(`Submission Failed`, "info");
-          }
+        if (updatedRecord.first_name.length < 3) {
+          showToast(`Please enter a valid name`, "info");
+          return;
         }
-      } catch (error) {
-        console.error(
-          `Error submitting register form data, Error in fetching api (${currentStep}) :`,
-          error
-        );
-        showToast(`Submission failed, system error!`, "info");
-      } finally {
-        setLoading(false);
+        if (updatedRecord.phone_number.length !== 10) {
+          showToast(`Phone number must be a 10-digit number`, "info");
+          setUserData((prevUserData) => ({
+            ...prevUserData,
+            phoneNumber: "",
+          }));
+          return;
+        }
+        if (!updatedRecord.entity_type)
+          return showToast("Select entity type", "info");
+        if (!isValidPassword) {
+          showToast(
+            `Password must be at least 8 characters long and include at least one letter, one digit, and one special character. Allowed special characters are: @$!%*?&#:`,
+            "info"
+          );
+          return;
+        }
+        if (updatedRecord.password !== updatedRecord.reenter_password) {
+          showToast(`Both password should match`, "info");
+          return;
+        }
+        if (!termsAccepted) {
+          showToast(`You must accept the terms and conditions`, "info");
+          return;
+        }
+
+        try {
+          const body = updatedRecord;
+          setLoading(true);
+          const response = await fetch(`${apiUrl}/user-api/register/`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+          });
+
+          if (response.status === 409) {
+            showToast(`Phone number is already registered. Please login`, "info");
+
+            setTimeout(() => {
+              router.push("/login");
+            }, 3000);
+          } else if (response.ok) {
+            let serverMessage = await response.json();
+            console.log(
+              `Register Form data submitted successfully!-- ${currentStep}`,
+              serverMessage
+            );
+
+            showToast(`Submission Successful`, "info");
+
+            let data = serverMessage;
+
+            setCookie(null, "accessTokenForRegister", data.access, {
+              maxAge: 60 * 60,
+              path: '/',
+            })
+
+            getRegistrationState();
+          } else {
+            let server_error = await response.json();
+            console.error(
+              `Failed to submit register form data.-- ${currentStep}`,
+              server_error
+            );
+
+            console.log(server_error.message);
+            showToast(`${server_error.message.phone_number[0]}`, "info");
+
+            if (!server_error.message.phone_number) {
+              showToast(`Submission Failed`, "info");
+            }
+          }
+        } catch (error) {
+          console.error(
+            `Error submitting register form data, Error in fetching api (${currentStep}) :`,
+            error
+          );
+          showToast(`Submission failed, system error!`, "info");
+        } finally {
+          setLoading(false);
+        }
       }
     }
   };
 
-  // handle password visibility
   const handleShowPassword = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  // handle password visibility
   const handleShowPassword2 = () => {
     setPassword2Visible(!password2Visible);
   };
 
   const handleConfirmButtonClick = async () => {
+    console.log("first", 1)
     if (
       userData.firstName.length &&
       userData.phoneNumber.length &&
@@ -199,8 +201,6 @@ const Register = () => {
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
-    // console.log("jo", value);
-
     setCurrentEntity(value);
   };
 
@@ -227,14 +227,13 @@ const Register = () => {
             value={userData.firstName || ""}
             name="firstName"
             placeholder="First Name"
-            className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
+            className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
             type="text"
             autoComplete="new-password"
             required
           />
         </div>
       </div>
-      {/* phone number field  */}
       <div className="w-full mx-2 flex-1">
         <div className="font-semibold h-6 mt-3 text-gray-300 text-sm leading-8 uppercase">
           Phone Number
@@ -245,14 +244,13 @@ const Register = () => {
             value={userData.phoneNumber || ""}
             name="phoneNumber"
             placeholder="Phone Number"
-            className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
+            className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
             type="text"
             autoComplete="new-password"
             required
           />
         </div>
       </div>
-      {/* warning text  */}
       {!showWarningText && (
         <div className="text-gray-300 mx-2 text-sm">
           Please input mobile number connected with PAN of the entity requesting
@@ -298,7 +296,6 @@ const Register = () => {
         </select>
       </div>
 
-      {/* password field  */}
       <div className="w-full mx-2 flex-1">
         <div className="font-semibold h-6 mt-3 text-gray-300 text-sm leading-8 uppercase">
           Password
@@ -309,46 +306,19 @@ const Register = () => {
             value={userData.password || ""}
             name="password"
             placeholder="Password"
-            className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
+            className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
             type={passwordVisible ? "text" : "password"}
             autoComplete="new-password"
             required
           />
-          {passwordVisible && (
-            <svg
-              className="w-6 h-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer"
-              aria-hidden="true"
-              onClick={handleShowPassword}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fillRule="evenodd"
-                d="M5 7.8C6.7 6.3 9.2 5 12 5s5.3 1.3 7 2.8a12.7 12.7 0 0 1 2.7 3.2c.2.2.3.6.3 1s-.1.8-.3 1a2 2 0 0 1-.6 1 12.7 12.7 0 0 1-9.1 5c-2.8 0-5.3-1.3-7-2.8A12.7 12.7 0 0 1 2.3 13c-.2-.2-.3-.6-.3-1s.1-.8.3-1c.1-.4.3-.7.6-1 .5-.7 1.2-1.5 2.1-2.2Zm7 7.2a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                clipRule="evenodd"
-              />
-            </svg>
-          )}
-
-          {!passwordVisible && (
-            <svg
-              className="w-6 h-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer"
-              aria-hidden="true"
-              onClick={handleShowPassword}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="m4 15.6 3-3V12a5 5 0 0 1 5-5h.5l1.8-1.7A9 9 0 0 0 12 5C6.6 5 2 10.3 2 12c.3 1.4 1 2.7 2 3.6Z" />
-              <path d="m14.7 10.7 5-5a1 1 0 1 0-1.4-1.4l-5 5A3 3 0 0 0 9 12.7l.2.6-5 5a1 1 0 1 0 1.4 1.4l5-5 .6.2a3 3 0 0 0 3.6-3.6 3 3 0 0 0-.2-.6Z" />
-              <path d="M19.8 8.6 17 11.5a5 5 0 0 1-5.6 5.5l-1.7 1.8 2.3.2c6.5 0 10-5.2 10-7 0-1.2-1.6-2.9-2.2-3.4Z" />
-            </svg>
+          {passwordVisible ? (
+            <IconEye onClick={handleShowPassword} className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer" />
+          ) : (
+            <IconEyeOff onClick={handleShowPassword} className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer" />
           )}
         </div>
       </div>
 
-      {/* re enter password  */}
       <div className="w-full mx-2 flex-1">
         <div className="font-semibold text-sm h-6 mt-3 text-gray-300 leading-8 uppercase">
           Re-enter Password
@@ -359,41 +329,15 @@ const Register = () => {
             value={userData.password2 || ""}
             name="password2"
             placeholder="Password"
-            className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
+            className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
             type={password2Visible ? "text" : "password"}
             autoComplete="new-password"
             required
           />
-          {password2Visible && (
-            <svg
-              className="w-6 h-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer"
-              aria-hidden="true"
-              onClick={handleShowPassword2}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fillRule="evenodd"
-                d="M5 7.8C6.7 6.3 9.2 5 12 5s5.3 1.3 7 2.8a12.7 12.7 0 0 1 2.7 3.2c.2.2.3.6.3 1s-.1.8-.3 1a2 2 0 0 1-.6 1 12.7 12.7 0 0 1-9.1 5c-2.8 0-5.3-1.3-7-2.8A12.7 12.7 0 0 1 2.3 13c-.2-.2-.3-.6-.3-1s.1-.8.3-1c.1-.4.3-.7.6-1 .5-.7 1.2-1.5 2.1-2.2Zm7 7.2a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                clipRule="evenodd"
-              />
-            </svg>
-          )}
-
-          {!password2Visible && (
-            <svg
-              className="w-6 h-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer"
-              aria-hidden="true"
-              onClick={handleShowPassword2}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="m4 15.6 3-3V12a5 5 0 0 1 5-5h.5l1.8-1.7A9 9 0 0 0 12 5C6.6 5 2 10.3 2 12c.3 1.4 1 2.7 2 3.6Z" />
-              <path d="m14.7 10.7 5-5a1 1 0 1 0-1.4-1.4l-5 5A3 3 0 0 0 9 12.7l.2.6-5 5a1 1 0 1 0 1.4 1.4l5-5 .6.2a3 3 0 0 0 3.6-3.6 3 3 0 0 0-.2-.6Z" />
-              <path d="M19.8 8.6 17 11.5a5 5 0 0 1-5.6 5.5l-1.7 1.8 2.3.2c6.5 0 10-5.2 10-7 0-1.2-1.6-2.9-2.2-3.4Z" />
-            </svg>
+          {password2Visible ? (
+            <IconEye onClick={handleShowPassword2} className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer" />
+          ) : (
+            <IconEyeOff onClick={handleShowPassword2} className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer" />
           )}
         </div>
       </div>
@@ -436,7 +380,6 @@ const Register = () => {
         </div>
       </div>
 
-      {/* Navigation controls  */}
       {currentStep !== steps.length && (
         <div className="container flex flex-col ">
           <div className="flex justify-around mt-6 mb-8">
@@ -535,7 +478,6 @@ const Register = () => {
         </div>
       )}
     </div>
-  );
-};
+  )}
 
-export default Register;
+  export default Register;

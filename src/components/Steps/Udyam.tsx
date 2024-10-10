@@ -5,7 +5,11 @@ import { parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/utils/show-toasts";
 
-const Udyam = () => {
+type Props = {
+  demo: boolean
+}
+
+const Udyam = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const { currentStep, setCurrentStep, setLoading, getRegistrationState } = useContext(StepperContext);
   const { showToast } = useToast()
@@ -30,6 +34,10 @@ const Udyam = () => {
       newStep--;
       setCurrentStep(newStep);
     } else if (direction === "next") {
+      if (demo) {
+        router.push('/register?demo=true&step=12')
+        return
+      }
       const { udyam_number, uam_number } = userData;
 
       // Validation: At least one field should be filled, and length should be greater than 5

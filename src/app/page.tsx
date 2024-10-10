@@ -34,8 +34,6 @@ const Page = () => {
       <JoinUsSection />
       <Footer />
       <FloatingButton />
-
-
     </div>
   )
 }

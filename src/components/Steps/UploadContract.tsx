@@ -6,9 +6,13 @@ import { parseCookies } from "nookies";
 import { useDropzone } from "react-dropzone";
 import { useToast } from "@/utils/show-toasts";
 
-const UploadContract = () => {
+type Props = {
+  demo: boolean
+}
+
+const UploadContract = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { currentStep, steps, setLoading, getRegistrationState } = useContext(StepperContext);
+  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } = useContext(StepperContext);
   const { showToast } = useToast()
 
   const [contractFiles, setContractFiles] = useState<File[]>([]);
@@ -23,6 +27,10 @@ const UploadContract = () => {
 
   const handleNextClick = async () => {
     try {
+      if (demo) {
+        router.push('/register?demo=true&step=13')
+        return
+      }
       if (contractFiles.length > 0) {
         await handleFileUpload(
           contractFiles,

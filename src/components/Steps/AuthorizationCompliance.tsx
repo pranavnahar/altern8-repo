@@ -19,7 +19,11 @@ interface UserData {
   additionalDocsConfirmed: boolean;
 }
 
-const AuthorizationCompliance = () => {
+type Props = {
+  demo: boolean
+}
+
+const AuthorizationCompliance = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const { currentStep, setCurrentStep, setLoading, getRegistrationState } = useContext(StepperContext);
   const { showToast } = useToast()
@@ -84,7 +88,9 @@ const AuthorizationCompliance = () => {
       }
     };
 
-    fetchData();
+    if (!demo) {
+      fetchData();
+    }
   }, []);
 
   const handleClick = async (direction?: string) => {
@@ -94,7 +100,10 @@ const AuthorizationCompliance = () => {
       newStep--;
       setCurrentStep(newStep);
     } else {
-      // Validation
+      if (demo) {
+        router.push('/register?demo=true&step=14')
+        return
+      }
       const {
         companyName,
         companyRegNumber,

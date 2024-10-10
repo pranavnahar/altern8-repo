@@ -13,9 +13,13 @@ import ImageSlider from "./Account Aggregator/ImageSlider";
 import { AA_videos } from "./Account Aggregator/AA_Videos";
 import { useToast } from "@/utils/show-toasts";
 
-const BankDetails = () => {
+type Props = {
+  demo: boolean;
+}
+
+const BankDetails  = ({ demo } : Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [needManualUpload, setNeedManualUpload] = useState(true);
+  const [needManualUpload, setNeedManualUpload] = useState(false);
   const {
     currentStep,
     setCurrentStep,
@@ -49,6 +53,10 @@ const BankDetails = () => {
     }
     // if button is next the submit data to backend api
     else if (direction === "next") {
+      if (demo) {
+        router.push('/register?demo=true&step=4')
+        return
+      }
       const bodyData = {};
 
       if (!needManualUpload) {
