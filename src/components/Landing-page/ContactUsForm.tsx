@@ -23,10 +23,11 @@ const ContactUsForm = () => {
     };
 
     const choices = [
-        'Invoice Discounting', 'Receivables Factoring', 'Purchase Order Finance',
-        'Inventory Leaseback Finance', 'Deep Tier Trade Finance', 'Working Capital Finance',
-        'ESG Finance', 'MSME Unsecured Finance', 'Revenue Finance',
-        'Ecommerce Sales Finance', 'Recurring Revenue Finance', 'Supply Chain Finance'
+        'Rental assets', 'Retirement communities', 'Co living',
+        'Hospitality projects', 'Warehousing', 'Residential',
+        'Commercial', 'Townships', 'Vacation properties',
+        'International properties', 'Redevelopment', 'Retirement communities',
+        'Student accommodation', 'Serviced apartments', 'Mixed use properly', 'Affordable housing', 'Plotted land'
     ];
 
     const [formData, setFormData] = useState<FormState>({

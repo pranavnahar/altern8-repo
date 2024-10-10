@@ -20,14 +20,14 @@ function ComplaintRegulated() {
             name: "RBI",
             image: "/RBI-min.png",
         },
-        {
-            name: "ocen",
-            image: "/ocen-min.png",
-        },
-        {
-            name: "ondc",
-            image: "/ondc-min.png",
-        },
+        // {
+        //     name: "ocen",
+        //     image: "/ocen-min.png",
+        // },
+        // {
+        //     name: "ondc",
+        //     image: "/ondc-min.png",
+        // },
     ];
 
     useEffect(() => {

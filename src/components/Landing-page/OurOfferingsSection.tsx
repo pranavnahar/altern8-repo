@@ -1,9 +1,56 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
-// Define the types for props
-interface VimeoEmbedProps {
-    videoId: string;
-}
+
+const offeringsCards = [
+    {
+        name: 'Advance loans for real-estate',
+        description:
+            'Ethyx Club is a seamless frictionless fintech to get instant lines of credit for your invoices based on just simple inputs of your mobile phone.',
+        icon: '/ethyx_club.png',
+    },
+    {
+        name: 'Fractional ownership for real-estate',
+        description:
+            "Unlock your supply chain's value with our lines of credit, empowering both suppliers and buyers to grow on their terms.",
+        link: 'https://www.nahar.om/transactions',
+        icon: '/ethyx_club.png',
+    },
+    {
+        name: 'Real estate investment trusts',
+        description:
+            'Offers based purely on the health of your revenue. Simple, fair payments that sync with your sales.',
+        link: 'http://www.ethyx.club/',
+        icon: '/ethyx_club.png',
+    },
+    {
+        name: 'High yield debenture',
+        description:
+            "Never miss out on your production's full potential due to bad timing. Access capital precisely when you need it and seize every big opportunity.",
+        link: 'https://www.nahar.om/ott-media-financing',
+        icon: "/ethyx_club.png",
+    },
+    {
+        name: 'Secured debt',
+        description:
+            "Ethyx Club offers instant lines of credit for your invoices via a simple mobile input. It's working capital that simply works.",
+        link: 'http://www.ethyx.club/',
+        icon: "/ethyx_club.png",
+    },
+    {
+        name: 'Structured notes',
+        description:
+            'Easy way for merchants to access capital without the frustration of traditional financing. No lengthy application process.',
+        link: 'https://www.nahar.om/contact',
+        icon: "/ethyx_club.png",
+    },
+    {
+        name: 'Venture Debt & Convertible Notes',
+        description:
+            'Extend your cash burn and delay your series equity financing rounds, dilute less equity via our venture debt & convertible lines of capital',
+        link: 'https://www.nahar.om/contact',
+        icon: "/ethyx_club.png",
+    },
+];
 
 interface OfferingsData {
     name: string;
@@ -15,33 +62,6 @@ interface OfferingsData {
 interface FlipAnimationCardProps {
     data: OfferingsData;
 }
-
-// VimeoEmbed component
-const VimeoEmbed: React.FC<VimeoEmbedProps> = ({ videoId }) => {
-    return (
-        <div
-            style={{
-                position: 'relative',
-                overflow: 'hidden',
-            }}
-            className="sm:h-[250px] md:h-[300px ] lg:h-[560px] sm:w-[90%] lg:w-[75%] sm:mt-28 mx-auto"
-        >
-            <iframe
-                src={`https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0`}
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                }}
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-                title="Vimeo Video"
-            />
-        </div>
-    );
-};
 
 const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
     // Local states
@@ -115,7 +135,7 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
                     className={`h-full w-full flip-card-back flex flex-col p-2 items-center ${flipCardSide ? 'block' : 'hidden'
                         }`}
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    animate={{ opacity: 1, }}
                     exit={{ opacity: 0 }}
                 >
                     <h6 className="w-full p-2 text-base font-medium text-center lg:p-2 lg:px-4 h-fit text-background-black-fade-font">
@@ -146,56 +166,7 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
 //Main Function
 function OurOfferingsSection() {
     //data for the cards
-    const offeringsCards = [
-        {
-            name: 'Invoice discounting',
-            description:
-                'Ethyx Club is a seamless frictionless fintech to get instant lines of credit for your invoices based on just simple inputs of your mobile phone.',
-            icon: '/ethyx_club.png',
-        },
-        {
-            name: 'Reverse Receivables Factoring',
-            description:
-                "Unlock your supply chain's value with our lines of credit, empowering both suppliers and buyers to grow on their terms.",
-            link: 'https://www.nahar.om/transactions',
-            icon: '/ethyx_club.png',
-        },
-        {
-            name: 'Recurring Revenue Financing',
-            description:
-                'Offers based purely on the health of your revenue. Simple, fair payments that sync with your sales.',
-            link: 'http://www.ethyx.club/',
-            icon: '/ethyx_club.png',
-        },
-        {
-            name: 'OTT - Media Financing',
-            description:
-                "Never miss out on your production's full potential due to bad timing. Access capital precisely when you need it and seize every big opportunity.",
-            link: 'https://www.nahar.om/ott-media-financing',
-            icon: "/ethyx_club.png",
-        },
-        {
-            name: 'Influencer Financing',
-            description:
-                "Ethyx Club offers instant lines of credit for your invoices via a simple mobile input. It's working capital that simply works.",
-            link: 'http://www.ethyx.club/',
-            icon: "/ethyx_club.png",
-        },
-        {
-            name: 'Merchant POS & UPI financing',
-            description:
-                'Easy way for merchants to access capital without the frustration of traditional financing. No lengthy application process.',
-            link: 'https://www.nahar.om/contact',
-            icon: "/ethyx_club.png",
-        },
-        {
-            name: 'Venture Debt & Convertible Notes',
-            description:
-                'Extend your cash burn and delay your series equity financing rounds, dilute less equity via our venture debt & convertible lines of capital',
-            link: 'https://www.nahar.om/contact',
-            icon: "/ethyx_club.png",
-        },
-    ];
+
     //hooks
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
@@ -218,17 +189,15 @@ function OurOfferingsSection() {
             animate={mainControls}
             transition={{ duration: 1, delay: 0.4 }}
         >
+            jk
             <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto">
-                <h1 className="py-5 mb-3 font-semibold tracking-tighter text-center text-21xl lg:mb-7 text-white-font">
-                    Our Offerings
+                <h1 className="py-5 mb-3 font-semibold tracking-tighter text-center text-21xl lg:mb-3 text-white-font">
+                    Ready to invest in Real-Estate?
                 </h1>
 
                 <div className="px-7">
                     <p className="pb-5 font-medium text-center text-background-black-font">
-                        We've been at the forefront of shaping credit investments, commanding Lines of Credit
-                        worth 500 million USD from prestigious banking institutions. Our founders driven by
-                        unwavering trust and passion for ethical business, have sealed transactions worth half a
-                        billion USD across major global cities, from Mumbai to New York.
+                        Choose between advancing loans or fractional ownership and start building wealth with Altern8 Club today.
                     </p>
 
                     <div
@@ -242,7 +211,6 @@ function OurOfferingsSection() {
                             </div>
                         ))}
                     </div>
-                    {/* <VimeoEmbed videoId="927123641?h=62fed1ec9a" /> */}
                 </div>
             </div>
         </motion.div>
