@@ -9,7 +9,6 @@ const page = () => {
 
   return (
     <>
-      <h1 className="text-5xl font-semibold text-center w-full text-zinc-100">Dashboard</h1>
       <div className="flex mt-8">
         <div className=" flex-[3]">
           <ActionItems

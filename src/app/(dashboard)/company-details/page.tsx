@@ -34,7 +34,7 @@ const Index = () => {
         <div className="mx-auto mt-8 rounded-lg">
           <Tabs value={activeTab} onValueChange={handleTabChange}>
             <div className="flex items-center justify-center w-full">
-              <TabsList className="flex gap-1 mx-auto max-w-max bg-white/10">
+              <TabsList className="flex gap-10 mx-auto max-w-max bg-white/10">
                 <TabsTrigger className="rounded hover:bg-white/10 animation" value="poc-details">
                   POC Details
                 </TabsTrigger>
