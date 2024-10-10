@@ -3,59 +3,98 @@ import { motion, useAnimation, useInView } from 'framer-motion';
 
 const offeringsCards = [
     {
-        name: 'Advance loans for real-estate',
-        description:
-            'Ethyx Club is a seamless frictionless fintech to get instant lines of credit for your invoices based on just simple inputs of your mobile phone.',
+        headingFront: 'Advance Loans',
+        headingBack: 'Advance Loans For Real-Estate',
+        description: [
+            {
+                heading: 'How It Works?',
+                body: 'Provide loans to real estate developers and property owners, helping fund their projects.',
+            },
+        ],
         icon: '/ethyx_club.png',
     },
     {
-        name: 'Fractional ownership for real-estate',
-        description:
-            "Unlock your supply chain's value with our lines of credit, empowering both suppliers and buyers to grow on their terms.",
+        headingFront: 'Fractional Ownership',
+        headingBack: 'Fractional Ownership For Real-Estate',
+        description: [
+            {
+                heading: 'How It Works?',
+                body: "Invest in a portion of high-value real estate with minimal capital and own a share of prime properties.",
+            },
+        ],
         link: 'https://www.nahar.om/transactions',
         icon: '/ethyx_club.png',
     },
     {
-        name: 'Real estate investment trusts',
-        description:
-            'Offers based purely on the health of your revenue. Simple, fair payments that sync with your sales.',
+        headingFront: 'Real Estate Investment Trusts',
+        headingBack: 'Real Estate Investment Trusts',
+        description: [
+            {
+                heading: 'How It Works?',
+                body: 'Invest in a professionally managed portfolio of income-generating real estate assets such as shopping malls, office buildings, and residential complexes, with shares traded like stocks.',
+            },
+        ],
         link: 'http://www.ethyx.club/',
         icon: '/ethyx_club.png',
     },
     {
-        name: 'High yield debenture',
-        description:
-            "Never miss out on your production's full potential due to bad timing. Access capital precisely when you need it and seize every big opportunity.",
+        headingFront: 'High Yield Debenture',
+        headingBack: 'High Yield Debenture',
+        description: [
+            {
+                heading: 'How It Works?',
+                body: "Invest in unsecured debt issued by real estate companies looking to raise capital. These debentures offer higher interest rates compared to traditional bonds due to the associated risk.",
+            },
+        ],
         link: 'https://www.nahar.om/ott-media-financing',
-        icon: "/ethyx_club.png",
+        icon: '/ethyx_club.png',
     },
     {
-        name: 'Secured debt',
-        description:
-            "Ethyx Club offers instant lines of credit for your invoices via a simple mobile input. It's working capital that simply works.",
+        headingFront: 'Secured Debt',
+        headingBack: 'Secured Debt',
+        description: [
+            {
+                heading: 'How It Works?',
+                body: "Invest in real estate loans backed by collateral, such as properties or other assets. In case of default, the collateral can be claimed to recover the investment.",
+            },
+        ],
         link: 'http://www.ethyx.club/',
-        icon: "/ethyx_club.png",
+        icon: '/ethyx_club.png',
     },
     {
-        name: 'Structured notes',
-        description:
-            'Easy way for merchants to access capital without the frustration of traditional financing. No lengthy application process.',
+        headingFront: 'Structured Notes',
+        headingBack: 'Structured Notes',
+        description: [
+            {
+                heading: 'How It Works?',
+                body: 'Invest in customized financial products linked to real estate performance, combining debt and equity elements to offer variable returns based on property market conditions.',
+            },
+        ],
         link: 'https://www.nahar.om/contact',
-        icon: "/ethyx_club.png",
+        icon: '/ethyx_club.png',
     },
     {
-        name: 'Venture Debt & Convertible Notes',
-        description:
-            'Extend your cash burn and delay your series equity financing rounds, dilute less equity via our venture debt & convertible lines of capital',
+        headingFront: 'Commercial Papers',
+        headingBack: 'Commercial Papers',
+        description: [
+            {
+                heading: 'How It Works?',
+                body: 'Invest in short-term debt instruments issued by real estate companies to finance immediate operational needs. These papers offer a fixed rate of return over a short duration.',
+            },
+        ],
         link: 'https://www.nahar.om/contact',
-        icon: "/ethyx_club.png",
+        icon: '/ethyx_club.png',
     },
 ];
 
+
 interface OfferingsData {
-    name: string;
-    description: string;
-    link: string;
+    headingFront: string;
+    headingBack: string;
+    description: {
+        heading: string;
+        body: string;
+    }[];
     icon?: string;
 }
 
@@ -70,30 +109,28 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
     const hoverTimer = useRef<NodeJS.Timeout | null>(null);
 
     // Destructure data props
-    const { name, description, icon, link } = data;
+    const { headingFront, headingBack, icon, description, link } = data;
     const image = icon ? icon : '/nahar_conscious_capital.jpg'; // Ensure the icon is present or fallback
 
     // Hover start
     const handleHoverStart = () => {
         hoverTimer.current = setTimeout(() => {
             setFlip(true);
-            setTimeout(() => setFlipCardSide(true), 300);
+            setTimeout(() => setFlipCardSide(true), 200);
         }, 200); // Delay before flipping
     };
 
     // Hover end
     const handleHoverEnd = () => {
         setTimeout(() => setFlipCardSide(false), 280); // Delay before flipping back
-        // @ts-ignore
-        clearTimeout(hoverTimer.current);
+        clearTimeout(hoverTimer.current!);
         setFlip(false);
     };
 
     // Clean up effect for hoverTimer
     useEffect(() => {
         return () => {
-            // @ts-ignore
-            clearTimeout(hoverTimer.current);
+            clearTimeout(hoverTimer.current!);
             setTimeout(() => setFlipCardSide(false), 280); // Delay before flipping back
         };
     }, []);
@@ -119,12 +156,12 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
                     exit={{ opacity: 0 }}
                 >
                     <h6 className="h-20 p-2 text-base font-medium text-center lg:p-2 lg:px-4 text-background-black-fade-font">
-                        {name}
+                        {headingFront}
                     </h6>
                     <div className="relative h-[220px] sm:h-[240px] lg:h-[240px] w-full">
                         <img
                             src={image}
-                            alt={name}
+                            alt={headingFront}
                             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                         />
                     </div>
@@ -135,21 +172,29 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
                     className={`h-full w-full flip-card-back flex flex-col p-2 items-center ${flipCardSide ? 'block' : 'hidden'
                         }`}
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1, }}
+                    animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                 >
                     <h6 className="w-full p-2 text-base font-medium text-center lg:p-2 lg:px-4 h-fit text-background-black-fade-font">
-                        {name}
+                        {headingBack}
                     </h6>
-                    <p className="text-[12px] mt-2 sm:text-sm md:text-sm lg:text-sm text-center w-full flex-1">
-                        {description}
-                    </p>
-                    <div className="text-center w-full h-[35%]">
-                        <a href={link} target="_blank" rel="noreferrer" className="m-auto text-blue-500 mt-7">
+
+                    {/* List for the description */}
+                    <div className="w-full mt-2 text-sm text-center">
+                        {description.map((item, index) => (
+                            <div key={index} className="my-2">
+                                <h6 className="font-semibold">{item.heading}</h6>
+                                <p className="text-xs">{item.body}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="text-center w-full h-[35%] mt-4">
+                        <a href={link} target="_blank" rel="noreferrer" className="m-auto text-blue-500">
                             Explore
                         </a>
                         <div
-                            className="m-auto relative h-[100px] w-[100px]"
+                            className="m-auto relative h-[100px] w-[100px] mt-2"
                             style={{
                                 backgroundImage: `url(${image})`,
                                 backgroundSize: 'cover',
@@ -197,7 +242,8 @@ function OurOfferingsSection() {
 
                 <div className="px-7">
                     <p className="pb-5 font-medium text-center text-background-black-font">
-                        Choose between advancing loans or fractional ownership and start building wealth with Altern8 Club today.
+                        Choose between advancing loans or fractional ownership and start building wealth with
+                        Altern8 Club today.
                     </p>
 
                     <div

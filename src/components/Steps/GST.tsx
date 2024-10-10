@@ -4,8 +4,8 @@ import { useContext, useState, useEffect } from "react";
 import { StepperContext } from "../../contexts/StepperContext";
 //import HelpAndLogin from "./stepsComponents/HelpAndLogin";
 import { parseCookies } from "nookies";
-import { showToast } from "../../utils/showToast";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/utils/show-toasts";
 
 const GST = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -34,7 +34,7 @@ const GST = () => {
   } = useContext(StepperContext);
   const [otpSent, setOtpSent] = useState(false);
   const [otpTimer, setOtpTimer] = useState(10);
-  console.log(otpTimer);
+  const { showToast } = useToast()
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccessForRegister;

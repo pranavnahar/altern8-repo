@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -6,13 +6,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../components/ui/dialog";
-import { Button } from "../../../components/ui/button";
-import { uploadBulkTransactions } from "../../../utils/ledger/transactions/transactions-service";
-import { Input } from "../../../components/ui/input";
-import { Upload } from "lucide-react";
-import { showToast } from "../../../utils/showToast";
-import { IconUpload } from "@tabler/icons-react";
+} from '../../../components/ui/dialog';
+import { Button } from '../../../components/ui/button';
+import { uploadBulkTransactions } from '../../../utils/ledger/transactions/transactions-service';
+import { Input } from '../../../components/ui/input';
+import { IconUpload } from '@tabler/icons-react';
+import { useToast } from '../../../utils/show-toasts';
 
 const TransactionUpload: React.FC<{
   onUploadSuccess: (data: object) => void;
@@ -20,9 +19,9 @@ const TransactionUpload: React.FC<{
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File>();
   const [uploadProgress, setUploadProgress] = useState(0);
-  console.log(uploadProgress);
+  const { showToast } = useToast();
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   console.log(errorMessage);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,20 +30,20 @@ const TransactionUpload: React.FC<{
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      setErrorMessage("Please select a file to upload.");
+      setErrorMessage('Please select a file to upload.');
       return;
     }
 
     const formData = new FormData();
-    formData.append("file", selectedFile);
+    formData.append('file', selectedFile);
 
     try {
       const data = await uploadBulkTransactions(formData, setUploadProgress);
       onUploadSuccess(data);
       setIsOpen(false);
     } catch (error) {
-      setErrorMessage("");
-      showToast("An error occurred during file upload.", "false");
+      setErrorMessage('');
+      showToast('An error occurred during file upload.', 'error');
       setSelectedFile(undefined);
     }
   };
@@ -52,7 +51,14 @@ const TransactionUpload: React.FC<{
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button iconPlacement="right" size="sm" Icon={IconUpload} variant="expandIcon" className="text-sm max-h-max">
+        <Button
+          iconPlacement="right"
+          size="sm"
+          Icon={IconUpload}
+          //@ts-expect-error variant type
+          variant="expandIcon"
+          className="text-sm max-h-max"
+        >
           Upload File
         </Button>
       </DialogTrigger>

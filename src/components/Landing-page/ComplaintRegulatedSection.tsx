@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, useAnimation, useInView } from 'framer-motion';
 
 function ComplaintRegulated() {
     const ref = useRef(null);
@@ -33,7 +33,7 @@ function ComplaintRegulated() {
     useEffect(() => {
         if (isInView) {
             // fires the  animation
-            mainControls.start("visible");
+            mainControls.start('visible');
         }
     }, [isInView]);
     return (
@@ -52,11 +52,10 @@ function ComplaintRegulated() {
                 </h1>
 
                 <p className="text-center max-w-[60%] mx-auto font-medium text-background-black-font pb-5">
-                    We rigorously adhere to the RBI's prudential norms for risk
-                    management, maintaining robust financial foundations to safeguard our
-                    firm and contribute to overall financial stability. Our investment
-                    decisions are guided by the RBI's regulations, aligning strategically
-                    with permissible sectors to support economic development responsibly.
+                    We rigorously adhere to the RBI's prudential norms for risk management, maintaining robust
+                    financial foundations to safeguard our firm and contribute to overall financial stability.
+                    Our investment decisions are guided by the RBI's regulations, aligning strategically with
+                    permissible sectors to support economic development responsibly.
                 </p>
                 <div className="flex items-center justify-between gap-4 mx-auto">
                     {imageInfos.map((data, index) => (
@@ -65,7 +64,7 @@ function ComplaintRegulated() {
                                 src={data.image}
                                 alt={data.name}
                                 // @ts-ignore
-                                objectfit="fill"
+                                // objectfit="fill"
                                 className="rounded-lg"
                             />
                         </div>

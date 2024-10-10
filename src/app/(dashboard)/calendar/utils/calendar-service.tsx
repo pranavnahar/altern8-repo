@@ -1,22 +1,11 @@
-import { getAccessToken } from '../auth';
+import { getAccessToken } from '../../../../utils/auth';
+import { Project } from '../types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
-interface Event {
-  id: string;
-  title: string;
-  start: Date;
-  end: Date;
-  extendedProps: {
-    uid: string;
-    invoice_amount: number;
-    date: string;
-  };
-}
-
-export const fetchEvents = async (accessToken: string): Promise<Event[]> => {
+export const fetchEvents = async (accessToken: string): Promise<Project[]> => {
   try {
-    let response = await fetch(`${API_URL}/admin-api/calendar/`, {
+    let response = await fetch(`${API_URL}/user-dashboard-api/calendar/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -25,7 +14,7 @@ export const fetchEvents = async (accessToken: string): Promise<Event[]> => {
     if (response.status === 401) {
       const newToken = await getAccessToken();
       if (newToken) {
-        response = await fetch(`${API_URL}/admin-api/calendar/`, {
+        response = await fetch(`${API_URL}/user-dashboard-api/calendar/`, {
           headers: {
             Authorization: `Bearer ${newToken}`,
           },
@@ -36,7 +25,7 @@ export const fetchEvents = async (accessToken: string): Promise<Event[]> => {
     }
 
     if (response.ok) {
-      const data: Event[] = await response.json();
+      const data: Project[] = await response.json();
       return data;
     } else {
       throw new Error('Failed to fetch events');

@@ -32,16 +32,18 @@ const FloatingButton = () => {
                 break;
             case 'LinkedIn':
                 shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-                    linkUrl,
+                    linkUrl as string,
                 )}`;
                 break;
             case 'Twitter':
                 shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                    linkUrl,
-                )}&text=${encodeURIComponent(shareText)}`;
+                    linkUrl as string,
+                )}&text=${encodeURIComponent(shareText as string)}`;
                 break;
             case 'Facebook':
-                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(linkUrl)}`;
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                    linkUrl as string,
+                )}`;
                 break;
             // case 'Instagram':
             //   shareUrl = `https://www.instagram.com/`;
@@ -75,7 +77,7 @@ const FloatingButton = () => {
         <motion.div
             initial="hidden"
             animate="visible"
-            className="fixed bottom-3 right-0 [background:linear-gradient(65.92deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050_99.08%),_#fff] p-2 rounded-l-lg flex flex-col items-end space-y-2 overflow-hidden"
+            className="fixed bottom-3 right-0 [background:linear-gradient(65.92deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050_99.08%),_#fff] p-2 rounded-l-lg flex flex-col items-end space-y-2"
             ref={floater}
             variants={sidebarVariants}
         >

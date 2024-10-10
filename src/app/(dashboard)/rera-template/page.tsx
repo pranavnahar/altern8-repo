@@ -1,11 +1,11 @@
-"use client";
-import React, { useState } from "react";
-import Input from "../../../components/Input/input";
-import { formTemplate } from "../../../utils/static";
-import { parseCookies } from "nookies";
-import { getAccessToken } from "../../../utils/auth";
-import { useRouter } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
+'use client';
+import React, { useState } from 'react';
+import Input from '../../../components/Input/input';
+import { formTemplate } from '../../../utils/static';
+import { parseCookies } from 'nookies';
+import { getAccessToken } from '../../../utils/auth';
+import { useRouter } from 'next/navigation';
+import { useToast } from '../../../utils/show-toasts';
 
 interface formDataType {
   basicInfo: object;
@@ -38,11 +38,9 @@ export default function page() {
 
   const [showFileUpload] = useState(false);
   const [file, setFile] = useState<File | null>();
+  const { showToast } = useToast();
 
-  const onChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    type: keyof formDataType
-  ) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>, type: keyof formDataType) => {
     if (showFileUpload) {
       setFile(e.target.files?.[0]);
     } else {
@@ -54,7 +52,7 @@ export default function page() {
   };
 
   const handleDownload = () => {
-    document.getElementById("download-link")!.click();
+    document.getElementById('download-link')!.click();
   };
 
   // Handle token
@@ -66,7 +64,7 @@ export default function page() {
     const token = await getAccessToken();
     // if not able to get the token then redirect to login
     if (!token) {
-      router.push("/login");
+      router.push('/login');
     } else {
       accessToken = token;
     }
@@ -87,18 +85,18 @@ export default function page() {
       const formDataToSend = new FormData();
 
       if (showFileUpload) {
-        formDataToSend.append("file", file!);
+        formDataToSend.append('file', file!);
       }
       const formDataHeaders = {
         Authorization: `Bearer ${accessToken}`,
       };
       const defaultHeaders = {
         Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       };
 
       const response = await fetch(`${apiUrl}/rera-api/rera-templates/`, {
-        method: "POST",
+        method: 'POST',
         headers: showFileUpload ? formDataHeaders : defaultHeaders,
         body: showFileUpload ? formDataToSend : JSON.stringify(formData),
       });
@@ -117,22 +115,10 @@ export default function page() {
           contactDetails: {},
         });
         setFile(null);
-        toast.success(
-          showFileUpload
-            ? "File Uploaded Successfully!"
-            : "Your Response Submitted Successfully!",
-          {
-            //position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          }
-        );
+        showToast('File Uploaded Successfully!', 'success');
       }
     } catch (err) {
-      toast.error("Error! Something went wrong.", {
-        //position: toast.POSITION.TOP_RIGHT,
-        autoClose: 3000,
-      });
-      console.error(err);
+      showToast('Error! Something went wrong.', 'warning');
     }
   };
 
@@ -173,16 +159,14 @@ export default function page() {
           </div>
           <div className="text-white text-center">(or)</div>
           <div className=" p-6 grid grid-cols-3">
-            {formTemplate.map((item) => (
+            {formTemplate.map(item => (
               <Input
                 key={item.name}
                 type={item.type}
                 label={item.label}
                 placeholder={item.placeholder}
                 name={item.name}
-                onChange={(e) =>
-                  onChange(e, item.formData as keyof formDataType)
-                }
+                onChange={e => onChange(e, item.formData as keyof formDataType)}
                 //value={formData?.[item.formData]?.[item.name] || ''}
                 required={item?.required}
                 id=""
@@ -197,7 +181,6 @@ export default function page() {
           </button>
         </form>
       </div>
-      <ToastContainer />
     </div>
   );
 }

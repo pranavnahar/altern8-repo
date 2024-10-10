@@ -1,10 +1,27 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
-import { Sidebar as SidebarLayout, SidebarBody, SidebarLink } from "../../../components/ui/sidebar";
-import Link from "next/link";
-import { IconApiApp, IconBuildingBank, IconCalendar, IconCloudUpload, IconHelp, IconLayoutDashboard, IconLogs, IconMoneybag, IconReceipt, IconReport, IconScreenShare, IconSettings, IconUserCircle, IconUsers, IconWallet } from "@tabler/icons-react";
+import { useEffect, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { Sidebar as SidebarLayout, SidebarBody, SidebarLink } from '../../../components/ui/sidebar';
+import Link from 'next/link';
+import {
+  IconApiApp,
+  IconBuildingBank,
+  IconCalendar,
+  IconCloudUpload,
+  IconHelp,
+  IconLayoutDashboard,
+  IconLogs,
+  IconMoneybag,
+  IconReceipt,
+  IconReport,
+  IconScreenShare,
+  IconSettings,
+  IconUserCircle,
+  IconUsers,
+  IconWallet,
+} from '@tabler/icons-react';
+import AnimatedLogo from '@/components/Header/AnimatedLogo';
 
 const Sidebar = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -12,43 +29,45 @@ const Sidebar = () => {
 
   const links = [
     {
-      label: "Dashboard",
-      href: "/dashboard",
-      icon: <IconLayoutDashboard className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />,
+      label: 'Dashboard',
+      href: '/dashboard',
+      icon: (
+        <IconLayoutDashboard className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />
+      ),
     },
     {
-      label: "Company Details",
-      href: "/company-details",
+      label: 'Company Details',
+      href: '/company-details',
       icon: <IconBuildingBank className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />,
     },
     {
-      label: "Calendar",
-      href: "/calendar",
+      label: 'Calendar',
+      href: '/calendar',
       icon: <IconCalendar className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />,
     },
     {
-      label: "Projects List",
-      href: "/projects-list",
+      label: 'Projects List',
+      href: '/projects-list',
       icon: <IconReceipt className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />,
     },
     {
-      label: "Ledger",
-      href: "/ledger",
+      label: 'Ledger',
+      href: '/ledger',
       icon: <IconWallet className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />,
     },
     {
-      label: "Referral",
-      href: "/referral",
+      label: 'Referral',
+      href: '/referral',
       icon: <IconScreenShare className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />,
     },
     {
-      label: "Upload Files",
-      href: "/upload-files",
+      label: 'Upload Files',
+      href: '/upload-files',
       icon: <IconCloudUpload className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />,
     },
     {
-      label: "Help",
-      href: "/help",
+      label: 'Help',
+      href: '/help',
       icon: <IconHelp className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />,
     },
   ];
@@ -65,7 +84,11 @@ const Sidebar = () => {
                 link={{
                   ...link,
                 }}
-                className={`px-2 ${pathname === link.href ? 'bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-lg' : ''}`}
+                className={`px-2 ${
+                  pathname === link.href
+                    ? 'bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-lg'
+                    : ''
+                }`}
               />
             ))}
           </div>
@@ -73,8 +96,8 @@ const Sidebar = () => {
         <div>
           <SidebarLink
             link={{
-              label: "Chikorita",
-              href: "/profile",
+              label: 'Chikorita',
+              href: '/profile',
               icon: (
                 <IconUserCircle className="flex-shrink-0 size-6 text-zinc-200" strokeWidth={1.5} />
               ),
@@ -85,7 +108,7 @@ const Sidebar = () => {
       </SidebarBody>
     </SidebarLayout>
   );
-}
+};
 
 const Logo = () => {
   return (
@@ -94,18 +117,17 @@ const Logo = () => {
       className="relative z-20 flex items-center text-sm font-normal text-zinc-50 mr-auto ml-1.5 gap-2"
     >
       <IconSettings className="size-7 text-zinc-200" strokeWidth={1.5} />
-      <h1 className="text-xl">ETHYX</h1>
+      <h1 className="text-xl">
+        <AnimatedLogo />
+      </h1>
     </Link>
   );
 };
 
 const LogoIcon = () => {
   return (
-    <Link
-      href="/"
-      className="relative z-20 flex items-center font-normal text-zinc-50 ml-1.5"
-    >
-        <IconSettings className="size-7 text-zinc-200" strokeWidth={1.5}/>
+    <Link href="/" className="relative z-20 flex items-center font-normal text-zinc-50 ml-1.5">
+      <IconSettings className="size-7 text-zinc-200" strokeWidth={1.5} />
     </Link>
   );
 };

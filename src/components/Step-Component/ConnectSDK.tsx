@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { RootFiClient } from "rootfi-api";
-import { RootFiEnvironment } from "rootfi-api";
-import Image from "next/image";
-import { Box, CircularProgress } from "@mui/material";
-import { parseCookies } from "nookies";
-import { showToast } from "../../utils/showToast";
-import { IntegrationCategory, IntegrationType } from "rootfi-api/api";
+import React, { useEffect, useState } from 'react';
+import { RootFiClient } from 'rootfi-api';
+import { RootFiEnvironment } from 'rootfi-api';
+import Image from 'next/image';
+import { Box, CircularProgress } from '@mui/material';
+import { parseCookies } from 'nookies';
+import { IntegrationCategory, IntegrationType } from 'rootfi-api/api';
+import { useToast } from '../../utils/show-toasts';
 
 type InviteLinkData = {
   data: {
@@ -36,6 +36,7 @@ const ConnectSDK: React.FC<{
 }> = ({ integration, category, onEventChange }) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   let accessToken = parseCookies().altern8_useraccessForRegister;
+  const { showToast } = useToast();
 
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   console.log(loadingSpinner);
@@ -45,7 +46,7 @@ const ConnectSDK: React.FC<{
   const SendRootfiRespToDB = async () => {
     // trim the fields before send
     let newRecord = {
-      company_name: "NAHAR",
+      company_name: 'NAHAR',
       integration_type: category,
       company_id: rootFiID,
     };
@@ -57,30 +58,27 @@ const ConnectSDK: React.FC<{
 
       let body = newRecord;
       console.log(body);
-      let response = await fetch(
-        `${apiUrl}/user-api/submit-rootfi-company-id/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
+      let response = await fetch(`${apiUrl}/user-api/submit-rootfi-company-id/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
 
-          body: JSON.stringify(body),
-        }
-      );
+        body: JSON.stringify(body),
+      });
 
       if (response.ok) {
         await response.json();
-        console.log("Rootfi ID successfully saved");
+        console.log('Rootfi ID successfully saved');
       } else {
         let server_error = await response.json();
 
-        console.error("Failed to upload accounting data details", server_error);
+        console.error('Failed to upload accounting data details', server_error);
       }
     } catch (error) {
-      console.error("Server Connection Error updating accounting data:", error);
-      showToast("Failed to send otp, system error", "false");
+      console.error('Server Connection Error updating accounting data:', error);
+      showToast('Failed to send otp, system error', 'error');
     } finally {
       setLoadingSpinner(false);
     }
@@ -88,21 +86,21 @@ const ConnectSDK: React.FC<{
 
   let logoUrl;
   switch (category) {
-    case "ECOMMERCE":
+    case 'ECOMMERCE':
       logoUrl = `/Ecommerce_Register_Logos/${integration}.png`;
       break;
-    case "ACCOUNTING":
+    case 'ACCOUNTING':
       logoUrl = `/Accounting_Register_Logos/${integration}.png`;
       break;
-    case "PAYMENTS":
+    case 'PAYMENTS':
       logoUrl = `/Pos_platform_logos/${integration}.png`;
       break;
 
-    case "OTHERS":
+    case 'OTHERS':
       logoUrl = `/others.svg`;
       break;
     default:
-      logoUrl = "";
+      logoUrl = '';
   }
 
   const rootfi = new RootFiClient({
@@ -110,7 +108,7 @@ const ConnectSDK: React.FC<{
     environment: RootFiEnvironment.Global,
   });
 
-  const [inviteLinkId, setInviteLinkId] = useState("");
+  const [inviteLinkId, setInviteLinkId] = useState('');
   const [isReady, setIsReady] = useState(false);
   console.log(isReady);
 
@@ -119,7 +117,7 @@ const ConnectSDK: React.FC<{
   async function createLink() {
     try {
       const data: InviteLinkData = await rootfi.core.inviteLinks.create({
-        company_name: "NAHAR", //pending for an company name fetch
+        company_name: 'NAHAR', //pending for an company name fetch
         integration_categories: [category as IntegrationCategory],
         integrations: [integration as IntegrationType],
       });
@@ -128,7 +126,7 @@ const ConnectSDK: React.FC<{
       setRootFiID(data.data.rootfi_company_id);
       setIsReady(true);
     } catch (e) {
-      console.log("error: " + e);
+      console.log('error: ' + e);
     }
   }
 
@@ -139,8 +137,8 @@ const ConnectSDK: React.FC<{
       onSuccess: () => {
         // connection succeeded
         RootfiLink.closeLink(); // Close the SDK
-        alert("Connection Success");
-        onEventChange("success");
+        alert('Connection Success');
+        onEventChange('success');
         SendRootfiRespToDB();
         // Make an API call to save success status to your db
       },
@@ -151,9 +149,9 @@ const ConnectSDK: React.FC<{
       onExit: () => {
         // Close SDK when user clicks closed.
         RootfiLink.closeLink();
-        onEventChange("incomplete");
+        onEventChange('incomplete');
         // Or you can show an alert msg instead of closing iframe
-        alert("Please complete the setup");
+        alert('Please complete the setup');
       },
     });
   }
@@ -175,7 +173,7 @@ const ConnectSDK: React.FC<{
       <button onClick={handleSubmit}>
         <div
           className={`h-14 w-14 overflow-hidden rounded-full relative ${
-            isLoading ? "bg-black" : "bg-white"
+            isLoading ? 'bg-black' : 'bg-white'
           }`}
         >
           {!isLoading ? (

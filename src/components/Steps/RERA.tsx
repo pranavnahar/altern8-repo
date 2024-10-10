@@ -1,15 +1,14 @@
 import React, { useContext, useState } from "react";
-import { showToast } from "../../utils/showToast";
 import { StepperContext } from "../../contexts/StepperContext";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/utils/show-toasts";
 
 const RERA = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { currentStep, setCurrentStep, setLoading, getRegistrationState } =
-    useContext(StepperContext);
-  console.log(currentStep);
+  const { currentStep, setCurrentStep, setLoading, getRegistrationState } = useContext(StepperContext);
+  const { showToast } = useToast()
 
   const [userData, setUserData] = useState({
     Rera_username: "",

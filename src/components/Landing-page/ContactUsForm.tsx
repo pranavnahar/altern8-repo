@@ -1,9 +1,9 @@
 // @ts-nocheck
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { showToast } from '@/Utils/showToast';
+import { showToast } from '../../utils/show-toasts';
 import LoadingSpinner from '../LoadingSpinner';
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '../ui/button';
 import { fetchWithAuth } from '@/Utils/fetch-with-auth';
 
@@ -32,7 +32,7 @@ const ContactUsForm = () => {
 
     const [formData, setFormData] = useState<FormState>({
         ...initialFormState,
-        ...Object.fromEntries(choices.map(choice => [choice, false]))
+        ...Object.fromEntries(choices.map(choice => [choice, false])),
     });
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -42,11 +42,14 @@ const ContactUsForm = () => {
         const { name, value, type } = e.target;
         const newValue = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
 
-        if ((name === 'company_name' && value.length > 200) ||
-            (name === 'company_query' && value.length > 400)) {
+        if (
+            (name === 'company_name' && value.length > 200) ||
+            (name === 'company_query' && value.length > 400)
+        ) {
             showToast(
-                `${name === 'company_name' ? 'Company name' : 'Comments'} should be less than ${name === 'company_name' ? 200 : 400} characters`,
-                'info'
+                `${name === 'company_name' ? 'Company name' : 'Comments'} should be less than ${name === 'company_name' ? 200 : 400
+                } characters`,
+                'info',
             );
             return;
         }
@@ -92,7 +95,10 @@ const ContactUsForm = () => {
 
             if (response.ok) {
                 showToast(`Form submitted successfully!`, 'info');
-                setFormData({ ...initialFormState, ...Object.fromEntries(choices.map(choice => [choice, false])) });
+                setFormData({
+                    ...initialFormState,
+                    ...Object.fromEntries(choices.map(choice => [choice, false])),
+                });
             } else {
                 throw new Error('Submission failed');
             }
@@ -124,11 +130,15 @@ const ContactUsForm = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="p-5">
-                    <h2 className="mb-5 text-5xl font-medium text-center font-roboto text-white-font">Contact us</h2>
+                    <h2 className="mb-5 text-5xl font-medium text-center font-roboto text-white-font">
+                        Contact us
+                    </h2>
 
                     {['company_name', 'company_email'].map(field => (
                         <div key={field} className="mb-4">
-                            <label className="block mb-2 text-xs text-gray-400 uppercase">{field.replace('_', ' ')}</label>
+                            <label className="block mb-2 text-xs text-gray-400 uppercase">
+                                {field.replace('_', ' ')}
+                            </label>
                             <input
                                 type={field === 'company_email' ? 'email' : 'text'}
                                 name={field}
@@ -162,7 +172,9 @@ const ContactUsForm = () => {
                     </div>
 
                     <div className="p-2 mb-4 rounded-md card-cover">
-                        <label className="block mb-2 text-xs text-gray-400 uppercase">Comments and questions</label>
+                        <label className="block mb-2 text-xs text-gray-400 uppercase">
+                            Comments and questions
+                        </label>
                         <textarea
                             name="company_query"
                             value={formData.company_query}

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'sonner';
-import "react-toastify/dist/ReactToastify.css";
 
 const figtree = Figtree({ subsets: ["latin"] });
 
@@ -18,12 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <title>Altern8</title>
-      </head>
       <body className={`${figtree.className}`}>
         {children}
-        <Toaster />
+        <Toaster position="bottom-center" />
       </body>
     </html>
   );

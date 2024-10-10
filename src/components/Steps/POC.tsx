@@ -4,8 +4,8 @@ import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { Button } from "@mui/material";
-import { showToast } from "../../utils/showToast";
 import { IconChevronUpRight } from "@tabler/icons-react";
+import { useToast } from "@/utils/show-toasts";
 
 const POC = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -28,9 +28,9 @@ const POC = () => {
     phoneNumber: "",
     designation: "",
   });
-  const { currentStep, steps, setLoading, getRegistrationState } =
-    useContext(StepperContext);
+  const { currentStep, steps, setLoading, getRegistrationState } = useContext(StepperContext);
   const router = useRouter();
+  const { showToast } = useToast()
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccessForRegister;

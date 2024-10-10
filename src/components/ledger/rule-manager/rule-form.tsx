@@ -1,20 +1,15 @@
-import React from "react";
-import {
-  Control,
-  FieldErrors,
-  useForm,
-  UseFormRegister,
-} from "react-hook-form";
+import React from 'react';
+import { Control, FieldErrors, useForm, UseFormRegister } from 'react-hook-form';
 import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
   SheetClose,
-} from "../../../components/ui/sheet";
-import { Button } from "../../../components/ui/button";
-import useLedgerRules from "../../../hooks/ledger/rule-manager/use-ledger-rules";
-import { showToast } from "../../../utils/showToast";
-import FormFields from "./fields/form-fields";
+} from '../../../components/ui/sheet';
+import { Button } from '../../../components/ui/button';
+import useLedgerRules from '../../../hooks/ledger/rule-manager/use-ledger-rules';
+import FormFields from './fields/form-fields';
+import { useToast } from '../../../utils/show-toasts';
 
 const RuleForm: React.FC<{
   mode: string;
@@ -32,7 +27,7 @@ const RuleForm: React.FC<{
   handleFetchRules: () => void;
   onClose: () => void;
 }> = ({ mode, rule, ruleID, handleFetchRules, onClose }) => {
-  const isEditMode = mode === "edit";
+  const isEditMode = mode === 'edit';
   const {
     register,
     control,
@@ -41,27 +36,24 @@ const RuleForm: React.FC<{
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: rule?.name || "",
-      from_account: rule?.from_account || "",
-      to_account: rule?.to_account || "",
-      condition_type: rule?.condition_type || "greater_than",
-      rule_amount: rule?.rule_amount || "",
-      pay_amount: rule?.pay_amount || "",
+      name: rule?.name || '',
+      from_account: rule?.from_account || '',
+      to_account: rule?.to_account || '',
+      condition_type: rule?.condition_type || 'greater_than',
+      rule_amount: rule?.rule_amount || '',
+      pay_amount: rule?.pay_amount || '',
       payout_date: rule?.payout_date ? new Date(rule.payout_date) : new Date(),
-      mode_of_payment: rule?.mode_of_payment || "",
+      mode_of_payment: rule?.mode_of_payment || '',
     },
   });
 
   const { handleAddRules, handleUpdateRules } = useLedgerRules();
+  const { showToast } = useToast();
 
-  const onFormSubmit = async (data: {
-    [key: string]: string | Date | number | null;
-  }) => {
+  const onFormSubmit = async (data: { [key: string]: string | Date | number | null }) => {
     try {
       if (data.payout_date) {
-        data.payout_date = (data.payout_date as Date)
-          .toISOString()
-          .slice(0, 10);
+        data.payout_date = (data.payout_date as Date).toISOString().slice(0, 10);
       }
       data.from_account = Number(data.from_account);
       data.to_account = data.to_account ? Number(data.to_account) : null;
@@ -79,10 +71,10 @@ const RuleForm: React.FC<{
         onClose();
         await handleFetchRules();
       } else {
-        showToast("Some error occurred", "false");
+        showToast('Some error occurred', 'error');
       }
     } catch (error) {
-      console.error("Error in onFormSubmit:", error);
+      console.error('Error in onFormSubmit:', error);
     } finally {
       reset();
     }
@@ -92,27 +84,16 @@ const RuleForm: React.FC<{
     <>
       <SheetHeader>
         <SheetTitle className="text-xl font-medium text-white">
-          {isEditMode ? "Edit Rule" : "Create New Rule"}
+          {isEditMode ? 'Edit Rule' : 'Create New Rule'}
         </SheetTitle>
         <SheetDescription>
-          {isEditMode
-            ? "Modify the rule details."
-            : "Fill in the details to create a new rule."}
+          {isEditMode ? 'Modify the rule details.' : 'Fill in the details to create a new rule.'}
         </SheetDescription>
       </SheetHeader>
-      <form
-        onSubmit={handleSubmit(onFormSubmit)}
-        className="w-full mt-4 space-y-4"
-      >
+      <form onSubmit={handleSubmit(onFormSubmit)} className="w-full mt-4 space-y-4">
         <FormFields
-          register={
-            register as unknown as
-              | UseFormRegister<Record<string, string>>
-              | undefined
-          }
-          control={
-            control as unknown as Control<Record<string, string>> | undefined
-          }
+          register={register as unknown as UseFormRegister<Record<string, string>> | undefined}
+          control={control as unknown as Control<Record<string, string>> | undefined}
           errors={errors as unknown as FieldErrors<Record<string, string>>}
           name=""
           placeholder=""
@@ -128,11 +109,8 @@ const RuleForm: React.FC<{
               </Button>
             </SheetClose>
           )}
-          <Button
-            type="submit"
-            className="w-full mt-5 bg-primary hover:bg-primary/90"
-          >
-            {isEditMode ? "Update Rule" : "Create Rule"}
+          <Button type="submit" className="w-full mt-5 bg-primary hover:bg-primary/90">
+            {isEditMode ? 'Update Rule' : 'Create Rule'}
           </Button>
         </div>
       </form>
