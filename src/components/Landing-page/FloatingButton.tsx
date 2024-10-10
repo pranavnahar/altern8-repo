@@ -75,7 +75,7 @@ const FloatingButton = () => {
         <motion.div
             initial="hidden"
             animate="visible"
-            className="fixed bottom-3 right-0 [background:linear-gradient(65.92deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050_99.08%),_#fff] p-2 rounded-l-lg flex flex-col items-end space-y-2"
+            className="fixed bottom-3 right-0 [background:linear-gradient(65.92deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050_99.08%),_#fff] p-2 rounded-l-lg flex flex-col items-end space-y-2 overflow-hidden"
             ref={floater}
             variants={sidebarVariants}
         >

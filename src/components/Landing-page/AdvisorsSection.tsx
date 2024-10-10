@@ -29,7 +29,7 @@ const AdvisorsSection: React.FC = () => {
     };
 
     return (
-        <div className="overflow-x-hidden">
+        <div className="overflow-y-hidden">
             <motion.div
                 variants={{
                     hidden: { opacity: 0, y: 75 },

@@ -78,12 +78,12 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
         hoverTimer.current = setTimeout(() => {
             setFlip(true);
             setTimeout(() => setFlipCardSide(true), 300);
-        }, 300); // Delay before flipping
+        }, 200); // Delay before flipping
     };
 
     // Hover end
     const handleHoverEnd = () => {
-        setTimeout(() => setFlipCardSide(false), 300); // Delay before flipping back
+        setTimeout(() => setFlipCardSide(false), 280); // Delay before flipping back
         // @ts-ignore
         clearTimeout(hoverTimer.current);
         setFlip(false);
@@ -94,7 +94,7 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
         return () => {
             // @ts-ignore
             clearTimeout(hoverTimer.current);
-            setTimeout(() => setFlipCardSide(false), 300); // Delay before flipping back
+            setTimeout(() => setFlipCardSide(false), 280); // Delay before flipping back
         };
     }, []);
 
@@ -106,8 +106,8 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
         >
             <motion.div
                 className="flex flex-col items-center justify-center w-full h-full overflow-hidden bg-white flip-card-inner card-shadow rounded-3xl"
-                transition={{ duration: 0.1, ease: 'easeInOut' }}
-                animate={{ rotateY: flip ? 180 : 0 }} // Card flip logic
+                transition={{ duration: 0.08, ease: 'easeInOut' }}
+                animate={{ rotateY: flip ? 360 : 0 }} // Card flip logic
                 initial={{ rotateY: 0 }} // Ensure the card starts in the unflipped state
             >
                 {/* Front side of the card */}
