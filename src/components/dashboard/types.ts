@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 export interface Column {
   id?: string;
@@ -21,4 +21,18 @@ export interface BasicTableProps {
 
 export interface DataRow {
   [key: string]: DataRow;
+}
+
+export interface actionItemsTable {
+  title: string;
+  data: string[];
+  columns: string[];
+  onClose: () => void;
+}
+
+export interface actionItems {
+  showActionItems: string;
+  latePayments: string;
+  upcomingPayments: string;
+  showActionItemsTables: (s: string) => void;
 }
