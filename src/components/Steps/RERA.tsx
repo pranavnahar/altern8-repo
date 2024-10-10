@@ -5,7 +5,11 @@ import { parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/utils/show-toasts";
 
-const RERA = () => {
+type Props = {
+  demo: boolean
+}
+
+const RERA = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const { currentStep, setCurrentStep, setLoading, getRegistrationState } = useContext(StepperContext);
   const { showToast } = useToast()
@@ -30,6 +34,10 @@ const RERA = () => {
       newStep--;
       setCurrentStep(newStep);
     } else if (direction === "next") {
+      if (demo) {
+        router.push('/register?demo=true&step=11')
+        return
+      }
       const { Rera_username, Rera_password } = userData;
 
       // Validation: At least one field should be filled, and length should be greater than 5

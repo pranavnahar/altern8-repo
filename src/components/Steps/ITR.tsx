@@ -8,7 +8,11 @@ import { useDropzone } from "react-dropzone";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/utils/show-toasts";
 
-const ITR = () => {
+type Props = {
+  demo: boolean
+}
+
+const ITR = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [userData, setUserData] = useState<{
     itrUsername: string;
@@ -82,7 +86,9 @@ const ITR = () => {
   };
 
   useEffect(() => {
-    GetItrUsername();
+    if (!demo) {
+      GetItrUsername();
+    }
   }, []);
 
   // to handle click on next and back button
@@ -94,6 +100,10 @@ const ITR = () => {
       setApiFailedIcon(false);
       setCurrentStep(newStep);
     } else if (direction === "next") {
+      if (demo) {
+        router.push('/register?demo=true&step=7')
+        return
+      }
       if (!needManualUpload) {
         let newRecord: { username: string; password: string } = {
           username: "",

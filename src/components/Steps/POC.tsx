@@ -7,7 +7,11 @@ import { Button } from "@mui/material";
 import { IconChevronUpRight } from "@tabler/icons-react";
 import { useToast } from "@/utils/show-toasts";
 
-const POC = () => {
+type Props = {
+  demo: boolean;
+}
+
+const POC = ({ demo } : Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [showEditDetails, setShowEditDetails] = useState(false);
   const [showAddDetails, setShowAddDetails] = useState(false);
@@ -28,7 +32,7 @@ const POC = () => {
     phoneNumber: "",
     designation: "",
   });
-  const { currentStep, steps, setLoading, getRegistrationState } = useContext(StepperContext);
+  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } = useContext(StepperContext);
   const router = useRouter();
   const { showToast } = useToast()
 
@@ -76,7 +80,6 @@ const POC = () => {
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log(responseData);
         const newPocDetails = responseData.map(
           (poc: {
             id: string;
@@ -147,8 +150,10 @@ const POC = () => {
   };
 
   useEffect(() => {
-    GetFetchedPersonalDetails();
-    GetPoc();
+    if (!demo) {
+      GetFetchedPersonalDetails();
+      GetPoc();
+    }
   }, []);
 
   // const handleClick = async (direction?: string) => {
@@ -339,6 +344,10 @@ const POC = () => {
   };
 
   const handleNextButtonClick = async () => {
+    if (demo) {
+      router.push('/register?demo=true&step=3')
+      return
+    }
     if (pocDetails && pocDetails.length === 0) {
       await submitAddedPOC();
     } else if (pocDetails && pocDetails.length > 0) {

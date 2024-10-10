@@ -4,7 +4,11 @@ import { parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/utils/show-toasts";
 
-const PAN = () => {
+type Props = {
+  demo: boolean
+}
+
+const PAN = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [panNumberList, setPanNumberList] = useState([]);
   const [userData, setUserData] = useState<{
@@ -72,7 +76,9 @@ const PAN = () => {
   };
 
   useEffect(() => {
-    GetPanList();
+    if (!demo) {
+      GetPanList();
+    }
   }, []);
 
   // Handle click on next and back button
@@ -83,6 +89,10 @@ const PAN = () => {
       newStep--;
       setCurrentStep(newStep);
     } else if (direction === "next") {
+      if (demo) {
+        router.push('/register?demo=true&step=6')
+        return
+      }
       let newRecord: { pan_number: string } = {
         pan_number: "",
       };

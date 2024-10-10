@@ -7,7 +7,11 @@ import { parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/utils/show-toasts";
 
-const GST = () => {
+type Props = {
+  demo: boolean
+}
+
+const GST = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [userData, setUserData] = useState({
     gstNumber: "",
@@ -101,7 +105,9 @@ const GST = () => {
   };
 
   useEffect(() => {
-    GetGSTINList();
+    if (!demo) {
+      GetGSTINList();
+    }
   }, []);
 
   const handleClick = async (direction?: string) => {
@@ -110,6 +116,10 @@ const GST = () => {
       newStep--;
       setCurrentStep(newStep);
     } else if (direction === "next") {
+      if (demo) {
+        router.push('/register?demo=true&step=9')
+        return
+      }
       let newRecord: { gstIn: string; username: string; password: string } = {
         gstIn: "",
         username: "",
@@ -224,8 +234,10 @@ const GST = () => {
 
   // to send the otp
   const handleSendOtp = async () => {
+    if (demo) {
+      setCurrentStep(9)
+    }
     if (userData.otp.length < 4) {
-      console.log("otp should be more then 3 digit long");
       showToast(`Enter valid OTP`, "info");
       return;
     }

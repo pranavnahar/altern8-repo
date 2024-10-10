@@ -20,9 +20,13 @@ import Accounting from "../Steps/Accounting";
 import RERA from "../Steps/RERA";
 import Udyam from "../Steps/Udyam";
 import Pending from "../Steps/Pending";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-const Register = () => {
+type Props = {
+  demo: boolean;
+}
+
+const Register = ({ demo } : Props) => {
   const [currentStep, setCurrentStep] = useState(1); // to handle multiple registration steps
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [apiFailedIcon, setApiFailedIcon] = useState(false); //to display cross instead of tick in stepper , where any api failed and manually upload require
@@ -31,6 +35,7 @@ const Register = () => {
   const [pageLoading, setPageLoading] = useState(true);
   console.log(pageLoading);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const steps = [
     "Register",
@@ -54,29 +59,11 @@ const Register = () => {
     stateName: string,
     currentPage?: string
   ) => {
-    if (stateName === "selectedPages") {
-      const selectedPages = JSON.parse(localStorage.getItem("selectedPages")!);
-      if (selectedPages && currentPage) {
-        const currentPageIndex = selectedPages.indexOf(currentPage);
-        const nextPage = selectedPages[currentPageIndex + 1];
 
-        if (nextPage) {
-          return setRegistrationState(nextPage);
-        } else {
-          return setRegistrationState("Final");
-        }
-      }
-    }
-
-    //  check for registration_step in steps array
     const registrationStepIndex = steps.indexOf(stateName);
-
-    console.log("registrationStepIndex", registrationStepIndex);
     if (registrationStepIndex !== -1) {
-      // If "registration_step" is found in the steps array
       setCurrentStep(registrationStepIndex + 1);
     } else {
-      // If "registration_step" is not found in the steps array
       console.log("got invalid state name", stateName);
       if (
         stateName === "Pending for Maker" ||
@@ -113,7 +100,7 @@ const Register = () => {
           });
 
           // if unauthorized then push to login page
-          if (response.status === 401) {
+          if (!demo && response.status === 401) {
             return router.push("/login");
           }
 
@@ -146,8 +133,23 @@ const Register = () => {
 
   // check for previous user state
   useEffect(() => {
-    getRegistrationState();
+    if (!demo) {
+      getRegistrationState();
+    }
   }, []);
+
+  useEffect(() => {
+    const demo = searchParams.get('demo');
+    const step = searchParams.get('step');
+
+    if (demo === 'true' && step) {
+      const stepNumber = parseInt(step, 10);
+
+      if (!isNaN(stepNumber)) {
+        setCurrentStep(stepNumber);
+      }
+    }
+  }, [searchParams]);
 
   // to manage the different registration steps
   const displayStep = (step: number) => {
@@ -155,39 +157,39 @@ const Register = () => {
       case 1:
         return (
           <Suspense>
-            <RegisterField />;
+            <RegisterField demo={demo} />
           </Suspense>
         );
       case 2:
-        return <POC />;
+        return <POC demo={demo} />;
       case 3:
-        return <BankDetails />;
+        return <BankDetails demo={demo} />;
       case 4:
-        return <SelectPrimaryBankAccount />;
+        return <SelectPrimaryBankAccount demo={demo} />;
       case 5:
-        return <PAN />;
+        return <PAN demo={demo} />;
       case 6:
-        return <ITR />;
+        return <ITR demo={demo} />;
       case 7:
-        return <BureauReport />;
+        return <BureauReport demo={demo} />;
       case 8:
-        return <GST />;
+        return <GST demo={demo} />;
       case 9:
-        return <Accounting />;
+        return <Accounting demo={demo} />;
       case 10:
-        return <RERA />;
+        return <RERA demo={demo} />;
       case 11:
-        return <Udyam />;
+        return <Udyam demo={demo} />;
       case 12:
-        return <UploadContract />;
+        return <UploadContract demo={demo} />;
       case 13:
-        return <AuthorizationCompliance />;
+        return <AuthorizationCompliance demo={demo} />;
       case 14:
-        return <Pending />;
+        return <Pending demo={demo} />;
       default:
         // when there is no step or undefined step
         setCurrentStep(1);
-        return <RegisterField />;
+        return <RegisterField demo={demo} />;
     }
   };
 

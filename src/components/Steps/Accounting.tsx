@@ -7,7 +7,11 @@ import { useDropzone } from "react-dropzone";
 import ConnectSDK from "../Step-Component/ConnectSDK";
 import { useToast } from "@/utils/show-toasts";
 
-const Accounting = () => {
+type Props = {
+  demo: boolean
+}
+
+const Accounting = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const {
     currentStep,
@@ -67,6 +71,10 @@ const Accounting = () => {
       setApiFailedIcon(false);
       setCurrentStep(newStep);
     } else if (direction === "next") {
+      if (demo) {
+        router.push('/register?demo=true&step=10')
+        return
+      }
       if (!needManualUpload) {
         if (userData.platform === "") {
           showToast(`Please select an accounting data platform`, "info");
