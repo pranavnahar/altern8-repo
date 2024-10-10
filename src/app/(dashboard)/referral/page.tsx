@@ -95,7 +95,7 @@ const Page = () => {
               iconPlacement="right"
               Icon={IconChevronRight}
               type="submit"
-              className="text-sm max-w-max"
+              className="text-sm max-w-max bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
             >
               Send Invite
             </Button>
@@ -119,7 +119,7 @@ const Page = () => {
               iconPlacement="right"
               Icon={IconUpload}
               type="button"
-              className="text-sm max-w-max h-full"
+              className="text-sm max-w-max h-full bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
             >
               Upload Bulk Invites
             </Button>
