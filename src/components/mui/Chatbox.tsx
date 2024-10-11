@@ -7,10 +7,10 @@ import {
   IconButton,
 } from "@mui/material";
 import { parseCookies } from "nookies";
-import { getAccessToken } from "../../utils/auth";
 import { useRouter } from "next/navigation";
 import { IconPaperclip, IconSend2, IconX } from "@tabler/icons-react";
-import { useToast } from "@/utils/show-toasts";
+import { useToast } from "@/Utils/show-toasts";
+import { getAccessToken } from "@/Utils/auth";
 
 type Message = {
   text: string;
@@ -184,7 +184,7 @@ const ChatBox: React.FC<{
       if (
         selectedFile.type === "application/pdf" ||
         selectedFile.type ===
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       ) {
         // Check if the file size is below 5MB
         if (selectedFile.size <= 5 * 1024 * 1024) {

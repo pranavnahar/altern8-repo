@@ -1,14 +1,22 @@
 'use client';
 
-import { FC, useState, useRef, useEffect } from 'react';
+import { FC, useState, useRef, useEffect, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { IconLogout, IconUserCircle } from '@tabler/icons-react';
+import { IconLogout, IconSend2, IconUserCircle } from '@tabler/icons-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import ChatBox from '@/components/mui/Chatbox';
+import { fetchWithAuth } from '@/Utils/fetch-with-auth';
+import { DashboardContext } from '@/Contexts/DashboardContext';
 
 export const Navbar: FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showMessageBox, setShowMessageBox] = useState(false);
+
+  const { chatCount, setChatCount } = useContext(DashboardContext);
+
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {
@@ -28,6 +36,29 @@ export const Navbar: FC = () => {
     };
   }, []);
 
+  const handleChatClick = () => {
+    setShowMessageBox(true);
+    makeServerUnreadChatZero();
+  };
+  const handleCloseMessageBox = () => {
+    setShowMessageBox(false);
+  };
+
+  const makeServerUnreadChatZero = async () => {
+    try {
+      const response = await fetchWithAuth(`/chat/user/read/`);
+
+      if (response) {
+        console.log('Unread messages set to zero successfully');
+        setChatCount(0);
+      } else {
+        console.log('Error during setting unread messages to zero');
+      }
+    } catch (error) {
+      console.log('Error during setting unread messages to zero:', error);
+    }
+  };
+
   return (
     <nav className="shadow-lg bg-white/10 z-20 backdrop-blur-md">
       <div className="px-4 mx-auto">
@@ -37,7 +68,25 @@ export const Navbar: FC = () => {
               <Link href="/" className="text-xl font-bold text-gray-800 dark:text-white"></Link>
             </div>
           </div>
-          <div className="flex items-center">
+          <div className="flex gap-5 items-center">
+            <div>
+              <div className=" text-center">
+                <Button
+                  //@ts-expect-error variant type
+                  variant="expandIcon"
+                  Icon={IconSend2}
+                  size={"sm"}
+                  iconPlacement="right"
+                  className="text-sm text-white bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
+                  onClick={handleChatClick}
+                >
+                  Chat With Admin
+                </Button>
+                {showMessageBox && (
+                  <ChatBox onClose={handleCloseMessageBox} showMessageBox={showMessageBox} />
+                )}
+              </div>
+            </div>
             <div className="relative" ref={dropdownRef}>
               <motion.button
                 onClick={toggleDropdown}
@@ -74,9 +123,9 @@ export const Navbar: FC = () => {
                           <Button
                             size="sm"
                             className="text-xs text-white w-full"
-                            //variant="expandIcon"
-                            //Icon={IconLogout}
-                            //iconPlacement="right"
+                          //variant="expandIcon"
+                          //Icon={IconLogout}
+                          //iconPlacement="right"
                           >
                             Sign Out
                           </Button>
