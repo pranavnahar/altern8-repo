@@ -2,6 +2,7 @@
 import ActionItems from '@/components/dashboard/Action-items';
 import ChartCalender from '@/components/dashboard/Chart-and-Calender';
 import React, { useState } from 'react';
+import UpcomingProjects from '../../../components/dashboard/Upcoming-Projects/UpcomingProjects';
 
 const page = () => {
   const [showTable, setShowTable] = useState<string>('');
@@ -17,6 +18,7 @@ const page = () => {
             upcomingPayments="test"
             showActionItemsTables={setShowTable}
           />
+          <UpcomingProjects />
         </div>
         <div className="flex-1">
           <ChartCalender sanctionedLimit={0} />

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { parseCookies, destroyCookie } from "nookies";
-import HelpAndLogin from "../Step-Component/HelpAndLogin";
-import confetti from "canvas-confetti";
+import { useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { parseCookies, destroyCookie } from 'nookies';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import confetti from 'canvas-confetti';
 
 type Props = {
-  demo: boolean
-}
+  demo: boolean;
+};
 
 const Pending = ({ demo }: Props) => {
   useEffect(() => {
@@ -19,8 +19,8 @@ const Pending = ({ demo }: Props) => {
       // Check if there is a token in cookies
       if (accessTokenForRegister) {
         // Delete the token from cookies
-        destroyCookie(null, "accessTokenForRegister");
-        console.log("Token removed from cookies.");
+        destroyCookie(null, 'accessTokenForRegister');
+        console.log('Token removed from cookies.');
       }
     };
 
@@ -55,7 +55,7 @@ const Pending = ({ demo }: Props) => {
 
   const handleClick = () => {
     const end = Date.now() + 3 * 1000; // 3 seconds
-    const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+    const colors = ['#a786ff', '#fd8bbc', '#eca184', '#f8deb1'];
 
     const frame = () => {
       if (Date.now() > end) return;
@@ -108,7 +108,8 @@ const Pending = ({ demo }: Props) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          Your registration has been received by us and we are processing it, once confirmed you will receive a mail regarding the same.
+          Your registration has been received by us and we are processing it, once confirmed you
+          will receive a mail regarding the same.
           <br />
           <br />
           We usually take around 48 hours to process it.
@@ -117,6 +118,6 @@ const Pending = ({ demo }: Props) => {
       <HelpAndLogin />
     </>
   );
-}
+};
 
 export default Pending;
