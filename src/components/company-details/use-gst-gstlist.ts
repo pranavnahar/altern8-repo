@@ -13,8 +13,8 @@ export const useGetGstList = () => {
         const data = await response?.json();
         setMessage(data.message);
         setGstList(data.data);
-      } catch (err) {
-        setError(err);
+      } catch (e) {
+        setError(e);
       }
     };
 
