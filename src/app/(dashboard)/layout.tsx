@@ -17,6 +17,7 @@ export default function Layout({ children }: Props) {
             <Sidebar />
             <div className="flex flex-col flex-1 overflow-hidden">
               <Navbar />
+              {/* <Header /> */}
               <main className="flex-1 p-7 overflow-auto">{children}</main>
             </div>
           </div>
