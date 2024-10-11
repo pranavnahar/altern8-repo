@@ -121,7 +121,7 @@ const Help = () => {
               variant="expandIcon"
               Icon={IconSend2}
               iconPlacement="right"
-              className="text-sm bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
+              className="text-sm text-white bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
               onClick={handleChatClick}
             >
               Chat With Admin
