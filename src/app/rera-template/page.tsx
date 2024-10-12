@@ -1,11 +1,11 @@
 'use client';
 import React, { useState } from 'react';
-import Input from '../../../components/Input/input';
-import { formTemplate } from '../../../utils/static';
+import Input from '../../components/Input/input';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../../utils/auth';
 import { useRouter } from 'next/navigation';
-import { useToast } from '../../../utils/show-toasts';
+import { formTemplate } from '@/Utils/static';
+import { getAccessToken } from '@/Utils/auth';
+import { useToast } from '@/Utils/show-toasts';
 
 interface formDataType {
   basicInfo: object;
@@ -123,9 +123,9 @@ export default function page() {
   };
 
   return (
-    <div className="min-h-screen p-10 w-full shadow-lg outline-none focus:outline-none [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]">
-      <div className="mb-5">
-        <h3 className="text-2xl text-gray-200 font-semibold">Add Template</h3>
+    <div className=" min-h-screen p-10 w-full shadow-lg outline-none focus:outline-none [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]">
+      <div className="">
+        <h3 className="text-3xl ml-10 text-gray-200 font-semibold">Add Template</h3>
       </div>
       <div className="flex justify-between items-center">
         <form onSubmit={saveReraTemplate}>

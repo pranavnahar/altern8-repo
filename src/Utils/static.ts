@@ -1,6 +1,14 @@
 export const formTemplate = [
   {
     type: "text",
+    label: "User ID",
+    name: "user_id",
+    placeholder: "User Id",
+    required: true,
+    formData: "basicInfo",
+  },
+  {
+    type: "text",
     label: "Details of Encumbrances",
     name: "details_of_encumbrances",
     placeholder: "Details of Encumbrances",

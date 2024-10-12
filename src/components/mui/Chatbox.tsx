@@ -207,11 +207,11 @@ const ChatBox: React.FC<{
       onClose={onClose}
       PaperProps={{
         style: {
-          backgroundColor: "#1f2937",
-          borderRadius: "10px", // Set the background color here
+          background: "linear-gradient(269.75deg, #011049, #19112f 25.75%, #251431 51.79%, #301941 64.24%, #6e3050)",
+          borderRadius: "10px",
+          color: "white", // Ensure text is visible on the gradient background
         },
       }}
-      className="[background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)]"
     >
       <DialogTitle style={{ color: "white" }}>
         <span className="text-white">Chat with Admin</span>
