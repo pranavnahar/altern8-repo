@@ -95,7 +95,7 @@ const Page = () => {
               iconPlacement="right"
               Icon={IconChevronRight}
               type="submit"
-              className="text-sm max-w-max bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
+              className="text-sm max-w-max text-white bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
             >
               Send Invite
             </Button>
@@ -109,7 +109,7 @@ const Page = () => {
             onChange={handleFileUpload}
             id="upload-excel-file"
             ref={fileInputRef}
-            className="w-full transition-colors bg-transparent border border-dashed rounded-md outline-none appearance-none cursor-pointer focus:outline-none focus:border-purple-600 text-neutral-200 border-neutral-300/70 placeholder:text-neutral-100 hover:bg-neutral-950/20 animation"
+            className="w-full  transition-colors bg-transparent border border-dashed rounded-md outline-none appearance-none cursor-pointer focus:outline-none focus:border-purple-600 text-neutral-200 border-neutral-300/70 placeholder:text-neutral-100 hover:bg-neutral-950/20 animation"
           />
           <label htmlFor="upload-excel-file">
             <Button
@@ -119,7 +119,7 @@ const Page = () => {
               iconPlacement="right"
               Icon={IconUpload}
               type="button"
-              className="text-sm max-w-max h-full bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
+              className="text-sm text-white max-w-max h-full bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
             >
               Upload Bulk Invites
             </Button>

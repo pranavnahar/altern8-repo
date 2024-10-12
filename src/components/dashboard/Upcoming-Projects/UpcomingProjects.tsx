@@ -15,7 +15,7 @@ const UpcomingProjects = () => {
       <BasicTable data={projectList} columns={getColumns()} filters={filters} />
       <div className=" flex justify-center items-center">
         <Button
-          className=" self-center mt-3 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700 hover:bg-gray-500"
+          className="text-white self-center mt-3 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700 hover:bg-gray-500"
           onClick={() => router.push('/projects-list')}
         >
           Add New Project

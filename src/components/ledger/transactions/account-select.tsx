@@ -14,14 +14,14 @@ const AccountSelect: React.FC<{
 }> = ({ accounts, onSelect, selectedAccount }) => {
   return (
     <Select onValueChange={onSelect} value={selectedAccount as string}>
-      <SelectTrigger className="w-[200px] gap-5 bg-primary border-2 mr-auto">
+      <SelectTrigger className="w-[200px] gap-5 bg-primary text-white border-2 border-gray-300 mr-auto">
         <SelectValue
-          className="text-left text-neutral-800"
+          className="text-left text-white"
           placeholder="Select Bank Account"
         />
       </SelectTrigger>
-      <SelectContent className="bg-neutral-200/70 backdrop-blur-md border-none w-[200px]">
-        <SelectItem value="all" className="truncate rounded-md">
+      <SelectContent className="bg-white backdrop-blur-md border-none w-[200px]">
+        <SelectItem value="all" className="truncate text-white  rounded-md">
           Show All Accounts
         </SelectItem>
         {accounts.map(
