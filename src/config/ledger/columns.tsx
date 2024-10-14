@@ -26,6 +26,7 @@ export const accountsColumns = [
     header: 'Link', // Header for the "Link" column
     accessorKey: 'actions', // Key for rendering the column
     cell: ({ row }) => {
+      console.log("reeooww", row)
       const [isOpen, setIsOpen] = useState(false);
       const id = row.original.id;
       const { handleFetchTransactions, transactions } = useLedgerTransactions(id);

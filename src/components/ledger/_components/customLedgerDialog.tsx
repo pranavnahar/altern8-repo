@@ -24,7 +24,7 @@ const CustomLedgerDialog = ({ isOpen, onClose, children }) => {
             <div
                 className={`fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
          [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]
-         border-none overflow-auto w-[70rem] max-w-[90vw] max-h-[90vh] rounded-lg
+         border-none overflow-auto h-[35rem] w-[82rem] max-w-[90vw] max-h-[90vh] rounded-lg
          transition-all duration-300 ease-in-out ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
                     }`}
                 onClick={(e) => e.stopPropagation()}

@@ -3,9 +3,9 @@ import { showToast } from '@/Helpers/show-toasts';
 import { fetchWithAuth } from '../fetch-with-auth';
 fetchWithAuth
 export const getTransactions = async (id) => {
-    // const response = await fetchWithAuth(`/seller-api/transactions/${id}`);
-    // if (!response.ok) throw new Error('Failed to fetch Accounts');
-    // return response.json();
+    const response = await fetchWithAuth(`/user-dashboard-api/transactions/${id}`);
+    if (!response.ok) throw new Error('Failed to fetch Accounts');
+    return response.json();
 
     return {
         "transactions": [
@@ -84,115 +84,115 @@ export const getTransactions = async (id) => {
 }
 
 export const getLedgerDetails = async () => {
-    // const response = await fetchWithAuth(`/seller-api/transactions/`);
-    // if (!response.ok) throw new Error('Failed to fetch Details');
-    // return response.json();
-    return {
-        "invoice_ids": [
-            [
-                4,
-                "invoices/dummy_pdf_4_tfJtQuv.pdf"
-            ],
-            [
-                3,
-                "invoices/dummy_pdf_2_ULUEqfb.pdf"
-            ],
-            [
-                19,
-                "invoices/dummy_pdf_2_ULUEqfb.pdf"
-            ],
-            [
-                20,
-                "invoices/dummy_pdf_2_ULUEqfb.pdf"
-            ],
-            [
-                22,
-                "invoices/dummy_pdf_2_ULUEqfb.pdf"
-            ],
-            [
-                93,
-                "invoices/gst_document.pdf"
-            ],
-            [
-                94,
-                "invoices/dummy_pdf_4_dacxNjY_1_2Vbea0M.pdf"
-            ],
-            [
-                95,
-                "invoices/dummy_pdf_4_dacxNjY_1.pdf"
-            ],
-            [
-                96,
-                "invoices/dummy_pdf_2_ULUEqfb_1.pdf"
-            ]
-        ],
-        "accounts": [
-            {
-                "id": 1,
-                "name": "Real account of seller",
-                "account_type": "Real Account of Sellers",
-                "account_number": "2000123001112",
-                "balance": 66378
-            },
-            {
-                "id": 3,
-                "name": "shared account of buyer and seller",
-                "account_type": "Shared Virtual Account of Buyer and Seller",
-                "account_number": "342345524534534",
-                "balance": 0
-            },
-            {
-                "id": 4,
-                "name": "virtual account example",
-                "account_type": "Shared Virtual Account of Buyer and Seller",
-                "account_number": "12313341233123",
-                "balance": 0
-            },
-            {
-                "id": 6,
-                "name": "new account",
-                "account_type": "account type virtual",
-                "account_number": "123123123123",
-                "balance": 1200000
-            },
-            {
-                "id": 7,
-                "name": "shared virtual between seller-buyer",
-                "account_type": "Shared Virtual Account of Buyer and Seller",
-                "account_number": "200012300432",
-                "balance": 12000
-            },
-            {
-                "id": 9,
-                "name": "hdhhghghh",
-                "account_type": "virtual account for new users 12",
-                "account_number": "11111222",
-                "balance": 1000
-            }
-        ],
-        "other_accounts": [
-            {
-                "id": 2,
-                "name": "Admin Account",
-                "account_number": "231232534234"
-            },
-            {
-                "id": 5,
-                "name": "sdfsd",
-                "account_number": "4242342432"
-            },
-            {
-                "id": 8,
-                "name": "Real Account of Seller",
-                "account_number": "2233445566"
-            }
-        ]
-    }
+    const response = await fetchWithAuth(`/user-dashboard-api/transactions/`);
+    if (!response.ok) throw new Error('Failed to fetch Details');
+    return response.json();
+    // return {
+    //     "invoice_ids": [
+    //         [
+    //             4,
+    //             "invoices/dummy_pdf_4_tfJtQuv.pdf"
+    //         ],
+    //         [
+    //             3,
+    //             "invoices/dummy_pdf_2_ULUEqfb.pdf"
+    //         ],
+    //         [
+    //             19,
+    //             "invoices/dummy_pdf_2_ULUEqfb.pdf"
+    //         ],
+    //         [
+    //             20,
+    //             "invoices/dummy_pdf_2_ULUEqfb.pdf"
+    //         ],
+    //         [
+    //             22,
+    //             "invoices/dummy_pdf_2_ULUEqfb.pdf"
+    //         ],
+    //         [
+    //             93,
+    //             "invoices/gst_document.pdf"
+    //         ],
+    //         [
+    //             94,
+    //             "invoices/dummy_pdf_4_dacxNjY_1_2Vbea0M.pdf"
+    //         ],
+    //         [
+    //             95,
+    //             "invoices/dummy_pdf_4_dacxNjY_1.pdf"
+    //         ],
+    //         [
+    //             96,
+    //             "invoices/dummy_pdf_2_ULUEqfb_1.pdf"
+    //         ]
+    //     ],
+    //     "accounts": [
+    //         {
+    //             "id": 1,
+    //             "name": "Real account of seller",
+    //             "account_type": "Real Account of Sellers",
+    //             "account_number": "2000123001112",
+    //             "balance": 66378
+    //         },
+    //         {
+    //             "id": 3,
+    //             "name": "shared account of buyer and seller",
+    //             "account_type": "Shared Virtual Account of Buyer and Seller",
+    //             "account_number": "342345524534534",
+    //             "balance": 0
+    //         },
+    //         {
+    //             "id": 4,
+    //             "name": "virtual account example",
+    //             "account_type": "Shared Virtual Account of Buyer and Seller",
+    //             "account_number": "12313341233123",
+    //             "balance": 0
+    //         },
+    //         {
+    //             "id": 6,
+    //             "name": "new account",
+    //             "account_type": "account type virtual",
+    //             "account_number": "123123123123",
+    //             "balance": 1200000
+    //         },
+    //         {
+    //             "id": 7,
+    //             "name": "shared virtual between seller-buyer",
+    //             "account_type": "Shared Virtual Account of Buyer and Seller",
+    //             "account_number": "200012300432",
+    //             "balance": 12000
+    //         },
+    //         {
+    //             "id": 9,
+    //             "name": "hdhhghghh",
+    //             "account_type": "virtual account for new users 12",
+    //             "account_number": "11111222",
+    //             "balance": 1000
+    //         }
+    //     ],
+    //     "other_accounts": [
+    //         {
+    //             "id": 2,
+    //             "name": "Admin Account",
+    //             "account_number": "231232534234"
+    //         },
+    //         {
+    //             "id": 5,
+    //             "name": "sdfsd",
+    //             "account_number": "4242342432"
+    //         },
+    //         {
+    //             "id": 8,
+    //             "name": "Real Account of Seller",
+    //             "account_number": "2233445566"
+    //         }
+    //     ]
+    // }
 }
 
 export const createTransactions = async (formData) => {
     try {
-        const response = await fetchWithAuth('/seller-api/transactions/', {
+        const response = await fetchWithAuth('/user-dashboard-api/transactions/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
