@@ -163,51 +163,56 @@ export const InputForms = ({
 
     fetchTemplateId();
   }, [params?.id]);
+
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onOpenChange();
     console.log(formData);
+
     try {
       if (!altern8_adminaccess) {
         await ReplaceTokenOrRedirect();
+      }
+
+      const formDataToSend = new FormData();
+      for (const key in formData) {
+        if (Object.hasOwnProperty.call(formData, key)) {
+          const value = formData[key];
+          if (Array.isArray(value) && value[0] instanceof File) {
+            value.forEach((file) => {
+              formDataToSend.append("file", file);
+            });
+          } else {
+            formDataToSend.append(key, value as string);
+          }
+        }
       }
 
       let response = await fetch(URL, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${altern8_adminaccess}`,
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: formDataToSend,
       });
 
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(URL, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${altern8_adminaccess}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-      }
       if (response.ok) {
         const responseData = await response.json();
-        setFormData(responseData);
-        toast("Document saved !", {
+        setFormData({});
+        toast("Document saved!", {
           description: "Success",
         });
       } else {
-        console.error("Failed to add profile data:", response.status);
+        console.error("Failed to upload:", response.status);
         toast("Failure", {
           description: "Something went wrong",
         });
       }
     } catch (error) {
-      console.log("Error during adding profile data:", error);
-      toast("UI Is Initialized", {
-        description: "Not integrated with any API",
+      console.log("Error during upload:", error);
+      toast("Error", {
+        description: "Something went wrong",
       });
     }
   };
