@@ -1,83 +1,49 @@
 "use client";
-import React, { ReactNode, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import TransactionsTab from "./transactions/index";
-import AccountsTab from "./accounts/index";
-import RuleManagerTab from "./rules-manager/index";
-import { NotificationSheet } from "../../../components/ledger/_components/notification-sheet";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../../components/ui/tabs";
 
-const TabContent: React.FC<{ value: string; children: ReactNode }> = ({
-  value,
-  children,
-}) => <TabsContent value={value}>{children}</TabsContent>;
+import { useEffect, useState } from 'react';
 
-const page = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const tab = searchParams.get("tab");
-  const [activeTab, setActiveTab] = useState("transactions");
+import { accountsColumns } from '@/config/ledger/columns';
+import BasicTable from '@/components/dashboard/BasicTable';
+import TableSkeleton from '@/components/ledger/_components/table-skeleton';
+import useLedgerDetails from '@/hooks/ledger/useLedgerDetails';
+import TransactionSheet from '@/components/ledger/transactions/transaction-sheet';
+import useTransactionForm from '@/hooks/ledger/useTransactionForm';
 
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-    const newUrl = new URL(window.location.href);
-    newUrl.searchParams.set("tab", value);
-    router.push(newUrl.toString(), { scroll: false });
-  };
+const Ledger = () => {
+  const { accounts, otherAccounts, isLoading, invoiceIDs, handleFetchLedgerDetails } =
+    useLedgerDetails();
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const { formData } = useTransactionForm();
+  const allAccounts = [...accounts, ...otherAccounts];
+
 
   useEffect(() => {
-    if (tab) {
-      setActiveTab(tab);
-    }
-  }, [tab]);
+    handleFetchLedgerDetails();
+  }, [isSheetOpen]);
 
   return (
-    <div className="flex min-h-screen mt-10">
-      <div className="w-full pt-5">
-        <div>
-          <Tabs value={activeTab} onValueChange={handleTabChange}>
-            <TabsList className="w-full bg-white/0">
-              <div className="flex justify-between gap-1 p-1 mr-auto rounded-md max-w-max bg-white/10">
-                <TabsTrigger
-                  value="transactions"
-                  className="rounded hover:bg-white/10 animation"
-                >
-                  Transactions
-                </TabsTrigger>
-                <TabsTrigger
-                  value="accounts"
-                  className="rounded hover:bg-white/10 animation"
-                >
-                  Accounts
-                </TabsTrigger>
-                <TabsTrigger
-                  value="rule-manager"
-                  className="rounded hover:bg-white/10 animation"
-                >
-                  Rules Manager
-                </TabsTrigger>
-              </div>
-              <NotificationSheet />
-            </TabsList>
-            <TabsContent value="transactions">
-              <TransactionsTab />
-            </TabsContent>
-            <TabContent value="accounts">
-              <AccountsTab />
-            </TabContent>
-            <TabContent value="rule-manager">
-              <RuleManagerTab />
-            </TabContent>
-          </Tabs>
-        </div>
+    <div className="min-h-screen py-10 pt-32 pr-10">
+      <div className="flex justify-between items-center ">
+        <h1 className="text-5xl text-center font-relative-medium text-white-font">Accounts</h1>
+        <TransactionSheet
+          accounts={allAccounts}
+          formData={formData}
+          invoiceIds={invoiceIDs}
+          isOpen={isSheetOpen}
+          onOpenChange={setIsSheetOpen}
+          mode="add"
+        />
       </div>
+      {isLoading ? (
+        <TableSkeleton />
+      ) : (
+        <BasicTable data={accounts} columns={accountsColumns} />
+        // <p>hello</p>
+      )}
     </div>
   );
 };
 
-export default page;
+export default Ledger;
+
+

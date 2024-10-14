@@ -6,8 +6,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../components/ui/table";
-import { Skeleton } from "../../../components/ui/skeleton";
+} from "../../ui/table";
+import { Skeleton } from "../../ui/skeleton";
 
 const TableSkeleton = ({ rows = 5, columns = 4 }) => {
   return (
