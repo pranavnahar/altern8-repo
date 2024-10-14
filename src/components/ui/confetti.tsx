@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+'use client';
+import type { ReactNode } from 'react';
 import React, {
   createContext,
   forwardRef,
@@ -7,21 +8,21 @@ import React, {
   useImperativeHandle,
   useMemo,
   useRef,
-} from "react";
+} from 'react';
 import type {
   GlobalOptions as ConfettiGlobalOptions,
   CreateTypes as ConfettiInstance,
   Options as ConfettiOptions,
-} from "canvas-confetti";
-import confetti from "canvas-confetti";
+} from 'canvas-confetti';
+import confetti from 'canvas-confetti';
 
-import { Button, ButtonProps } from "@/components/ui/button";
+import { Button, ButtonProps } from '@/components/ui/button';
 
 type Api = {
   fire: (options?: ConfettiOptions) => void;
 };
 
-type Props = React.ComponentPropsWithRef<"canvas"> & {
+type Props = React.ComponentPropsWithRef<'canvas'> & {
   options?: ConfettiOptions;
   globalOptions?: ConfettiGlobalOptions;
   manualstart?: boolean;
@@ -94,8 +95,7 @@ const Confetti = forwardRef<ConfettiRef, Props>((props, ref) => {
 });
 
 interface ConfettiButtonProps extends ButtonProps {
-  options?: ConfettiOptions &
-    ConfettiGlobalOptions & { canvas?: HTMLCanvasElement };
+  options?: ConfettiOptions & ConfettiGlobalOptions & { canvas?: HTMLCanvasElement };
   children?: React.ReactNode;
 }
 
@@ -120,7 +120,7 @@ function ConfettiButton({ options, children, ...props }: ConfettiButtonProps) {
   );
 }
 
-Confetti.displayName = "Confetti";
+Confetti.displayName = 'Confetti';
 
 export { Confetti, ConfettiButton };
 

@@ -7,12 +7,12 @@ import { IconLogout, IconSend2, IconUserCircle } from '@tabler/icons-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import ChatBox from '@/components/mui/Chatbox';
-import { fetchWithAuth } from '@/Utils/fetch-with-auth';
+import { fetchWithAuth } from '@/utils/fetch-with-auth';
 import { DashboardContext } from '@/Contexts/DashboardContext';
 import { showToast } from '@/Helpers/show-toasts';
 import { useRouter } from 'next/compat/router';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '@/Utils/auth';
+import { getAccessToken } from '@/utils/auth';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
@@ -125,18 +125,18 @@ export const Navbar: FC = () => {
       if (true) {
         // const responseData = await response.json();
         const responseData = {
-          "id": 12,
-          "user_amount": "600000.00",
-          "admin_amount": "0.00",
-          "limit_status": "Pending for Maker",
-          "comments": "required for loan amount",
-          "created_at": "2024-09-30T12:25:47.326118+05:30",
-          "modified_at": "2024-09-30T12:25:47.333588+05:30",
-          "uid": "YSRBRV6195",
-          "maker": null,
-          "checker": null,
-          "current_amount": 320000
-        }
+          id: 12,
+          user_amount: '600000.00',
+          admin_amount: '0.00',
+          limit_status: 'Pending for Maker',
+          comments: 'required for loan amount',
+          created_at: '2024-09-30T12:25:47.326118+05:30',
+          modified_at: '2024-09-30T12:25:47.333588+05:30',
+          uid: 'YSRBRV6195',
+          maker: null,
+          checker: null,
+          current_amount: 320000,
+        };
         let newData = {
           id: responseData['id'],
           requested_amount: parseInt(responseData['user_amount']),
@@ -204,17 +204,13 @@ export const Navbar: FC = () => {
           const file = files[i];
           if (
             file.type === 'application/pdf' ||
-            file.type ===
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
           ) {
             if (file.size <= 5 * 1024 * 1024) {
               // Check if the file size is below 5MB
               formData.append('files', file); // Append each file to the FormData object
             } else {
-              showToast(
-                'File size exceeds 5MB limit. Please choose a smaller file.',
-                'info',
-              );
+              showToast('File size exceeds 5MB limit. Please choose a smaller file.', 'info');
               return; // Stop processing files if size limit exceeded
             }
           } else {
@@ -282,7 +278,7 @@ export const Navbar: FC = () => {
   const onDrop = useCallback(async (acceptedFiles: any) => {
     // Do something with the files
     console.log(acceptedFiles);
-    showToast("Files uploaded successfully", true)
+    showToast('Files uploaded successfully', true);
     setFiles(acceptedFiles);
   }, []);
 
@@ -301,7 +297,6 @@ export const Navbar: FC = () => {
             {/* increase credit */}
             <Dialog>
               <DialogTrigger>
-
                 <Button
                   //@ts-expect-error variant type
                   variant="expandIcon"
@@ -324,7 +319,7 @@ export const Navbar: FC = () => {
                         <h3 className="text-2xl font-semibold text-white">Get More Credit</h3>
                         <DialogTrigger asChild>
                           <Button
-                            size={"sm"}
+                            size={'sm'}
                             className="float-right p-1 ml-auto text-3xl font-semibold leading-none text-black bg-transparent border-0 outline-none focus:outline-none"
                             onClick={handleGetMoreCreditClose}
                           >
@@ -385,10 +380,7 @@ export const Navbar: FC = () => {
                               {isDragActive ? (
                                 <p>Drop the files here ...</p>
                               ) : (
-                                <p>
-                                  Drag 'n' drop some files here, or click
-                                  to select files
-                                </p>
+                                <p>Drag 'n' drop some files here, or click to select files</p>
                               )}
                             </div>
                           </div>
@@ -428,24 +420,17 @@ export const Navbar: FC = () => {
                                     </td>
                                     <td className="p-3 text-sm font-medium text-gray-400 whitespace-nowrap hover:text-gray-300">
                                       ₹{' '}
-                                      {oldCreditRequests?.requested_amount?.toLocaleString(
-                                        'en-IN',
-                                      )}
+                                      {oldCreditRequests?.requested_amount?.toLocaleString('en-IN')}
                                     </td>
 
                                     <td className="p-3 text-sm font-medium text-gray-400 whitespace-nowrap hover:text-gray-300">
-                                      {oldCreditRequests.status ===
-                                        'Pending for Maker' ||
-                                        oldCreditRequests.status ===
-                                        'Pending for Checker'
+                                      {oldCreditRequests.status === 'Pending for Maker' ||
+                                      oldCreditRequests.status === 'Pending for Checker'
                                         ? 'Pending for Approval'
                                         : oldCreditRequests.status}
                                     </td>
                                     <td className="p-3 text-sm font-medium text-gray-400 whitespace-nowrap hover:text-gray-300">
-                                      ₹{' '}
-                                      {oldCreditRequests?.current_amount?.toLocaleString(
-                                        'en-IN',
-                                      )}
+                                      ₹ {oldCreditRequests?.current_amount?.toLocaleString('en-IN')}
                                     </td>
                                   </tr>
                                 </tbody>
@@ -472,7 +457,6 @@ export const Navbar: FC = () => {
                   </div>
                 )}
               </DialogContent>
-
             </Dialog>
 
             {/* chatbox */}
@@ -532,9 +516,9 @@ export const Navbar: FC = () => {
                           <Button
                             size="sm"
                             className="text-xs text-white w-full"
-                          //variant="expandIcon"
-                          //Icon={IconLogout}
-                          //iconPlacement="right"
+                            //variant="expandIcon"
+                            //Icon={IconLogout}
+                            //iconPlacement="right"
                           >
                             Sign Out
                           </Button>
@@ -548,7 +532,7 @@ export const Navbar: FC = () => {
           </div>
         </div>
       </div>
-    </nav >
+    </nav>
   );
 };
 

@@ -3,7 +3,13 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import nookies from 'nookies';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
 interface AuthContextType {
