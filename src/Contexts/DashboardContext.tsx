@@ -1,12 +1,7 @@
-import { jwtDecode } from "jwt-decode";
-import { parseCookies } from "nookies";
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from "react";
+'use client';
+import { jwtDecode } from 'jwt-decode';
+import { parseCookies } from 'nookies';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface DashboardContextType {
   chatCount: number;
@@ -14,9 +9,7 @@ interface DashboardContextType {
   newMessage: string;
   setNewMessage: (message: string) => void;
   messages: { text: string; sender: string; file?: string | null }[];
-  setMessages: (
-    messages: { text: string; sender: string; file?: string | null }[]
-  ) => void;
+  setMessages: (messages: { text: string; sender: string; file?: string | null }[]) => void;
   uId: string;
   setUId: (id: string) => void;
 }
@@ -25,17 +18,15 @@ interface DashboardContextType {
 const defaultDashboardContext: DashboardContextType = {
   chatCount: 0,
   setChatCount: () => {},
-  newMessage: "",
+  newMessage: '',
   setNewMessage: () => {},
-  messages: [{ text: "How may I help you?", sender: "admin" }],
+  messages: [{ text: 'How may I help you?', sender: 'admin' }],
   setMessages: () => {},
-  uId: "",
+  uId: '',
   setUId: () => {},
 };
 
-export const DashboardContext = createContext<DashboardContextType>(
-  defaultDashboardContext
-);
+export const DashboardContext = createContext<DashboardContextType>(defaultDashboardContext);
 
 export const useDashboardContext = () => useContext(DashboardContext);
 
@@ -45,11 +36,9 @@ interface DashboardProviderProps {
 
 export const DashboardProvider = ({ children }: DashboardProviderProps) => {
   const [chatCount, setChatCount] = useState(0);
-  const [newMessage, setNewMessage] = useState("");
-  const [messages, setMessages] = useState([
-    { text: "How may I help you?", sender: "admin" },
-  ]);
-  const [uId, setUId] = useState("");
+  const [newMessage, setNewMessage] = useState('');
+  const [messages, setMessages] = useState([{ text: 'How may I help you?', sender: 'admin' }]);
+  const [uId, setUId] = useState('');
 
   useEffect(() => {
     const fetchTokenAndSetUserId = async () => {
@@ -68,7 +57,7 @@ export const DashboardProvider = ({ children }: DashboardProviderProps) => {
           const userId = decodedToken.uid;
 
           // Introduce a delay of 1000 milliseconds (1 second)
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          await new Promise(resolve => setTimeout(resolve, 1000));
 
           // Set the user ID in state after the delay
           setUId(userId);

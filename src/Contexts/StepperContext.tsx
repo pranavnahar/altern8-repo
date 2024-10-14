@@ -1,7 +1,8 @@
-import { apiUrl } from "../utils/auth";
-import { useRouter } from "next/navigation";
-import { parseCookies } from "nookies";
-import { createContext, useContext, useState, ReactNode } from "react";
+'use client';
+import { apiUrl } from '../utils/auth';
+import { useRouter } from 'next/navigation';
+import { parseCookies } from 'nookies';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface StepperContextType {
   currentStep: number;
@@ -20,21 +21,19 @@ interface StepperContextType {
 // Create a default context value
 const defaultStepperContext: StepperContextType = {
   currentStep: 0,
-  setCurrentStep: () => { },
+  setCurrentStep: () => {},
   steps: [],
   loading: false,
-  setLoading: () => { },
+  setLoading: () => {},
   showHelpPage: false,
-  setShowHelpPage: () => { },
-  handleClickHelp: () => { },
-  getRegistrationState: () => { },
+  setShowHelpPage: () => {},
+  handleClickHelp: () => {},
+  getRegistrationState: () => {},
   apiFailedIcon: false,
-  setApiFailedIcon: () => { },
+  setApiFailedIcon: () => {},
 };
 
-export const StepperContext = createContext<StepperContextType>(
-  defaultStepperContext
-);
+export const StepperContext = createContext<StepperContextType>(defaultStepperContext);
 
 export const useStepperContext = () => useContext(StepperContext);
 
@@ -54,12 +53,9 @@ export const StepperProvider = ({ children }: StepperProviderProps) => {
     setShowHelpPage(true);
   };
 
-  const setRegistrationState = async (
-    stateName?: string,
-    currentPage?: string
-  ) => {
-    if (stateName === "selectedPages") {
-      const selectedPages = JSON.parse(localStorage.getItem("selectedPages")!);
+  const setRegistrationState = async (stateName?: string, currentPage?: string) => {
+    if (stateName === 'selectedPages') {
+      const selectedPages = JSON.parse(localStorage.getItem('selectedPages')!);
       if (selectedPages && currentPage) {
         const currentPageIndex = selectedPages.indexOf(currentPage);
         const nextPage = selectedPages[currentPageIndex + 1];
@@ -67,7 +63,7 @@ export const StepperProvider = ({ children }: StepperProviderProps) => {
         if (nextPage) {
           return setRegistrationState(nextPage);
         } else {
-          return setRegistrationState("Final");
+          return setRegistrationState('Final');
         }
       }
     }
@@ -85,24 +81,18 @@ export const StepperProvider = ({ children }: StepperProviderProps) => {
         });
 
         if (response.status === 401) {
-          router.push("/login");
+          router.push('/login');
         }
 
         if (response.ok) {
           let server_message = await response.json();
           const registration_step = server_message.user_state;
-          console.log(
-            `user step fetched successfully! ${registration_step}`,
-            server_message
-          );
+          console.log(`user step fetched successfully! ${registration_step}`, server_message);
           setRegistrationState(registration_step);
           console.log(registration_step);
         } else {
           let server_error = await response.json();
-          console.error(
-            `Failed to fetch user state from backend`,
-            server_error
-          );
+          console.error(`Failed to fetch user state from backend`, server_error);
         }
       } catch (error) {
         console.error(`Failed to fetch user state from backend`, error);
@@ -112,10 +102,7 @@ export const StepperProvider = ({ children }: StepperProviderProps) => {
     }
   };
 
-  const getRegistrationState = async (
-    stateName?: string,
-    currentPage?: string
-  ) => {
+  const getRegistrationState = async (stateName?: string, currentPage?: string) => {
     await setRegistrationState(stateName, currentPage);
   };
 
