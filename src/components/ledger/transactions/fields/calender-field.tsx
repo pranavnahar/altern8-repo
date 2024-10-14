@@ -15,7 +15,7 @@ const CalendarField: React.FC<{
         mode="single"
         selected={selected as Date}
         onSelect={onSelect}
-        className="my-2 border rounded-lg"
+        className="my-2 border text-white rounded-lg"
       />
     </div>
   );
