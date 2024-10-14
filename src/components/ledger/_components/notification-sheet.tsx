@@ -1,5 +1,4 @@
-import { fetchWithAuth } from '../../../utils/fetch-with-auth';
-import { Button } from '../../../components/ui/button';
+import { Button } from '../../ui/button';
 import {
   Sheet,
   SheetContent,
@@ -7,10 +6,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '../../../components/ui/sheet';
+} from '../../ui/sheet';
 import { CheckCheck, Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { IconNotification } from '@tabler/icons-react';
+import { fetchWithAuth } from '@/Utils/fetch-with-auth';
 
 export function NotificationSheet() {
   const [notifications, setNotifications] = useState<
