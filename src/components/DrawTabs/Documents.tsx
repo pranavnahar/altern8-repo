@@ -186,8 +186,8 @@ const FilterContainer = () => {
         <div className="text-black">
           <strong className="text-xs text-white">Search By:</strong>
           <Select>
-            <SelectTrigger className="w-[180px]   ">
-              <SelectValue className="text-black" placeholder="Select by column" />
+            <SelectTrigger className="w-[180px] bg-gray-200  ">
+              <SelectValue className="text-black bg-gray-300" placeholder="Select by column" />
             </SelectTrigger>
             <SelectContent className="text-black">
               <SelectGroup>
@@ -209,7 +209,7 @@ const FilterContainer = () => {
         </div>
       </div>
       <div className="flex gap-3">
-        <Button variant={'secondary'} onClick={() => setOpen(true)}>
+        <Button variant={'secondary'} className=" text-gray-200" onClick={() => setOpen(true)}>
           Add Documents
         </Button>
         <div className="text-black">

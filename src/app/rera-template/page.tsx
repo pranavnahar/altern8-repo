@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import Input from '../../components/Input/input';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
-import { formTemplate } from '@/Utils/static';
-import { getAccessToken } from '@/Utils/auth';
-import { useToast } from '@/Utils/show-toasts';
+import { formTemplate } from '@/utils/static';
+import { getAccessToken } from '@/utils/auth';
+import { useToast } from '@/utils/show-toasts';
 
 interface formDataType {
   basicInfo: object;

@@ -73,7 +73,7 @@ const InventoryTable: React.FC = () => {
           <SheetTrigger>
             <Button
               variant={'outline'}
-              className=" bg-themeBlue border-0 text-white hover:bg-themeBlue hover:text-white"
+              className=" bg-themeBlue border-0 text-white hover:bg-themeBlue hover:bg-transparent bg-[#1565c0]"
             >
               Add Inventory
             </Button>
@@ -99,7 +99,7 @@ const InventoryTable: React.FC = () => {
                 <Input
                   type="number"
                   value={item.count}
-                  className="text-black"
+                  className="text-black bg-gray-200"
                   onChange={e => handleInputChange(index, 'count', e.target.value)}
                 />
               </TableCell>
@@ -107,7 +107,7 @@ const InventoryTable: React.FC = () => {
                 <Input
                   type="text"
                   value={item.amount}
-                  className="text-black"
+                  className="text-black bg-gray-200"
                   onChange={e => handleInputChange(index, 'amount', e.target.value)}
                 />
               </TableCell>
