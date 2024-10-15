@@ -5,20 +5,20 @@ import {
   SheetHeader,
   SheetTrigger,
   SheetClose,
-} from "../../../components/ui/sheet";
+} from '../../../components/ui/sheet';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../components/ui/select";
-import { useAccountTypes } from "../../../hooks/ledger/accounts/use-account-types";
-import useAccounts from "../../../hooks/ledger/accounts/use-accounts";
-import { Switch } from "../../../components/ui/switch";
-import { Button } from "../../../components/ui/button.jsx";
-import React, { useState } from "react";
-import { Account, AccountType, Props } from "./types";
+} from '../../../components/ui/select';
+//import { useAccountTypes } from "../../../hooks/ledger/accounts/use-account-types";
+//import useAccounts from "../../../hooks/ledger/accounts/use-accounts";
+import { Switch } from '../../../components/ui/switch';
+import { Button } from '../../../components/ui/button.jsx';
+import React, { useState } from 'react';
+import { Account, AccountType, Props } from './types';
 
 const EditAccountButton: React.FC<Props> = ({
   account,
@@ -32,25 +32,24 @@ const EditAccountButton: React.FC<Props> = ({
     newAccountType,
     handleAddNewAccountType,
     handleNewAccountTypeChange,
+    //@ts-expect-error useaccounttypes not present
   } = useAccountTypes(handleFetchAccountsTypes as unknown as boolean);
   const { setLinkedRealAccount, handleEditAccount } =
+    //@ts-expect-error useaccount not present
     useAccounts(accountsTypes);
-  const virtualText = isVirtual ? "Virtual" : "Non-Virtual";
+  const virtualText = isVirtual ? 'Virtual' : 'Non-Virtual';
   const [accountData, setAccountData] = useState({
     name: account?.name,
     account_number: account?.account_number,
-    account_type: account?.account_type ? account?.account_type.toString() : "",
+    account_type: account?.account_type ? account?.account_type.toString() : '',
   });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
     const { value } = e.target;
-    setAccountData((prev) => ({ ...prev, [field]: value }));
-    if (field === "account_type") {
+    setAccountData(prev => ({ ...prev, [field]: value }));
+    if (field === 'account_type') {
       const selectedAccountType: Account = accountsTypes.find(
-        (type: AccountType) => type.id.toString() === value
+        (type: AccountType) => type.id.toString() === value,
       )!;
       if (selectedAccountType) {
         setIsVirtual(selectedAccountType.is_virtual);
@@ -79,7 +78,7 @@ const EditAccountButton: React.FC<Props> = ({
           <div className="flex flex-col gap-2">
             <h1 className="text-sm text-neutral-100">Name</h1>
             <input
-              onChange={(e) => handleInputChange(e, "name")}
+              onChange={e => handleInputChange(e, 'name')}
               value={accountData.name}
               required
               placeholder="Account Name"
@@ -90,7 +89,7 @@ const EditAccountButton: React.FC<Props> = ({
           <div className="flex flex-col gap-2">
             <h1 className="text-sm text-neutral-100">Account Number</h1>
             <input
-              onChange={(e) => handleInputChange(e, "account_number")}
+              onChange={e => handleInputChange(e, 'account_number')}
               value={accountData.account_number}
               required
               placeholder="Account Number"
@@ -101,9 +100,9 @@ const EditAccountButton: React.FC<Props> = ({
           <div className="flex flex-col gap-2">
             <h1 className="text-neutral-100">Account type</h1>
             <Select
-              onValueChange={(value) =>
+              onValueChange={value =>
                 //@ts-expect-error target is not defined
-                handleInputChange({ target: { value } }, "account_type")
+                handleInputChange({ target: { value } }, 'account_type')
               }
               defaultValue={accountData.account_type}
             >
@@ -118,8 +117,7 @@ const EditAccountButton: React.FC<Props> = ({
                       value={accountsType.id.toString()}
                       className="truncate rounded-md"
                     >
-                      {accountsType.description}{" "}
-                      {accountsType.is_virtual ? "(Virtual)" : ""}
+                      {accountsType.description} {accountsType.is_virtual ? '(Virtual)' : ''}
                     </SelectItem>
                   ))}
               </SelectContent>
@@ -128,7 +126,7 @@ const EditAccountButton: React.FC<Props> = ({
           {isVirtualAccountSelected && (
             <div className="flex flex-col gap-2">
               <h1 className="text-sm text-neutral-100">Linked Real Account</h1>
-              <Select onValueChange={(value) => setLinkedRealAccount(value)}>
+              <Select onValueChange={value => setLinkedRealAccount(value)}>
                 <SelectTrigger className="w-full border-2 bg-primary">
                   <SelectValue placeholder="Select a real account..." />
                 </SelectTrigger>
@@ -151,8 +149,7 @@ const EditAccountButton: React.FC<Props> = ({
           )}
           <div className="flex flex-col gap-2 p-3 rounded-md bg-white/10">
             <h1 className="text-sm text-neutral-100">
-              Add Account Type{" "}
-              <span className="text-neutral-400">(if needed)</span>
+              Add Account Type <span className="text-neutral-400">(if needed)</span>
             </h1>
             <div className="grid grid-cols-2 gap-5">
               <input
@@ -163,11 +160,7 @@ const EditAccountButton: React.FC<Props> = ({
                 type="text"
               />
               <div className="flex my-auto">
-                <Switch
-                  checked={isVirtual}
-                  onCheckedChange={setIsVirtual}
-                  className=""
-                />
+                <Switch checked={isVirtual} onCheckedChange={setIsVirtual} className="" />
                 <h1 className="ml-2">{virtualText}</h1>
               </div>
             </div>

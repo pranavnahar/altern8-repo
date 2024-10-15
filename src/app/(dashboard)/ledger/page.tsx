@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -8,6 +8,7 @@ import TableSkeleton from '@/components/ledger/_components/table-skeleton';
 import useLedgerDetails from '@/hooks/ledger/useLedgerDetails';
 import TransactionSheet from '@/components/ledger/transactions/transaction-sheet';
 import useTransactionForm from '@/hooks/ledger/useTransactionForm';
+import { Column } from '@/components/dashboard/types';
 
 const Ledger = () => {
   const { accounts, otherAccounts, isLoading, invoiceIDs, handleFetchLedgerDetails } =
@@ -15,7 +16,6 @@ const Ledger = () => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const { formData } = useTransactionForm();
   const allAccounts = [...accounts, ...otherAccounts];
-
 
   useEffect(() => {
     handleFetchLedgerDetails();
@@ -27,6 +27,7 @@ const Ledger = () => {
         <h1 className="text-5xl text-center font-relative-medium text-white-font">Accounts</h1>
         <TransactionSheet
           accounts={allAccounts}
+          //@ts-expect-error formdata types mismatched
           formData={formData}
           invoiceIds={invoiceIDs}
           isOpen={isSheetOpen}
@@ -37,7 +38,7 @@ const Ledger = () => {
       {isLoading ? (
         <TableSkeleton />
       ) : (
-        <BasicTable data={accounts} columns={accountsColumns} />
+        <BasicTable data={accounts} columns={accountsColumns as Column[]} filters={[]} />
         // <p>hello</p>
       )}
     </div>
@@ -45,5 +46,3 @@ const Ledger = () => {
 };
 
 export default Ledger;
-
-

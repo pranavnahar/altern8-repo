@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState, useRef, useEffect, useContext, useCallback } from 'react';
+import React, { FC, useState, useRef, useEffect, useContext, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { IconLogout, IconSend2, IconUserCircle } from '@tabler/icons-react';
@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import ChatBox from '@/components/mui/Chatbox';
 import { fetchWithAuth } from '@/utils/fetch-with-auth';
-import { DashboardContext } from '@/Contexts/DashboardContext';
+import { DashboardContext } from '@/contexts/DashboardContext';
 import { showToast } from '@/Helpers/show-toasts';
 import { useRouter } from 'next/compat/router';
 import { parseCookies } from 'nookies';
@@ -75,10 +75,15 @@ export const Navbar: FC = () => {
     comments: '',
   });
 
-  const [oldCreditRequests, setOldCreditRequests] = useState([]);
+  const [oldCreditRequests, setOldCreditRequests] = useState<{
+    id: string;
+    requested_amount: string;
+    status: string;
+    current_amount: string;
+  }>();
 
   const [errors, setErrors] = useState({});
-  const [files, setFiles] = useState(null);
+  const [files, setFiles] = useState<File[] | null>(null);
 
   const [loadingSpinner, setLoadingSpinner] = useState(true); // for loading animation
   const router = useRouter();
@@ -92,7 +97,7 @@ export const Navbar: FC = () => {
     const token = await getAccessToken();
     // if not able to get the token then redirect to login
     if (!token) {
-      router.push('/login');
+      router!.push('/login');
     } else {
       accessToken = token;
     }
@@ -105,7 +110,7 @@ export const Navbar: FC = () => {
         await ReplaceTokenOrRedirect();
       }
 
-      let response = await fetch(`${apiUrl}/seller-api/get-more-credit/`, {
+      let response = await fetch(`${apiUrl}/user-dashboard-api/get-more-credit/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -114,7 +119,7 @@ export const Navbar: FC = () => {
       if (response.status === 401) {
         await ReplaceTokenOrRedirect();
         // Again try to fetch the data
-        response = await fetch(`${apiUrl}/seller-api/get-more-credit/`, {
+        response = await fetch(`${apiUrl}/user-dashboard-api/get-more-credit/`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -164,7 +169,7 @@ export const Navbar: FC = () => {
   }, [showGetMoreCreditBox]);
 
   // handle input change
-  const handleChange = e => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData({
       ...userData,
@@ -172,7 +177,7 @@ export const Navbar: FC = () => {
     });
   };
 
-  const handleAmountChange = e => {
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     let formattedValue = value.replace(/\D/g, ''); // Remove non-numeric characters
 
@@ -183,8 +188,8 @@ export const Navbar: FC = () => {
     setUserData({ ...userData, [name]: formattedValue });
   };
 
-  const handleGetMoreCreditSubmit = async e => {
-    e.preventDefault();
+  const handleGetMoreCreditSubmit = async () => {
+    // e.preventDefault();
     const newErrors = {};
 
     // Validate the amount length
@@ -226,7 +231,7 @@ export const Navbar: FC = () => {
       // Send the form data to the server
       setLoadingSpinner(true);
 
-      let response = await fetch(`${apiUrl}/seller-api/get-more-credit/`, {
+      let response = await fetch(`${apiUrl}/user-dashboard-api/get-more-credit/`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -237,7 +242,7 @@ export const Navbar: FC = () => {
       if (response.status === 401) {
         await ReplaceTokenOrRedirect();
         // Again try to fetch the data
-        response = await fetch(`${apiUrl}/seller-api/get-more-credit/`, {
+        response = await fetch(`${apiUrl}/user-dashboard-api/get-more-credit/`, {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -247,10 +252,10 @@ export const Navbar: FC = () => {
       }
 
       if (response.ok) {
-        const responseData = await response.json();
+        await response.json();
         showToast('Request submitted successfully', 'info');
         // Handle successful submission, e.g., reset form
-        setUserData('');
+        setUserData({ amount: '', comments: '' });
         setFiles(null);
         GetOldCredit();
       } else {
@@ -278,7 +283,7 @@ export const Navbar: FC = () => {
   const onDrop = useCallback(async (acceptedFiles: any) => {
     // Do something with the files
     console.log(acceptedFiles);
-    showToast('Files uploaded successfully', true);
+    showToast('Files uploaded successfully');
     setFiles(acceptedFiles);
   }, []);
 
@@ -356,6 +361,7 @@ export const Navbar: FC = () => {
                           </div>
                           <div className="flex py-1 my-2">
                             <textarea
+                              //@ts-expect-error onchange
                               onChange={handleChange}
                               value={userData['comments'] || ''}
                               name="comments"
@@ -387,7 +393,7 @@ export const Navbar: FC = () => {
                         </div>
 
                         {/* old credit request  */}
-                        {oldCreditRequests.length !== 0 && (
+                        {oldCreditRequests && (
                           <div className="col-span-4 pb-5 mt-5 mr-5 rounded-lg">
                             <div className="flex items-center px-2 pt-3 ">
                               <div className="flex-grow text-xl font-medium text-center text-gray-300">
@@ -416,21 +422,20 @@ export const Navbar: FC = () => {
                                 <tbody>
                                   <tr className="">
                                     <td className="p-3 text-sm font-medium text-gray-300">
-                                      {oldCreditRequests.id}
+                                      {oldCreditRequests?.id}
                                     </td>
                                     <td className="p-3 text-sm font-medium text-gray-400 whitespace-nowrap hover:text-gray-300">
-                                      ₹{' '}
-                                      {oldCreditRequests?.requested_amount?.toLocaleString('en-IN')}
+                                      ₹ {oldCreditRequests?.requested_amount?.toLocaleString()}
                                     </td>
 
                                     <td className="p-3 text-sm font-medium text-gray-400 whitespace-nowrap hover:text-gray-300">
-                                      {oldCreditRequests.status === 'Pending for Maker' ||
-                                      oldCreditRequests.status === 'Pending for Checker'
+                                      {oldCreditRequests?.status === 'Pending for Maker' ||
+                                      oldCreditRequests?.status === 'Pending for Checker'
                                         ? 'Pending for Approval'
-                                        : oldCreditRequests.status}
+                                        : oldCreditRequests?.status}
                                     </td>
                                     <td className="p-3 text-sm font-medium text-gray-400 whitespace-nowrap hover:text-gray-300">
-                                      ₹ {oldCreditRequests?.current_amount?.toLocaleString('en-IN')}
+                                      ₹ {oldCreditRequests?.current_amount?.toLocaleString()}
                                     </td>
                                   </tr>
                                 </tbody>
