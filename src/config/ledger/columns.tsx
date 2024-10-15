@@ -4,6 +4,7 @@ import BasicTable from '@/components/dashboard/BasicTable';
 import useLedgerTransactions from '@/hooks/ledger/useLedgerTransactions';
 import useLedgerDetails from '@/hooks/ledger/useLedgerDetails';
 import CustomDialog from '@/components/ledger/_components/customLedgerDialog';
+import { Column } from '@/components/dashboard/types';
 
 export const accountsColumns = [
   {
@@ -25,8 +26,9 @@ export const accountsColumns = [
   {
     header: 'Link', // Header for the "Link" column
     accessorKey: 'actions', // Key for rendering the column
+    //@ts-expect-error row types
     cell: ({ row }) => {
-      console.log("reeooww", row)
+      console.log('reeooww', row);
       const [isOpen, setIsOpen] = useState(false);
       const id = row.original.id;
       const { handleFetchTransactions, transactions } = useLedgerTransactions(id);
@@ -50,8 +52,8 @@ export const accountsColumns = [
             {transactions && transactions.length > 0 ? (
               <BasicTable
                 data={transactions}
-                columns={transactionsColumns}
-                statusColors={{}}
+                columns={transactionsColumns as Column[]}
+                //statusColors={{}}
                 filters={[]}
               />
             ) : (
@@ -90,12 +92,12 @@ export const transactionsColumns = [
   {
     header: 'Description',
     accessorKey: 'description',
-    cell: info => info.getValue() || '-',
+    cell: (info: { getValue: () => string }) => info.getValue() || '-',
   },
   {
     header: 'Timestamp',
     accessorKey: 'timestamp',
-    cell: info => {
+    cell: (info: { getValue: () => string | number | Date }) => {
       const dateObj = new Date(info.getValue());
       const options = {
         year: 'numeric',
@@ -104,33 +106,35 @@ export const transactionsColumns = [
         hour: '2-digit',
         minute: '2-digit',
       };
-      return dateObj.toLocaleString('en-IN', options);
+      return dateObj.toLocaleString('en-IN');
     },
   },
   {
     header: 'From Account',
     accessorKey: 'from_account',
-    cell: info => {
+    cell: (info: { getValue: () => string }) => {
       const { accounts, otherAccounts } = useLedgerDetails();
       const allAccounts = [...accounts, ...otherAccounts];
-      const account = allAccounts.find(acc => acc.id === info.getValue());
+      //@ts-expect-error id not present
+      const account: { name: string } = allAccounts.find(acc => acc.id === info.getValue())!;
       return account ? account.name : '~';
     },
   },
   {
     header: 'To Account',
     accessorKey: 'to_account',
-    cell: info => {
+    cell: (info: { getValue: () => string }) => {
       const { accounts, otherAccounts } = useLedgerDetails();
       const allAccounts = [...accounts, ...otherAccounts];
-      const account = allAccounts.find(acc => acc.id === info.getValue());
+      //@ts-expect-error id not present
+      const account: { name: string } = allAccounts.find(acc => acc.id === info.getValue())!;
       return account ? account.name : '~';
     },
   },
   {
     header: 'Balance',
     accessorKey: 'balance',
-    cell: info => {
+    cell: (info: { getValue: () => string }) => {
       return `₹ ${parseFloat(info.getValue()).toLocaleString('en-IN', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,

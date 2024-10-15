@@ -1,5 +1,5 @@
-import React from "react";
-import { Button } from "../../../components/ui/button";
+import React from 'react';
+import { Button } from '../../../components/ui/button';
 import {
   Sheet,
   SheetContent,
@@ -7,18 +7,18 @@ import {
   SheetHeader,
   SheetTrigger,
   SheetClose,
-} from "../../../components/ui/sheet";
-import { Plus } from "lucide-react";
+} from '../../../components/ui/sheet';
+import { Plus } from 'lucide-react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../components/ui/select";
-import { useAccountTypes } from "../../../hooks/ledger/accounts/use-account-types";
-import { Switch } from "../../../components/ui/switch";
-import { AccountType, Props, Account } from "./types";
+} from '../../../components/ui/select';
+//import { useAccountTypes } from "../../../hooks/ledger/accounts/use-account-types";
+import { Switch } from '../../../components/ui/switch';
+import { AccountType, Props, Account } from './types';
 
 const AddAccountButton: React.FC<Props> = ({
   isVirtual,
@@ -35,8 +35,9 @@ const AddAccountButton: React.FC<Props> = ({
     newAccountType,
     handleAddNewAccountType,
     handleNewAccountTypeChange,
+    //@ts-expect-error use account not present
   } = useAccountTypes(isVirtual, setIsVirtual);
-  const virtualText = isVirtual ? "Virtual" : "Non-Virtual";
+  const virtualText = isVirtual ? 'Virtual' : 'Non-Virtual';
 
   return (
     <Sheet>
@@ -57,7 +58,7 @@ const AddAccountButton: React.FC<Props> = ({
           <div className="flex flex-col gap-2">
             <h1 className="text-sm text-neutral-100">Name</h1>
             <input
-              onChange={(e) => handleInputChange(e, "name")}
+              onChange={e => handleInputChange(e, 'name')}
               value={accountData.name}
               required
               placeholder="Account Name"
@@ -68,7 +69,7 @@ const AddAccountButton: React.FC<Props> = ({
           <div className="flex flex-col gap-2">
             <h1 className="text-sm text-neutral-100">Account Number</h1>
             <input
-              onChange={(e) => handleInputChange(e, "account_number")}
+              onChange={e => handleInputChange(e, 'account_number')}
               value={accountData.account_number}
               required
               placeholder="Account Number"
@@ -79,7 +80,7 @@ const AddAccountButton: React.FC<Props> = ({
           <div className="flex flex-col gap-2">
             <h1 className="text-sm text-neutral-100">Balance</h1>
             <input
-              onChange={(e) => handleInputChange(e, "balance")}
+              onChange={e => handleInputChange(e, 'balance')}
               value={accountData.balance}
               required
               placeholder="Account Balance"
@@ -90,10 +91,10 @@ const AddAccountButton: React.FC<Props> = ({
           <div className="flex flex-col gap-2">
             <h1 className="text-neutral-100">Account type</h1>
             <Select
-              onValueChange={(value) =>
+              onValueChange={value =>
                 handleInputChange(
                   { target: { value } } as React.ChangeEvent<HTMLInputElement>,
-                  "account_type"
+                  'account_type',
                 )
               }
             >
@@ -108,8 +109,7 @@ const AddAccountButton: React.FC<Props> = ({
                       value={accountsType.id.toString()}
                       className="truncate rounded-md"
                     >
-                      {accountsType.description}{" "}
-                      {accountsType.is_virtual ? "(Virtual)" : "(Real)"}
+                      {accountsType.description} {accountsType.is_virtual ? '(Virtual)' : '(Real)'}
                     </SelectItem>
                   ))}
               </SelectContent>
@@ -118,21 +118,20 @@ const AddAccountButton: React.FC<Props> = ({
           {isVirtualAccountSelected && (
             <div className="flex flex-col gap-2">
               <h1 className="text-sm text-neutral-100">Link Real Account</h1>
-              <Select onValueChange={(value) => setLinkedRealAccount(value)}>
+              <Select onValueChange={value => setLinkedRealAccount(value)}>
                 <SelectTrigger className="w-full border-2 bg-primary">
                   <SelectValue placeholder="Select a real account..." />
                 </SelectTrigger>
                 <SelectContent className="border-none bg-neutral-200/70 backdrop-blur-md max-h-80">
                   {accounts &&
                     accounts
-                      .filter((account) => {
+                      .filter(account => {
                         const accountType: Account = accountsTypes.find(
-                          (type: AccountType) =>
-                            type.id === account.account_type
+                          (type: AccountType) => type.id === account.account_type,
                         )!;
                         return accountType && !accountType.is_virtual;
                       })
-                      .map((account) => (
+                      .map(account => (
                         <SelectItem
                           key={account.id}
                           value={account.id!.toString()}
@@ -147,8 +146,7 @@ const AddAccountButton: React.FC<Props> = ({
           )}
           <div className="flex flex-col gap-2 p-3 rounded-md bg-white/10">
             <h1 className="text-sm text-neutral-100">
-              Add Account Type{" "}
-              <span className="text-neutral-400">(if needed)</span>
+              Add Account Type <span className="text-neutral-400">(if needed)</span>
             </h1>
             <div className="grid grid-cols-2 gap-5">
               <input
@@ -159,11 +157,7 @@ const AddAccountButton: React.FC<Props> = ({
                 type="text"
               />
               <div className="flex my-auto">
-                <Switch
-                  checked={isVirtual}
-                  onCheckedChange={setIsVirtual}
-                  className=""
-                />
+                <Switch checked={isVirtual} onCheckedChange={setIsVirtual} className="" />
                 <h1 className="ml-2">{virtualText}</h1>
               </div>
             </div>
@@ -177,10 +171,7 @@ const AddAccountButton: React.FC<Props> = ({
           </div>
         </div>
         <SheetClose asChild>
-          <Button
-            onClick={handleAddAccount}
-            className="w-full mt-5 bg-primary hover:bg-primary/80"
-          >
+          <Button onClick={handleAddAccount} className="w-full mt-5 bg-primary hover:bg-primary/80">
             Add Account
           </Button>
         </SheetClose>
