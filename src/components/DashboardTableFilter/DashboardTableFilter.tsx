@@ -377,7 +377,7 @@ const DashboardTableFilter: React.FC = () => {
                 </motion.div>
               </div>
               <Button
-                className="bg-themeBlue hover:bg-blue-700"
+                className="bg-themeBlue hover:bg-blue-700 bg-[#1565c0]"
                 onClick={() => setOpenFormModal(true)}
               >
                 <CirclePlus className="mr-1 " /> Add Project
@@ -399,10 +399,13 @@ const DashboardTableFilter: React.FC = () => {
                       <div className="text-black">
                         <strong className="text-xs text-white">Search By:</strong>
                         <Select>
-                          <SelectTrigger className="w-[180px]">
-                            <SelectValue className="text-black" placeholder="Select by column" />
+                          <SelectTrigger className="w-[180px] bg-gray-200">
+                            <SelectValue
+                              className="text-black bg-gray-300"
+                              placeholder="Select by column"
+                            />
                           </SelectTrigger>
-                          <SelectContent className="text-black">
+                          <SelectContent className="text-black bg-gray-200">
                             <SelectGroup>
                               {filterSection?.map((filter, index) => (
                                 <SelectItem key={index} value={filter}>
@@ -414,7 +417,11 @@ const DashboardTableFilter: React.FC = () => {
                         </Select>
                       </div>
                       <div>
-                        <Input className="text-black" type="search" placeholder="Search" />
+                        <Input
+                          className="text-black bg-gray-200"
+                          type="search"
+                          placeholder="Search"
+                        />
                       </div>
                       <div>
                         <Button variant="secondary" onClick={() => setFiltersOpen(true)}>
@@ -426,7 +433,9 @@ const DashboardTableFilter: React.FC = () => {
                       <div className="text-black">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="outline">Take Actions</Button>
+                            <Button variant="outline" className="bg-[#1565c0] text-white">
+                              Take Actions
+                            </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent>
                             <DropdownMenuItem onClick={() => setCustomizeModal(true)}>

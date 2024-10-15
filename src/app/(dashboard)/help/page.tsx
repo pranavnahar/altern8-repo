@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useContext, useEffect } from 'react';
-import Accordion from '@/components/ui/accordion';
+
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { IconSend2 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
 import ChatBox from '@/components/mui/Chatbox';
-import { DashboardContext } from '@/Contexts/DashboardContext';
-import { fetchWithAuth } from '@/Utils/fetch-with-auth';
+import { DashboardContext } from '@/contexts/DashboardContext';
+import { fetchWithAuth } from '@/utils/fetch-with-auth';
+import { Accordion } from '@/components/ui/accordion';
 
 const dummyFaqs = [
   {
@@ -42,7 +43,7 @@ const Help = () => {
   useEffect(() => {
     const GetFaq = async () => {
       try {
-        const response = await fetchWithAuth(`/seller-api/faq/`);
+        const response = await fetchWithAuth(`/user-dashboard-api/faq/`);
 
         if (response) {
           const responseData = await response.json();
@@ -107,6 +108,7 @@ const Help = () => {
           <div className="py-5 text-5xl font-semibold text-center text-white">FAQs</div>
           <div className="mx-6">
             <Accordion
+              //@ts-expect-error items not compatible
               items={faqs.map(faq => ({
                 title: faq.question,
                 content: faq.answer,

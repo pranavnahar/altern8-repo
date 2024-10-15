@@ -1,11 +1,11 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
 interface DrawHeaderProps {
-    params: {
-      id: string | number;
-    };
-  }
+  params: {
+    id: string | number;
+  };
+}
 
 const DrawHeader = ({ params }: DrawHeaderProps) => {
   return (
@@ -15,7 +15,7 @@ const DrawHeader = ({ params }: DrawHeaderProps) => {
       <h1 className="text-2xl font-bold text-white mr-5">{`Tranche ${params?.id}`}</h1>
       <div className="mx-5">
         <p className="text-white text-xs">Tranche Total</p>
-        <h4 className="text-themeBlue font-bold">74554564 INR</h4>
+        <h4 className="text-themeBlue font-bold text-gray-200">74554564 INR</h4>
       </div>
       <div className="mx-5">
         <p className="text-white text-xs">Approvals</p>

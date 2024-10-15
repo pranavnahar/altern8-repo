@@ -47,7 +47,7 @@ const Sidebar = () => {
     },
     {
       label: 'Projects List',
-      href: '/projects-list',
+      href: '/projects',
       icon: <IconReceipt className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />,
     },
     {
