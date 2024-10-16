@@ -1,16 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Button,
-  IconButton,
-} from "@mui/material";
-import { parseCookies } from "nookies";
-import { useRouter } from "next/navigation";
-import { IconPaperclip, IconSend2, IconX } from "@tabler/icons-react";
-import { useToast } from "@/Utils/show-toasts";
-import { getAccessToken } from "@/Utils/auth";
+import React, { useState, useRef, useEffect } from 'react';
+import { Dialog, DialogTitle, DialogContent, Button, IconButton } from '@mui/material';
+import { parseCookies } from 'nookies';
+import { useRouter } from 'next/navigation';
+import { IconPaperclip, IconSend2, IconX } from '@tabler/icons-react';
+import { useToast } from '@/utils/show-toasts';
+import { getAccessToken } from '@/utils/auth';
 
 type Message = {
   text: string;
@@ -26,13 +20,13 @@ const ChatBox: React.FC<{
 }> = ({ onClose, showMessageBox }) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
   const [messages, setMessages] = useState<Message[]>([
     // initial messages for the chat
-    { text: "How may I help you?", sender: "admin" },
+    { text: 'How may I help you?', sender: 'admin' },
   ]);
-  const [newMessage, setNewMessage] = useState(""); // to handle new message
+  const [newMessage, setNewMessage] = useState(''); // to handle new message
   const [file, setFile] = useState<File | null>(null); // for file attachment
 
   const chatContainerRef = useRef<HTMLDivElement>(null); // for chat modal scrolling
@@ -40,7 +34,7 @@ const ChatBox: React.FC<{
   const ReplaceTokenOrRedirect = async () => {
     const token = await getAccessToken();
     if (!token) {
-      router.push("/login");
+      router.push('/login');
     } else {
       accessToken = token;
     }
@@ -79,10 +73,9 @@ const ChatBox: React.FC<{
           for (let i = 0; i < responseData.length; i++) {
             const additionalMessage = [
               {
-                text: responseData[i]["content"],
-                file: responseData[i]["file"],
-                sender:
-                  responseData[i]["type_sender"] === "User" ? "user" : "admin",
+                text: responseData[i]['content'],
+                file: responseData[i]['file'],
+                sender: responseData[i]['type_sender'] === 'User' ? 'user' : 'admin',
               },
             ];
 
@@ -92,10 +85,10 @@ const ChatBox: React.FC<{
           const newMsg = [...messages, ...addMessage];
           setMessages(newMsg);
         } else {
-          console.log("error during getting chats");
+          console.log('error during getting chats');
         }
       } catch (error) {
-        console.log("error during getting chats");
+        console.log('error during getting chats');
       }
     };
 
@@ -109,12 +102,12 @@ const ChatBox: React.FC<{
       try {
         const formData = new FormData();
         if (file) {
-          formData.append("file", file);
+          formData.append('file', file);
         }
-        formData.append("content", newMessage);
+        formData.append('content', newMessage);
 
         let response = await fetch(`${apiUrl}/chat/user/`, {
-          method: "POST",
+          method: 'POST',
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -125,7 +118,7 @@ const ChatBox: React.FC<{
           await ReplaceTokenOrRedirect();
           // Again try to fetch the data
           response = await fetch(`${apiUrl}/chat/user/`, {
-            method: "POST",
+            method: 'POST',
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
@@ -136,17 +129,17 @@ const ChatBox: React.FC<{
         if (response.ok) {
           setMessages([
             ...messages,
-            { text: newMessage, file: file ? file.name : null, sender: "user" },
+            { text: newMessage, file: file ? file.name : null, sender: 'user' },
           ]);
-          setNewMessage("");
+          setNewMessage('');
           setFile(null);
         } else {
-          console.log("message send failed!");
-          showToast(`Message Failed!`, "info");
+          console.log('message send failed!');
+          showToast(`Message Failed!`, 'info');
         }
       } catch (error) {
-        console.log("send message failed", error);
-        showToast(`Message Failed!`, "info");
+        console.log('send message failed', error);
+        showToast(`Message Failed!`, 'info');
       }
     }
   };
@@ -155,8 +148,8 @@ const ChatBox: React.FC<{
   useEffect(() => {
     if (messages.length) {
       chatContainerRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
+        behavior: 'smooth',
+        block: 'end',
       });
     }
   }, [messages.length]);
@@ -166,37 +159,34 @@ const ChatBox: React.FC<{
     // Scroll to bottom after a short delay
     setTimeout(() => {
       chatContainerRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
+        behavior: 'smooth',
+        block: 'end',
       });
     }, 100); // Adjust the delay as needed
   }, [showMessageBox]);
 
   // handle file attachment
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileInput = event.target;
     const selectedFile = fileInput.files?.[0];
 
     if (selectedFile) {
       // Check if the selected file is a PDF
       if (
-        selectedFile.type === "application/pdf" ||
-        selectedFile.type ===
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        selectedFile.type === 'application/pdf' ||
+        selectedFile.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       ) {
         // Check if the file size is below 5MB
         if (selectedFile.size <= 5 * 1024 * 1024) {
           setFile(selectedFile);
-          fileInput.value = ""; // Clear the input to allow selecting a new file
+          fileInput.value = ''; // Clear the input to allow selecting a new file
         } else {
-          alert("File size exceeds 5MB limit. Please choose a smaller file.");
-          fileInput.value = ""; // Clear the input to allow selecting a new file
+          alert('File size exceeds 5MB limit. Please choose a smaller file.');
+          fileInput.value = ''; // Clear the input to allow selecting a new file
         }
       } else {
-        alert("Please choose a PDF or Excel file.");
-        fileInput.value = ""; // Clear the input to allow selecting a new file
+        alert('Please choose a PDF or Excel file.');
+        fileInput.value = ''; // Clear the input to allow selecting a new file
       }
     }
   };
@@ -207,28 +197,29 @@ const ChatBox: React.FC<{
       onClose={onClose}
       PaperProps={{
         style: {
-          background: "linear-gradient(269.75deg, #011049, #19112f 25.75%, #251431 51.79%, #301941 64.24%, #6e3050)",
-          borderRadius: "10px",
-          color: "white", // Ensure text is visible on the gradient background
+          background:
+            'linear-gradient(269.75deg, #011049, #19112f 25.75%, #251431 51.79%, #301941 64.24%, #6e3050)',
+          borderRadius: '10px',
+          color: 'white', // Ensure text is visible on the gradient background
         },
       }}
     >
-      <DialogTitle style={{ color: "white" }}>
+      <DialogTitle style={{ color: 'white' }}>
         <span className="text-white">Chat with Admin</span>
         <IconButton
           aria-label="close"
           onClick={onClose}
           style={{
-            position: "absolute",
+            position: 'absolute',
             right: 8,
             top: 8,
-            color: "#ffffff",
+            color: '#ffffff',
           }}
         >
           <IconX />
         </IconButton>
       </DialogTitle>
-      <DialogContent sx={{ width: 600, marginY: "0px" }}>
+      <DialogContent sx={{ width: 600, marginY: '0px' }}>
         <div
           ref={chatContainerRef}
           // ref for scroll
@@ -237,7 +228,7 @@ const ChatBox: React.FC<{
           {/* showing all the messages */}
           {messages.map((message, index) => (
             <div key={index}>
-              {message.sender === "admin" ? (
+              {message.sender === 'admin' ? (
                 // if sender is admin
                 <div className="flex items-center pb-5 ">
                   <div className="bg-gray-700 mr-2 w-8 h-8 rounded-full overflow-hidden flex items-center justify-center text-gray-300">
@@ -247,9 +238,7 @@ const ChatBox: React.FC<{
                     {message.file ? (
                       <div>
                         <div>{message.text}</div>
-                        <div className="text-gray-400">
-                          {message.file.split("/").pop()}
-                        </div>
+                        <div className="text-gray-400">{message.file.split('/').pop()}</div>
                       </div>
                     ) : (
                       <div>{message.text}</div>
@@ -263,9 +252,7 @@ const ChatBox: React.FC<{
                     {message.file ? (
                       <div>
                         <div>{message.text}</div>
-                        <div className="text-gray-400">
-                          {message.file.split("/").pop()}
-                        </div>
+                        <div className="text-gray-400">{message.file.split('/').pop()}</div>
                       </div>
                     ) : (
                       <div>{message.text}</div>
@@ -280,9 +267,7 @@ const ChatBox: React.FC<{
           ))}
 
           {/* show selected file */}
-          {file && (
-            <div className="text-gray-400 mb-4">Selected file: {file.name}</div>
-          )}
+          {file && <div className="text-gray-400 mb-4">Selected file: {file.name}</div>}
 
           {/* input and button section */}
           <div className="flex items-center mt-4">
@@ -292,9 +277,9 @@ const ChatBox: React.FC<{
               placeholder="Type your message..."
               className="w-full px-3 py-2 rounded-full bg-gray-800 border border-gray-500 text-gray-300 focus:outline-none focus:ring focus:border-blue-500"
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
+              onChange={e => setNewMessage(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
                   handleSendMessage();
                 }
               }}
@@ -302,11 +287,7 @@ const ChatBox: React.FC<{
 
             {/* file attachment icon */}
             <div className="relative fill-gray-300">
-              <IconButton
-                className="h-8"
-                style={{ color: "#cbd5e0" }}
-                component="label"
-              >
+              <IconButton className="h-8" style={{ color: '#cbd5e0' }} component="label">
                 <input
                   type="file"
                   className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
@@ -322,9 +303,9 @@ const ChatBox: React.FC<{
               variant="contained"
               endIcon={<IconSend2 />}
               style={{
-                backgroundColor: "#1565c0",
-                borderRadius: "25px", // Adjust the pixel value for the desired border radius
-                padding: "7px 30px",
+                backgroundColor: '#1565c0',
+                borderRadius: '25px', // Adjust the pixel value for the desired border radius
+                padding: '7px 30px',
               }}
             >
               Send

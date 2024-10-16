@@ -24,23 +24,23 @@ const useTransactionForm = () => {
       purpose: '',
       amount: '',
       description: '',
-      approved: false,
+      approved: false as unknown as string,
       status: 'Pending for Approval',
       receipt: null,
-      timestamp: new Date(),
+      timestamp: new Date() as unknown as string,
       invoice_product: '',
       from_account: '',
       to_account: '',
     });
   };
 
-  const handleSubmit = async (submitFunction, data) => {
+  const handleSubmit = async (submitFunction: (data: any) => void, data: any) => {
     try {
       await submitFunction(data);
       resetFormData();
       return true;
     } catch (error) {
-      showToast(`${error}`, false);
+      showToast(`${error}`);
       return false;
     }
   };
@@ -48,7 +48,7 @@ const useTransactionForm = () => {
   return {
     showAddTransactionBox,
     formData,
-    handleAddTransactionSubmit: data => handleSubmit(createTransactions, data),
+    handleAddTransactionSubmit: (data: any) => handleSubmit(createTransactions, data),
     handleAddTransactionButton: () => setShowAddTransactionBox(true),
     handleCloseTransactionBoxButton: () => setShowAddTransactionBox(false),
   };
