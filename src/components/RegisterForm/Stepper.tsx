@@ -1,9 +1,9 @@
 // for register page
 // control the top register page element
 
-import React, { useState, useRef, useEffect, useContext } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
-import AnimatedLogo from "../Header/AnimatedLogo";
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import AnimatedLogo from '../Header/AnimatedLogo';
 
 const Stepper = () => {
   const { currentStep, steps, apiFailedIcon } = useContext(StepperContext);
@@ -39,7 +39,7 @@ const Stepper = () => {
       apiFailed: false,
       selected: false,
       completed: false,
-      description: "",
+      description: '',
     },
   ]);
 
@@ -52,7 +52,7 @@ const Stepper = () => {
       selected: boolean;
       completed: boolean;
       description: string;
-    }[]
+    }[],
   ) => {
     const newSteps = [...steps];
 
@@ -117,8 +117,8 @@ const Stepper = () => {
           apiFailed: false,
           highlighted: index === 0 ? true : false,
           selected: index === 0 ? true : false,
-        }
-      )
+        },
+      ),
     );
 
     stepRef.current = stepsState;
@@ -142,17 +142,15 @@ const Stepper = () => {
       <div
         key={index}
         className={
-          index !== finalStep.length - 1
-            ? "w-full flex items-center"
-            : "flex items-center"
+          index !== finalStep.length - 1 ? 'w-full flex items-center' : 'flex items-center'
         }
       >
         <div className="relative flex flex-col items-center text-gray-200">
           <div
             className={`rounded-full transition duration-500 ease-in-out border-2 border-gray-300 h-12 w-12 flex items-center justify-center py-3 ${
               step.selected && !step.apiFailed
-                ? "bg-[#1565c0] text-white font-bold border border-[#1565c0]"
-                : ""
+                ? 'bg-[#1565c0] text-white font-bold border border-[#1565c0]'
+                : ''
             } `}
           >
             {!step.apiFailed &&
@@ -164,19 +162,14 @@ const Stepper = () => {
 
             {step.apiFailed &&
               (step.completed ? (
-                <span className="text-xl font-bold text-red-700">
-                  {" "}
-                  &#10539;
-                </span>
+                <span className="text-xl font-bold text-red-700"> &#10539;</span>
               ) : (
                 index + 1
               ))}
           </div>
           <div
             className={`absolute top-0 text-center  mt-16 w-20 overflow-hidden text-xs font-medium uppercase ${
-              step.highlighted
-                ? "text-purple-600 font-semibold"
-                : "text-gray-200"
+              step.highlighted ? 'text-purple-600 font-semibold' : 'text-gray-200'
             }`}
           >
             {step.description}
@@ -184,7 +177,7 @@ const Stepper = () => {
         </div>
         <div
           className={`flex-auto border-t-2 transition duration-500 ease-in-out ${
-            step.completed ? "border-[#1565c0]" : "border-gray-300"
+            step.completed ? 'border-[#1565c0]' : 'border-gray-300'
           }`}
         ></div>
       </div>
@@ -196,9 +189,7 @@ const Stepper = () => {
       <div className="flex justify-center items-center pt-3 pb-8 text-5xl text-center sm:text-10xl font-exo lg:text-20xl text-white-font letter-spacing-2">
         <AnimatedLogo />
       </div>
-      <div className="flex items-center justify-between p-4 mx-4">
-        {displaySteps}
-      </div>
+      <div className="flex items-center justify-between p-4 mx-4">{displaySteps}</div>
     </div>
   );
 };

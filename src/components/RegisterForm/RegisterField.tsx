@@ -1,45 +1,40 @@
-import React, { useContext, useState } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
-import { Button } from "@mui/material";
-import { useSearchParams, useRouter } from "next/navigation";
-import HelpAndLogin from "../Step-Component/HelpAndLogin";
-import { useToast } from "@/utils/show-toasts";
-import { setCookie } from "nookies";
-import { IconEye, IconEyeOff } from "@tabler/icons-react";
+import React, { useContext, useState } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import { Button } from '@mui/material';
+import { useSearchParams, useRouter } from 'next/navigation';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import { useToast } from '@/Utils/show-toasts';
+import { setCookie } from 'nookies';
+import { IconEye, IconEyeOff } from '@tabler/icons-react';
 
 type Props = {
   demo: boolean;
-}
+};
 
-const Register = ({ demo } : Props) => {
+const Register = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const entityType = [
-    "Company",
-    "Partnership",
-    "Sole Proprietorship",
-    "Individual",
-    "Trust",
-  ];
+  const entityType = ['Company', 'Partnership', 'Sole Proprietorship', 'Individual', 'Trust'];
   const [userData, setUserData] = useState({
-    firstName: "",
-    phoneNumber: "",
-    password: "",
-    password2: "",
-    referredBy: "",
-    entityType: "",
+    firstName: '',
+    phoneNumber: '',
+    password: '',
+    password2: '',
+    referredBy: '',
+    entityType: '',
   });
-  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } = useContext(StepperContext);
-  const { showToast } = useToast()
+  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } =
+    useContext(StepperContext);
+  const { showToast } = useToast();
   const search = useSearchParams();
   const [termsAccepted, setTermsAccepted] = useState(true);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password2Visible, setPassword2Visible] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showWarningText, setShowWarningText] = useState(false);
-  const [currentEntity, setCurrentEntity] = useState("");
+  const [currentEntity, setCurrentEntity] = useState('');
   const router = useRouter();
 
-  userData.referredBy = search.get("referal_code")!;
+  userData.referredBy = search.get('referal_code')!;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -49,9 +44,9 @@ const Register = ({ demo } : Props) => {
   const handleNoButtonClick = () => {
     setShowConfirmationModal(false);
     if (userData.phoneNumber) {
-      setUserData((prevUserData) => ({
+      setUserData(prevUserData => ({
         ...prevUserData,
-        phoneNumber: "",
+        phoneNumber: '',
       }));
     }
     setShowWarningText(true);
@@ -59,59 +54,57 @@ const Register = ({ demo } : Props) => {
 
   const handleYesButtonClick = async () => {
     setShowConfirmationModal(false);
-    await handleSubmission("next");
+    await handleSubmission('next');
   };
 
   const handleSubmission = async (direction?: string) => {
-    console.log("handle Submission")
-    if (direction !== "next") {
-      router.push("/");
-    } else if (direction === "next") {
+    console.log('handle Submission');
+    if (direction !== 'next') {
+      router.push('/');
+    } else if (direction === 'next') {
       if (demo) {
-        router.push('/register?demo=true&step=2')
-        return
+        router.push('/register?demo=true&step=2');
+        return;
       } else {
         const updatedRecord = {
-          first_name: userData.firstName ? userData.firstName.trim() : "",
-          phone_number: userData.phoneNumber ? userData.phoneNumber.trim() : "",
-          password: userData.password ? userData.password.trim() : "",
-          reenter_password: userData.password2 ? userData.password2.trim() : "",
-          referred_by: userData.referredBy ? userData.referredBy.trim() : "",
-          entity_type: currentEntity ? currentEntity.trim() : "",
+          first_name: userData.firstName ? userData.firstName.trim() : '',
+          phone_number: userData.phoneNumber ? userData.phoneNumber.trim() : '',
+          password: userData.password ? userData.password.trim() : '',
+          reenter_password: userData.password2 ? userData.password2.trim() : '',
+          referred_by: userData.referredBy ? userData.referredBy.trim() : '',
+          entity_type: currentEntity ? currentEntity.trim() : '',
         };
 
         // password validation
-        const passwordRegex =
-          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#:])[A-Za-z\d@$!%*?&#:]{8,}$/;
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#:])[A-Za-z\d@$!%*?&#:]{8,}$/;
         const isValidPassword = passwordRegex.test(updatedRecord.password);
 
         if (updatedRecord.first_name.length < 3) {
-          showToast(`Please enter a valid name`, "info");
+          showToast(`Please enter a valid name`, 'info');
           return;
         }
         if (updatedRecord.phone_number.length !== 10) {
-          showToast(`Phone number must be a 10-digit number`, "info");
-          setUserData((prevUserData) => ({
+          showToast(`Phone number must be a 10-digit number`, 'info');
+          setUserData(prevUserData => ({
             ...prevUserData,
-            phoneNumber: "",
+            phoneNumber: '',
           }));
           return;
         }
-        if (!updatedRecord.entity_type)
-          return showToast("Select entity type", "info");
+        if (!updatedRecord.entity_type) return showToast('Select entity type', 'info');
         if (!isValidPassword) {
           showToast(
             `Password must be at least 8 characters long and include at least one letter, one digit, and one special character. Allowed special characters are: @$!%*?&#:`,
-            "info"
+            'info',
           );
           return;
         }
         if (updatedRecord.password !== updatedRecord.reenter_password) {
-          showToast(`Both password should match`, "info");
+          showToast(`Both password should match`, 'info');
           return;
         }
         if (!termsAccepted) {
-          showToast(`You must accept the terms and conditions`, "info");
+          showToast(`You must accept the terms and conditions`, 'info');
           return;
         }
 
@@ -119,56 +112,53 @@ const Register = ({ demo } : Props) => {
           const body = updatedRecord;
           setLoading(true);
           const response = await fetch(`${apiUrl}/user-api/register/`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify(body),
           });
 
           if (response.status === 409) {
-            showToast(`Phone number is already registered. Please login`, "info");
+            showToast(`Phone number is already registered. Please login`, 'info');
 
             setTimeout(() => {
-              router.push("/login");
+              router.push('/login');
             }, 3000);
           } else if (response.ok) {
             let serverMessage = await response.json();
             console.log(
               `Register Form data submitted successfully!-- ${currentStep}`,
-              serverMessage
+              serverMessage,
             );
 
-            showToast(`Submission Successful`, "info");
+            showToast(`Submission Successful`, 'info');
 
             let data = serverMessage;
 
-            setCookie(null, "accessTokenForRegister", data.access, {
+            setCookie(null, 'accessTokenForRegister', data.access, {
               maxAge: 60 * 60,
               path: '/',
-            })
+            });
 
             getRegistrationState();
           } else {
             let server_error = await response.json();
-            console.error(
-              `Failed to submit register form data.-- ${currentStep}`,
-              server_error
-            );
+            console.error(`Failed to submit register form data.-- ${currentStep}`, server_error);
 
             console.log(server_error.message);
-            showToast(`${server_error.message.phone_number[0]}`, "info");
+            showToast(`${server_error.message.phone_number[0]}`, 'info');
 
             if (!server_error.message.phone_number) {
-              showToast(`Submission Failed`, "info");
+              showToast(`Submission Failed`, 'info');
             }
           }
         } catch (error) {
           console.error(
             `Error submitting register form data, Error in fetching api (${currentStep}) :`,
-            error
+            error,
           );
-          showToast(`Submission failed, system error!`, "info");
+          showToast(`Submission failed, system error!`, 'info');
         } finally {
           setLoading(false);
         }
@@ -185,7 +175,7 @@ const Register = ({ demo } : Props) => {
   };
 
   const handleConfirmButtonClick = async () => {
-    console.log("first", 1)
+    console.log('first', 1);
     if (
       userData.firstName.length &&
       userData.phoneNumber.length &&
@@ -195,7 +185,7 @@ const Register = ({ demo } : Props) => {
     ) {
       setShowConfirmationModal(true);
     } else {
-      await handleSubmission("next");
+      await handleSubmission('next');
     }
   };
 
@@ -224,7 +214,7 @@ const Register = ({ demo } : Props) => {
         <div className="mt-2 py-1 flex text-gray-200">
           <input
             onChange={handleChange}
-            value={userData.firstName || ""}
+            value={userData.firstName || ''}
             name="firstName"
             placeholder="First Name"
             className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -241,7 +231,7 @@ const Register = ({ demo } : Props) => {
         <div className="mt-2 py-1 flex text-gray-200">
           <input
             onChange={handleChange}
-            value={userData.phoneNumber || ""}
+            value={userData.phoneNumber || ''}
             name="phoneNumber"
             placeholder="Phone Number"
             className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -253,14 +243,12 @@ const Register = ({ demo } : Props) => {
       </div>
       {!showWarningText && (
         <div className="text-gray-300 mx-2 text-sm">
-          Please input mobile number connected with PAN of the entity requesting
-          Invoice Discounting
+          Please input mobile number connected with PAN of the entity requesting Invoice Discounting
         </div>
       )}
       {showWarningText && (
         <div className="text-yellow-600 mx-2 text-sm">
-          Please input mobile number connected with PAN of the entity requesting
-          Invoice Discounting
+          Please input mobile number connected with PAN of the entity requesting Invoice Discounting
         </div>
       )}
       <div className="text-gray-300 mx-2 text-sm">
@@ -272,7 +260,7 @@ const Register = ({ demo } : Props) => {
       <div className="flex py-1 my-2 ml-2 ">
         <select
           onChange={handleSelectChange}
-          value={currentEntity || ""}
+          value={currentEntity || ''}
           name="primary account"
           className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none focus:outline-none focus:border-purple-600"
           required
@@ -303,18 +291,24 @@ const Register = ({ demo } : Props) => {
         <div className="my-2 py-1 relative">
           <input
             onChange={handleChange}
-            value={userData.password || ""}
+            value={userData.password || ''}
             name="password"
             placeholder="Password"
             className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
-            type={passwordVisible ? "text" : "password"}
+            type={passwordVisible ? 'text' : 'password'}
             autoComplete="new-password"
             required
           />
           {passwordVisible ? (
-            <IconEye onClick={handleShowPassword} className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer" />
+            <IconEye
+              onClick={handleShowPassword}
+              className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer"
+            />
           ) : (
-            <IconEyeOff onClick={handleShowPassword} className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer" />
+            <IconEyeOff
+              onClick={handleShowPassword}
+              className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer"
+            />
           )}
         </div>
       </div>
@@ -326,25 +320,30 @@ const Register = ({ demo } : Props) => {
         <div className="mt-2 py-1 relative">
           <input
             onChange={handleChange}
-            value={userData.password2 || ""}
+            value={userData.password2 || ''}
             name="password2"
             placeholder="Password"
             className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
-            type={password2Visible ? "text" : "password"}
+            type={password2Visible ? 'text' : 'password'}
             autoComplete="new-password"
             required
           />
           {password2Visible ? (
-            <IconEye onClick={handleShowPassword2} className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer" />
+            <IconEye
+              onClick={handleShowPassword2}
+              className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer"
+            />
           ) : (
-            <IconEyeOff onClick={handleShowPassword2} className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer" />
+            <IconEyeOff
+              onClick={handleShowPassword2}
+              className="size-6 absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 hover:text-gray-300 cursor-pointer"
+            />
           )}
         </div>
       </div>
       <div className="text-gray-300 mb-2 mx-2 text-sm">
-        Password must be at least 8 characters long and include at least one
-        letter, one digit, and one special character. Allowed special characters
-        are: @$!%*?&#:
+        Password must be at least 8 characters long and include at least one letter, one digit, and
+        one special character. Allowed special characters are: @$!%*?&#:
       </div>
 
       <div className="w-full mx-2 flex-1">
@@ -357,7 +356,7 @@ const Register = ({ demo } : Props) => {
               onChange={() => setTermsAccepted(!termsAccepted)}
             />
             <span className="ml-2 text-gray-300">
-              I agree to the{" "}
+              I agree to the{' '}
               <a
                 href="/terms-and-conditions"
                 target="_blank"
@@ -365,8 +364,8 @@ const Register = ({ demo } : Props) => {
                 className="text-indigo-500"
               >
                 terms and conditions
-              </a>{" "}
-              and{" "}
+              </a>{' '}
+              and{' '}
               <a
                 href="/privacy-policy"
                 target="_blank"
@@ -404,7 +403,7 @@ const Register = ({ demo } : Props) => {
             {showConfirmationModal && (
               // next button
               <button
-                onClick={() => handleSubmission("next")}
+                onClick={() => handleSubmission('next')}
                 className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
               >
                 Next
@@ -418,9 +417,7 @@ const Register = ({ demo } : Props) => {
                   <div className="relative flex flex-col   rounded-lg shadow-lg outline-none focus:outline-none [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]">
                     {/* Header */}
                     <div className="flex items-center justify-between p-5  rounded-t">
-                      <div className="text-2xl  font-semibold text-gray-300">
-                        Confirmation
-                      </div>
+                      <div className="text-2xl  font-semibold text-gray-300">Confirmation</div>
                       <button
                         className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                         onClick={() => {
@@ -436,8 +433,8 @@ const Register = ({ demo } : Props) => {
                     <div className="underline border-b-2 mx-5 border-gray-400"></div>
                     <div className="relative p-6 flex-auto">
                       <div className="text-gray-300 text-base2">
-                        Is {userData.phoneNumber} connected with PAN of the
-                        entity requesting Discounting ?
+                        Is {userData.phoneNumber} connected with PAN of the entity requesting
+                        Discounting ?
                       </div>
                     </div>
                     {/* Footer */}
@@ -445,9 +442,9 @@ const Register = ({ demo } : Props) => {
                       <div>
                         <Button
                           style={{
-                            backgroundColor: "#1565c0",
-                            borderRadius: "25px", // Adjust the pixel value for the desired border radius
-                            marginRight: "20px",
+                            backgroundColor: '#1565c0',
+                            borderRadius: '25px', // Adjust the pixel value for the desired border radius
+                            marginRight: '20px',
                           }}
                           variant="contained"
                           onClick={handleNoButtonClick}
@@ -458,9 +455,9 @@ const Register = ({ demo } : Props) => {
                       <div>
                         <Button
                           style={{
-                            backgroundColor: "#1565c0",
-                            borderRadius: "25px",
-                            marginRight: "20px",
+                            backgroundColor: '#1565c0',
+                            borderRadius: '25px',
+                            marginRight: '20px',
                           }}
                           variant="contained"
                           onClick={handleYesButtonClick}
@@ -478,6 +475,7 @@ const Register = ({ demo } : Props) => {
         </div>
       )}
     </div>
-  )}
+  );
+};
 
-  export default Register;
+export default Register;

@@ -1,22 +1,23 @@
-import React, { useContext, useState } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
-import HelpAndLogin from "../Step-Component/HelpAndLogin";
-import { parseCookies } from "nookies";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/utils/show-toasts";
+import React, { useContext, useState } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import { parseCookies } from 'nookies';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/Utils/show-toasts';
 
 type Props = {
-  demo: boolean
-}
+  demo: boolean;
+};
 
 const RERA = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { currentStep, setCurrentStep, setLoading, getRegistrationState } = useContext(StepperContext);
-  const { showToast } = useToast()
+  const { currentStep, setCurrentStep, setLoading, getRegistrationState } =
+    useContext(StepperContext);
+  const { showToast } = useToast();
 
   const [userData, setUserData] = useState({
-    Rera_username: "",
-    Rera_password: "",
+    Rera_username: '',
+    Rera_password: '',
   });
   let accessToken = parseCookies().altern8_useraccessForRegister;
   const router = useRouter();
@@ -30,19 +31,19 @@ const RERA = ({ demo }: Props) => {
   const handleClick = async (direction?: string) => {
     let newStep = currentStep;
 
-    if (direction !== "next") {
+    if (direction !== 'next') {
       newStep--;
       setCurrentStep(newStep);
-    } else if (direction === "next") {
+    } else if (direction === 'next') {
       if (demo) {
-        router.push('/register?demo=true&step=11')
-        return
+        router.push('/register?demo=true&step=11');
+        return;
       }
       const { Rera_username, Rera_password } = userData;
 
       // Validation: At least one field should be filled, and length should be greater than 5
       if (Rera_username.length < 3 || Rera_password.length < 5) {
-        showToast("Please provide a valid RERA name and password.", "info");
+        showToast('Please provide a valid RERA name and password.', 'info');
         return;
       }
 
@@ -54,38 +55,33 @@ const RERA = ({ demo }: Props) => {
 
         setLoading(true);
         const response = await fetch(`${apiUrl}/user-api/rera-details/`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              accessToken || localStorage.getItem("token")
-            }`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken || localStorage.getItem('token')}`,
           },
           body: JSON.stringify(newRecord),
         });
 
         // if unauthorized then push to login page
         if (response.status === 401) {
-          router.push("/login");
+          router.push('/login');
         }
 
         if (response.ok) {
           let server_message = await response.json();
-          console.log("RERA data submitted successfully", server_message);
+          console.log('RERA data submitted successfully', server_message);
 
-          showToast("Submission Successful", "info");
+          showToast('Submission Successful', 'info');
           getRegistrationState();
         } else {
           let server_error = await response.json();
-          console.error("RERA submission failed", server_error);
-          showToast("Submission failed!", "info");
+          console.error('RERA submission failed', server_error);
+          showToast('Submission failed!', 'info');
         }
       } catch (error) {
-        console.error(
-          `Error in submitting RERA data, (${currentStep}) :`,
-          error
-        );
-        showToast("Submission failed, system error!", "info");
+        console.error(`Error in submitting RERA data, (${currentStep}) :`, error);
+        showToast('Submission failed, system error!', 'info');
       } finally {
         setLoading(false);
       }
@@ -101,7 +97,7 @@ const RERA = ({ demo }: Props) => {
         <div className="mt-2 py-1 flex text-gray-200">
           <input
             onChange={handleChange}
-            value={userData.Rera_username || ""}
+            value={userData.Rera_username || ''}
             name="Rera_username"
             placeholder="Rera username"
             className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -117,7 +113,7 @@ const RERA = ({ demo }: Props) => {
         <div className="mt-2 py-1 flex text-gray-200">
           <input
             onChange={handleChange}
-            value={userData.Rera_password || ""}
+            value={userData.Rera_password || ''}
             name="Rera_password"
             placeholder="Rera password"
             className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -134,7 +130,7 @@ const RERA = ({ demo }: Props) => {
 
           {/* next button  */}
           <button
-            onClick={() => handleClick("next")}
+            onClick={() => handleClick('next')}
             className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
           >
             Next

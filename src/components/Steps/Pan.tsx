@@ -1,12 +1,12 @@
-import { useContext, useState, useEffect } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
-import { parseCookies } from "nookies";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/utils/show-toasts";
+import { useContext, useState, useEffect } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import { parseCookies } from 'nookies';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/Utils/show-toasts';
 
 type Props = {
-  demo: boolean
-}
+  demo: boolean;
+};
 
 const PAN = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -15,21 +15,16 @@ const PAN = ({ demo }: Props) => {
     panNumber?: string;
     [key: string]: string | undefined;
   }>({
-    panNumber: "",
+    panNumber: '',
   });
   const router = useRouter();
-  const {
-    currentStep,
-    setCurrentStep,
-    steps,
-    setLoading,
-    getRegistrationState,
-  } = useContext(StepperContext);
+  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } =
+    useContext(StepperContext);
   const [showInput, setShowInput] = useState(false);
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccessForRegister;
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
   // Handle select change
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -54,7 +49,7 @@ const PAN = ({ demo }: Props) => {
 
       // If unauthorized then push to login page
       if (response.status === 401) {
-        router.push("/login");
+        router.push('/login');
       }
 
       if (response.ok) {
@@ -63,13 +58,10 @@ const PAN = ({ demo }: Props) => {
         const panNumbers = responseData.data;
         setPanNumberList(panNumbers);
       } else {
-        console.log("Unable to fetch PAN numbers list");
+        console.log('Unable to fetch PAN numbers list');
       }
     } catch (error) {
-      console.log(
-        `Unable to fetch PAN numbers list, (${currentStep}) :`,
-        error
-      );
+      console.log(`Unable to fetch PAN numbers list, (${currentStep}) :`, error);
     } finally {
       setLoading(false);
     }
@@ -85,23 +77,23 @@ const PAN = ({ demo }: Props) => {
   const handleClick = async (direction?: string) => {
     let newStep = currentStep;
 
-    if (direction !== "next") {
+    if (direction !== 'next') {
       newStep--;
       setCurrentStep(newStep);
-    } else if (direction === "next") {
+    } else if (direction === 'next') {
       if (demo) {
-        router.push('/register?demo=true&step=6')
-        return
+        router.push('/register?demo=true&step=6');
+        return;
       }
       let newRecord: { pan_number: string } = {
-        pan_number: "",
+        pan_number: '',
       };
       newRecord.pan_number = userData.panNumber!;
 
       if (!/^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$/.test(newRecord.pan_number)) {
         showToast(
-          "PAN Number must be exactly 10 characters long, with the format: 5 letters, 4 digits, 1 letter.",
-          "info"
+          'PAN Number must be exactly 10 characters long, with the format: 5 letters, 4 digits, 1 letter.',
+          'info',
         );
         return;
       }
@@ -113,9 +105,9 @@ const PAN = ({ demo }: Props) => {
           const body = newRecord;
           setLoading(true);
           const response = await fetch(`${apiUrl}/user-api/select-pan/`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
               Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify(body),
@@ -123,32 +115,29 @@ const PAN = ({ demo }: Props) => {
 
           // If unauthorized then push to login page
           if (response.status === 401) {
-            router.push("/login");
+            router.push('/login');
           }
 
           if (response.ok) {
             let server_message = await response.json();
-            console.log(
-              `PAN page data submitted successfully.`,
-              server_message
-            );
+            console.log(`PAN page data submitted successfully.`, server_message);
 
-            showToast(`Submission Successful`, "info");
+            showToast(`Submission Successful`, 'info');
 
             // Change the step after click and submitting the data
             getRegistrationState();
           } else {
             let server_error = await response.json();
             console.error(`PAN page data submission failed`, server_error);
-            showToast(`Submission failed! ${server_error.message}`, "info");
+            showToast(`Submission failed! ${server_error.message}`, 'info');
           }
         }
       } catch (error) {
         console.error(
           `PAN page data submission failed, Error in fetching api, (${currentStep}) :`,
-          error
+          error,
         );
-        showToast(`Submission failed, system error!`, "info");
+        showToast(`Submission failed, system error!`, 'info');
       } finally {
         setLoading(false);
       }
@@ -166,7 +155,7 @@ const PAN = ({ demo }: Props) => {
           <div className="my-2 py-1 flex">
             <select
               onChange={handleSelectChange}
-              value={userData.panNumber || ""}
+              value={userData.panNumber || ''}
               name="panNumber"
               className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
               required
@@ -201,7 +190,7 @@ const PAN = ({ demo }: Props) => {
           <div className="my-2 py-1 flex">
             <input
               onChange={handleChange}
-              value={userData.panNumber || ""}
+              value={userData.panNumber || ''}
               name="panNumber"
               placeholder="Enter PAN number"
               className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -229,7 +218,7 @@ const PAN = ({ demo }: Props) => {
 
             {/* Next button */}
             <button
-              onClick={() => handleClick("next")}
+              onClick={() => handleClick('next')}
               className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
             >
               Next

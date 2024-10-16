@@ -4,10 +4,10 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../../utils/auth';
+import { getAccessToken } from '../../../Utils/auth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { IconCloudUpload } from '@tabler/icons-react';
-import { useToast } from '../../../utils/show-toasts';
+import { useToast } from '../../../Utils/show-toasts';
 import Pdf from '@/assets/pdf';
 
 const Page = () => {

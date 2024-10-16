@@ -1,44 +1,38 @@
 // get the gst details of the user
 
-import { useContext, useState, useEffect } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
+import { useContext, useState, useEffect } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
 //import HelpAndLogin from "./stepsComponents/HelpAndLogin";
-import { parseCookies } from "nookies";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/utils/show-toasts";
+import { parseCookies } from 'nookies';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/Utils/show-toasts';
 
 type Props = {
-  demo: boolean
-}
+  demo: boolean;
+};
 
 const GST = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [userData, setUserData] = useState({
-    gstNumber: "",
-    gstUsername: "",
-    gstPassword: "",
-    otp: "",
+    gstNumber: '',
+    gstUsername: '',
+    gstPassword: '',
+    otp: '',
   });
   const router = useRouter();
   const [alreadyHaveGstin, setAlreadyHaveGstin] = useState(false);
-  const [atleastOneGstinSubmitted, setAtleastOneGstinSubmitted] =
-    useState(false);
+  const [atleastOneGstinSubmitted, setAtleastOneGstinSubmitted] = useState(false);
   const [isIasEnabled, setIsIasEnabled] = useState(true);
   const [currentGstinList, setCurrentGstinList] = useState([
-    "123321123321",
-    "gjkgj1232jkgh",
-    "gjkgj1232jk00",
+    '123321123321',
+    'gjkgj1232jkgh',
+    'gjkgj1232jk00',
   ]);
-  const {
-    currentStep,
-    setCurrentStep,
-    steps,
-    setLoading,
-    getRegistrationState,
-  } = useContext(StepperContext);
+  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } =
+    useContext(StepperContext);
   const [otpSent, setOtpSent] = useState(false);
   const [otpTimer, setOtpTimer] = useState(10);
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccessForRegister;
@@ -55,7 +49,7 @@ const GST = ({ demo }: Props) => {
     if (checked) {
       setUserData({ ...userData, gstNumber: value });
     } else {
-      setUserData({ ...userData, gstNumber: "" });
+      setUserData({ ...userData, gstNumber: '' });
     }
   };
 
@@ -70,7 +64,7 @@ const GST = ({ demo }: Props) => {
 
       // if unauthorized then push to login page
       if (response.status === 401) {
-        router.push("/login");
+        router.push('/login');
       }
 
       if (response.ok) {
@@ -78,7 +72,7 @@ const GST = ({ demo }: Props) => {
         console.log(responseData);
         if (responseData.data) {
           const gstinNumbers = responseData.data;
-          console.log("gstin list:", gstinNumbers);
+          console.log('gstin list:', gstinNumbers);
           setCurrentGstinList(gstinNumbers);
 
           if (gstinNumbers.length > 0) {
@@ -90,14 +84,11 @@ const GST = ({ demo }: Props) => {
         }
       } else {
         let responseData = await response.json();
-        console.log("Unable to fetch gst numbers list", responseData);
+        console.log('Unable to fetch gst numbers list', responseData);
         setAlreadyHaveGstin(false);
       }
     } catch (error) {
-      console.log(
-        `Unable to fetch gst numbers list, (${currentStep}) :`,
-        error
-      );
+      console.log(`Unable to fetch gst numbers list, (${currentStep}) :`, error);
       setAlreadyHaveGstin(false);
     } finally {
       setLoading(false);
@@ -112,31 +103,31 @@ const GST = ({ demo }: Props) => {
 
   const handleClick = async (direction?: string) => {
     let newStep = currentStep;
-    if (direction !== "next") {
+    if (direction !== 'next') {
       newStep--;
       setCurrentStep(newStep);
-    } else if (direction === "next") {
+    } else if (direction === 'next') {
       if (demo) {
-        router.push('/register?demo=true&step=9')
-        return
+        router.push('/register?demo=true&step=9');
+        return;
       }
       let newRecord: { gstIn: string; username: string; password: string } = {
-        gstIn: "",
-        username: "",
-        password: "",
+        gstIn: '',
+        username: '',
+        password: '',
       };
       newRecord.gstIn = userData.gstNumber;
       newRecord.username = userData.gstUsername;
 
       if (!alreadyHaveGstin) {
         if (newRecord.gstIn.length !== 15) {
-          showToast(`GSTIN Number must contain 15 digits`, "info");
+          showToast(`GSTIN Number must contain 15 digits`, 'info');
           return;
         }
       }
 
       if (newRecord.username.length < 3) {
-        showToast(`Enter a valid gst username`, "info");
+        showToast(`Enter a valid gst username`, 'info');
         return;
       }
       if (!isIasEnabled) {
@@ -148,61 +139,10 @@ const GST = ({ demo }: Props) => {
             // temp
             // setOtpSent(true);
             // return;
-            const response = await fetch(
-              `${apiUrl}/scoreme-api/gst/external/gstgenerateotp/`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(body),
-              }
-            );
-
-            if (response.ok) {
-              let server_message = await response.json();
-              console.log(`GST data submitted successfully`, server_message);
-
-              // set otp state
-              setOtpSent(true);
-              showToast(`Submission successful`, "info");
-            } else {
-              let server_error = await response.json();
-              console.error(`Failed to submit GST data`, server_error);
-
-              // temp
-              // set otp state
-              // setOtpSent(true);
-
-              showToast(`Submission failed! ${server_error.message}`, "info");
-            }
-          }
-        } catch (error) {
-          console.error(
-            `Error submitting GST form data, (${currentStep}) :`,
-            error
-          );
-          showToast(`Submission failed, system error!`, "info");
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        // for IAS GST Scoreme api
-        newRecord.password = userData.gstPassword;
-        if (newRecord.password.length < 3) {
-          showToast(`Please enter a valid gst password`, "info");
-          return;
-        }
-        console.log(newRecord);
-        try {
-          if (newRecord) {
-            const body = newRecord;
-            setLoading(true);
-            const response = await fetch(`${apiUrl}/user-api/ias-gst/`, {
-              method: "POST",
+            const response = await fetch(`${apiUrl}/scoreme-api/gst/external/gstgenerateotp/`, {
+              method: 'POST',
               headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
                 Authorization: `Bearer ${accessToken}`,
               },
               body: JSON.stringify(body),
@@ -212,19 +152,61 @@ const GST = ({ demo }: Props) => {
               let server_message = await response.json();
               console.log(`GST data submitted successfully`, server_message);
 
-              showToast(`Submission successful`, "info");
+              // set otp state
+              setOtpSent(true);
+              showToast(`Submission successful`, 'info');
             } else {
               let server_error = await response.json();
               console.error(`Failed to submit GST data`, server_error);
-              showToast(`Submission failed! ${server_error.message}`, "info");
+
+              // temp
+              // set otp state
+              // setOtpSent(true);
+
+              showToast(`Submission failed! ${server_error.message}`, 'info');
             }
           }
         } catch (error) {
-          console.error(
-            `Error submitting GST form data, (${currentStep}) :`,
-            error
-          );
-          showToast(`Submission failed, system error!`, "info");
+          console.error(`Error submitting GST form data, (${currentStep}) :`, error);
+          showToast(`Submission failed, system error!`, 'info');
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        // for IAS GST Scoreme api
+        newRecord.password = userData.gstPassword;
+        if (newRecord.password.length < 3) {
+          showToast(`Please enter a valid gst password`, 'info');
+          return;
+        }
+        console.log(newRecord);
+        try {
+          if (newRecord) {
+            const body = newRecord;
+            setLoading(true);
+            const response = await fetch(`${apiUrl}/user-api/ias-gst/`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify(body),
+            });
+
+            if (response.ok) {
+              let server_message = await response.json();
+              console.log(`GST data submitted successfully`, server_message);
+
+              showToast(`Submission successful`, 'info');
+            } else {
+              let server_error = await response.json();
+              console.error(`Failed to submit GST data`, server_error);
+              showToast(`Submission failed! ${server_error.message}`, 'info');
+            }
+          }
+        } catch (error) {
+          console.error(`Error submitting GST form data, (${currentStep}) :`, error);
+          showToast(`Submission failed, system error!`, 'info');
         } finally {
           setLoading(false);
         }
@@ -235,10 +217,10 @@ const GST = ({ demo }: Props) => {
   // to send the otp
   const handleSendOtp = async () => {
     if (demo) {
-      setCurrentStep(9)
+      setCurrentStep(9);
     }
     if (userData.otp.length < 4) {
-      showToast(`Enter valid OTP`, "info");
+      showToast(`Enter valid OTP`, 'info');
       return;
     }
 
@@ -253,23 +235,20 @@ const GST = ({ demo }: Props) => {
       console.log(body);
       // temp
       // return;
-      const response = await fetch(
-        `${apiUrl}/scoreme-api/gst/external/gstauthentication/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
+      const response = await fetch(`${apiUrl}/scoreme-api/gst/external/gstauthentication/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
 
-          body: JSON.stringify(body),
-        }
-      );
+        body: JSON.stringify(body),
+      });
 
       if (response.ok) {
         let responseData = await response.json();
         console.log(responseData);
-        console.log("Otp submitted, get success");
+        console.log('Otp submitted, get success');
         setAtleastOneGstinSubmitted(true);
 
         if (atleastOneGstinSubmitted) {
@@ -278,19 +257,16 @@ const GST = ({ demo }: Props) => {
       } else {
         let server_error = await response.json();
         if (server_error.message) {
-          console.error("Failed to submit otp", server_error.message);
-          showToast(`Failed to submit otp, ${server_error.message}`, "info");
+          console.error('Failed to submit otp', server_error.message);
+          showToast(`Failed to submit otp, ${server_error.message}`, 'info');
         } else {
-          console.error("Failed to submit otp", server_error);
-          showToast(`Failed to submit otp`, "info");
+          console.error('Failed to submit otp', server_error);
+          showToast(`Failed to submit otp`, 'info');
         }
       }
     } catch (error) {
-      console.error(
-        `Server Connection Error during otp, (${currentStep}) :`,
-        error
-      );
-      showToast(`Failed to send otp, system error`, "info");
+      console.error(`Server Connection Error during otp, (${currentStep}) :`, error);
+      showToast(`Failed to send otp, system error`, 'info');
     } finally {
       setLoading(false);
     }
@@ -302,7 +278,7 @@ const GST = ({ demo }: Props) => {
     // Start the countdown when otpSent is true
     if (otpSent) {
       intervalId = setInterval(() => {
-        setOtpTimer((prevTimer) => {
+        setOtpTimer(prevTimer => {
           if (prevTimer === 0) {
             clearInterval(intervalId);
             setOtpSent(false);
@@ -340,9 +316,7 @@ const GST = ({ demo }: Props) => {
                 />
               </svg>
             </div>
-            <div>
-              AA GST fetch Failed, No problem lets try from GSTIN Website
-            </div>
+            <div>AA GST fetch Failed, No problem lets try from GSTIN Website</div>
           </div>
 
           {alreadyHaveGstin && (
@@ -353,10 +327,7 @@ const GST = ({ demo }: Props) => {
               <div className="flex justify-start py-1 my-2 ">
                 <div>
                   {currentGstinList.map((currentGstin, index) => (
-                    <label
-                      key={index}
-                      className="block mx-2 font-medium text-gray-300 text-start"
-                    >
+                    <label key={index} className="block mx-2 font-medium text-gray-300 text-start">
                       <input
                         type="checkbox"
                         onChange={handleChangeInSelect}
@@ -383,7 +354,7 @@ const GST = ({ demo }: Props) => {
               <div className="flex py-1 my-2 ">
                 <input
                   onChange={handleChange}
-                  value={userData.gstNumber || ""}
+                  value={userData.gstNumber || ''}
                   name="gstNumber"
                   placeholder="GSTIN"
                   className="w-full py-1 text-gray-100 uppercase transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
@@ -402,7 +373,7 @@ const GST = ({ demo }: Props) => {
             <div className="flex py-1 my-2 ">
               <input
                 onChange={handleChange}
-                value={userData.gstUsername || ""}
+                value={userData.gstUsername || ''}
                 name="gstUsername"
                 placeholder="GST Username"
                 className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
@@ -420,7 +391,7 @@ const GST = ({ demo }: Props) => {
               <div className="flex py-1 my-2 ">
                 <input
                   onChange={handleChange}
-                  value={userData.gstPassword || ""}
+                  value={userData.gstPassword || ''}
                   name="gstPassword"
                   placeholder="GST Password"
                   className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
@@ -443,7 +414,7 @@ const GST = ({ demo }: Props) => {
               <div className="flex py-1 my-2 ">
                 <input
                   onChange={handleChange}
-                  value={userData.otp || ""}
+                  value={userData.otp || ''}
                   name="otp"
                   placeholder="OTP"
                   className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
@@ -473,7 +444,7 @@ const GST = ({ demo }: Props) => {
             {/* next button  */}
             {!otpSent && (
               <button
-                onClick={() => handleClick("next")}
+                onClick={() => handleClick('next')}
                 className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
               >
                 Next

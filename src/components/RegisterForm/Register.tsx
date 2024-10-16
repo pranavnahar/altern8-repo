@@ -1,32 +1,32 @@
-"use client";
-import React, { useState, useEffect, Suspense } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
-import Stepper from "../../components/RegisterForm/Stepper";
-import RegisterField from "../../components/RegisterForm/RegisterField";
-import SelectPrimaryBankAccount from "../../components/Steps/SelectPrimaryBankAccount";
-import ITR from "../../components/Steps/ITR";
-import PAN from "../../components/Steps/Pan";
-import GST from "../../components/Steps/GST";
-import { motion } from "framer-motion"; // for animation
-import { parseCookies } from "nookies";
-import LinearBuffer from "../../components/LinearBuffer"; //for progress animation
-import POC from "../Steps/POC";
-import BureauReport from "../Steps/BereauReport";
-import AuthorizationCompliance from "../Steps/AuthorizationCompliance";
-import UploadContract from "../Steps/UploadContract";
-import BankDetails from "../Steps/BankDetails";
-import HelpPage from "../../app/(dashboard)/help/page";
-import Accounting from "../Steps/Accounting";
-import RERA from "../Steps/RERA";
-import Udyam from "../Steps/Udyam";
-import Pending from "../Steps/Pending";
-import { useRouter, useSearchParams } from "next/navigation";
+'use client';
+import React, { useState, useEffect, Suspense } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import Stepper from '../../components/RegisterForm/Stepper';
+import RegisterField from '../../components/RegisterForm/RegisterField';
+import SelectPrimaryBankAccount from '../../components/Steps/SelectPrimaryBankAccount';
+import ITR from '../../components/Steps/ITR';
+import PAN from '../../components/Steps/Pan';
+import GST from '../../components/Steps/GST';
+import { motion } from 'framer-motion'; // for animation
+import { parseCookies } from 'nookies';
+import LinearBuffer from '../../components/LinearBuffer'; //for progress animation
+import POC from '../Steps/POC';
+import BureauReport from '../Steps/BereauReport';
+import AuthorizationCompliance from '../Steps/AuthorizationCompliance';
+import UploadContract from '../Steps/UploadContract';
+import BankDetails from '../Steps/BankDetails';
+import HelpPage from '../../app/(dashboard)/help/page';
+import Accounting from '../Steps/Accounting';
+import RERA from '../Steps/RERA';
+import Udyam from '../Steps/Udyam';
+import Pending from '../Steps/Pending';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type Props = {
   demo: boolean;
-}
+};
 
-const Register = ({ demo } : Props) => {
+const Register = ({ demo }: Props) => {
   const [currentStep, setCurrentStep] = useState(1); // to handle multiple registration steps
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [apiFailedIcon, setApiFailedIcon] = useState(false); //to display cross instead of tick in stepper , where any api failed and manually upload require
@@ -38,37 +38,30 @@ const Register = ({ demo } : Props) => {
   const searchParams = useSearchParams();
 
   const steps = [
-    "Register",
-    "POC",
-    "Bank Details",
-    "Select Bank",
-    "PAN",
-    "ITR",
-    "Bureau Report",
-    "GST",
-    "Accounting Data",
-    "RERA",
-    "Udyam",
-    "Upload Contract",
-    "Authorization Compliance",
-    "Pending",
+    'Register',
+    'POC',
+    'Bank Details',
+    'Select Bank',
+    'PAN',
+    'ITR',
+    'Bureau Report',
+    'GST',
+    'Accounting Data',
+    'RERA',
+    'Udyam',
+    'Upload Contract',
+    'Authorization Compliance',
+    'Pending',
   ]; //registration steps
 
   // set current page state if stepName is provided
-  const setRegistrationState = async (
-    stateName: string,
-    currentPage?: string
-  ) => {
-
+  const setRegistrationState = async (stateName: string, currentPage?: string) => {
     const registrationStepIndex = steps.indexOf(stateName);
     if (registrationStepIndex !== -1) {
       setCurrentStep(registrationStepIndex + 1);
     } else {
-      console.log("got invalid state name", stateName);
-      if (
-        stateName === "Pending for Maker" ||
-        stateName === "Pending for Checker"
-      ) {
+      console.log('got invalid state name', stateName);
+      if (stateName === 'Pending for Maker' || stateName === 'Pending for Checker') {
         setCurrentStep(steps.length);
       } else {
         setCurrentStep(1);
@@ -77,10 +70,7 @@ const Register = ({ demo } : Props) => {
   };
 
   // get seller registration state from backend
-  const getRegistrationState = async (
-    stateName?: string,
-    currentPage?: string
-  ) => {
+  const getRegistrationState = async (stateName?: string, currentPage?: string) => {
     let accessToken = parseCookies().altern8_useraccessForRegister;
     // if the cookies don't have access token for register
     if (!accessToken || accessToken.length < 5) {
@@ -101,25 +91,18 @@ const Register = ({ demo } : Props) => {
 
           // if unauthorized then push to login page
           if (!demo && response.status === 401) {
-            return router.push("/login");
+            return router.push('/login');
           }
 
           if (response.ok) {
             let server_message = await response.json();
             const registration_step = server_message.user_state;
-            if (registration_step === "Approved")
-              return router.push("/dashboard");
-            console.log(
-              `Seller step fetched successfully! ${registration_step}`,
-              server_message
-            );
+            if (registration_step === 'Approved') return router.push('/dashboard');
+            console.log(`Seller step fetched successfully! ${registration_step}`, server_message);
             setRegistrationState(registration_step);
           } else {
             let server_error = await response.json();
-            console.error(
-              `Failed to fetch seller state from backend`,
-              server_error
-            );
+            console.error(`Failed to fetch seller state from backend`, server_error);
           }
         } catch (error) {
           console.error(`Failed to fetch seller state from backend`, error);
