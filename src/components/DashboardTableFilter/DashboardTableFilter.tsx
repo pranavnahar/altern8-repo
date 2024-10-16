@@ -243,6 +243,25 @@ const DashboardTableFilter: React.FC = () => {
       min: 0,
       max: 100,
     },
+    {
+      type: 'file',
+      label: 'Upload your Sale deed',
+      name: 'salesDeeed',
+      required: false,
+    },
+    {
+      type: 'file',
+      label: 'Upload your Encumberance certificate',
+      name: 'salesDeeed',
+      required: false,
+    },
+    {
+      type: 'checkbox',
+      label: 'Upload rest of your documents',
+      name: 'uploadDocuments',
+      values: ['Fetch details for me', 'I will provide all the documents', 'I have partial documents which ill provide'], // Specify checkbox options
+      required: false,
+  },
   ];
   const listData: datasList[] = [
     {

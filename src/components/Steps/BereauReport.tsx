@@ -1,10 +1,10 @@
 import { useContext, useState, useEffect } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
+import { StepperContext } from "../../Contexts/StepperContext";
 import HelpAndLogin from "../Step-Component/HelpAndLogin";
 import { parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import { useDropzone } from "react-dropzone";
-import { useToast } from "@/utils/show-toasts";
+import { useToast } from "@/Utils/show-toasts";
 
 type Props = {
   demo: boolean

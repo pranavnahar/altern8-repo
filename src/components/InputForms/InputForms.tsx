@@ -9,7 +9,7 @@ import { FormInput } from '../LedgerTypeTable/Filter';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import DatePicker from '../DatePicker/DatePicker';
 import FileUpload from '../FileUpload/FileUpload';
-import { apiUrl, getAccessToken } from '@/utils/auth';
+import { apiUrl, getAccessToken } from '@/Utils/auth';
 import { parseCookies } from 'nookies';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -34,16 +34,15 @@ type RenderInputsProps = {
 
 export const RenderInputs = ({ item, formData, setFormData }: RenderInputsProps) => {
   const onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
+    (acceptedFiles: File[], fieldName: string) => {
       setFormData(prevFormData => ({
         ...prevFormData,
-        [item.name]: acceptedFiles,
+        [fieldName]: [...(prevFormData[fieldName] as File[] || []), ...acceptedFiles],
       }));
     },
-    [item, setFormData],
+    [setFormData],
   );
 
-  //onchange function for inputs
   const onChange = (e: ChangeEvent<HTMLInputElement>, type: keyof FormData) => {
     e.preventDefault();
     setFormData(prevFormData => ({
@@ -52,11 +51,48 @@ export const RenderInputs = ({ item, formData, setFormData }: RenderInputsProps)
     }));
   };
 
+  const radioChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [item.name]: value,
+    }));
+  };
+
   const dateOnChange = (e: Date | undefined, type: keyof FormData) => {
     setFormData(prevFormData => ({
       ...prevFormData,
       [type]: e,
     }));
+  };
+
+  const renderFileUploadOptions = () => {
+    const selectedOption = formData[item.name as keyof FormData];
+    const fileOptions = [
+      'Title deed', 'FMB', 'TSLR Records', 'Patta/Chitta', 
+      'Guideline value', 'Mortage report', 'Property tax receipt'
+    ];
+
+    if (selectedOption === 'I will provide all the documents' || 
+        selectedOption === 'I have partial documents which ill provide') {
+      return (
+        <>
+          <p className="text-sm text-yellow-500">
+            {selectedOption === 'I will provide all the documents' 
+              ? 'Please upload all the required files:' 
+              : 'Upload any documents you have (Optional):'}
+          </p>
+          {fileOptions.map((label) => (
+            <FileUpload 
+              key={label} 
+              onDrop={(files) => onDrop(files, label)} 
+              label={label}
+            />
+          ))}
+        </>
+      );
+    }
+    return null;
   };
 
   return (
@@ -81,14 +117,27 @@ export const RenderInputs = ({ item, formData, setFormData }: RenderInputsProps)
         </Select>
       ) : item?.type === 'datepicker' ? (
         <DatePicker
-          date={
-            (formData[item.name as keyof FormData] as any) || new Date()
-            // Used ANY here because getting error and cant find solution for now.
-          }
+          date={(formData[item.name as keyof FormData] as any) || new Date()}
           handleDateChange={e => dateOnChange(e, item.name as keyof FormData)}
         />
       ) : item?.type === 'file' ? (
-        <FileUpload onDrop={onDrop} />
+        <FileUpload onDrop={(files) => onDrop(files, item.name)} />
+      ) : item?.type === 'checkbox' ? (
+        Array.isArray(item.values) && item.values.map((value) => (
+          <div key={value} className="flex items-center mb-2 text-white text-xs">
+            <input
+              type="radio"
+              name={item.name}
+              value={value}
+              onChange={radioChange}
+              checked={formData[item.name as keyof FormData] === value}
+              id={value}
+            />
+            <label htmlFor={value} className="ml-2">
+              {value}
+            </label>
+          </div>
+        ))
       ) : (
         <Input
           type={item.type}
@@ -101,6 +150,7 @@ export const RenderInputs = ({ item, formData, setFormData }: RenderInputsProps)
           max={item.max}
         />
       )}
+      {renderFileUploadOptions()}
     </>
   );
 };
