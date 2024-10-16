@@ -7,12 +7,12 @@ import { IconLogout, IconSend2, IconUserCircle } from '@tabler/icons-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import ChatBox from '@/components/mui/Chatbox';
-import { fetchWithAuth } from '../../../utils/fetch-with-auth'; 
-import { DashboardContext } from '../../../contexts/DashboardContext'; 
+import { fetchWithAuth } from '../../../Utils/fetch-with-auth';
+import { DashboardContext } from '../../../Contexts/DashboardContext';
 import { showToast } from '@/Helpers/show-toasts';
 import { useRouter } from 'next/compat/router';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../../utils/auth'; 
+import { getAccessToken } from '../../../Utils/auth';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 

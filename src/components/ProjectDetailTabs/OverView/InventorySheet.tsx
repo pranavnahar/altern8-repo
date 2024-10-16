@@ -1,17 +1,13 @@
-import React, { useState } from "react";
-import {
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "../../../components/ui/sheet";
-import { Label } from "../../../components/ui/label";
-import { Input } from "../../../components//ui/input";
-import { Button } from "../../../components//ui/button";
-import { useParams } from "next/navigation";
-import { toast } from "react-toastify";
-import { getAccessToken } from "../../../Utils/auth";
-import { parseCookies } from "nookies";
-import { apiUrl } from "@/Utils/auth";
+import React, { useState } from 'react';
+import { SheetDescription, SheetHeader, SheetTitle } from '../../../components/ui/sheet';
+import { Label } from '../../../components/ui/label';
+import { Input } from '../../../components//ui/input';
+import { Button } from '../../../components//ui/button';
+import { useParams } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { getAccessToken } from '../../../Utils/auth';
+import { parseCookies } from 'nookies';
+import { apiUrl } from '@/Utils/auth';
 
 const InventorySheet = () => {
   const params = useParams();
@@ -29,7 +25,7 @@ const InventorySheet = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]: value,
     }));
@@ -40,7 +36,7 @@ const InventorySheet = () => {
   const ReplaceTokenOrRedirect = async (): Promise<void> => {
     const token = await getAccessToken();
     if (!token) {
-      window.location.replace("/login");
+      window.location.replace('/login');
     } else {
       altern8_adminaccess = token;
     }
@@ -53,43 +49,37 @@ const InventorySheet = () => {
         await ReplaceTokenOrRedirect();
       }
 
-      let response = await fetch(
-        `${apiUrl}/rablet-api/projects/${templateId}/inventories/`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${altern8_adminaccess}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      let response = await fetch(`${apiUrl}/rablet-api/projects/${templateId}/inventories/`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${altern8_adminaccess}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (response.status === 401) {
         await ReplaceTokenOrRedirect();
-        response = await fetch(
-          `${apiUrl}/rablet-api/projects/${templateId}/inventories/`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${altern8_adminaccess}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
+        response = await fetch(`${apiUrl}/rablet-api/projects/${templateId}/inventories/`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${altern8_adminaccess}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
       }
       if (response.ok) {
         const responseData = await response.json();
         console.log(responseData);
-        toast("Document saved !");
+        toast('Document saved !');
       } else {
-        console.error("Failed to add profile data:", response.status);
-        toast("Failure");
+        console.error('Failed to add profile data:', response.status);
+        toast('Failure');
       }
     } catch (error) {
-      console.log("Error during adding profile data:", error);
-      toast("UI Is Initialized");
+      console.log('Error during adding profile data:', error);
+      toast('UI Is Initialized');
     }
   };
 

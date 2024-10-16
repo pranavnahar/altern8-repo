@@ -1,14 +1,14 @@
-import { useContext, useState, useEffect } from "react";
-import { StepperContext } from "../../Contexts/StepperContext";
-import HelpAndLogin from "../Step-Component/HelpAndLogin";
-import { parseCookies } from "nookies";
-import { useRouter } from "next/navigation";
-import { useDropzone } from "react-dropzone";
-import { useToast } from "@/Utils/show-toasts";
+import { useContext, useState, useEffect } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import { parseCookies } from 'nookies';
+import { useRouter } from 'next/navigation';
+import { useDropzone } from 'react-dropzone';
+import { useToast } from '@/Utils/show-toasts';
 
 type Props = {
-  demo: boolean
-}
+  demo: boolean;
+};
 
 interface DocumentFiles {
   [key: string]: File[];
@@ -18,18 +18,17 @@ const BureauReport = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const { currentStep, setCurrentStep, setLoading, getRegistrationState } =
     useContext(StepperContext);
-  const [referenceId, setReferenceId] = useState("");
+  const [referenceId, setReferenceId] = useState('');
   const [otpForm, setOtpForm] = useState({
-    otp: "",
+    otp: '',
   });
   const [otpSent, setOtpSent] = useState(true);
-  const [manualBureauReportNeeded, setManualBureauReportNeeded] =
-    useState(false);
-  const [entityType, setEntityType] = useState("");
+  const [manualBureauReportNeeded, setManualBureauReportNeeded] = useState(false);
+  const [entityType, setEntityType] = useState('');
   console.log(entityType);
   const [otpTimer, setOtpTimer] = useState(60);
   const [documentFiles, setDocumentFiles] = useState<DocumentFiles>({});
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccessForRegister;
@@ -46,7 +45,7 @@ const BureauReport = ({ demo }: Props) => {
     try {
       setLoading(true);
       let response = await fetch(`${apiUrl}/user-api/bureau-report/`, {
-        method: "POST",
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -54,7 +53,7 @@ const BureauReport = ({ demo }: Props) => {
 
       // if unauthorized then push to login page
       if (response.status === 401) {
-        router.push("/login");
+        router.push('/login');
       }
 
       if (response.ok) {
@@ -71,22 +70,16 @@ const BureauReport = ({ demo }: Props) => {
             setOtpSent(true);
           } else {
             setTimeout(() => {
-              showToast(
-                `Unable to get reference ID, please try again later.`,
-                "info"
-              );
+              showToast(`Unable to get reference ID, please try again later.`, 'info');
             }, 1000);
           }
         }
       } else {
-        console.log("Unable to fetch reference id for Bureau report");
+        console.log('Unable to fetch reference id for Bureau report');
         //getRegistrationState();
       }
     } catch (error) {
-      console.log(
-        `Unable to fetch reference id for Bureau report, (${currentStep}) :`,
-        error
-      );
+      console.log(`Unable to fetch reference id for Bureau report, (${currentStep}) :`, error);
     } finally {
       setLoading(false);
     }
@@ -102,24 +95,24 @@ const BureauReport = ({ demo }: Props) => {
   const handleClick = async (direction?: string) => {
     let newStep = currentStep;
 
-    if (direction !== "next") {
+    if (direction !== 'next') {
       newStep--;
       setCurrentStep(newStep);
-    } else if (direction === "next") {
+    } else if (direction === 'next') {
       if (demo) {
-        router.push('/register?demo=true&step=8')
-        return
+        router.push('/register?demo=true&step=8');
+        return;
       }
       if (!manualBureauReportNeeded) {
         const newRecord: { otp: string; referenceId: string } = {
-          otp: "",
-          referenceId: "",
+          otp: '',
+          referenceId: '',
         };
         newRecord.otp = otpForm.otp;
         newRecord.referenceId = referenceId;
 
-        if (newRecord["otp"].length < 3) {
-          showToast(`Please enter valid otp`, "info");
+        if (newRecord['otp'].length < 3) {
+          showToast(`Please enter valid otp`, 'info');
           return;
         }
 
@@ -128,40 +121,31 @@ const BureauReport = ({ demo }: Props) => {
             const body = newRecord;
             console.log(body);
             setLoading(true);
-            const response = await fetch(
-              `${apiUrl}/scoreme-api/bda/external/validateotp/`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(body),
-              }
-            );
+            const response = await fetch(`${apiUrl}/scoreme-api/bda/external/validateotp/`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify(body),
+            });
 
             if (response.ok) {
               let server_message = await response.json();
-              console.log(
-                `Bureau Report submission successful`,
-                server_message
-              );
-              showToast(`Submission Successful`, "info");
+              console.log(`Bureau Report submission successful`, server_message);
+              showToast(`Submission Successful`, 'info');
 
               // change the step after click and submitting the data
               getRegistrationState();
             } else {
               let server_error = await response.json();
               console.error(`Bureau Report submission failed!`, server_error);
-              showToast(`Submission failed! ${server_error.message}`, "info");
+              showToast(`Submission failed! ${server_error.message}`, 'info');
             }
           }
         } catch (error) {
-          console.error(
-            `Bureau Report submission failed!, (${currentStep}) :`,
-            error
-          );
-          showToast(`Submission failed, system error!`, "info");
+          console.error(`Bureau Report submission failed!, (${currentStep}) :`, error);
+          showToast(`Submission failed, system error!`, 'info');
         } finally {
           setLoading(false);
         }
@@ -174,36 +158,33 @@ const BureauReport = ({ demo }: Props) => {
         });
 
         if (Array.from(formData.values()).length === 0) {
-          showToast("Please select files", "info");
+          showToast('Please select files', 'info');
           return;
         }
 
         try {
           setLoading(true);
-          const response = await fetch(
-            `${apiUrl}/user-api/upload-bureau-docs/`,
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-              body: formData,
-            }
-          );
+          const response = await fetch(`${apiUrl}/user-api/upload-bureau-docs/`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: formData,
+          });
 
           if (response.status === 401) {
-            router.push("/login");
+            router.push('/login');
           }
 
           if (response.ok) {
-            showToast("Files uploaded successfully", "info");
+            showToast('Files uploaded successfully', 'info');
             getRegistrationState();
           } else {
-            showToast("File upload failed", "info");
+            showToast('File upload failed', 'info');
           }
         } catch (error) {
-          console.error("Error uploading files:", error);
-          showToast("Error uploading files", "info");
+          console.error('Error uploading files:', error);
+          showToast('Error uploading files', 'info');
         } finally {
           setLoading(false);
         }
@@ -216,41 +197,35 @@ const BureauReport = ({ demo }: Props) => {
     try {
       setLoading(true);
       const newRecord: { referenceId: string } = {
-        referenceId: "",
+        referenceId: '',
       };
       newRecord.referenceId = referenceId;
       console.log(newRecord);
-      const response = await fetch(
-        `${apiUrl}/scoreme-api/bda/external/resendotp/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newRecord),
-        }
-      );
+      const response = await fetch(`${apiUrl}/scoreme-api/bda/external/resendotp/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newRecord),
+      });
 
       if (response.ok) {
         let responseData = await response.json();
-        console.log("otp sent, get success", responseData);
+        console.log('otp sent, get success', responseData);
         setOtpSent(true);
-        otpForm.otp = "";
+        otpForm.otp = '';
       } else {
         let server_error = await response.json();
 
         // empty previous otp in login form field
-        otpForm.otp = "";
-        console.error("Failed to send otp", server_error);
-        showToast(`Failed to send otp,${server_error.message}`, "info");
+        otpForm.otp = '';
+        console.error('Failed to send otp', server_error);
+        showToast(`Failed to send otp,${server_error.message}`, 'info');
       }
     } catch (error) {
       console.log(error);
-      console.error(
-        "Server Connection Error during otp, (${currentStep}) :",
-        error
-      );
-      showToast(`Failed to send otp, system error`, "info");
+      console.error('Server Connection Error during otp, (${currentStep}) :', error);
+      showToast(`Failed to send otp, system error`, 'info');
     } finally {
       setLoading(false);
     }
@@ -263,7 +238,7 @@ const BureauReport = ({ demo }: Props) => {
       setOtpTimer(60);
 
       intervalId = setInterval(() => {
-        setOtpTimer((prevTimer) => {
+        setOtpTimer(prevTimer => {
           if (prevTimer === 1) {
             clearInterval(intervalId);
             setOtpSent(false);
@@ -278,33 +253,32 @@ const BureauReport = ({ demo }: Props) => {
 
   const documentDictionary: { [key: string]: string } = {
     AddressProof:
-      "Telephone or Electricity Bill, Bank Passbook or Account Statement, Registered Lease/Sale Agreement of office premises, Proof of Address issued by Scheduled Commercial Banks/Multinational Foreign Banks, Registration Certificate issued under Shops and Establishment Act",
-    "Copy of Partnership Deed":
-      "Copy of Partnership Deed which is mandatory to submit in case of Partnership",
-    "List of Authorized Signatories":
-      "A list of authorized signatories is mandatory to submit in case of Partnership",
-    IDProof: "PAN Card, Driving License, Passport, Voter ID card, Aadhaar Card",
-    CompanyPan:
-      "Copy of Company PAN which is mandatory to submit in case of Partnership",
-    "Copy of Board Resolution":
-      "Copy of Board Resolution which is mandatory to submit in case of Partnership",
+      'Telephone or Electricity Bill, Bank Passbook or Account Statement, Registered Lease/Sale Agreement of office premises, Proof of Address issued by Scheduled Commercial Banks/Multinational Foreign Banks, Registration Certificate issued under Shops and Establishment Act',
+    'Copy of Partnership Deed':
+      'Copy of Partnership Deed which is mandatory to submit in case of Partnership',
+    'List of Authorized Signatories':
+      'A list of authorized signatories is mandatory to submit in case of Partnership',
+    IDProof: 'PAN Card, Driving License, Passport, Voter ID card, Aadhaar Card',
+    CompanyPan: 'Copy of Company PAN which is mandatory to submit in case of Partnership',
+    'Copy of Board Resolution':
+      'Copy of Board Resolution which is mandatory to submit in case of Partnership',
   };
 
   // Define all potential document types regardless of entityType
   const allDocumentTypes = [
-    "Address Proof",
-    "Copy of Partnership Deed",
-    "List of Authorized Signatories",
-    "ID Proof",
-    "Company Pan",
-    "Copy of Board Resolution",
+    'Address Proof',
+    'Copy of Partnership Deed',
+    'List of Authorized Signatories',
+    'ID Proof',
+    'Company Pan',
+    'Copy of Board Resolution',
   ];
 
   // Create hooks for all document types
   const dropzoneHooks = allDocumentTypes.reduce((acc, documentType) => {
     acc[documentType] = useDropzone({
       onDrop: (acceptedFiles: File[]) =>
-        setDocumentFiles((prevFiles) => ({
+        setDocumentFiles(prevFiles => ({
           ...prevFiles,
           [documentType]: acceptedFiles,
         })),
@@ -339,7 +313,7 @@ const BureauReport = ({ demo }: Props) => {
           <div className="my-4">
             <h4 className="text-sm text-gray-400">Allowed Document Types:</h4>
             <p className="text-xs text-gray-300">
-              {documentDictionary[documentType.replace(/\s+/g, "")]}
+              {documentDictionary[documentType.replace(/\s+/g, '')]}
             </p>
           </div>
         </div>
@@ -363,7 +337,7 @@ const BureauReport = ({ demo }: Props) => {
                   <div className=" my-2 py-1 flex ">
                     <input
                       onChange={handleInput}
-                      value={otpForm.otp || ""}
+                      value={otpForm.otp || ''}
                       name="otp"
                       placeholder="OTP"
                       className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -376,9 +350,7 @@ const BureauReport = ({ demo }: Props) => {
 
                 {otpSent && (
                   <div>
-                    <p className="text-sm text-white">
-                      Resend OTP in {otpTimer} seconds
-                    </p>
+                    <p className="text-sm text-white">Resend OTP in {otpTimer} seconds</p>
                   </div>
                 )}
                 {!otpSent && (
@@ -394,7 +366,7 @@ const BureauReport = ({ demo }: Props) => {
 
             <div className="flex justify-center items-center">
               <button
-                onClick={() => handleClick("next")}
+                onClick={() => handleClick('next')}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md"
               >
                 Next

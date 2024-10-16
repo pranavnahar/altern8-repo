@@ -1,31 +1,26 @@
 // choose the primary bank account
 
-import { useContext, useState, useEffect } from "react";
-import { StepperContext } from "../../Contexts/StepperContext";
-import { parseCookies } from "nookies";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/Utils/show-toasts";
+import { useContext, useState, useEffect } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import { parseCookies } from 'nookies';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/Utils/show-toasts';
 
 type Props = {
-  demo: boolean
-}
+  demo: boolean;
+};
 
 const SelectPrimaryBankAccount = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [bankAccountsList, setBankAccountsList] = useState<{ accountNumber: string; bankName: string }[]>();
-  const { showToast } = useToast()
-  const [currentBankAccount, setCurrentBankAccount] = useState("");
-  const {
-    currentStep,
-    setCurrentStep,
-    steps,
-    setLoading,
-    getRegistrationState,
-  } = useContext(StepperContext);
+  const [bankAccountsList, setBankAccountsList] =
+    useState<{ accountNumber: string; bankName: string }[]>();
+  const { showToast } = useToast();
+  const [currentBankAccount, setCurrentBankAccount] = useState('');
+  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } =
+    useContext(StepperContext);
   const router = useRouter();
   // Handle token
-  let accessToken =
-    parseCookies().altern8_useraccessForRegister || localStorage.getItem("token");
+  let accessToken = parseCookies().altern8_useraccessForRegister || localStorage.getItem('token');
 
   // handle input change
   // const handleChange = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -44,7 +39,7 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
 
       // if unauthorized then push to login page
       if (response.status === 401) {
-        router.push("/login");
+        router.push('/login');
       }
 
       if (response.ok) {
@@ -53,16 +48,13 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
         if (responseData.accounts) {
           setBankAccountsList(responseData.accounts);
         } else {
-          console.log("No accounts data available");
+          console.log('No accounts data available');
         }
       } else {
-        console.log("Unable to fetch bank accounts list");
+        console.log('Unable to fetch bank accounts list');
       }
     } catch (error) {
-      console.log(
-        `Unable to fetch bank accounts list, (${currentStep}) :`,
-        error
-      );
+      console.log(`Unable to fetch bank accounts list, (${currentStep}) :`, error);
     } finally {
       setLoading(false);
     }
@@ -79,25 +71,25 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
     // change the step after click for back button
     let newStep = currentStep;
 
-    if (direction !== "next") {
+    if (direction !== 'next') {
       newStep--;
       setCurrentStep(newStep);
     }
     // if button is next the submit data to backend api
-    else if (direction === "next") {
+    else if (direction === 'next') {
       if (demo) {
-        router.push('/register?demo=true&step=5')
-        return
+        router.push('/register?demo=true&step=5');
+        return;
       }
-      if (currentBankAccount == "") {
-        console.log("Please select a valid bank account");
-        showToast(`Please select a valid bank account`, "info");
+      if (currentBankAccount == '') {
+        console.log('Please select a valid bank account');
+        showToast(`Please select a valid bank account`, 'info');
 
         return;
       }
 
       let newRecord: { accountNumber: string } = {
-        accountNumber: "",
+        accountNumber: '',
       };
       newRecord.accountNumber = currentBankAccount;
 
@@ -106,50 +98,38 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
         if (newRecord) {
           const body = newRecord;
           setLoading(true);
-          const response = await fetch(
-            `${apiUrl}/user-api/select-primary-bank/`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-              },
-              body: JSON.stringify(body),
-            }
-          );
+          const response = await fetch(`${apiUrl}/user-api/select-primary-bank/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(body),
+          });
 
           // if unauthorized then push to login page
           if (response.status === 401) {
-            router.push("/login");
+            router.push('/login');
           }
 
           if (response.ok) {
             let server_message = await response.json();
-            console.log(
-              `Primary bank account data submitted successfully!`,
-              server_message
-            );
+            console.log(`Primary bank account data submitted successfully!`, server_message);
 
-            showToast(`Submission Successful`, "info");
+            showToast(`Submission Successful`, 'info');
 
             // change the step after click and submitting the data
             getRegistrationState();
           } else {
             let server_error = await response.json();
-            console.error(
-              `Failed to submit primary bank account data.`,
-              server_error
-            );
+            console.error(`Failed to submit primary bank account data.`, server_error);
 
-            showToast(`Submission failed! ${server_error.message}`, "info");
+            showToast(`Submission failed! ${server_error.message}`, 'info');
           }
         }
       } catch (error) {
-        console.error(
-          `Error submitting data, Error in fetching api (${currentStep}) :`,
-          error
-        );
-        showToast(`Submission failed, system error!`, "info");
+        console.error(`Error submitting data, Error in fetching api (${currentStep}) :`, error);
+        showToast(`Submission failed, system error!`, 'info');
       } finally {
         setLoading(false);
       }
@@ -164,8 +144,8 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
         </div>
         <div className="my-2 py-1 flex">
           <select
-            onChange={(e) => setCurrentBankAccount(e.target.value)}
-            value={currentBankAccount || ""}
+            onChange={e => setCurrentBankAccount(e.target.value)}
+            value={currentBankAccount || ''}
             name="currentBankAccount"
             className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
             required
@@ -204,7 +184,7 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
             </button>
             {/* next button  */}
             <button
-              onClick={() => handleClick("next")}
+              onClick={() => handleClick('next')}
               className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
             >
               Next

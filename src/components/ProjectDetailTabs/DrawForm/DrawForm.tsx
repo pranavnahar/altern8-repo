@@ -1,14 +1,14 @@
-import React, { FormEvent, useEffect, useState } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../../ui/sheet";
-import { Label } from "../../ui/label";
-import { Input } from "../../ui/input";
-import DatePicker from "../../../components/DatePicker/DatePicker";
-import { Button } from "../../../components/ui/button";
-import { Checkbox } from "../../../components/ui/checkbox";
-import { toast } from "react-toastify";
-import { apiUrl, getAccessToken } from "@/Utils/auth";
-import { parseCookies } from "nookies";
-import { useParams } from "next/navigation";
+import React, { FormEvent, useEffect, useState } from 'react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../../ui/sheet';
+import { Label } from '../../ui/label';
+import { Input } from '../../ui/input';
+import DatePicker from '../../../components/DatePicker/DatePicker';
+import { Button } from '../../../components/ui/button';
+import { Checkbox } from '../../../components/ui/checkbox';
+import { toast } from 'react-toastify';
+import { apiUrl, getAccessToken } from '@/Utils/auth';
+import { parseCookies } from 'nookies';
+import { useParams } from 'next/navigation';
 
 interface DrawFormTypes {
   open: boolean;
@@ -16,12 +16,12 @@ interface DrawFormTypes {
 }
 
 export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
-  const [name, setName] = useState("");
-  const [Id, setId] = useState("");
+  const [name, setName] = useState('');
+  const [Id, setId] = useState('');
   const [submissionDate, setSubmissionDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
 
-  const [trancheTotal, setTrancheTotal] = useState<string>("");
+  const [trancheTotal, setTrancheTotal] = useState<string>('');
 
   const [markChecked, setMarkChecked] = useState<boolean>(false);
 
@@ -38,7 +38,7 @@ export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
   const ReplaceTokenOrRedirect = async (): Promise<void> => {
     const token = await getAccessToken();
     if (!token) {
-      window.location.replace("/login");
+      window.location.replace('/login');
     } else {
       altern8_adminaccess = token;
     }
@@ -50,9 +50,7 @@ export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
       const templateId = params?.id;
 
       if (templateId) {
-        setIdParam(
-          Array.isArray(templateId) ? templateId.join("") : templateId.trim()
-        );
+        setIdParam(Array.isArray(templateId) ? templateId.join('') : templateId.trim());
       }
     };
 
@@ -76,43 +74,37 @@ export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
         await ReplaceTokenOrRedirect();
       }
 
-      let response = await fetch(
-        `${apiUrl}/rablet-api/projects/${idParam}/tranches/`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${altern8_adminaccess}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      let response = await fetch(`${apiUrl}/rablet-api/projects/${idParam}/tranches/`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${altern8_adminaccess}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
       if (response.status === 401) {
         await ReplaceTokenOrRedirect();
-        response = await fetch(
-          `${apiUrl}/rablet-api/projects/${idParam}/tranches/`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${altern8_adminaccess}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
+        response = await fetch(`${apiUrl}/rablet-api/projects/${idParam}/tranches/`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${altern8_adminaccess}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
       }
       if (response.ok) {
         const responseData = await response.json();
         console.log(responseData);
-        toast("Document saved !");
+        toast('Document saved !');
       } else {
-        console.error("Failed to add profile data:", response.status);
-        toast("Failure");
+        console.error('Failed to add profile data:', response.status);
+        toast('Failure');
       }
     } catch (error) {
-      console.log("Error during adding profile data:", error);
-      toast("UI Is Initialized");
+      console.log('Error during adding profile data:', error);
+      toast('UI Is Initialized');
     }
   };
   return (
@@ -130,7 +122,7 @@ export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
                 className="text-black"
                 placeholder="Name"
                 id="tranche_name"
-                onChange={(e) => setName(e.target.value)}
+                onChange={e => setName(e.target.value)}
               />
             </div>
             <div>
@@ -140,15 +132,12 @@ export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
                 className="text-black"
                 placeholder="Id"
                 id="tranche_id"
-                onChange={(e) => setId(e.target.value)}
+                onChange={e => setId(e.target.value)}
               />
             </div>
             <div className="my-2">
               <Label>Submission Date</Label>
-              <DatePicker
-                date={submissionDate}
-                handleDateChange={handleSubmissionDate}
-              />
+              <DatePicker date={submissionDate} handleDateChange={handleSubmissionDate} />
             </div>
             {/* <div>
               <div className="flex items-center justify-between">
@@ -177,7 +166,7 @@ export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
                 className="text-black"
                 placeholder="Total"
                 id="tranche_total"
-                onChange={(e) => setTrancheTotal(e.target.value)}
+                onChange={e => setTrancheTotal(e.target.value)}
               />
             </div>
 
@@ -197,10 +186,7 @@ export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
             </div>
 
             <div className="my-2">
-              <DatePicker
-                date={submissionDate}
-                handleDateChange={handleSubmissionDate}
-              />
+              <DatePicker date={submissionDate} handleDateChange={handleSubmissionDate} />
             </div>
 
             <div className="my-2">

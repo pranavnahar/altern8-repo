@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { showToast } from '../../Helpers/show-toasts';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../utils/auth';
+import { getAccessToken } from '../../Utils/auth';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Button from '@mui/material/Button';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';

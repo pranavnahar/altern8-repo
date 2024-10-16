@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import nookies from "nookies"
+import nookies from 'nookies';
 import { fetchEvents } from '../utils/calendar-service';
 import { Project } from '../types';
-
 
 const useCalendarEvents = () => {
   const [events, setEvents] = useState<Project[]>([]);
@@ -20,7 +19,7 @@ const useCalendarEvents = () => {
       try {
         setLoading(true);
         const data: Project[] = await fetchEvents(accessToken);
-        console.log(data)
+        console.log(data);
         setEvents(data);
       } catch (error) {
         console.error('Error fetching calendar events:', error);

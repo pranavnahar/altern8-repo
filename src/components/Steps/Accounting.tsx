@@ -1,15 +1,15 @@
-import { useContext, useState, useCallback } from "react";
-import { StepperContext } from "../../Contexts/StepperContext";
-import HelpAndLogin from "../Step-Component/HelpAndLogin";
-import { useRouter } from "next/navigation";
-import { parseCookies } from "nookies";
-import { useDropzone } from "react-dropzone";
-import ConnectSDK from "../Step-Component/ConnectSDK";
-import { useToast } from "@/Utils/show-toasts";
+import { useContext, useState, useCallback } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import { useRouter } from 'next/navigation';
+import { parseCookies } from 'nookies';
+import { useDropzone } from 'react-dropzone';
+import ConnectSDK from '../Step-Component/ConnectSDK';
+import { useToast } from '@/Utils/show-toasts';
 
 type Props = {
-  demo: boolean
-}
+  demo: boolean;
+};
 
 const Accounting = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -23,20 +23,15 @@ const Accounting = ({ demo }: Props) => {
     setApiFailedIcon,
   } = useContext(StepperContext);
 
-  const [accountingPlatforms] = useState([
-    "TALLY",
-    "ZOHO_BOOKS",
-    "QUICKBOOKS",
-    "Others",
-  ]);
+  const [accountingPlatforms] = useState(['TALLY', 'ZOHO_BOOKS', 'QUICKBOOKS', 'Others']);
 
   const [userData, setUserData] = useState({
-    category: "ACCOUNTING",
-    platform: "",
+    category: 'ACCOUNTING',
+    platform: '',
   });
 
-  const [processState, setProcessState] = useState("initializing");
-  const { showToast } = useToast()
+  const [processState, setProcessState] = useState('initializing');
+  const { showToast } = useToast();
 
   function handleProcessChange(newState: string) {
     setProcessState(newState);
@@ -55,7 +50,7 @@ const Accounting = ({ demo }: Props) => {
   let accessToken = parseCookies().altern8_useraccessForRegister;
 
   function changeUserPlatform(platform: string) {
-    if (platform === "Others") {
+    if (platform === 'Others') {
       setNeedManualUpload(true);
     } else {
       setUserData({ ...userData, platform: platform });
@@ -66,18 +61,18 @@ const Accounting = ({ demo }: Props) => {
   const handleClick = async (direction?: string) => {
     let newStep = currentStep;
 
-    if (direction !== "next") {
+    if (direction !== 'next') {
       newStep--;
       setApiFailedIcon(false);
       setCurrentStep(newStep);
-    } else if (direction === "next") {
+    } else if (direction === 'next') {
       if (demo) {
-        router.push('/register?demo=true&step=10')
-        return
+        router.push('/register?demo=true&step=10');
+        return;
       }
       if (!needManualUpload) {
-        if (userData.platform === "") {
-          showToast(`Please select an accounting data platform`, "info");
+        if (userData.platform === '') {
+          showToast(`Please select an accounting data platform`, 'info');
           return;
         }
 
@@ -89,44 +84,35 @@ const Accounting = ({ demo }: Props) => {
         try {
           if (newRecord) {
             setLoading(true);
-            const response = await fetch(
-              `${apiUrl}/user-api/accounting-data/`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(newRecord),
-              }
-            );
+            const response = await fetch(`${apiUrl}/user-api/accounting-data/`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify(newRecord),
+            });
 
             if (response.status === 401) {
-              router.push("/login");
+              router.push('/login');
             }
 
             if (response.ok) {
               const serverMessage = await response.json();
-              console.log(
-                `Accounting data submission successful`,
-                serverMessage
-              );
-              showToast(`Submission Successful`, "info");
+              console.log(`Accounting data submission successful`, serverMessage);
+              showToast(`Submission Successful`, 'info');
               getRegistrationState();
             } else {
               const serverError = await response.json();
               console.error(`Accounting data submission failed!`, serverError);
-              showToast(`Submission failed! ${serverError.message}`, "info");
+              showToast(`Submission failed! ${serverError.message}`, 'info');
               setNeedManualUpload(true);
               setApiFailedIcon(true);
             }
           }
         } catch (error) {
-          console.error(
-            `Accounting data submission failed!, (${currentStep}) :`,
-            error
-          );
-          showToast(`Submission failed, system error!`, "info");
+          console.error(`Accounting data submission failed!, (${currentStep}) :`, error);
+          showToast(`Submission failed, system error!`, 'info');
           setNeedManualUpload(true);
           setApiFailedIcon(true);
         } finally {
@@ -161,55 +147,51 @@ const Accounting = ({ demo }: Props) => {
         const file = acceptedFiles[i];
 
         if (
-          file.type === "application/pdf" ||
-          file.type ===
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          file.type === 'application/pdf' ||
+          file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ) {
           if (file.size <= 5 * 1024 * 1024) {
             formData.append(`files[${i}]`, file);
           } else {
-            alert("File size exceeds 5MB limit. Please choose a smaller file.");
+            alert('File size exceeds 5MB limit. Please choose a smaller file.');
             return;
           }
         } else {
-          alert("Please choose PDF or Excel files only.");
+          alert('Please choose PDF or Excel files only.');
           return;
         }
       }
 
       try {
         setLoading(true);
-        const response = await fetch(
-          `${apiUrl}/user-api/accounting-document/`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-            body: formData,
-          }
-        );
+        const response = await fetch(`${apiUrl}/user-api/accounting-document/`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: formData,
+        });
 
         if (response.status === 401) {
-          router.push("/login");
+          router.push('/login');
         }
 
         if (response.ok) {
           await response.json();
-          showToast(`Files uploaded successfully`, "info");
+          showToast(`Files uploaded successfully`, 'info');
           setApiFailedIcon(false);
           getRegistrationState();
         } else {
-          showToast(`Files upload failed!`, "info");
+          showToast(`Files upload failed!`, 'info');
         }
       } catch (error) {
         console.log(`Error uploading files, (${currentStep}) :`, error);
-        showToast(`Files upload failed!`, "info");
+        showToast(`Files upload failed!`, 'info');
       } finally {
         setLoading(false);
       }
     } else {
-      showToast(`Please drag and drop files to upload.`, "info");
+      showToast(`Please drag and drop files to upload.`, 'info');
     }
   };
 
@@ -237,19 +219,15 @@ const Accounting = ({ demo }: Props) => {
                       className="rounded-full"
                       onClick={() => changeUserPlatform(platform)}
                     >
-                      {platform !== "Others" ? (
+                      {platform !== 'Others' ? (
                         <ConnectSDK
                           integration={platform}
-                          category={"ACCOUNTING"}
+                          category={'ACCOUNTING'}
                           onEventChange={handleProcessChange}
                         />
                       ) : (
                         <button className="grid h-full gap-0 px-5 my-auto rounded-full">
-                          <img
-                            src="/icons/others.svg"
-                            alt="..."
-                            className="m-auto size-12"
-                          />
+                          <img src="/icons/others.svg" alt="..." className="m-auto size-12" />
                           <h1 className="-mt-1 text-white">Others</h1>
                         </button>
                       )}
@@ -257,13 +235,13 @@ const Accounting = ({ demo }: Props) => {
                   ))}
                 </div>
               </>
-              {processState === "success" && (
+              {processState === 'success' && (
                 <div className="text-center text-green-500">
                   <h2 className="text-2xl font-semibold">Success!</h2>
                   <p>Your Accounting Platform Is Connected Successfully.</p>
                 </div>
               )}
-              {processState === "incomplete" && (
+              {processState === 'incomplete' && (
                 <div className="text-center text-red-500">
                   <h2 className="text-2xl font-semibold">Incomplete</h2>
                   <p>Process Not Completed .</p>
@@ -297,28 +275,25 @@ const Accounting = ({ demo }: Props) => {
                       />
                     </svg>
                     <div>
-                      Data Fetching from your Accounting Platform failed. Please
-                      upload your accounting statements and ledgers (Only PDF
-                      and Excel Files Allowed).
+                      Data Fetching from your Accounting Platform failed. Please upload your
+                      accounting statements and ledgers (Only PDF and Excel Files Allowed).
                     </div>
                   </>
                 ) : (
                   <>
                     <div>
-                      Please upload your accounting statements and ledgers (Only
-                      PDF and Excel Files Allowed).
+                      Please upload your accounting statements and ledgers (Only PDF and Excel Files
+                      Allowed).
                     </div>
                   </>
                 )}
               </div>
               <div className="flex flex-col items-center justify-center w-full px-6 py-8 border-2 border-gray-600 rounded-lg">
-                <div className="text-lg font-semibold text-gray-300">
-                  Upload Files
-                </div>
+                <div className="text-lg font-semibold text-gray-300">Upload Files</div>
                 <div
                   {...getRootProps()}
                   className={`flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-gray-400 rounded-md p-4 mt-2 transition-colors duration-300 ${
-                    isDragActive ? "border-blue-500" : ""
+                    isDragActive ? 'border-blue-500' : ''
                   }`}
                 >
                   <input {...getInputProps()} />
@@ -367,10 +342,10 @@ const Accounting = ({ demo }: Props) => {
 
         <div className="flex justify-center my-4">
           <button
-            onClick={() => handleClick("next")}
+            onClick={() => handleClick('next')}
             className="px-10 py-2 font-semibold text-gray-300 transition duration-200 ease-in-out bg-blue-800 rounded-lg shadow-md hover:bg-blue-600"
           >
-            {currentStep === steps.length - 1 ? "Submit" : "Next"}
+            {currentStep === steps.length - 1 ? 'Submit' : 'Next'}
           </button>
         </div>
       </div>
