@@ -114,7 +114,7 @@ const HeaderText = ({ data, setData, header }: HeaderTextProps) => {
     const fullySortedData = sortedData.map(section => {
       const sortedItems = [
         ...section.items
-          .filter((item: { type: string }) => item.type !== 'subtotal')
+          .filter(item => item.type !== 'subtotal')
           .sort((a: any, b: any) => {
             const aValue = a[column];
             const bValue = b[column];
@@ -137,7 +137,7 @@ const HeaderText = ({ data, setData, header }: HeaderTextProps) => {
             if (aString > bString) return newSortOrder === 'asc' ? 1 : -1;
             return 0;
           }),
-        ...section.items.filter((item: { type: string }) => item.type === 'subtotal'),
+        ...section.items.filter(item => item.type === 'subtotal'),
       ];
 
       return { ...section, items: sortedItems };
