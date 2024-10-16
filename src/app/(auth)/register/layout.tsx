@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
+import LoadingSpinner from '@/components/LoadingSpinner';
+import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
-  title: "Altern8 Register",
-  description: "Register to login",
+  title: 'Altern8 Register',
+  description: 'Register to login',
 };
 
 export default function ProductLayout({
@@ -12,7 +14,7 @@ export default function ProductLayout({
 }>) {
   return (
     <main className="register-main" id="register-main-page">
-      {children}
+      <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
     </main>
   );
 }

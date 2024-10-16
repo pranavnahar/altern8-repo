@@ -136,9 +136,7 @@ const Page = () => {
         </div>
       )}
       <div className="mt-15 pb-10 rounded-lg flex flex-col gap-12">
-        <div className="text-3xl text-white font-semibold text-white-font text-center py-5">
-          Files & Documents
-        </div>
+        <div className="text-3xl text-white font-semibold text-center py-5">Files & Documents</div>
         {/* previous file uploads */}
         <div className="flex justify-center gap-20 mx-6">
           <div className="text-center cursor-pointer grid gap-5">
