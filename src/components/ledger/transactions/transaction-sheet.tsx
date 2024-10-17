@@ -17,7 +17,7 @@ import FileField from './fields/file-field';
 import { fieldData } from './field-data';
 import { Account } from '../accounts/types';
 import { IconPlus } from '@tabler/icons-react';
-import useTransactionForm from '@/hooks/ledger/useTransactionForm';
+import useTransactionForm from '../../../hooks/ledger/useTransactionForm';
 //import { ScrollAreaScrollbar } from "@radix-ui/react-scroll-area";
 
 interface TransactionSheetProps {
@@ -80,9 +80,8 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
         : transactionData[fieldName] || '',
       onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
         handleFieldChange(fieldName, e.target.value),
-      inputClassName: `w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none ${
-        isEditMode ? 'focus:border-blue-600' : 'focus:border-purple-600'
-      }`,
+      inputClassName: `w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none ${isEditMode ? 'focus:border-blue-600' : 'focus:border-purple-600'
+        }`,
       ...field,
     };
 
@@ -117,14 +116,14 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
                   fieldName === 'from_account'
                     ? accounts.find(a => a.id === option)?.id
                     : fieldName === 'to_account'
-                    ? accounts.find(a => a.id === option)?.id
-                    : option,
+                      ? accounts.find(a => a.id === option)?.id
+                      : option,
                 label:
                   fieldName === 'from_account'
                     ? accounts.find(a => a.id === option)?.name
                     : fieldName === 'to_account'
-                    ? accounts.find(a => a.id === option)?.name
-                    : option,
+                      ? accounts.find(a => a.id === option)?.name
+                      : option,
               }))
             }
           />
@@ -169,9 +168,8 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
         </SheetTrigger>
       )}
       <SheetContent
-        className={`flex flex-col min-h-screen border-none [background:linear-gradient(269.75deg,#011049,#19112f_25.75%,#251431_51.79%,#301941_64.24%,_#6e3050)] p-4 ${
-          isEditMode ? 'edit-mode-classname' : 'add-mode-classname'
-        }`}
+        className={`flex flex-col min-h-screen border-none [background:linear-gradient(269.75deg,#011049,#19112f_25.75%,#251431_51.79%,#301941_64.24%,_#6e3050)] p-4 ${isEditMode ? 'edit-mode-classname' : 'add-mode-classname'
+          }`}
       >
         <div className=" overflow-x-auto">
           <div className="pl-2 pr-3.5">
@@ -191,8 +189,8 @@ const TransactionSheet: FC<TransactionSheetProps> = ({
                       fieldName === 'invoice_product'
                         ? invoiceIds
                         : fieldName === 'from_account' || fieldName === 'to_account'
-                        ? accounts.map(account => account.id)
-                        : // : field.options,
+                          ? accounts.map(account => account.id)
+                          : // : field.options,
                           '',
                   }),
                 )}

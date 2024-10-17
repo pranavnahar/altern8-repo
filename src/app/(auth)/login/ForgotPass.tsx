@@ -1,6 +1,6 @@
-import AnimatedLogo from "@/components/Header/AnimatedLogo";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import AnimatedLogo from "../../../components/Header/AnimatedLogo";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 import { motion } from "framer-motion";
 
 const ForgotPass = () => {
@@ -32,7 +32,7 @@ const ForgotPass = () => {
               placeholder="Phone Number"
               name="phonenumber"
               className="appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-              //onChange={(e) => handleChange(e, "phoneNumber")}
+            //onChange={(e) => handleChange(e, "phoneNumber")}
             />
           </div>
 
@@ -45,7 +45,7 @@ const ForgotPass = () => {
           <Button
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
             size="lg"
-            //onClick={handleLogin}
+          //onClick={handleLogin}
           >
             Reset
           </Button>

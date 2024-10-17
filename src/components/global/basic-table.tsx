@@ -2,14 +2,14 @@
 
 import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, ColumnDef, SortingState, PaginationState, Row } from "@tanstack/react-table";
 import { useState, useEffect, useMemo } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
 import { AnimatePresence, Reorder, motion } from "framer-motion";
-import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Table, TableBody, TableCell, TableHeader, TableRow } from "../../components/ui/table";
+import { ScrollArea, ScrollBar } from "../../components/ui/scroll-area";
 import { ChevronDown, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronUp } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import useMediaQuery from "@/hooks/use-media-query";
+import { Checkbox } from "../../components/ui/checkbox";
+import { Button } from "../../components/ui/button";
+import useMediaQuery from "../../hooks/use-media-query";
 
 type CustomColumnDef<T extends object> = ColumnDef<T> & {
   accessorKey?: keyof T | string;
@@ -82,9 +82,9 @@ const BasicTable = <T extends object>({
     const header = col.header || snakeToTitleCase(col.accessorKey?.toString() || '');
     const accessorFn = col.accessorKey
       ? (row: T) => {
-          const keys = (col.accessorKey as string).split('.');
-          return keys.reduce((obj: any, key: string) => obj && obj[key], row);
-        }
+        const keys = (col.accessorKey as string).split('.');
+        return keys.reduce((obj: any, key: string) => obj && obj[key], row);
+      }
       : undefined;
 
     return {
@@ -211,7 +211,7 @@ const BasicTable = <T extends object>({
                 onClick={() => setShowAllColumns(!showAllColumns)}
                 className={`text-white transform transition-transform duration-300 ${showAllColumns ? 'rotate-180' : ''}`}
               >
-                <ChevronDown className="size-5"/>
+                <ChevronDown className="size-5" />
               </button>
             </div>
           )}

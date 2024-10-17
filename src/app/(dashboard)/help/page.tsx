@@ -2,18 +2,18 @@
 
 import React, { useState, useContext, useEffect } from 'react';
 
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import { IconSend2 } from '@tabler/icons-react';
-import { Button } from '@/components/ui/button';
-import ChatBox from '@/components/mui/Chatbox';
-import { DashboardContext } from '@/Contexts/DashboardContext';
-import { fetchWithAuth } from '@/Utils/fetch-with-auth';
+import { Button } from '../../../components/ui/button';
+import ChatBox from '../../../components/mui/Chatbox';
+import { DashboardContext } from '../../../Contexts/DashboardContext';
+import { fetchWithAuth } from '../../../Utils/fetch-with-auth';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion';
+} from '../../../components/ui/accordion';
 
 const dummyFaqs = [
   {

@@ -1,53 +1,32 @@
-# Stage 1: Installing dependencies with Bun
-FROM oven/bun:latest AS deps
+# Use the latest stable Node.js slim version for a smaller image
+FROM node:20-slim
 
+# Set the working directory
 WORKDIR /app
 
-# Copy package and lock files
-COPY package.json bun.lockb ./
+# Copy package.json and package-lock.json to the container
+COPY package*.json ./
 
-# Install only production dependencies
-RUN bun install --only=production
+# Install production dependencies
+RUN npm install --only=production
 
-# Stage 2: Building the Next.js project
-FROM oven/bun:latest AS builder
-
-WORKDIR /app
-
-# Copy all files
+# Copy the rest of the application code
 COPY . .
 
-# Set environment variables for production
-ENV NODE_ENV=production
-
-# Copy environment production file (optional if you have it)
+# Copy the production environment file
 COPY .env.production .env
 
-# Remove local environment file to avoid conflicts (optional)
+# Remove any local environment file to avoid conflicts
 RUN rm -f .env.local
 
-# Use dependencies from deps stage
-COPY --from=deps /app/node_modules ./node_modules
+# Set the environment to production explicitly
+ENV NODE_ENV=production
 
-# Build the Next.js app
-RUN bun run build
-
-# Stage 3: Production Image
-FROM oven/bun:latest AS runner
-
-WORKDIR /app
-
-# Copy the built app from the builder stage
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/static ./.next/static
+# Build the Next.js application
+RUN npm run build
 
 # Expose port 3000
 EXPOSE 3000
 
-# Set the PORT and HOSTNAME environment variables
-ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
-
-# Run the Next.js app
-CMD ["bun", "run", "server.js"]
+# Start the Next.js application and bind it to 0.0.0.0 with port 3000
+CMD ["npm", "start", "--", "-p", "3000", "-H", "0.0.0.0"]

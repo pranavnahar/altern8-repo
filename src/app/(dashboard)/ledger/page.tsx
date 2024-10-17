@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react';
 
-import { accountsColumns } from '@/config/ledger/columns';
-import BasicTable from '@/components/dashboard/BasicTable';
-import TableSkeleton from '@/components/ledger/_components/table-skeleton';
-import useLedgerDetails from '@/hooks/ledger/useLedgerDetails';
-import TransactionSheet from '@/components/ledger/transactions/transaction-sheet';
-import useTransactionForm from '@/hooks/ledger/useTransactionForm';
-import { Column } from '@/components/dashboard/types';
+import { accountsColumns } from '../../../config/ledger/columns';
+import BasicTable from '../../../components/dashboard/BasicTable';
+import TableSkeleton from '../../../components/ledger/_components/table-skeleton';
+import useLedgerDetails from '../../../hooks/ledger/useLedgerDetails';
+import TransactionSheet from '../../../components/ledger/transactions/transaction-sheet';
+import useTransactionForm from '../../../hooks/ledger/useTransactionForm';
+import { Column } from '../../../components/dashboard/types';
 
 const Ledger = () => {
   const { accounts, otherAccounts, isLoading, invoiceIDs, handleFetchLedgerDetails } =

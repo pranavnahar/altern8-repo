@@ -1,4 +1,4 @@
-import LoadingSpinner from '@/components/LoadingSpinner';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 

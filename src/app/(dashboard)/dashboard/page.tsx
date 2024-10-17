@@ -1,6 +1,6 @@
 'use client';
-import ActionItems from '@/components/dashboard/Action-items';
-import ChartCalender from '@/components/dashboard/Chart-and-Calender';
+import ActionItems from '../../../components/dashboard/Action-items';
+import ChartCalender from '../../../components/dashboard/Chart-and-Calender';
 import React, { useState } from 'react';
 import UpcomingProjects from '../../../components/dashboard/Upcoming-Projects/UpcomingProjects';
 

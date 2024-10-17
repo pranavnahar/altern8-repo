@@ -21,7 +21,7 @@ import {
   IconUsers,
   IconWallet,
 } from '@tabler/icons-react';
-import AnimatedLogo from '@/components/Header/AnimatedLogo';
+import AnimatedLogo from '../../../components/Header/AnimatedLogo';
 
 const Sidebar = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -84,11 +84,10 @@ const Sidebar = () => {
                 link={{
                   ...link,
                 }}
-                className={`px-2 ${
-                  pathname === link.href
+                className={`px-2 ${pathname === link.href
                     ? 'bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 rounded-lg'
                     : ''
-                }`}
+                  }`}
               />
             ))}
           </div>

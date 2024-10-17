@@ -23,10 +23,10 @@ import {
   TableRow,
 } from '../../../components/ui/table';
 import { Input } from '../../../components/ui/input';
-import { formatINR, formatDate } from '@/Utils/formatter';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { formatINR, formatDate } from '../../../Utils/formatter';
+import { Sheet, SheetContent, SheetTrigger } from '../../ui/sheet';
 import InventorySheet from './InventorySheet';
-import { fetchTranchData } from '@/app/(dashboard)/project/actions/fetch-tranch.actions';
+import { fetchTranchData } from '../../../app/(dashboard)/project/actions/fetch-tranch.actions';
 
 interface ProjectOverViewProps {
   user: 'customer' | 'borrower';

@@ -3,9 +3,9 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { motion } from 'framer-motion';
 import { showToast } from '../../Utils/show-toasts';
 import LoadingSpinner from '../LoadingSpinner';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Checkbox } from '../../components/ui/checkbox';
 import { Button } from '../ui/button';
-import { fetchWithAuth } from '@/Utils/fetch-with-auth';
+import { fetchWithAuth } from '../../Utils/fetch-with-auth';
 
 // Define form state type
 interface FormState {
@@ -59,8 +59,7 @@ const ContactUsForm = () => {
       (name === 'company_query' && value.length > 400)
     ) {
       showToast(
-        `${name === 'company_name' ? 'Company name' : 'Comments'} should be less than ${
-          name === 'company_name' ? 200 : 400
+        `${name === 'company_name' ? 'Company name' : 'Comments'} should be less than ${name === 'company_name' ? 200 : 400
         } characters`,
         'info',
       );

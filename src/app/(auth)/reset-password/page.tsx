@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { parseCookies } from 'nookies';
 import { setAccessTokenCookie, setRefreshTokenCookie } from '../../../Utils/auth';
-import LinearBuffer from '@/components/LinearBuffer';
-import AnimatedLogo from '@/components/Header/AnimatedLogo';
+import LinearBuffer from '../../../components/LinearBuffer';
+import AnimatedLogo from '../../../components/Header/AnimatedLogo';
 import { useToast } from '../../../Utils/show-toasts';
 let accessToken = parseCookies().altern8_useraccess;
 

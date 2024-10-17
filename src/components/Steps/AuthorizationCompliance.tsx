@@ -4,7 +4,7 @@ import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
-import { useToast } from '@/Utils/show-toasts';
+import { useToast } from '../../Utils/show-toasts';
 
 interface UserData {
   companyName: string;
@@ -358,9 +358,8 @@ const AuthorizationCompliance = ({ demo }: Props) => {
         </div>
         <div
           {...getRootProps()}
-          className={`p-4 border-2 border-dashed ${
-            isDragActive ? 'border-green-500' : 'border-gray-400'
-          } rounded-md cursor-pointer text-center`}
+          className={`p-4 border-2 border-dashed ${isDragActive ? 'border-green-500' : 'border-gray-400'
+            } rounded-md cursor-pointer text-center`}
         >
           <input {...getInputProps()} />
           {isDragActive ? (
