@@ -406,7 +406,7 @@ function Documents() {
     }
   }, [admin]);
 
-  const handleOnclick = admin ? () => router.push(`/draw/document-preview`) : () => {};
+  const handleOnclick = admin ? () => router.push(`/draw/document-preview`) : () => { };
 
   return (
     <div>

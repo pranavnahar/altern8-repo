@@ -205,7 +205,7 @@ const ChatBox: React.FC<{
       }}
     >
       <DialogTitle style={{ color: 'white' }}>
-        <span className="text-white">Chat with Admin</span>
+        <span className="text-white font-medium text-[22px]">Chat with Admin</span>
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -223,7 +223,7 @@ const ChatBox: React.FC<{
         <div
           ref={chatContainerRef}
           // ref for scroll
-          className="[background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] p-4 rounded-lg"
+          className="mt-5"
         >
           {/* showing all the messages */}
           {messages.map((message, index) => (
@@ -275,7 +275,7 @@ const ChatBox: React.FC<{
             <input
               type="text"
               placeholder="Type your message..."
-              className="w-full px-3 py-2 rounded-full bg-gray-800 border border-gray-500 text-gray-300 focus:outline-none focus:ring focus:border-blue-500"
+              className="w-full px-3 py-2 rounded-full bg-gray-800 bg-opacity-20 border border-gray-500 text-gray-300 focus:outline-none focus:ring focus:border-blue-500"
               value={newMessage}
               onChange={e => setNewMessage(e.target.value)}
               onKeyDown={e => {

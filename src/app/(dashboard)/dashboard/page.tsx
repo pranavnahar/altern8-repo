@@ -21,7 +21,7 @@ const page = () => {
           <UpcomingProjects />
         </div>
         <div className="flex-1">
-          <ChartCalender sanctionedLimit={0} />
+          <ChartCalender sanctionedLimit={7000000} />
         </div>
       </div>
     </>

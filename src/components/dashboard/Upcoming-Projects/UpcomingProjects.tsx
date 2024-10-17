@@ -16,7 +16,7 @@ const UpcomingProjects = () => {
       <div className=" flex justify-center items-center">
         <Button
           className="text-white self-center mt-3 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700 hover:bg-gray-500"
-          onClick={() => router.push('/projects-list')}
+          onClick={() => router.push('/projects')}
         >
           Add New Project
         </Button>
