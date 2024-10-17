@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { showToast } from '../../Utils/show-toasts';
+import { useToast } from '../../Utils/show-toasts';
 import LoadingSpinner from '../LoadingSpinner';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Button } from '../ui/button';
@@ -58,7 +58,7 @@ const ContactUsForm = () => {
       (name === 'company_name' && value.length > 200) ||
       (name === 'company_query' && value.length > 400)
     ) {
-      showToast(
+      useToast(
         `${name === 'company_name' ? 'Company name' : 'Comments'} should be less than ${name === 'company_name' ? 200 : 400
         } characters`,
         'info',
@@ -82,18 +82,18 @@ const ContactUsForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
     if (company_name.length < 3 || company_email.length < 3 || company_query.length < 10) {
-      showToast(`Input value should not be too small or empty`, 'info');
+      useToast(`Input value should not be too small or empty`, 'info');
       return;
     }
 
     if (!emailRegex.test(company_email)) {
-      showToast(`Invalid email format`, 'info');
+      useToast(`Invalid email format`, 'info');
       return;
     }
 
     const isAnyChoiceSelected = choices.some(choice => formData[choice] === true);
     if (!isAnyChoiceSelected) {
-      showToast(`Choose at least one area of interest`, 'info');
+      useToast(`Choose at least one area of interest`, 'info');
       return;
     }
 
@@ -106,7 +106,7 @@ const ContactUsForm = () => {
       });
 
       if (response.ok) {
-        showToast(`Form submitted successfully!`, 'info');
+        useToast(`Form submitted successfully!`, 'info');
         setFormData({
           ...initialFormState,
           ...Object.fromEntries(choices.map(choice => [choice, false])),
@@ -116,7 +116,7 @@ const ContactUsForm = () => {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      showToast(`Submission failed!`, 'info');
+      useToast(`Submission failed!`, 'info');
     } finally {
       setLoading(false);
     }

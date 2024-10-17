@@ -136,12 +136,14 @@ const HeroSection: React.FC = () => {
                             whileHover={{ scale: 0.9, opacity: 0.9 }}
                             className="flex-1 relative text-xl mt-[150px] tracking-[-0.5px] font-medium text-background-black-font"
                         >
-                            Ethyx is a strategic digital performance agency that offers a
-                            unique approach called "fluid marketing" to help fast-growing
-                            consumer brands achieve their biggest goals, growth, and profits.
-                            Ethyx has developed various digital growth playbooks, elite
-                            creative and strategy teams, and a framework for scaling up
-                            digital marketing performance.
+
+                            Discover a new era in lending with Altern8 Club, your ultimate alternate platform and
+                            marketplace connecting borrowers with patrons. As a trailblazer in the industry,
+                            Altern8 Club serves as the end-to-end originator and distributor of premium loans,
+                            leveraging cutting-edge data science, Artificial Intelligence, and Machine Learning
+                            techniques. We specialize in demystifying complex industries with opaque data,
+                            starting with our fully automated data aggregation stack that delivers results in
+                            minutes, beginning with just a simple mobile number.
                         </motion.div>
                     </div>
                 </div>
