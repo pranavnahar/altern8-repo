@@ -1,6 +1,6 @@
-import { showToast } from '@/Helpers/show-toasts';
+import { showToast } from '../../Helpers/show-toasts';
 import { fetchWithAuth } from '../fetch-with-auth';
-import { formData } from '@/components/DashboardTableFilter/AddProjectFormModal';
+import { formData } from '../../components/DashboardTableFilter/AddProjectFormModal';
 fetchWithAuth;
 export const getTransactions = async (id: string) => {
   const response = await fetchWithAuth(`/user-dashboard-api/transactions/${id}`);

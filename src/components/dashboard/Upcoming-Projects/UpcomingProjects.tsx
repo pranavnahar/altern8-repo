@@ -2,7 +2,7 @@ import React from 'react';
 import { useProjects } from './useProjects';
 import BasicTable from '../BasicTable';
 import getColumns, { statusColors } from './Columns';
-import { Button } from '@/components/ui/button';
+import { Button } from '../../../components/ui/button';
 import { useRouter } from 'next/navigation';
 
 const UpcomingProjects = () => {

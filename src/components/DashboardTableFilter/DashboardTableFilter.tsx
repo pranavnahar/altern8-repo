@@ -42,8 +42,8 @@ import { FormInput } from '../LedgerTypeTable/Filter';
 import FilterDrawer from '../FilterDrawer/FilterDrawer';
 import TodoList from '../TodoList/TodoList';
 import BasicTable from '../global/basic-table';
-import { fetchProjectData } from '@/app/(dashboard)/projects/actions';
-import columns from '@/app/(dashboard)/projects/columns';
+import { fetchProjectData } from '../../app/(dashboard)/projects/actions';
+import columns from '../../app/(dashboard)/projects/columns';
 
 interface datasList {
   label: string;

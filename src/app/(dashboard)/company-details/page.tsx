@@ -2,7 +2,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Layout from '../layout';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../../components/ui/tabs';
 import BankDetailsPage from '../../../components/company-details/BankDetailsPage';
 import GSTList from '../../../components/company-details/GSTList';
 import PocForm from '../../../components/company-details/poc-form';

@@ -1,10 +1,10 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '../../components/ui/button';
 import { useState } from 'react';
-import BasicTable from '@/components/dashboard/BasicTable';
-import useLedgerTransactions from '@/hooks/ledger/useLedgerTransactions';
-import useLedgerDetails from '@/hooks/ledger/useLedgerDetails';
-import CustomDialog from '@/components/ledger/_components/customLedgerDialog';
-import { Column } from '@/components/dashboard/types';
+import BasicTable from '../../components/dashboard/BasicTable';
+import useLedgerTransactions from '../../hooks/ledger/useLedgerTransactions';
+import useLedgerDetails from '../../hooks/ledger/useLedgerDetails';
+import CustomDialog from '../../components/ledger/_components/customLedgerDialog';
+import { Column } from '../../components/dashboard/types';
 
 export const accountsColumns = [
   {

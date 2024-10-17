@@ -1,4 +1,4 @@
-import ConnectSDK from '@/components/Step-Component/ConnectSDK';
+import ConnectSDK from '../../../components/Step-Component/ConnectSDK';
 import { MoveRight } from 'lucide-react';
 import React from 'react';
 
@@ -18,9 +18,8 @@ const AccountingSoftwareList: React.FC<{
         return (
           <React.Fragment key={index}>
             <div
-              className={`w-40 pt-5 rounded-md ${
-                isActive ? 'bg-white/10 cursor-pointer' : 'bg-gray-200 cursor-not-allowed'
-              }`}
+              className={`w-40 pt-5 rounded-md ${isActive ? 'bg-white/10 cursor-pointer' : 'bg-gray-200 cursor-not-allowed'
+                }`}
               onClick={() => isActive && onSelectSoftware(platform)}
               style={{ opacity: isActive ? 1 : 0.5 }}
             >
@@ -31,7 +30,7 @@ const AccountingSoftwareList: React.FC<{
                 <ConnectSDK
                   integration={platform}
                   category={'ACCOUNTING'}
-                  onEventChange={isActive ? onProcessChange : () => {}}
+                  onEventChange={isActive ? onProcessChange : () => { }}
                 />
               </div>
             </div>

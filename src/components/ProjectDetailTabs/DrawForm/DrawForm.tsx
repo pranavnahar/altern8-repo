@@ -6,7 +6,7 @@ import DatePicker from '../../../components/DatePicker/DatePicker';
 import { Button } from '../../../components/ui/button';
 import { Checkbox } from '../../../components/ui/checkbox';
 import { toast } from 'react-toastify';
-import { apiUrl, getAccessToken } from '@/Utils/auth';
+import { apiUrl, getAccessToken } from '../../../Utils/auth';
 import { parseCookies } from 'nookies';
 import { useParams } from 'next/navigation';
 

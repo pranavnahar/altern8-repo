@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { Button } from '@mui/material';
 import { IconChevronUpRight } from '@tabler/icons-react';
-import { useToast } from '@/Utils/show-toasts';
+import { useToast } from '../../Utils/show-toasts';
 
 type Props = {
   demo: boolean;

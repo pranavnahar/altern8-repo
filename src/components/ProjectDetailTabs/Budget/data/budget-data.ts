@@ -1,4 +1,4 @@
-import { BudgetSection } from '@/app/(dashboard)/draw/[id]/page';
+import { BudgetSection } from '../../../../app/(dashboard)/draw/[id]/page';
 
 export const budgetData: BudgetSection[] = [
   {

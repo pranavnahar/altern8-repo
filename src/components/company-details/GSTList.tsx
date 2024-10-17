@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { MultiSelect } from '../../components/ui/multi-select';
-import { Table, TableHeader, TableRow, TableCell, TableBody } from '@/components/ui/table';
+import { Table, TableHeader, TableRow, TableCell, TableBody } from '../../components/ui/table';
 import { useGetGstList } from './use-gst-gstlist';
-import { Button } from '@/components/ui/button';
+import { Button } from '../../components/ui/button';
 
 const GSTList = () => {
   const [loadingSpinner] = useState(false);
@@ -31,7 +31,7 @@ const GSTList = () => {
     });
   };
 
-  const handleSubmitGstin = () => {};
+  const handleSubmitGstin = () => { };
 
   const handleAddGstinInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

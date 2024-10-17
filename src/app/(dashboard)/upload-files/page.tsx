@@ -8,7 +8,7 @@ import { getAccessToken } from '../../../Utils/auth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { IconCloudUpload } from '@tabler/icons-react';
 import { useToast } from '../../../Utils/show-toasts';
-import Pdf from '@/assets/pdf';
+import Pdf from '../../../assets/pdf';
 
 const Page = () => {
   const [file, setFile] = useState<File>();

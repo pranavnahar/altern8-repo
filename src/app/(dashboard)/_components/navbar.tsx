@@ -4,17 +4,17 @@ import React, { FC, useState, useRef, useEffect, useContext, useCallback } from 
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { IconLogout, IconSend2, IconUserCircle } from '@tabler/icons-react';
-import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button';
-import ChatBox from '@/components/mui/Chatbox';
+import { Separator } from '../../../components/ui/separator';
+import { Button } from '../../../components/ui/button';
+import ChatBox from '../../../components/mui/Chatbox';
 import { fetchWithAuth } from '../../../Utils/fetch-with-auth';
 import { DashboardContext } from '../../../Contexts/DashboardContext';
-import { showToast } from '@/Helpers/show-toasts';
+import { showToast } from '../../../Helpers/show-toasts';
 import { useRouter } from 'next/compat/router';
 import { parseCookies } from 'nookies';
 import { getAccessToken } from '../../../Utils/auth';
 import { useDropzone } from 'react-dropzone';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '../../../components/ui/dialog';
 
 export const Navbar: FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -430,7 +430,7 @@ export const Navbar: FC = () => {
 
                                     <td className="p-3 text-sm font-medium text-gray-400 whitespace-nowrap hover:text-gray-300">
                                       {oldCreditRequests?.status === 'Pending for Maker' ||
-                                      oldCreditRequests?.status === 'Pending for Checker'
+                                        oldCreditRequests?.status === 'Pending for Checker'
                                         ? 'Pending for Approval'
                                         : oldCreditRequests?.status}
                                     </td>
@@ -521,9 +521,9 @@ export const Navbar: FC = () => {
                           <Button
                             size="sm"
                             className="text-xs text-white w-full"
-                            //variant="expandIcon"
-                            //Icon={IconLogout}
-                            //iconPlacement="right"
+                          //variant="expandIcon"
+                          //Icon={IconLogout}
+                          //iconPlacement="right"
                           >
                             Sign Out
                           </Button>

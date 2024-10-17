@@ -2,12 +2,12 @@
 
 import React, { useRef, useEffect } from 'react';
 import { useFormState } from 'react-dom';
-import { Button } from '@/components/ui/button';
+import { Button } from '../../../components/ui/button';
 import { IconChevronRight, IconUpload } from '@tabler/icons-react';
 import { Snippet } from '@nextui-org/snippet';
 import { sendInvite, uploadBulkInvites, getReferralLink, type ActionState } from './actions';
 import { useToast } from '../../../Utils/show-toasts';
-import { Input } from '@/components/ui/input';
+import { Input } from '../../../components/ui/input';
 
 const Page = () => {
   const [inviteState, inviteAction] = useFormState<ActionState, FormData>(sendInvite, null);
