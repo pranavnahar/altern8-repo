@@ -99,7 +99,7 @@ const FileUpload = ({ onDrop: handleChange, className, label }: FileUploadProps)
         {isDragActive ? (
           <p>Drop the files here ...</p>
         ) : (
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center text-sm">
             <p>Drag 'n' drop some files here, or click to select files</p>
           </div>
         )}

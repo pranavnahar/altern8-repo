@@ -150,7 +150,7 @@ const DashboardTableFilter: React.FC = () => {
     {
       type: 'text',
       label: 'Line of Credit Used',
-      name: 'line_of_credit_used', // Changed to match backend key
+      name: 'line_of_credit', // Changed to match backend key
       placeholder: 'Line of Credit Used',
       required: true,
       errMsg: 'Please fill this out!',
@@ -160,7 +160,7 @@ const DashboardTableFilter: React.FC = () => {
       label: 'Line of Credits Available',
       name: 'line_of_credits_available', // Changed to match backend key
       placeholder: 'Line of Credits Available',
-      required: true,
+      required: false,
       errMsg: 'Please fill this out!',
     },
     {
@@ -197,7 +197,7 @@ const DashboardTableFilter: React.FC = () => {
       label: 'Account Remaining',
       name: 'account_remaining', // Matches backend key
       placeholder: 'Account Remaining',
-      required: true, // Changed to required
+      required: false, // Changed to required
       errMsg: 'Account Remaining is required!',
     },
     {
@@ -247,7 +247,7 @@ const DashboardTableFilter: React.FC = () => {
     {
       type: 'file',
       label: 'Upload your Encumberance Certificate',
-      name: 'encumberance_certificate', // Required by backend
+      name: 'encumbrance_certificate', // Required by backend
       required: true,
       errMsg: 'Please upload the encumberance certificate!',
     },
@@ -257,8 +257,7 @@ const DashboardTableFilter: React.FC = () => {
       name: 'uploadDocuments',
       values: [
         'Fetch details for me',
-        'I will provide all the documents',
-        'I have partial documents which I will provide'
+        'I will provide all the documents'
       ], // Specify checkbox options
       required: true,
     },
@@ -345,7 +344,7 @@ const DashboardTableFilter: React.FC = () => {
 
   const filterSection = tableHeaders.map(header => header?.title);
 
-  console.log(projects.results);
+  // console.log("The results of project result are: " + JSON.stringify(projects.results, null, 2));
 
   return (
     <>

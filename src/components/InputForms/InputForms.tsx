@@ -74,20 +74,15 @@ export const RenderInputs = ({ item, formData, setFormData }: RenderInputsProps)
       'TSLR Records',
       'Patta/Chitta',
       'Guideline value',
-      'Mortage report',
+      'Mortgage report',
       'Property tax receipt',
     ];
-
-    if (
-      selectedOption === 'I will provide all the documents' ||
-      selectedOption === 'I have partial documents which ill provide'
-    ) {
+  
+    if (selectedOption === 'I will provide all the documents') {
       return (
         <>
           <p className="text-sm text-yellow-500">
-            {selectedOption === 'I will provide all the documents'
-              ? 'Please upload all the required files:'
-              : 'Upload any documents you have (Optional):'}
+            Please upload all the required files:
           </p>
           {fileOptions.map(label => (
             <FileUpload key={label} onDrop={files => onDrop(files, label)} label={label} />
@@ -182,17 +177,15 @@ export const InputForms = ({
   const params = useParams();
   let URL = '';
   if (type === 'documents') {
-    
+    // no use of this
     URL = `${apiUrl}/rablet-api/projects/${id}/documents/`;
-    console.log("the rabelt api is: ", URL);
   }
   if (type === 'tranches') {
+    // this api is of no use as of now
     URL = `${apiUrl}/rablet-api/projects/${id}/tranches/2/documents/`; //should be dynamic tranche id
-    console.log("the rabelt api is running and url is: ", URL);
   } else{
-    console.log("none matched the route");
+    // route which will be trggered when user clicks on submit button in mattrum flow
     URL = `${apiUrl}/rablet-api/projects/`;
-    console.log("the url formed is: ", URL);
   }
   useEffect(() => {
     const fetchTemplateId = async () => {
@@ -214,25 +207,24 @@ export const InputForms = ({
     if (!formData.sale_deed) {
       return toast('Error', { description: 'Sales Deed is required' });
     }
-    if (!formData.encumberance_certificate) {
+    if (!formData.encumbrance_certificate) {
       return toast('Error', { description: 'Encumberance certificate is required' });
     }
   
-    console.log('this part of the code is running');
   
     try {
-      console.log("admin access before block running");
+      let altern8_useraccess = parseCookies().altern8_useraccess; // Access token from cookies
+      // console.log("Token used for authorization: ", altern8_useraccess);
   
-      // Log altern8_adminaccess token
-      console.log("Token used for authorization: ", altern8_adminaccess);
-  
-      if (!altern8_adminaccess) {
-        console.log("admin access value is: ", altern8_adminaccess);
+      if (!altern8_useraccess) {
+        console.log("User access token is missing");
         await ReplaceTokenOrRedirect();
-        console.log('admin access');
-      } else {
-        console.log("else block of altern admin access");
       }
+
+      const base64Url = altern8_useraccess.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const decodedToken = JSON.parse(atob(base64));
+      const userId = decodedToken.uid;
   
       const formDataToSend = new FormData();
       for (const key in formData) {
@@ -247,40 +239,37 @@ export const InputForms = ({
           }
         }
       }
+
+      formDataToSend.append('user', userId);
+
+      // for (const pair of formDataToSend.entries()) {
+      //   console.log(`${pair[0]}: ${pair[1]}`);
+      // }
   
-      console.log('form data that will be sent is: ', formDataToSend);
-      for (let pair of formDataToSend.entries()) {
-        console.log(`${pair[0]}, ${pair[1]}`);
-      }
+      // console.log('form data that will be sent is: ', formDataToSend);
   
-      // Make API call
-      let response = await fetch(URL, {
+      const response = await fetch(URL, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${altern8_adminaccess}`,
+          Authorization: `Bearer ${altern8_useraccess}`,
         },
         body: formDataToSend,
       });
   
-      console.log('raw response is: ', response);
-  
       if (response.ok) {
-        console.log('response ok function');
         await response.json();
         setFormData({});
         toast('Document saved!', {
           description: 'Success',
         });
       } else {
-        const errorResponse = await response.json(); // Extract the error message
+        const errorResponse = await response.json(); 
         console.error('Upload error:', errorResponse.message || response.status);
-        console.error('Failed to upload:', response.status);
         toast('Failure', {
           description: 'Something went wrong',
         });
       }
     } catch (error) {
-      console.log('this part of the code is raising the error in catch block');
       console.log('Error during upload:', error);
       toast('Error', {
         description: 'Something went wrong',
