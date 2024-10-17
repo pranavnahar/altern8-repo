@@ -1,22 +1,23 @@
-import React, { useContext, useState } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
-import HelpAndLogin from "../Step-Component/HelpAndLogin";
-import { parseCookies } from "nookies";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/utils/show-toasts";
+import React, { useContext, useState } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import { parseCookies } from 'nookies';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/Utils/show-toasts';
 
 type Props = {
-  demo: boolean
-}
+  demo: boolean;
+};
 
 const Udyam = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { currentStep, setCurrentStep, setLoading, getRegistrationState } = useContext(StepperContext);
-  const { showToast } = useToast()
+  const { currentStep, setCurrentStep, setLoading, getRegistrationState } =
+    useContext(StepperContext);
+  const { showToast } = useToast();
 
   const [userData, setUserData] = useState({
-    udyam_number: "",
-    uam_number: "",
+    udyam_number: '',
+    uam_number: '',
   });
   let accessToken = parseCookies().altern8_useraccessForRegister;
   const router = useRouter();
@@ -30,22 +31,19 @@ const Udyam = ({ demo }: Props) => {
   const handleClick = async (direction?: string) => {
     let newStep = currentStep;
 
-    if (direction !== "next") {
+    if (direction !== 'next') {
       newStep--;
       setCurrentStep(newStep);
-    } else if (direction === "next") {
+    } else if (direction === 'next') {
       if (demo) {
-        router.push('/register?demo=true&step=12')
-        return
+        router.push('/register?demo=true&step=12');
+        return;
       }
       const { udyam_number, uam_number } = userData;
 
       // Validation: At least one field should be filled, and length should be greater than 5
-      if (
-        (!udyam_number || udyam_number.length <= 5) &&
-        (!uam_number || uam_number.length <= 5)
-      ) {
-        showToast("Please provide a valid Udyam or UAM Number.", "info");
+      if ((!udyam_number || udyam_number.length <= 5) && (!uam_number || uam_number.length <= 5)) {
+        showToast('Please provide a valid Udyam or UAM Number.', 'info');
         return;
       }
 
@@ -57,9 +55,9 @@ const Udyam = ({ demo }: Props) => {
 
         setLoading(true);
         const response = await fetch(`${apiUrl}/user-api/udyam/`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify(newRecord),
@@ -67,26 +65,23 @@ const Udyam = ({ demo }: Props) => {
 
         // if unauthorized then push to login page
         if (response.status === 401) {
-          router.push("/login");
+          router.push('/login');
         }
 
         if (response.ok) {
           let server_message = await response.json();
-          console.log("Udyam data submitted successfully", server_message);
+          console.log('Udyam data submitted successfully', server_message);
 
-          showToast("Submission Successful", "info");
+          showToast('Submission Successful', 'info');
           getRegistrationState();
         } else {
           let server_error = await response.json();
-          console.error("Udyam submission failed", server_error);
-          showToast("Submission failed!", "info");
+          console.error('Udyam submission failed', server_error);
+          showToast('Submission failed!', 'info');
         }
       } catch (error) {
-        console.error(
-          `Error in submitting udyam data, (${currentStep}) :`,
-          error
-        );
-        showToast("Submission failed, system error!", "info");
+        console.error(`Error in submitting udyam data, (${currentStep}) :`, error);
+        showToast('Submission failed, system error!', 'info');
       } finally {
         setLoading(false);
       }
@@ -102,7 +97,7 @@ const Udyam = ({ demo }: Props) => {
         <div className="mt-2 py-1 flex text-gray-200">
           <input
             onChange={handleChange}
-            value={userData["udyam_number"] || ""}
+            value={userData['udyam_number'] || ''}
             name="udyam_number"
             placeholder="Udyam Number"
             className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -118,7 +113,7 @@ const Udyam = ({ demo }: Props) => {
         <div className="mt-2 py-1 flex text-gray-200">
           <input
             onChange={handleChange}
-            value={userData["uam_number"] || ""}
+            value={userData['uam_number'] || ''}
             name="uam_number"
             placeholder="UAM Number"
             className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -135,14 +130,14 @@ const Udyam = ({ demo }: Props) => {
 
           {/* next button  */}
           <button
-            onClick={() => handleClick("next")}
+            onClick={() => handleClick('next')}
             className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
           >
             Next
           </button>
           <button
             onClick={() => {
-              getRegistrationState("Upload Contract");
+              getRegistrationState('Upload Contract');
             }}
             className="bg-gray-500 text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-gray-700 hover:text-white transition duration-200 ease-in-out"
           >

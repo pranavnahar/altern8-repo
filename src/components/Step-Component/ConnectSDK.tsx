@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Box, CircularProgress } from '@mui/material';
 import { parseCookies } from 'nookies';
 import { IntegrationCategory, IntegrationType } from 'rootfi-api/api';
-import { useToast } from '../../utils/show-toasts';
+import { useToast } from '../../Utils/show-toasts';
 
 type InviteLinkData = {
   data: {

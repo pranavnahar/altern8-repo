@@ -1,10 +1,10 @@
-import { useContext, useState, useCallback, useEffect } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
-import HelpAndLogin from "../Step-Component/HelpAndLogin";
-import { parseCookies } from "nookies";
-import { useRouter } from "next/navigation";
-import { useDropzone } from "react-dropzone";
-import { useToast } from "@/utils/show-toasts";
+import { useContext, useState, useCallback, useEffect } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import { parseCookies } from 'nookies';
+import { useRouter } from 'next/navigation';
+import { useDropzone } from 'react-dropzone';
+import { useToast } from '@/Utils/show-toasts';
 
 interface UserData {
   companyName: string;
@@ -20,24 +20,25 @@ interface UserData {
 }
 
 type Props = {
-  demo: boolean
-}
+  demo: boolean;
+};
 
 const AuthorizationCompliance = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { currentStep, setCurrentStep, setLoading, getRegistrationState } = useContext(StepperContext);
-  const { showToast } = useToast()
+  const { currentStep, setCurrentStep, setLoading, getRegistrationState } =
+    useContext(StepperContext);
+  const { showToast } = useToast();
 
   const [userData, setUserData] = useState<UserData>({
-    companyName: "",
-    companyRegNumber: "",
-    repName: "",
-    position: "",
-    email: "",
+    companyName: '',
+    companyRegNumber: '',
+    repName: '',
+    position: '',
+    email: '',
     resolutionConfirmed: true,
     powerOfAttorneyConfirmed: true,
-    authorizedPersons: "",
-    authorizedPositions: "",
+    authorizedPersons: '',
+    authorizedPositions: '',
     additionalDocsConfirmed: true,
   });
   const [files, setFiles] = useState<File[]>([]);
@@ -48,27 +49,24 @@ const AuthorizationCompliance = ({ demo }: Props) => {
     const { name, value, type, checked } = e.target;
     setUserData({
       ...userData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `${apiUrl}/user-api/authorization-compliance/`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const response = await fetch(`${apiUrl}/user-api/authorization-compliance/`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
         if (response.ok) {
           const responseData = await response.json();
           const data = responseData.data;
-          setUserData((prevUserData) => {
+          setUserData(prevUserData => {
             const updatedUserData: Partial<UserData> = { ...prevUserData };
             for (const key in prevUserData) {
               if (data.hasOwnProperty(key)) {
@@ -78,13 +76,13 @@ const AuthorizationCompliance = ({ demo }: Props) => {
             return updatedUserData as UserData;
           });
         } else if (response.status === 401) {
-          router.push("/login");
+          router.push('/login');
         } else {
-          showToast("Failed to fetch data", "info");
+          showToast('Failed to fetch data', 'info');
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
-        showToast("Failed to fetch data, system error!", "info");
+        console.error('Error fetching data:', error);
+        showToast('Failed to fetch data, system error!', 'info');
       }
     };
 
@@ -96,13 +94,13 @@ const AuthorizationCompliance = ({ demo }: Props) => {
   const handleClick = async (direction?: string) => {
     let newStep = currentStep;
 
-    if (direction !== "next") {
+    if (direction !== 'next') {
       newStep--;
       setCurrentStep(newStep);
     } else {
       if (demo) {
-        router.push('/register?demo=true&step=14')
-        return
+        router.push('/register?demo=true&step=14');
+        return;
       }
       const {
         companyName,
@@ -129,10 +127,7 @@ const AuthorizationCompliance = ({ demo }: Props) => {
         !authorizedPositions ||
         !additionalDocsConfirmed
       ) {
-        showToast(
-          "Please fill all fields and confirm all checkboxes before submission.",
-          "info"
-        );
+        showToast('Please fill all fields and confirm all checkboxes before submission.', 'info');
         return;
       }
 
@@ -140,44 +135,41 @@ const AuthorizationCompliance = ({ demo }: Props) => {
         setLoading(true);
         const formData = new FormData();
 
-        formData.append("company_name", companyName);
-        formData.append("company_reg_number", companyRegNumber);
-        formData.append("rep_name", repName);
-        formData.append("position", position);
-        formData.append("email", email);
-        formData.append("authorized_persons", authorizedPersons);
-        formData.append("authorized_positions", authorizedPositions);
+        formData.append('company_name', companyName);
+        formData.append('company_reg_number', companyRegNumber);
+        formData.append('rep_name', repName);
+        formData.append('position', position);
+        formData.append('email', email);
+        formData.append('authorized_persons', authorizedPersons);
+        formData.append('authorized_positions', authorizedPositions);
 
         if (files && files.length > 0) {
-          files.forEach((file) => {
-            formData.append("documents", file);
+          files.forEach(file => {
+            formData.append('documents', file);
           });
         }
 
-        const response = await fetch(
-          `${apiUrl}/user-api/authorization-compliance/`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-            body: formData,
-          }
-        );
+        const response = await fetch(`${apiUrl}/user-api/authorization-compliance/`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: formData,
+        });
 
         if (response.status === 401) {
-          router.push("/login");
+          router.push('/login');
         }
 
         if (response.ok) {
-          showToast("Submission Successful", "info");
+          showToast('Submission Successful', 'info');
           getRegistrationState();
         } else {
-          showToast("Submission failed!", "info");
+          showToast('Submission failed!', 'info');
         }
       } catch (error) {
-        console.error("Submission failed:", error);
-        showToast("Submission failed, system error!", "info");
+        console.error('Submission failed:', error);
+        showToast('Submission failed, system error!', 'info');
       } finally {
         setLoading(false);
       }
@@ -185,11 +177,11 @@ const AuthorizationCompliance = ({ demo }: Props) => {
   };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+    setFiles(prevFiles => [...prevFiles, ...acceptedFiles]);
   }, []);
 
   const removeFile = (fileName: string) => {
-    setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
+    setFiles(prevFiles => prevFiles.filter(file => file.name !== fileName));
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -258,9 +250,9 @@ const AuthorizationCompliance = ({ demo }: Props) => {
               className="h-4 w-4"
             />
             <span className="text-gray-200">
-              I confirm that the Board of Directors of the company has passed a
-              resolution authorizing the creation of this account and the
-              transaction of business by availing the services on this platform.
+              I confirm that the Board of Directors of the company has passed a resolution
+              authorizing the creation of this account and the transaction of business by availing
+              the services on this platform.
             </span>
           </label>
           <label className="flex items-center space-x-2">
@@ -272,9 +264,8 @@ const AuthorizationCompliance = ({ demo }: Props) => {
               className="h-4 w-4"
             />
             <span className="text-gray-200">
-              I confirm that a Power of Attorney has been granted to the
-              following managers, officers, or employees to transact as
-              representatives on behalf of the company:
+              I confirm that a Power of Attorney has been granted to the following managers,
+              officers, or employees to transact as representatives on behalf of the company:
             </span>
           </label>
           <input
@@ -302,8 +293,8 @@ const AuthorizationCompliance = ({ demo }: Props) => {
               className="h-4 w-4"
             />
             <span className="text-gray-200">
-              I confirm that the additional documents have been uploaded to
-              support this confirmation.
+              I confirm that the additional documents have been uploaded to support this
+              confirmation.
             </span>
           </label>
         </div>
@@ -314,17 +305,14 @@ const AuthorizationCompliance = ({ demo }: Props) => {
       <div>
         <div className="px-5 py-2">
           <span className="text-gray-200">
-            Furthermore, being an authorized beneficial owner/manager/ officer
-            of the Company I confirm to have with me and to submit the following
-            documents:
+            Furthermore, being an authorized beneficial owner/manager/ officer of the Company I
+            confirm to have with me and to submit the following documents:
           </span>
           <ul className="text-gray-200 space-y-1 mt-2">
+            <li>1. The Aadhaar number and proof of possession of Aadhaar number</li>
             <li>
-              1. The Aadhaar number and proof of possession of Aadhaar number
-            </li>
-            <li>
-              2. The Permanent Account Number or the equivalent e-document
-              thereof or Form No. 60 as defined in Income-tax Rules, 1962
+              2. The Permanent Account Number or the equivalent e-document thereof or Form No. 60 as
+              defined in Income-tax Rules, 1962
             </li>
           </ul>
           <label className="flex items-center space-x-2 my-2">
@@ -337,9 +325,8 @@ const AuthorizationCompliance = ({ demo }: Props) => {
             />
 
             <span className="text-gray-200">
-              I confirm that the above mentioned documents related to individual
-              holding an attorney to transact on behalf of the company have been
-              submitted.
+              I confirm that the above mentioned documents related to individual holding an attorney
+              to transact on behalf of the company have been submitted.
             </span>
           </label>
         </div>
@@ -350,23 +337,17 @@ const AuthorizationCompliance = ({ demo }: Props) => {
       </div>
 
       <div className="px-5 py-2">
-        <span className="text-gray-200">
-          By signing below, I acknowledge and confirm that:
-        </span>
+        <span className="text-gray-200">By signing below, I acknowledge and confirm that:</span>
         <ol className="text-gray-200 space-y-1 mt-2">
-          <li>
-            1. All information provided is accurate and truthful to my best
-            knowledge.
-          </li>
+          <li>1. All information provided is accurate and truthful to my best knowledge.</li>
           <li>2. The documents uploaded are authentic and valid.</li>
           <li>
-            3. I understand that the platform reserves the right to verify the
-            information and documents provided.
+            3. I understand that the platform reserves the right to verify the information and
+            documents provided.
           </li>
           <li>
-            4. That any falsification of information and submission of
-            misleading documents is liable to penal or other actions under law
-            and equity.{" "}
+            4. That any falsification of information and submission of misleading documents is
+            liable to penal or other actions under law and equity.{' '}
           </li>
         </ol>
       </div>
@@ -378,7 +359,7 @@ const AuthorizationCompliance = ({ demo }: Props) => {
         <div
           {...getRootProps()}
           className={`p-4 border-2 border-dashed ${
-            isDragActive ? "border-green-500" : "border-gray-400"
+            isDragActive ? 'border-green-500' : 'border-gray-400'
           } rounded-md cursor-pointer text-center`}
         >
           <input {...getInputProps()} />
@@ -386,22 +367,16 @@ const AuthorizationCompliance = ({ demo }: Props) => {
             <p>Drop the files here ...</p>
           ) : (
             <p className=" text-white">
-              Drag 'n' drop some files here, or click to select files. (PDF,
-              DOCX, etc.)
+              Drag 'n' drop some files here, or click to select files. (PDF, DOCX, etc.)
             </p>
           )}
         </div>
         {files.length > 0 && (
           <div className="mt-2">
-            <h3 className="text-lg font-medium text-gray-200">
-              Selected Files
-            </h3>
+            <h3 className="text-lg font-medium text-gray-200">Selected Files</h3>
             <ul className="list-disc text-gray-200">
-              {files.map((file) => (
-                <li
-                  key={file.name}
-                  className="flex justify-start items-center gap-2"
-                >
+              {files.map(file => (
+                <li key={file.name} className="flex justify-start items-center gap-2">
                   <span>{file.name}</span>
                   <button
                     onClick={() => removeFile(file.name)}
@@ -415,11 +390,7 @@ const AuthorizationCompliance = ({ demo }: Props) => {
                       stroke="currentColor"
                       className="w-4 h-4"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
                 </li>
@@ -432,7 +403,7 @@ const AuthorizationCompliance = ({ demo }: Props) => {
       <div className="flex justify-center items-center mt-2">
         <button
           className="px-4 py-2 bg-blue-600 text-white rounded-xl"
-          onClick={() => handleClick("next")}
+          onClick={() => handleClick('next')}
         >
           Submit
         </button>

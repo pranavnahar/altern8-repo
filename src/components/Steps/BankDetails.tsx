@@ -3,38 +3,32 @@
 // 1. connect with rootfi to collect data
 // 2. if it fails then manually upload bank statement
 
-import { useContext, useState, useCallback, useEffect } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
-import HelpAndLogin from "../Step-Component/HelpAndLogin";
-import { useRouter } from "next/navigation";
-import { parseCookies } from "nookies";
-import { useDropzone } from "react-dropzone";
-import ImageSlider from "./Account Aggregator/ImageSlider";
-import { AA_videos } from "./Account Aggregator/AA_Videos";
-import { useToast } from "@/utils/show-toasts";
+import { useContext, useState, useCallback, useEffect } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import { useRouter } from 'next/navigation';
+import { parseCookies } from 'nookies';
+import { useDropzone } from 'react-dropzone';
+import ImageSlider from './Account Aggregator/ImageSlider';
+import { AA_videos } from './Account Aggregator/AA_Videos';
+import { useToast } from '@/Utils/show-toasts';
 
 type Props = {
   demo: boolean;
-}
+};
 
-const BankDetails  = ({ demo } : Props) => {
+const BankDetails = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [needManualUpload, setNeedManualUpload] = useState(false);
-  const {
-    currentStep,
-    setCurrentStep,
-    steps,
-    setLoading,
-    getRegistrationState,
-    setApiFailedIcon,
-  } = useContext(StepperContext);
+  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState, setApiFailedIcon } =
+    useContext(StepperContext);
   const [files, setFiles] = useState<{ file: File; password: string }[]>([]); // state for file upload
   const [showFileBasedInputFields, setShowFileBasedInputFields] = useState(false);
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
   const [showKnowMore, setShowKnowMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const iframeUrl = "";
+  const iframeUrl = '';
   // Handle token
   let accessToken = parseCookies().altern8_useraccessForRegister;
 
@@ -45,17 +39,17 @@ const BankDetails  = ({ demo } : Props) => {
     // change the step after click for back button
     let newStep = currentStep;
 
-    if (direction !== "next") {
+    if (direction !== 'next') {
       newStep--;
       // add a tick in the stepper instead of red cross
       setApiFailedIcon(false);
       setCurrentStep(newStep);
     }
     // if button is next the submit data to backend api
-    else if (direction === "next") {
+    else if (direction === 'next') {
       if (demo) {
-        router.push('/register?demo=true&step=4')
-        return
+        router.push('/register?demo=true&step=4');
+        return;
       }
       const bodyData = {};
 
@@ -64,28 +58,25 @@ const BankDetails  = ({ demo } : Props) => {
           if (bodyData) {
             const body = bodyData;
             setLoading(true);
-            const response = await fetch(
-              `${apiUrl}/user-api/account-aggregator/`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(body),
-              }
-            );
+            const response = await fetch(`${apiUrl}/user-api/account-aggregator/`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify(body),
+            });
 
             // if unauthorized then push to login page
             if (response.status === 401) {
-              router.push("/login");
+              router.push('/login');
             }
 
             if (response.ok) {
               let server_message = await response.json();
               console.log(`AA data submitted successfully`, server_message);
 
-              showToast(`Submission Successful`, "info");
+              showToast(`Submission Successful`, 'info');
 
               // change the step after click and submitting the data
               getRegistrationState();
@@ -98,13 +89,13 @@ const BankDetails  = ({ demo } : Props) => {
               // add a cross in the stepper instead of tick
               setApiFailedIcon(true);
 
-              showToast(`Submission failed!`, "info");
+              showToast(`Submission failed!`, 'info');
             }
           }
         } catch (error) {
           console.error(
             `Error submitting AA data, Error in fetching api (${currentStep}) :`,
-            error
+            error,
           );
 
           // if api fails then go for manaual upload
@@ -112,7 +103,7 @@ const BankDetails  = ({ demo } : Props) => {
           // add a cross in the stepper instead of tick
           setApiFailedIcon(true);
 
-          showToast(`Submission failed, system error!`, "info");
+          showToast(`Submission failed, system error!`, 'info');
         } finally {
           setLoading(false);
         }
@@ -130,7 +121,7 @@ const BankDetails  = ({ demo } : Props) => {
 
   // handle input field changes
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
     //index?: number
   ) => {
     // const { name, value } = e.target;
@@ -147,7 +138,7 @@ const BankDetails  = ({ demo } : Props) => {
     const { value } = e.target;
 
     // Update the password for all files
-    const updatedFiles = files.map((file) => ({
+    const updatedFiles = files.map(file => ({
       ...file,
       password: value,
     }));
@@ -160,7 +151,7 @@ const BankDetails  = ({ demo } : Props) => {
     // Construct an array with objects containing file and additional fields
     const updatedFiles = acceptedFiles.map((file: File) => ({
       file: file,
-      password: "",
+      password: '',
     }));
 
     setShowFileBasedInputFields(true);
@@ -184,9 +175,8 @@ const BankDetails  = ({ demo } : Props) => {
 
         // file type and size validations
         if (
-          file.type === "application/pdf" || // Check if the file is a PDF
-          file.type ===
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          file.type === 'application/pdf' || // Check if the file is a PDF
+          file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ) {
           if (file.size <= 5 * 1024 * 1024) {
             // Check if the file size is below 5MB
@@ -197,11 +187,11 @@ const BankDetails  = ({ demo } : Props) => {
 
             console.log(formData);
           } else {
-            alert("File size exceeds 5MB limit. Please choose a smaller file.");
+            alert('File size exceeds 5MB limit. Please choose a smaller file.');
             return; // Stop processing files if size limit exceeded
           }
         } else {
-          alert("Please choose PDF or Excel files only.");
+          alert('Please choose PDF or Excel files only.');
           return; // Stop processing files if file type is not supported
         }
       }
@@ -214,7 +204,7 @@ const BankDetails  = ({ demo } : Props) => {
           console.log(`${key}: ${value}`);
         }
         let response = await fetch(`${apiUrl}/user-api/bank-document/`, {
-          method: "POST",
+          method: 'POST',
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -223,13 +213,13 @@ const BankDetails  = ({ demo } : Props) => {
 
         // if unauthorized then push to login page
         if (response.status === 401) {
-          router.push("/login");
+          router.push('/login');
         }
 
         if (response.ok) {
           await response.json();
-          showToast(`Files uploaded successfully`, "info");
-          console.log("Files uploaded successfully:");
+          showToast(`Files uploaded successfully`, 'info');
+          console.log('Files uploaded successfully:');
 
           // add a tick in the stepper instead of red cross
           setApiFailedIcon(false);
@@ -238,23 +228,23 @@ const BankDetails  = ({ demo } : Props) => {
         } else {
           const responseData = await response.json();
           console.log(responseData);
-          console.error("Error uploading files:");
-          showToast("Files upload failed!", "info");
+          console.error('Error uploading files:');
+          showToast('Files upload failed!', 'info');
         }
       } catch (error) {
         console.log(`Error uploading files  (${currentStep}) :`, error);
-        showToast(`Files upload failed!`, "info");
+        showToast(`Files upload failed!`, 'info');
       } finally {
         setLoading(false);
       }
     } else {
-      showToast(`Please drag and drop files to upload.`, "info");
+      showToast(`Please drag and drop files to upload.`, 'info');
     }
   };
 
   // to show "know more" text
   const handleKnowMoreButtonClick = () => {
-    setShowKnowMore((prevState) => !prevState);
+    setShowKnowMore(prevState => !prevState);
   };
 
   //Digitap SDK PART
@@ -262,14 +252,14 @@ const BankDetails  = ({ demo } : Props) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/generate-url", {
+      const response = await fetch('/api/generate-url', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          destination: "accountaggregator",
-          return_url: "http://localhost:3000/register",
+          destination: 'accountaggregator',
+          return_url: 'http://localhost:3000/register',
         }),
       });
 
@@ -315,20 +305,16 @@ const BankDetails  = ({ demo } : Props) => {
           {showKnowMore && (
             <div className="text-gray-300 flex flex-row items-center text-base p-2 mx-auto  rounded-lg ">
               <div>
-                In September 2016, the RBI has proposed setting up of an Account
-                Aggregator (AA) that would act as a common platform which
-                enables easy sharing of data from various entities with user
-                consent. The Account Aggregator will help individuals share
-                their financial data with third parties in a safe and secure
-                manner, and give them greater control over how their data is
-                being used. AA does not and cannot store any user’s data - thus,
-                the potential for leakage and misuse of user’s data is
-                prevented. Aggregators (AA) use technology to assist you in
-                simple and secure exchange of your data between financial
-                institutions like banks. This information cannot be shared
-                without your consent. With AA, you can use your financial data
-                to access a vast array of financial services for your personal
-                or business needs.
+                In September 2016, the RBI has proposed setting up of an Account Aggregator (AA)
+                that would act as a common platform which enables easy sharing of data from various
+                entities with user consent. The Account Aggregator will help individuals share their
+                financial data with third parties in a safe and secure manner, and give them greater
+                control over how their data is being used. AA does not and cannot store any user’s
+                data - thus, the potential for leakage and misuse of user’s data is prevented.
+                Aggregators (AA) use technology to assist you in simple and secure exchange of your
+                data between financial institutions like banks. This information cannot be shared
+                without your consent. With AA, you can use your financial data to access a vast
+                array of financial services for your personal or business needs.
               </div>
             </div>
           )}
@@ -374,8 +360,8 @@ const BankDetails  = ({ demo } : Props) => {
               </svg>
             </div>
             <div>
-              Account Aggregator Data Fetch Failed. Please upload 3 year Bank
-              Statements of all your business accounts (xls,csv, pdf)
+              Account Aggregator Data Fetch Failed. Please upload 3 year Bank Statements of all your
+              business accounts (xls,csv, pdf)
             </div>
           </div>
           {/* upload bank statements files  */}
@@ -402,12 +388,8 @@ const BankDetails  = ({ demo } : Props) => {
                 <table>
                   <thead className="border-b border-gray-200">
                     <tr>
-                      <th className="p-3 text-sm text-gray-300 font-medium text-left">
-                        File Name
-                      </th>
-                      <th className="p-3 text-sm text-gray-300 font-medium text-left">
-                        Password
-                      </th>
+                      <th className="p-3 text-sm text-gray-300 font-medium text-left">File Name</th>
+                      <th className="p-3 text-sm text-gray-300 font-medium text-left">Password</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -419,10 +401,10 @@ const BankDetails  = ({ demo } : Props) => {
 
                         <td className="p-3 text-sm text-gray-200 font-medium">
                           <input
-                            onChange={(e) => handleChange(e)}
+                            onChange={e => handleChange(e)}
                             //value={file.password || ""}
                             name="password"
-                            placeholder={file.password || "Enter password"}
+                            placeholder={file.password || 'Enter password'}
                             className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:border-purple-600 transition-colors"
                             type="text"
                             autoComplete="new-password"
@@ -451,14 +433,14 @@ const BankDetails  = ({ demo } : Props) => {
                   className=" bg-teal-400 text-white px-4 mx-3 py-2 rounded-full transition-transform transform hover:scale-110"
                   disabled={isLoading}
                 >
-                  {isLoading ? "Loading..." : "Connect Bank Accounts"}
+                  {isLoading ? 'Loading...' : 'Connect Bank Accounts'}
                 </button>
               </div>
             )}
 
             {/* next button  */}
             <button
-              onClick={() => handleClick("next")}
+              onClick={() => handleClick('next')}
               className="bg-[#1565c0] mx-3 text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
             >
               Next

@@ -1,16 +1,16 @@
 // get the ITR details of the user
 
-import React, { useContext, useState, useCallback, useEffect } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
+import React, { useContext, useState, useCallback, useEffect } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
 //import HelpAndLogin from "./stepsComponents/HelpAndLogin";
-import { parseCookies } from "nookies";
-import { useDropzone } from "react-dropzone";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/utils/show-toasts";
+import { parseCookies } from 'nookies';
+import { useDropzone } from 'react-dropzone';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/Utils/show-toasts';
 
 type Props = {
-  demo: boolean
-}
+  demo: boolean;
+};
 
 const ITR = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -18,29 +18,21 @@ const ITR = ({ demo }: Props) => {
     itrUsername: string;
     itrPassword: string;
   }>({
-    itrUsername: "",
-    itrPassword: "",
+    itrUsername: '',
+    itrPassword: '',
   });
-  const {
-    currentStep,
-    setCurrentStep,
-    steps,
-    setLoading,
-    getRegistrationState,
-    setApiFailedIcon,
-  } = useContext(StepperContext);
+  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState, setApiFailedIcon } =
+    useContext(StepperContext);
 
   // if the system fails to get ITR via api
   // then user will manually uploads the data
   const [needManualUpload, setNeedManualUpload] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
-  const [filePasswords, setFilePasswords] = useState<{ [key: string]: string }>(
-    {
-      fileName: "",
-    }
-  );
+  const [filePasswords, setFilePasswords] = useState<{ [key: string]: string }>({
+    fileName: '',
+  });
   const [externalApiErrorCounts, setExternalApiErrorCounts] = useState(0);
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccessForRegister;
@@ -65,21 +57,21 @@ const ITR = ({ demo }: Props) => {
 
       // if unauthorized then push to login page
       if (response.status === 401) {
-        router.push("/login");
+        router.push('/login');
       }
 
       if (response.ok) {
         const responseData = await response.json();
         const panNumber = responseData.data;
-        setUserData((prevData) => ({
+        setUserData(prevData => ({
           ...prevData,
           itrUsername: panNumber,
         }));
       } else {
-        console.log("Unable to fetch itr username");
+        console.log('Unable to fetch itr username');
       }
     } catch (error) {
-      console.log("Unable to fetch itr username, (${currentStep}) :", error);
+      console.log('Unable to fetch itr username, (${currentStep}) :', error);
     } finally {
       setLoading(false);
     }
@@ -95,30 +87,30 @@ const ITR = ({ demo }: Props) => {
   const handleClick = async (direction?: string) => {
     let newStep = currentStep;
 
-    if (direction !== "next") {
+    if (direction !== 'next') {
       newStep--;
       setApiFailedIcon(false);
       setCurrentStep(newStep);
-    } else if (direction === "next") {
+    } else if (direction === 'next') {
       if (demo) {
-        router.push('/register?demo=true&step=7')
-        return
+        router.push('/register?demo=true&step=7');
+        return;
       }
       if (!needManualUpload) {
         let newRecord: { username: string; password: string } = {
-          username: "",
-          password: "",
+          username: '',
+          password: '',
         };
         newRecord.username = userData.itrUsername;
         newRecord.password = userData.itrPassword;
 
         // data validation
         if (newRecord.username.length !== 10) {
-          showToast(`PAN Number or username must contain 10 digits`, "info");
+          showToast(`PAN Number or username must contain 10 digits`, 'info');
           return;
         }
         if (newRecord.password.length < 4) {
-          showToast(`Please enter valid ITR password`, "info");
+          showToast(`Please enter valid ITR password`, 'info');
           return;
         }
 
@@ -130,25 +122,25 @@ const ITR = ({ demo }: Props) => {
             const response = await fetch(
               `${apiUrl}/scoreme-api/itr/external/fileautomatedrequest/validationcheck/`,
               {
-                method: "POST",
+                method: 'POST',
                 headers: {
-                  "Content-Type": "application/json",
+                  'Content-Type': 'application/json',
                   Authorization: `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify(body),
-              }
+              },
             );
 
             // if unauthorized then push to login page
             if (response.status === 401) {
-              router.push("/login");
+              router.push('/login');
             }
 
             if (response.ok) {
               let serverMessage = await response.json();
               console.log(`ITR data submitted successfully`, serverMessage);
 
-              showToast(`Submission Successful`, "info");
+              showToast(`Submission Successful`, 'info');
 
               // change the step after click and submitting the data
               getRegistrationState();
@@ -156,9 +148,9 @@ const ITR = ({ demo }: Props) => {
               let server_error = await response.json();
               console.error(`Failed to submit ITR data`, server_error);
               setExternalApiErrorCounts(
-                (prevExternalApiErrorCounts) => prevExternalApiErrorCounts + 1
+                prevExternalApiErrorCounts => prevExternalApiErrorCounts + 1,
               );
-              showToast(`Submission failed! ${server_error.message}`, "info");
+              showToast(`Submission failed! ${server_error.message}`, 'info');
 
               if (externalApiErrorCounts > 1) {
                 setNeedManualUpload(true);
@@ -169,9 +161,9 @@ const ITR = ({ demo }: Props) => {
         } catch (error) {
           console.error(
             `Error submitting ITR form data, Error in fetching api, (${currentStep}) :`,
-            error
+            error,
           );
-          showToast(`Submission failed, system error!`, "info");
+          showToast(`Submission failed, system error!`, 'info');
 
           setNeedManualUpload(true);
           setApiFailedIcon(true);
@@ -193,14 +185,11 @@ const ITR = ({ demo }: Props) => {
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     console.log(acceptedFiles);
     setFiles(acceptedFiles);
-    setFilePasswords({ fileName: "" });
+    setFilePasswords({ fileName: '' });
   }, []);
 
-  const handlePasswordChange = (
-    fileName: string,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFilePasswords((prevPasswords) => ({
+  const handlePasswordChange = (fileName: string, event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilePasswords(prevPasswords => ({
       ...prevPasswords,
       [fileName]: event.target.value,
     }));
@@ -219,25 +208,24 @@ const ITR = ({ demo }: Props) => {
         const file = files[i];
 
         if (
-          file.type === "application/pdf" ||
-          file.type ===
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          file.type === 'application/pdf' ||
+          file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ) {
           if (file.size <= 5 * 1024 * 1024) {
             // Check if the file size is below 5MB
             formData.append(`files[${i}]`, file);
 
             // Add password or None if not provided
-            const password = filePasswords.fileName || "None";
+            const password = filePasswords.fileName || 'None';
             formData.append(`passwords[${i}]`, password);
 
             console.log(formData, file, password);
           } else {
-            alert("File size exceeds 5MB limit. Please choose a smaller file.");
+            alert('File size exceeds 5MB limit. Please choose a smaller file.');
             return; // Stop processing files if size limit exceeded
           }
         } else {
-          alert("Please choose PDF or Excel files only.");
+          alert('Please choose PDF or Excel files only.');
           return; // Stop processing files if file type is not supported
         }
       }
@@ -246,7 +234,7 @@ const ITR = ({ demo }: Props) => {
         setLoading(true);
 
         let response = await fetch(`${apiUrl}/user-api/itr-document/`, {
-          method: "POST",
+          method: 'POST',
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -255,14 +243,14 @@ const ITR = ({ demo }: Props) => {
 
         // if unauthorized then push to login page
         if (response.status === 401) {
-          router.push("/login");
+          router.push('/login');
         }
 
         if (response.ok) {
           await response.json();
 
-          console.log("Files uploaded successfully:");
-          showToast(`Files uploaded successfully`, "info");
+          console.log('Files uploaded successfully:');
+          showToast(`Files uploaded successfully`, 'info');
 
           // add a tick in the stepper instead of red cross
           setApiFailedIcon(false);
@@ -272,17 +260,17 @@ const ITR = ({ demo }: Props) => {
         } else {
           const responseData = await response.json();
           console.log(responseData);
-          console.error("Error uploading files:", responseData);
-          showToast("Files upload failed!", "info");
+          console.error('Error uploading files:', responseData);
+          showToast('Files upload failed!', 'info');
         }
       } catch (error) {
         console.log(`Error uploading files, (${currentStep}) :`, error);
-        showToast(`Files upload failed!`, "info");
+        showToast(`Files upload failed!`, 'info');
       } finally {
         setLoading(false);
       }
     } else {
-      showToast(`Please drag and drop files to upload.`, "info");
+      showToast(`Please drag and drop files to upload.`, 'info');
     }
   };
 
@@ -303,7 +291,7 @@ const ITR = ({ demo }: Props) => {
             <div className=" my-2 py-1 flex">
               <input
                 onChange={handleChange}
-                value={userData.itrUsername || ""}
+                value={userData.itrUsername || ''}
                 name="itrUsername"
                 placeholder="ITR Username"
                 className="py-1   uppercase w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -320,11 +308,11 @@ const ITR = ({ demo }: Props) => {
             <div className=" my-2 py-1 relative">
               <input
                 onChange={handleChange}
-                value={userData.itrPassword || ""}
+                value={userData.itrPassword || ''}
                 name="itrPassword"
                 placeholder="ITR Password"
                 className="py-1 w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
-                type={passwordVisible ? "text" : "password"}
+                type={passwordVisible ? 'text' : 'password'}
                 autoComplete="new-password"
                 required
               />
@@ -390,8 +378,8 @@ const ITR = ({ demo }: Props) => {
               </svg>
             </div>
             <div>
-              Income Tax Data Fetch Failed. Please upload 3 year ITR of all your
-              business accounts (xls,csv, pdf)
+              Income Tax Data Fetch Failed. Please upload 3 year ITR of all your business accounts
+              (xls,csv, pdf)
             </div>
           </div>
           {/* upload ITR files  */}
@@ -430,8 +418,8 @@ const ITR = ({ demo }: Props) => {
                     </span>
                     <div className=" my-1 py-1 flex">
                       <input
-                        onChange={(e) => handlePasswordChange(file.name, e)}
-                        value={filePasswords.fileName || ""}
+                        onChange={e => handlePasswordChange(file.name, e)}
+                        value={filePasswords.fileName || ''}
                         placeholder="Enter password if any"
                         className="py-1 w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
                         type="text"
@@ -455,7 +443,7 @@ const ITR = ({ demo }: Props) => {
 
             {/* next button  */}
             <button
-              onClick={() => handleClick("next")}
+              onClick={() => handleClick('next')}
               className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
             >
               Next

@@ -1,17 +1,17 @@
-import React, { useContext, useState, useEffect } from "react";
-import { StepperContext } from "../../contexts/StepperContext";
-import HelpAndLogin from "../Step-Component/HelpAndLogin";
-import { useRouter } from "next/navigation";
-import { parseCookies } from "nookies";
-import { Button } from "@mui/material";
-import { IconChevronUpRight } from "@tabler/icons-react";
-import { useToast } from "@/utils/show-toasts";
+import React, { useContext, useState, useEffect } from 'react';
+import { StepperContext } from '../../Contexts/StepperContext';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import { useRouter } from 'next/navigation';
+import { parseCookies } from 'nookies';
+import { Button } from '@mui/material';
+import { IconChevronUpRight } from '@tabler/icons-react';
+import { useToast } from '@/Utils/show-toasts';
 
 type Props = {
   demo: boolean;
-}
+};
 
-const POC = ({ demo } : Props) => {
+const POC = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [showEditDetails, setShowEditDetails] = useState(false);
   const [showAddDetails, setShowAddDetails] = useState(false);
@@ -24,17 +24,18 @@ const POC = ({ demo } : Props) => {
       designation: string;
     }[]
   >([]); // to show previous poc details
-  const [currentPocId, setCurrentPocId] = useState(""); // to show previous poc details
+  const [currentPocId, setCurrentPocId] = useState(''); // to show previous poc details
 
   const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-    phoneNumber: "",
-    designation: "",
+    name: '',
+    email: '',
+    phoneNumber: '',
+    designation: '',
   });
-  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } = useContext(StepperContext);
+  const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } =
+    useContext(StepperContext);
   const router = useRouter();
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccessForRegister;
@@ -75,7 +76,7 @@ const POC = ({ demo } : Props) => {
 
       // if unauthorized then push to login page
       if (response.status === 401) {
-        router.push("/login");
+        router.push('/login');
       }
 
       if (response.ok) {
@@ -89,11 +90,11 @@ const POC = ({ demo } : Props) => {
             designation: string;
           }) => ({
             id: poc.id,
-            name: poc.name || "",
-            email: poc.email || "",
-            phoneNumber: poc.phone_number || "",
-            designation: poc.designation || "",
-          })
+            name: poc.name || '',
+            email: poc.email || '',
+            phoneNumber: poc.phone_number || '',
+            designation: poc.designation || '',
+          }),
         );
 
         if (newPocDetails.length < 1) {
@@ -121,21 +122,20 @@ const POC = ({ demo } : Props) => {
 
       // if unauthorized then push to login page
       if (response.status === 401) {
-        router.push("/login");
+        router.push('/login');
       }
 
       if (response.ok) {
         const responseData = await response.json();
         console.log(responseData);
 
-        const { first_name, last_name, email, phone_number, designation } =
-          responseData[0] || {};
+        const { first_name, last_name, email, phone_number, designation } = responseData[0] || {};
 
         setUserData({
-          name: `${first_name || ""} ${last_name || ""}`,
-          email: email || "",
-          phoneNumber: phone_number || "",
-          designation: designation || "",
+          name: `${first_name || ''} ${last_name || ''}`,
+          email: email || '',
+          phoneNumber: phone_number || '',
+          designation: designation || '',
         });
 
         setShowAddDetails(true);
@@ -167,7 +167,7 @@ const POC = ({ demo } : Props) => {
   const handleEditButtonClick = (id: string) => {
     // show edit poc details fields
     // Find the selected POC based on the ID
-    const selectedPOC = pocDetails.find((poc) => poc.id === id);
+    const selectedPOC = pocDetails.find(poc => poc.id === id);
     console.log(selectedPOC);
     if (selectedPOC) {
       // Set the userData state with the selected POC data
@@ -182,17 +182,17 @@ const POC = ({ demo } : Props) => {
       setShowEditDetails(true);
       setShowAddDetails(false);
     } else {
-      console.error("POC with ID", id, "not found.");
+      console.error('POC with ID', id, 'not found.');
     }
   };
   const handleAddButtonClick = () => {
     // show add poc details fields
     // Set the userData state with the selected POC data
     setUserData({
-      name: "",
-      email: "",
-      phoneNumber: "",
-      designation: "",
+      name: '',
+      email: '',
+      phoneNumber: '',
+      designation: '',
     });
     setShowAddDetails(true);
     setShowEditDetails(false);
@@ -203,26 +203,26 @@ const POC = ({ demo } : Props) => {
 
     // Validate Name
     if (!validateName(userData.name)) {
-      showToast(`Valid Name is required`, "info");
+      showToast(`Valid Name is required`, 'info');
       return;
     } else if (!validateEmail(userData.email)) {
-      showToast(`Invalid email address`, "info");
+      showToast(`Invalid email address`, 'info');
       return;
     } else if (!validatePhoneNumber(userData.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, "info");
+      showToast(`Phone number must be a 10-digit number`, 'info');
       return;
     } else if (userData.designation.length < 3) {
-      showToast(`Invalid designation`, "info");
+      showToast(`Invalid designation`, 'info');
       return;
     }
 
     const bodyData = {
       id: currentPocId,
-      name: userData["name"].trim(),
-      email: userData["email"].trim(),
-      phone_number: userData["phoneNumber"].trim(),
-      designation: userData["designation"].trim(),
-      source: "user_register_page",
+      name: userData['name'].trim(),
+      email: userData['email'].trim(),
+      phone_number: userData['phoneNumber'].trim(),
+      designation: userData['designation'].trim(),
+      source: 'user_register_page',
     };
     console.log(bodyData);
     try {
@@ -231,9 +231,9 @@ const POC = ({ demo } : Props) => {
         console.log(accessToken);
         setLoading(true);
         const response = await fetch(`${apiUrl}/user-api/poc/`, {
-          method: "PUT",
+          method: 'PUT',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify(body),
@@ -241,13 +241,13 @@ const POC = ({ demo } : Props) => {
 
         // if unauthorized then push to login page
         if (response.status === 401) {
-          router.push("/login");
+          router.push('/login');
         }
 
         if (response.ok) {
           let server_message = await response.json();
           console.log(`POC Form data submitted successfully!`, server_message);
-          showToast(`Submission Successful`, "info");
+          showToast(`Submission Successful`, 'info');
 
           //  update the poc details list
           GetPoc();
@@ -257,15 +257,15 @@ const POC = ({ demo } : Props) => {
           let server_error = await response.json();
           console.error(`Failed to submit poc data`, server_error);
 
-          showToast(`Submission failed!`, "info");
+          showToast(`Submission failed!`, 'info');
         }
       }
     } catch (error) {
       console.error(
         `Error submitting POC form data, Error in fetching api, (${currentStep}) :`,
-        error
+        error,
       );
-      showToast(`Submission failed, system error!`, "info");
+      showToast(`Submission failed, system error!`, 'info');
     } finally {
       setLoading(false);
     }
@@ -273,24 +273,24 @@ const POC = ({ demo } : Props) => {
 
   const submitAddedPOC = async () => {
     if (!validateName(userData.name)) {
-      showToast(`Valid Name is required`, "info");
+      showToast(`Valid Name is required`, 'info');
       return;
     } else if (!validateEmail(userData.email)) {
-      showToast(`Invalid email address`, "info");
+      showToast(`Invalid email address`, 'info');
       return;
     } else if (!validatePhoneNumber(userData.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, "info");
+      showToast(`Phone number must be a 10-digit number`, 'info');
       return;
     } else if (userData.designation.length < 3) {
-      showToast(`Please add a valid designation`, "info");
+      showToast(`Please add a valid designation`, 'info');
       return;
     }
     const bodyData = {
-      name: userData["name"].trim(),
-      email: userData["email"].trim(),
-      phone_number: userData["phoneNumber"].trim(),
-      designation: userData["designation"].trim(),
-      source: "user_register_page",
+      name: userData['name'].trim(),
+      email: userData['email'].trim(),
+      phone_number: userData['phoneNumber'].trim(),
+      designation: userData['designation'].trim(),
+      source: 'user_register_page',
     };
     console.log(bodyData);
     try {
@@ -299,9 +299,9 @@ const POC = ({ demo } : Props) => {
         console.log(accessToken);
         setLoading(true);
         const response = await fetch(`${apiUrl}/user-api/poc/`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify(body),
@@ -309,17 +309,14 @@ const POC = ({ demo } : Props) => {
 
         // if unauthorized then push to login page
         if (response.status === 401) {
-          router.push("/login");
+          router.push('/login');
         }
 
         if (response.ok) {
           let server_message = await response.json();
-          console.log(
-            `POC Form data submitted successfully!-- ${currentStep}`,
-            server_message
-          );
+          console.log(`POC Form data submitted successfully!-- ${currentStep}`, server_message);
 
-          showToast(`Submission Successful`, "info");
+          showToast(`Submission Successful`, 'info');
 
           // update poc details list
           GetPoc();
@@ -329,15 +326,15 @@ const POC = ({ demo } : Props) => {
           let server_error = await response.json();
           console.error(`Failed to submit poc form data.`, server_error);
 
-          showToast(`Submission failed!`, "info");
+          showToast(`Submission failed!`, 'info');
         }
       }
     } catch (error) {
       console.error(
         `Error submitting poc form data, Error in fetching api :, (${currentStep}) :`,
-        error
+        error,
       );
-      showToast(`Submission failed, system error!`, "info");
+      showToast(`Submission failed, system error!`, 'info');
     } finally {
       setLoading(false);
     }
@@ -345,15 +342,15 @@ const POC = ({ demo } : Props) => {
 
   const handleNextButtonClick = async () => {
     if (demo) {
-      router.push('/register?demo=true&step=3')
-      return
+      router.push('/register?demo=true&step=3');
+      return;
     }
     if (pocDetails && pocDetails.length === 0) {
       await submitAddedPOC();
     } else if (pocDetails && pocDetails.length > 0) {
-      getRegistrationState("Bank Details");
+      getRegistrationState('Bank Details');
     } else {
-      showToast(`Please add atleast one point of contact detail`, "info");
+      showToast(`Please add atleast one point of contact detail`, 'info');
     }
   };
 
@@ -393,9 +390,7 @@ const POC = ({ demo } : Props) => {
               <tbody>
                 {pocDetails.map((poc, index) => (
                   <tr key={index} className="">
-                    <td className="p-3 text-sm text-gray-300 font-medium">
-                      {poc.name}
-                    </td>
+                    <td className="p-3 text-sm text-gray-300 font-medium">{poc.name}</td>
                     <td className="p-3 text-sm text-gray-300 font-medium text-center">
                       {poc.email}
                     </td>
@@ -424,8 +419,8 @@ const POC = ({ demo } : Props) => {
               <Button
                 onClick={handleAddButtonClick}
                 style={{
-                  backgroundColor: "#1565c0",
-                  borderRadius: "25px", // Adjust the pixel value for the desired border radius
+                  backgroundColor: '#1565c0',
+                  borderRadius: '25px', // Adjust the pixel value for the desired border radius
                 }}
                 variant="contained"
                 endIcon={<IconChevronUpRight />}
@@ -448,7 +443,7 @@ const POC = ({ demo } : Props) => {
               <div className="my-2 py-1 flex">
                 <input
                   onChange={handleChange}
-                  value={userData["name"] || ""}
+                  value={userData['name'] || ''}
                   name="name"
                   placeholder="name"
                   className="py-1 placeholder:text-white  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -464,7 +459,7 @@ const POC = ({ demo } : Props) => {
               <div className="my-2 py-1 relative">
                 <input
                   onChange={handleChange}
-                  value={userData["email"] || ""}
+                  value={userData['email'] || ''}
                   name="email"
                   placeholder="Email"
                   className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -481,7 +476,7 @@ const POC = ({ demo } : Props) => {
               <div className="my-2 py-1 relative">
                 <input
                   onChange={handleChange}
-                  value={userData["phoneNumber"] || ""}
+                  value={userData['phoneNumber'] || ''}
                   name="phoneNumber"
                   placeholder="Phone Number"
                   className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -498,7 +493,7 @@ const POC = ({ demo } : Props) => {
               <div className="my-2 py-1 flex">
                 <input
                   onChange={handleChange}
-                  value={userData["designation"] || ""}
+                  value={userData['designation'] || ''}
                   name="designation"
                   placeholder="designation"
                   className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -511,8 +506,8 @@ const POC = ({ demo } : Props) => {
               <Button
                 onClick={submitEditedPOC}
                 style={{
-                  backgroundColor: "#1565c0",
-                  borderRadius: "25px", // Adjust the pixel value for the desired border radius
+                  backgroundColor: '#1565c0',
+                  borderRadius: '25px', // Adjust the pixel value for the desired border radius
                 }}
                 variant="contained"
                 endIcon={<IconChevronUpRight />}
@@ -535,7 +530,7 @@ const POC = ({ demo } : Props) => {
               <div className="my-2 py-1 flex">
                 <input
                   onChange={handleChange}
-                  value={userData["name"] || ""}
+                  value={userData['name'] || ''}
                   name="name"
                   placeholder="name"
                   className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -551,7 +546,7 @@ const POC = ({ demo } : Props) => {
               <div className="my-2 py-1 relative">
                 <input
                   onChange={handleChange}
-                  value={userData["email"] || ""}
+                  value={userData['email'] || ''}
                   name="email"
                   placeholder="Email"
                   className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -568,7 +563,7 @@ const POC = ({ demo } : Props) => {
               <div className="my-2 py-1 relative">
                 <input
                   onChange={handleChange}
-                  value={userData["phoneNumber"] || ""}
+                  value={userData['phoneNumber'] || ''}
                   name="phoneNumber"
                   placeholder="Phone Number"
                   className="py-1    w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -585,7 +580,7 @@ const POC = ({ demo } : Props) => {
               <div className="my-2 py-1 flex">
                 <input
                   onChange={handleChange}
-                  value={userData["designation"] || ""}
+                  value={userData['designation'] || ''}
                   name="designation"
                   placeholder="designation"
                   className="py-1  w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
@@ -599,8 +594,8 @@ const POC = ({ demo } : Props) => {
                 <Button
                   onClick={submitAddedPOC}
                   style={{
-                    backgroundColor: "#1565c0",
-                    borderRadius: "25px",
+                    backgroundColor: '#1565c0',
+                    borderRadius: '25px',
                   }}
                   variant="contained"
                   endIcon={<IconChevronUpRight />}
