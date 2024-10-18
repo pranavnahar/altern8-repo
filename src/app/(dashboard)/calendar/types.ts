@@ -3,5 +3,9 @@ export type Project = {
   project_name: string;
   start_date: string;
   end_date: string;
-  budget: number
-}
+  budget: number;
+};
+
+export type ProjectsResponse = {
+  project_data: Project[];
+};

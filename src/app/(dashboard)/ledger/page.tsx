@@ -39,7 +39,6 @@ const Ledger = () => {
         <TableSkeleton />
       ) : (
         <BasicTable data={accounts} columns={accountsColumns as Column[]} filters={[]} />
-        // <p>hello</p>
       )}
     </div>
   );

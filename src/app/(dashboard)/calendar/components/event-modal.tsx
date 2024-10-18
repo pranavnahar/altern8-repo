@@ -1,40 +1,41 @@
 import React from "react";
-import EventTable from "./event-table";
-import { IconButton } from "@mui/material";
-import { IconChevronLeft, IconX } from "@tabler/icons-react"
+import { IconArrowBack, IconX } from "@tabler/icons-react";
 import { Project } from "../types";
+import EventTable from "./event-table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
-interface EventModalProps {
-  events: Project[];
+type Props = {
+  projects: Project[];
+  isOpen: boolean;
   onClose: () => void;
 }
 
-const EventModal: React.FC<EventModalProps> = ({ events, onClose }) => {
-  console.log("ease", events)
+const EventModal: React.FC<Props> = ({ projects, isOpen, onClose }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto bg-black bg-opacity-50 outline-none focus:outline-none">
-      <div className="relative w-1/2 mx-auto my-6">
-        <div className="relative flex flex-col rounded-lg shadow-lg outline-none focus:outline-none [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]">
-          <div className="flex items-center justify-between p-5 rounded-t">
-            <IconButton>
-              <IconChevronLeft onClick={onClose} style={{ fill: "#d4d4d4" }} />
-            </IconButton>
-
-            <h3 className="text-xl font-semibold text-gray-300">
-              Invoices & Payment Dates
-            </h3>
-            <IconButton>
-              <IconX onClick={onClose} style={{ fill: "#d4d4d4" }} />
-            </IconButton>
-          </div>
-          <div className="relative flex-auto px-6 mb-5">
-            {events.map((event, index) => (
-              <EventTable key={index} project_id={event.project_id} project_name={event.project_name} start_date={event.start_date} end_date={event.end_date} budget={event.budget}  />
-            ))}
-          </div>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[50%] border-none [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]">
+        <DialogHeader className="flex flex-row items-center justify-between">
+          <IconArrowBack onClick={onClose} className="text-[#d4d4d4] cursor-pointer" />
+          <DialogTitle className="text-xl font-semibold text-gray-300">
+            Invoices & Payment Dates
+          </DialogTitle>
+          <IconX onClick={onClose} className="text-[#d4d4d4] cursor-pointer" />
+        </DialogHeader>
+        <div className="relative flex-auto px-6 mb-5">
+          {projects.map((project, index) => (
+            <EventTable
+              key={index}
+              project_id={project.project_id}
+              project_name={project.project_name}
+              start_date={project.start_date}
+              end_date={project.end_date}
+              budget={project.budget}
+            />
+          ))}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 

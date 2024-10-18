@@ -12,32 +12,6 @@ interface DashboardGridsProps {
   user: 'customer' | 'borrower';
 }
 
-// {
-//   "id": 3,
-//   "user": "MSABFQ3092",
-//   "project_name": "Downtown Skyline",
-//   "project_type": "Residential",
-//   "location": "City, State",
-//   "pin_code": "123456",
-//   "rera_regd_no": "ABC123",
-//   "start_date": "2023-01-01",
-//   "current_tranche_name": "First Phase",
-//   "current_tranche_status": "In Progress",
-//   "current_project_status": "In Progress",
-//   "line_of_credit_used": "0.00",
-//   "line_of_credit_available": "0.00",
-//   "line_of_credit": "5000000.00",
-//   "equity_commitment": "1000000.00",
-//   "debt_commitment": "2000000.00",
-//   "other_commitment": "500000.00",
-//   "project_total": "8500000.00",
-//   "percentage_complete_net": null,
-//   "application_date": "2024-10-03T12:53:36.502085+05:30",
-//   "project_completion_date": null,
-//   "last_tranche_date": null,
-//   "approved_by_admin": true
-// }
-
 const DashboardGrids: React.FC<DashboardGridsProps> = ({ data, user }) => {
   console.log('lol', data);
   const calc = data['%Complete (Net)'] ? String(data['%Complete (Net)']).replace('%', '') : '';

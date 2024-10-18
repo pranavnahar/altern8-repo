@@ -6,7 +6,6 @@ import { Button } from '../ui/button';
 import { fetchWithAuth } from '../../Utils/fetch-with-auth';
 import { showToast } from '../../Helpers/show-toasts';
 
-// Define form state type
 interface FormState {
   company_name: string;
   company_email: string;
