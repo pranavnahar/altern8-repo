@@ -8,7 +8,7 @@ import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/mui/Chatbox';
 import { DashboardContext } from '../../../Contexts/DashboardContext';
 import { fetchWithAuth } from '../../../Utils/fetch-with-auth';
-import Accordion from '@/components/ui/accordion2';
+import Accordion from '../../../components/ui/accordion2';
 
 const dummyFaqs = [
   {
