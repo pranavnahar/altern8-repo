@@ -1,11 +1,10 @@
-// @ts-nocheck
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { useToast } from '../../Utils/show-toasts';
 import LoadingSpinner from '../LoadingSpinner';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Button } from '../ui/button';
 import { fetchWithAuth } from '../../Utils/fetch-with-auth';
+import { showToast } from '@/Helpers/show-toasts';
 
 // Define form state type
 interface FormState {
@@ -34,10 +33,9 @@ const ContactUsForm = () => {
     'Vacation properties',
     'International properties',
     'Redevelopment',
-    'Retirement communities',
     'Student accommodation',
     'Serviced apartments',
-    'Mixed use properly',
+    'Mixed use property',
     'Affordable housing',
     'Plotted land',
   ];
@@ -58,8 +56,9 @@ const ContactUsForm = () => {
       (name === 'company_name' && value.length > 200) ||
       (name === 'company_query' && value.length > 400)
     ) {
-      useToast(
-        `${name === 'company_name' ? 'Company name' : 'Comments'} should be less than ${name === 'company_name' ? 200 : 400
+      showToast(
+        `${name === 'company_name' ? 'Company name' : 'Comments'} should be less than ${
+          name === 'company_name' ? 200 : 400
         } characters`,
         'info',
       );
@@ -80,33 +79,31 @@ const ContactUsForm = () => {
 
     const { company_name, company_email, company_query } = formData;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    //console.log(formData);
 
     if (company_name.length < 3 || company_email.length < 3 || company_query.length < 10) {
-      useToast(`Input value should not be too small or empty`, 'info');
-      return;
+      showToast(`Input value should not be too small or empty`, 'info');
     }
 
     if (!emailRegex.test(company_email)) {
-      useToast(`Invalid email format`, 'info');
-      return;
+      showToast(`Invalid email format`, 'info');
     }
 
     const isAnyChoiceSelected = choices.some(choice => formData[choice] === true);
     if (!isAnyChoiceSelected) {
-      useToast(`Choose at least one area of interest`, 'info');
-      return;
+      showToast(`Choose at least one area of interest`, 'info');
     }
 
     setLoading(true);
     try {
-      const response = await fetchWithAuth('/landing-page/contactus/', {
+      const response = await fetchWithAuth('/landing-page/contact-us/', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        useToast(`Form submitted successfully!`, 'info');
+      if (response?.ok) {
+        showToast(`Form submitted successfully!`, 'info');
         setFormData({
           ...initialFormState,
           ...Object.fromEntries(choices.map(choice => [choice, false])),
@@ -116,7 +113,7 @@ const ContactUsForm = () => {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      useToast(`Submission failed!`, 'info');
+      showToast(`Submission failed!`, 'info');
     } finally {
       setLoading(false);
     }
@@ -141,20 +138,26 @@ const ContactUsForm = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="p-5">
+        <form className="p-5" onSubmit={handleSubmit}>
           <h2 className="mb-5 text-5xl font-medium text-center font-roboto text-white-font">
             Contact us
           </h2>
 
-          {['company_name', 'company_email'].map(field => (
+          {['company_name', 'company_email', 'company_phone_number'].map(field => (
             <div key={field} className="mb-4">
               <label className="block mb-2 text-xs text-gray-400 uppercase">
                 {field.replace('_', ' ')}
               </label>
               <input
-                type={field === 'company_email' ? 'email' : 'text'}
+                type={
+                  field === 'company_email'
+                    ? 'email'
+                    : field === 'company_phone_number'
+                    ? 'number'
+                    : 'text'
+                }
                 name={field}
-                value={formData[field]}
+                value={formData[field] as string}
                 onChange={handleInput}
                 className="w-full px-2 py-1 text-sm text-gray-100 bg-transparent border-b-2 outline-none focus:border-purple-600 placeholder:text-sm"
                 required

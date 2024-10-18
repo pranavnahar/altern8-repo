@@ -8,12 +8,7 @@ import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/mui/Chatbox';
 import { DashboardContext } from '../../../Contexts/DashboardContext';
 import { fetchWithAuth } from '../../../Utils/fetch-with-auth';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '../../../components/ui/accordion';
+import Accordion from '@/components/ui/accordion2';
 
 const dummyFaqs = [
   {
@@ -112,23 +107,13 @@ const Help = () => {
         <div className="w-4/5 mx-auto pb-10 rounded-lg mt-15">
           <div className="py-5 text-5xl font-semibold text-center text-white">FAQs</div>
           <div className="mx-6">
-            <Accordion type="single" collapsible className="w-full">
-              {faqs.map(faq => {
-                return (
-                  <AccordionItem value={faq.id.toString()} key={faq.id}>
-                    <AccordionTrigger className="text-gray-200">{faq.question}</AccordionTrigger>
-                    <AccordionContent className="text-gray-200">{faq.answer}</AccordionContent>
-                  </AccordionItem>
-                );
-              })}
-            </Accordion>
-            {/* <Accordion
+            <Accordion
               items={faqs.map(faq => ({
                 title: faq.question,
                 content: faq.answer,
                 isOpenByDefault: false,
               }))}
-            /> */}
+            />
           </div>
 
           <div className="mt-10 text-center">

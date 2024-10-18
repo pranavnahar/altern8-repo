@@ -68,7 +68,7 @@ export const StepperProvider = ({ children }: StepperProviderProps) => {
       }
     }
 
-    let accessToken = parseCookies().altern8_useraccessForRegister;
+    let accessToken = parseCookies().altern8_useraccess;
     if (!accessToken || accessToken.length < 5) {
       setCurrentStep(1);
     } else {
