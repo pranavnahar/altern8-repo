@@ -20,6 +20,7 @@ interface InputFormsTypes {
   title: string;
   submitAction?: () => void;
   type?: string;
+  onProjectCreated?: (newProject: any) => void;
 }
 
 type FormData = {
@@ -160,6 +161,7 @@ export const InputForms = ({
   data,
   title,
   type,
+  onProjectCreated,
   submitAction = () => console.log('Function not passed'),
 }: InputFormsTypes) => {
   const ReplaceTokenOrRedirect = async (): Promise<void> => {
@@ -257,11 +259,18 @@ export const InputForms = ({
       });
 
       if (response.ok) {
-        await response.json();
+        const data = await response.json();
         setFormData({});
         toast('Document saved!', {
           description: 'Success',
         });
+
+        if (onProjectCreated){
+          onProjectCreated(data);
+          toast('Project created!', {
+            description: 'Success',
+          });
+        }
       } else {
         const errorResponse = await response.json();
         console.error('Upload error:', errorResponse.message || response.status);

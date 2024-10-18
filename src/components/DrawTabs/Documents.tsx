@@ -28,7 +28,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-// import { ButtonProps } from "@/lib/componentProps";
 import { useRouter } from 'next/navigation';
 import { FormInput } from '../LedgerTypeTable/Filter';
 import { InputForms } from '../InputForms/InputForms';

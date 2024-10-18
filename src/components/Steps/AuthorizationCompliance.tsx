@@ -358,8 +358,9 @@ const AuthorizationCompliance = ({ demo }: Props) => {
         </div>
         <div
           {...getRootProps()}
-          className={`p-4 border-2 border-dashed ${isDragActive ? 'border-green-500' : 'border-gray-400'
-            } rounded-md cursor-pointer text-center`}
+          className={`p-4 border-2 border-dashed ${
+            isDragActive ? 'border-green-500' : 'border-gray-400'
+          } rounded-md cursor-pointer text-center`}
         >
           <input {...getInputProps()} />
           {isDragActive ? (

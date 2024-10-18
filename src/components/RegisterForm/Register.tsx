@@ -71,7 +71,7 @@ const Register = ({ demo }: Props) => {
 
   // get seller registration state from backend
   const getRegistrationState = async (stateName?: string, currentPage?: string) => {
-    let accessToken = parseCookies().altern8_useraccessForRegister;
+    let accessToken = parseCookies().altern8_useraccess;
     // if the cookies don't have access token for register
     if (!accessToken || accessToken.length < 5) {
       setCurrentStep(1);

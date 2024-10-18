@@ -1,11 +1,11 @@
 'use client';
 import React, { useState } from 'react';
-import Input from '../../components/Input/input';
+import Input from '../../../components/Input/input';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
-import { formTemplate } from '../../utils/static';
-import { getAccessToken } from '../../utils/auth';
-import { useToast } from '../../utils/show-toasts';
+import { formTemplate } from '../../../utils/static';
+import { getAccessToken } from '../../../utils/auth';
+import { useToast } from '../../../utils/show-toasts';
 
 interface formDataType {
   basicInfo: object;
@@ -36,7 +36,7 @@ export default function page() {
     contactDetails: {},
   });
 
-  const [showFileUpload] = useState(false);
+  const [showFileUpload, setShowFileUpload] = useState(false);
   const [file, setFile] = useState<File | null>();
   const { showToast } = useToast();
 
@@ -84,8 +84,8 @@ export default function page() {
 
       const formDataToSend = new FormData();
 
-      if (showFileUpload) {
-        formDataToSend.append('file', file!);
+      if (file) {
+        formDataToSend.append('file', file);
       }
       const formDataHeaders = {
         Authorization: `Bearer ${accessToken}`,
@@ -97,8 +97,8 @@ export default function page() {
 
       const response = await fetch(`${apiUrl}/rera-api/rera-templates/`, {
         method: 'POST',
-        headers: showFileUpload ? formDataHeaders : defaultHeaders,
-        body: showFileUpload ? formDataToSend : JSON.stringify(formData),
+        headers: file ? formDataHeaders : defaultHeaders,
+        body: file ? formDataToSend : JSON.stringify(formData),
       });
 
       if (response.ok) {
@@ -137,7 +137,7 @@ export default function page() {
               label="Upload Template"
               onChange={handleFileChange}
               accept=".xls,.xlsx"
-              required
+              required={false}
               id=""
             />
             <div>

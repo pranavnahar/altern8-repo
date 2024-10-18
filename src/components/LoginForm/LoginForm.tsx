@@ -60,12 +60,12 @@ const login = () => {
       if (registrationStep === 'Approved') {
         router.push('/dashboard');
       } else {
-        setCookie(null, 'altern8_registeruseraccess', accessToken, {
-          expires: 30,
-          path: '/',
-        });
-        destroyCookie(null, 'altern8_useraccess');
-        destroyCookie(null, 'altern8_userrefresh');
+        // setCookie(null, 'altern8_registeruseraccess', accessToken, {
+        //   expires: 30,
+        //   path: '/',
+        // });
+        // destroyCookie(null, 'altern8_useraccess');
+        // destroyCookie(null, 'altern8_userrefresh');
         router.push('/register');
         showToast(`Please complete the registration`, 'info');
       }

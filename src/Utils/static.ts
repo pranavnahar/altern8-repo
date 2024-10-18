@@ -4,7 +4,7 @@ export const formTemplate = [
     label: "User ID",
     name: "user_id",
     placeholder: "User Id",
-    required: true,
+    required: false,
     formData: "basicInfo",
   },
   {

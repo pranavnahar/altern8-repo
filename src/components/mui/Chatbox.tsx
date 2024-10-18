@@ -41,7 +41,7 @@ const ChatBox: React.FC<{
   };
 
   // Handle token
-  let accessToken = parseCookies().altern8_useraccessForRegister; // access token from cookies
+  let accessToken = parseCookies().altern8_useraccess; // access token from cookies
 
   // get all Messages from backend
   useEffect(() => {
