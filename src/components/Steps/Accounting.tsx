@@ -292,8 +292,9 @@ const Accounting = ({ demo }: Props) => {
                 <div className="text-lg font-semibold text-gray-300">Upload Files</div>
                 <div
                   {...getRootProps()}
-                  className={`flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-gray-400 rounded-md p-4 mt-2 transition-colors duration-300 ${isDragActive ? 'border-blue-500' : ''
-                    }`}
+                  className={`flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-gray-400 rounded-md p-4 mt-2 transition-colors duration-300 ${
+                    isDragActive ? 'border-blue-500' : ''
+                  }`}
                 >
                   <input {...getInputProps()} />
                   <div className="flex flex-col items-center justify-center w-full py-2">
