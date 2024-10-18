@@ -58,7 +58,7 @@ const BankDetails = ({ demo }: Props) => {
           if (bodyData) {
             const body = bodyData;
             setLoading(true);
-            const response = await fetch(`${apiUrl}/user-api/account-aggregator/`, {
+            const response = await fetch(`${apiUrl!}/user-api/account-aggregator/`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
