@@ -1,54 +1,37 @@
-import React from 'react';
-import Link from 'next/link';
+import React, { FC } from 'react';
 import { Project } from '../types';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../../../components/ui/table";
 
-const EventTable: React.FC<Project> = ( project ) => {
+const EventTable: FC<Project> = ({ project_id, project_name, start_date, end_date, budget }) => {
   return (
     <div className="col-span-4 pb-10 mt-3 mr-5 rounded-lg">
-      <div className="rounded-lg">
-        <table className="w-full overflow-hidden rounded-lg">
-          <thead className="overflow-hidden border-b-2 border-gray-400 rounded-lg">
-            <tr>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left text-gray-200">
-                Seller ID
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left text-gray-200">
-                Invoice ID
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left text-gray-200">
-                Title
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left text-gray-200">
-                Amount
-              </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left text-gray-200">
-                Payment Date
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="p-3 text-sm font-medium text-blue-600">
-                <Link href={`/sellers/${project.project_id}`}>
-                  {project.project_id}
-                </Link>
-              </td>
-              <td className="p-3 text-sm font-medium text-blue-600">
-                <Link href={`/invoices/${project.project_id}`}>{project.project_id}</Link>
-              </td>
-              <td className="p-3 text-sm font-medium text-gray-300 whitespace-nowrap hover:text-gray-200">
-                {project.project_name}
-              </td>
-              <td className="p-3 text-sm font-medium text-gray-300 whitespace-nowrap hover:text-gray-200">
-                ₹ {project.budget?.toLocaleString('en-IN')}
-              </td>
-              <td className="p-3 text-sm font-medium text-gray-300 whitespace-nowrap hover:text-gray-200">
-                {project.start_date}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-gray-200">ID</TableHead>
+            <TableHead className="text-gray-200">Name</TableHead>
+            <TableHead className="text-gray-200">Start</TableHead>
+            <TableHead className="text-gray-200">End</TableHead>
+            <TableHead className="text-gray-200">Budget</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell className="font-medium text-gray-300">{project_id}</TableCell>
+            <TableCell className="text-gray-300">{project_name}</TableCell>
+            <TableCell className="text-gray-300">{start_date}</TableCell>
+            <TableCell className="text-gray-300">{end_date}</TableCell>
+            <TableCell className="text-gray-300">{budget}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
   );
 };
