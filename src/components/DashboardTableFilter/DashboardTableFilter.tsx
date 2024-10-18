@@ -134,7 +134,7 @@ const DashboardTableFilter: React.FC = () => {
     {
       type: 'text',
       label: 'Project Name',
-      name: 'projectName',
+      name: 'project_name',
       placeholder: 'Project Name',
       required: true,
       errMsg: 'Please fill this out!',
@@ -144,50 +144,61 @@ const DashboardTableFilter: React.FC = () => {
       label: 'Location',
       name: 'location',
       placeholder: 'Your Location',
-      required: false,
+      required: true, // Made it required
+      errMsg: 'Location is required!',
     },
     {
       type: 'text',
-      label: 'Line of Credit',
-      name: 'lineOfCredit',
-      placeholder: 'Line of Credit',
+      label: 'Line of Credit Used',
+      name: 'line_of_credit', // Changed to match backend key
+      placeholder: 'Line of Credit Used',
+      required: true,
+      errMsg: 'Please fill this out!',
+    },
+    {
+      type: 'text',
+      label: 'Line of Credits Available',
+      name: 'line_of_credits_available', // Changed to match backend key
+      placeholder: 'Line of Credits Available',
       required: false,
+      errMsg: 'Please fill this out!',
     },
     {
       type: 'text',
       label: 'Equity Commitment',
-      name: 'equityCommitment',
+      name: 'equity_commitment',
       placeholder: 'Equity Commitment',
       required: false,
     },
     {
       type: 'text',
       label: 'Debt Commitment',
-      name: 'debtCommitment',
+      name: 'debt_commitment',
       placeholder: 'Debt Commitment',
       required: false,
     },
     {
       type: 'text',
       label: 'Other Commitment',
-      name: 'otherCommitment',
+      name: 'other_commitment',
       placeholder: 'Other Commitment',
       required: false,
     },
-
     {
       type: 'text',
       label: 'Project Total',
-      name: 'projectTotal',
+      name: 'project_total', // Matches backend key
       placeholder: 'Project Total',
-      required: false,
+      required: true, // Changed to required
+      errMsg: 'Project Total is required!',
     },
     {
       type: 'number',
       label: 'Account Remaining',
-      name: 'accountRemaining',
+      name: 'account_remaining', // Matches backend key
       placeholder: 'Account Remaining',
-      required: false,
+      required: false, // Changed to required
+      errMsg: 'Account Remaining is required!',
     },
     {
       type: 'number',
@@ -201,49 +212,57 @@ const DashboardTableFilter: React.FC = () => {
     {
       type: 'date',
       label: 'Application Date',
-      name: 'percentCompleteNet',
-      placeholder: 'Enter the percentage',
+      name: 'applicationDate',
+      placeholder: 'Enter the application date',
       required: false,
-      min: 0,
-      max: 100,
     },
     {
       type: 'date',
       label: 'LOC Date',
-      name: 'percentCompleteNet',
-      placeholder: 'Enter the percentage',
+      name: 'locDate',
+      placeholder: 'Enter the LOC date',
       required: false,
-      min: 0,
-      max: 100,
-    },
-    {
-      type: 'number',
-      label: '% Complete (Net)',
-      name: 'percentCompleteNet',
-      placeholder: 'Enter the percentage',
-      required: false,
-      min: 0,
-      max: 100,
     },
     {
       type: 'date',
-      label: ' Project Completion date',
-      name: 'percentCompleteNet',
-      placeholder: 'Enter the percentage',
+      label: 'Project Completion Date',
+      name: 'percentCompletionDate',
+      placeholder: 'Enter the project completion date',
       required: false,
-      min: 0,
-      max: 100,
     },
     {
       type: 'date',
-      label: 'Last Tranche date',
-      name: 'percentCompleteNet',
-      placeholder: 'Enter the percentage',
+      label: 'Last Tranche Date',
+      name: 'lastTrancheDate',
+      placeholder: 'Enter the last tranche date',
       required: false,
-      min: 0,
-      max: 100,
+    },
+    {
+      type: 'file',
+      label: 'Upload your Sale Deed',
+      name: 'sale_deed', // Required by backend
+      required: true,
+      errMsg: 'Please upload the sale deed!',
+    },
+    {
+      type: 'file',
+      label: 'Upload your Encumberance Certificate',
+      name: 'encumbrance_certificate', // Required by backend
+      required: true,
+      errMsg: 'Please upload the encumberance certificate!',
+    },
+    {
+      type: 'checkbox',
+      label: 'Upload rest of your documents',
+      name: 'uploadDocuments',
+      values: [
+        'Fetch details for me',
+        'I will provide all the documents'
+      ], // Specify checkbox options
+      required: true,
     },
   ];
+  
   const listData: datasList[] = [
     {
       label: 'Interest Reserves',
@@ -325,7 +344,7 @@ const DashboardTableFilter: React.FC = () => {
 
   const filterSection = tableHeaders.map(header => header?.title);
 
-  console.log(projects.results);
+  // console.log("The results of project result are: " + JSON.stringify(projects.results, null, 2));
 
   return (
     <>
