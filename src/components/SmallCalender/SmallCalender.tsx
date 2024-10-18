@@ -91,7 +91,7 @@ const SmallCalendar: React.FC = () => {
         onChange={handleDateChange}
         value={selectedDate}
         tileContent={tileContent}
-        className={`w-full max-w-md mx-auto ${styles.react_calendar} custom-calendar rounded-md`}
+        className={`w-full max-w-md mx-auto ${styles.react_calendar} rounded-md`}
       />
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="border-none [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] max-w-3xl">

@@ -67,3 +67,27 @@
   from { transform: rotate(180deg); }
   to { transform: rotate(0); }
 }
+
+
+.react-calendar__tile--now {
+  @apply bg-primary rounded-md !important;
+}
+.react-calendar__tile:hover {
+  @apply bg-primary/10 rounded-md !important;
+  @apply !transition !duration-500 !ease-in-out !rounded-b-md
+}
+
+.react-calendar__tile--active {
+  @apply flex-none rounded-md;
+}
+
+.react-calendar__navigation button:hover {
+  background-color: rgba(255, 255, 255, 0.302) !important;
+  background-color: rgba(255, 255, 255, 0.302) !important;
+  @apply !transition !duration-500 !ease-in-out !rounded-b-md
+}
+
+.react-calendar__navigation button:enabled:hover, .react-calendar__navigation button:enabled:focus {
+  background-color: #ffffff13 !important;
+  border-radius: 8px !important;
+}

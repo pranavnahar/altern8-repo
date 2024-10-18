@@ -1,25 +1,24 @@
 /* components/SmallCalendar.css */
 .react-calendar__tile {
-    position: relative;
-    background-color: transparent;
-  }
+  position: relative;
+}
 
-  
-  
-  .eventIndicator {
-    background-color: #1565c0; /* Yellow indicator */
-    border-radius: 50%;
-    width: 8px;
-    height: 8px;
-    margin: 0 auto;
-  }
+.eventIndicator {
+  background-color: #1565c0; /* Yellow indicator */
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  margin: 0 auto;
+}
 
-  .react_calendar {
-    background-color: transparent; /* Dark background */
-    color: #cfe2fa; /*  text color */
-    /* height: 350px; */
-    width: 600px;
-  }
+.react_calendar {
+  background-color: transparent !important; /* Dark background */
+  color: #cfe2fa; /*  text color */
+  border-color: #ffffff34 !important;
+  border-width: 2px !important;
+  /* height: 350px; */
+  width: 600px;
+}
 
 /* Change Saturday and Sunday text color */
 .react-calendar__month-view__days__day--weekend abbr {
@@ -30,7 +29,6 @@
   background: red;
 }
 
-
 .react-calendar__tile--now abbr {
   color: #7c1717 !important; /* White text */
 }
@@ -39,6 +37,12 @@
 .react-calendar__tile--now {
   background-color: #1565c0 !important; /* Blue background */
   color: #1565c0 !important; /* White text */
+}
+
+.react-calendar__tile:hover {
+  background-color: #1565c0 !important;
+  color: #000000;
+  cursor: pointer;
 }
 
 /* Secondary color */
