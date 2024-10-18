@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -128,6 +128,36 @@ const DashboardTableFilter: React.FC = () => {
       setProjects(data);
     };
     handleFetchProjects();
+  }, []);
+
+  // const handleProjectCreated = useCallback((newProject: any) => {
+  // //   setProjects(prevProjects => ({
+  // //     ...prevProjects,
+  // //     results: [newProject, ...prevProjects.results]
+  // //   }));
+  // // }, []);
+
+  const handleProjectCreated = useCallback((newProject: any) => {
+    const formattedProject = {
+      id: newProject.id, // Include id for keys in rendering
+      user: newProject.user,
+      project_name: newProject.project_name,
+      location: newProject.location,
+      line_of_credit: newProject.line_of_credit,
+      line_of_credit_used: newProject.line_of_credit_used,
+      project_total: newProject.project_total,
+      application_date: newProject.application_date,
+      project_completion_date: newProject.project_completion_date,
+      percentage_complete_net: newProject.percentage_complete_net || "N/A",
+      currentDraw: newProject.current_tranche_name || "N/A",
+      time: new Date(newProject.application_date).toLocaleTimeString(),
+      date: new Date(newProject.application_date).toLocaleDateString(),
+    };
+  
+    setProjects((prevProjects: any) => ({
+      ...prevProjects,
+      results: [formattedProject, ...prevProjects.results],
+    }));
   }, []);
 
   let formInputs: FormInput[] = [
@@ -344,7 +374,7 @@ const DashboardTableFilter: React.FC = () => {
 
   const filterSection = tableHeaders.map(header => header?.title);
 
-  // console.log("The results of project result are: " + JSON.stringify(projects.results, null, 2));
+  console.log("The results of project result are: " + JSON.stringify(projects.results, null, 2));
 
   return (
     <>
@@ -530,6 +560,7 @@ const DashboardTableFilter: React.FC = () => {
               data={formInputs}
               open={openFormModal}
               onOpenChange={() => setOpenFormModal(false)}
+              onProjectCreated={handleProjectCreated}
             />
             <FilterDrawer
               open={filtersOpen}
