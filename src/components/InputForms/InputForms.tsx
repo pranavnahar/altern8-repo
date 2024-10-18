@@ -9,7 +9,7 @@ import { FormInput } from '../LedgerTypeTable/Filter';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import DatePicker from '../DatePicker/DatePicker';
 import FileUpload from '../FileUpload/FileUpload';
-import { apiUrl, getAccessToken } from '../../Utils/auth';
+import { apiUrl, getAccessToken } from '../../utils/auth';
 import { parseCookies } from 'nookies';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -77,7 +77,7 @@ export const RenderInputs = ({ item, formData, setFormData }: RenderInputsProps)
       'Mortgage report',
       'Property tax receipt',
     ];
-  
+
     if (selectedOption === 'I will provide all the documents') {
       return (
         <>
@@ -202,7 +202,7 @@ export const InputForms = ({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onOpenChange();
-  
+
     // Validate form data
     if (!formData.sale_deed) {
       return toast('Error', { description: 'Sales Deed is required' });
@@ -210,12 +210,12 @@ export const InputForms = ({
     if (!formData.encumbrance_certificate) {
       return toast('Error', { description: 'Encumberance certificate is required' });
     }
-  
-  
+
+
     try {
       let altern8_useraccess = parseCookies().altern8_useraccess; // Access token from cookies
       // console.log("Token used for authorization: ", altern8_useraccess);
-  
+
       if (!altern8_useraccess) {
         console.log("User access token is missing");
         await ReplaceTokenOrRedirect();
@@ -225,7 +225,7 @@ export const InputForms = ({
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const decodedToken = JSON.parse(atob(base64));
       const userId = decodedToken.uid;
-  
+
       const formDataToSend = new FormData();
       for (const key in formData) {
         if (Object.hasOwnProperty.call(formData, key)) {
@@ -245,9 +245,9 @@ export const InputForms = ({
       // for (const pair of formDataToSend.entries()) {
       //   console.log(`${pair[0]}: ${pair[1]}`);
       // }
-  
+
       // console.log('form data that will be sent is: ', formDataToSend);
-  
+
       const response = await fetch(URL, {
         method: 'POST',
         headers: {
@@ -255,7 +255,7 @@ export const InputForms = ({
         },
         body: formDataToSend,
       });
-  
+
       if (response.ok) {
         await response.json();
         setFormData({});
@@ -263,7 +263,7 @@ export const InputForms = ({
           description: 'Success',
         });
       } else {
-        const errorResponse = await response.json(); 
+        const errorResponse = await response.json();
         console.error('Upload error:', errorResponse.message || response.status);
         toast('Failure', {
           description: 'Something went wrong',

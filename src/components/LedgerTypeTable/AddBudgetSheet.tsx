@@ -5,9 +5,9 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { getAccessToken } from '../../Utils/auth';
+import { getAccessToken } from '../../utils/auth';
 import { parseCookies } from 'nookies';
-import { apiUrl } from '../../Utils/auth';
+import { apiUrl } from '../../utils/auth';
 
 const AddBudgetSheet = () => {
   const params = useParams();

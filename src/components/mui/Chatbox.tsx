@@ -3,8 +3,8 @@ import { Dialog, DialogTitle, DialogContent, Button, IconButton } from '@mui/mat
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { IconPaperclip, IconSend2, IconX } from '@tabler/icons-react';
-import { useToast } from '../../Utils/show-toasts';
-import { getAccessToken } from '../../Utils/auth';
+import { useToast } from '../../utils/show-toasts';
+import { getAccessToken } from '../../utils/auth';
 
 type Message = {
   text: string;

@@ -1,7 +1,8 @@
 import { showToast } from '../../Helpers/show-toasts';
-import { fetchWithAuth } from '../fetch-with-auth';
 import { formData } from '../../components/DashboardTableFilter/AddProjectFormModal';
-fetchWithAuth;
+import { fetchWithAuth } from '../fetch-with-auth';
+
+
 export const getTransactions = async (id: string) => {
   const response = await fetchWithAuth(`/user-dashboard-api/transactions/${id}`);
   if (!response?.ok) throw new Error('Failed to fetch Accounts');

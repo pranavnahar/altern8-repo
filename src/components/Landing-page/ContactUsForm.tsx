@@ -5,7 +5,7 @@ import { useToast } from '../../Utils/show-toasts';
 import LoadingSpinner from '../LoadingSpinner';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Button } from '../ui/button';
-import { fetchWithAuth } from '../../Utils/fetch-with-auth';
+import { fetchWithAuth } from '../../utils/fetch-with-auth';
 
 // Define form state type
 interface FormState {

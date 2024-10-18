@@ -1,4 +1,4 @@
-import { getLedgerDetails } from '../../Utils/ledger/ledgerService';
+import { getLedgerDetails } from '../../utils/ledger/ledgerService';
 import { useState, useEffect } from 'react';
 
 const useLedgerDetails = () => {
