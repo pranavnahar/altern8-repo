@@ -2,7 +2,7 @@
 import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
 import './globals.css';
-import { Toaster } from 'sonner';
+import { Toaster } from 'sonner'; 
 import { RecoilRoot } from 'recoil';
 
 const figtree = Figtree({ subsets: ['latin'] });
