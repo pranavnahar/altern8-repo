@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "../../../../components/ui/table";
 
 const EventTable: FC<Project> = ({ project_id, project_name, start_date, end_date, budget }) => {
   return (

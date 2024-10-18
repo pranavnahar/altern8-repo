@@ -2,8 +2,8 @@ import React from "react";
 import { IconArrowBack, IconX } from "@tabler/icons-react";
 import { Project } from "../types";
 import EventTable from "./event-table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../../components/ui/dialog";
+import { Button } from "../../../../components/ui/button";
 
 type Props = {
   projects: Project[];

@@ -5,9 +5,9 @@ import Calendar from 'react-calendar';
 import Loading from '../Loading';
 import 'react-calendar/dist/Calendar.css';
 import styles from './SmallCalendar.module.css';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "../../components/ui/dialog";
+import { Button } from "../../components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/ui/table";
 import { getCalendarEvents } from '../../app/(dashboard)/calendar/actions';
 
 type ValuePiece = Date | null;
