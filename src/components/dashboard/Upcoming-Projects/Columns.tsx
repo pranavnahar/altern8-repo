@@ -1,4 +1,4 @@
-import { formatIndianNumber } from '../../../utils/money';
+import { formatIndianNumber } from '../../../Utils/money';
 import { Column } from './types';
 
 const getColumns = (): Column[] => [

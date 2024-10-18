@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { StepperContext } from '../../contexts/StepperContext';
+import { StepperContext } from '../../Contexts/StepperContext';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { Button } from '@mui/material';
 import { IconChevronUpRight } from '@tabler/icons-react';
-import { useToast } from '../../utils/show-toasts';
+import { useToast } from '../../Utils/show-toasts';
 
 type Props = {
   demo: boolean;

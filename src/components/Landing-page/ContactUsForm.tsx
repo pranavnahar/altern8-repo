@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import LoadingSpinner from '../LoadingSpinner';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Button } from '../ui/button';
-import { fetchWithAuth } from '../../utils/fetch-with-auth';
+import { fetchWithAuth } from '../../Utils/fetch-with-auth';
 import { showToast } from '../../Helpers/show-toasts';
 
 interface FormState {

@@ -2,8 +2,8 @@ import React, { useContext, useState } from 'react';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
-import { useToast } from '../../utils/show-toasts';
-import { StepperContext } from '../../contexts/StepperContext';
+import { useToast } from '../../Utils/show-toasts';
+import { StepperContext } from '../../Contexts/StepperContext';
 
 type Props = {
   demo: boolean;

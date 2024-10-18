@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 //import Link from "next/link";
-import { StepperContext } from '../../contexts/StepperContext';
+import { StepperContext } from '../../Contexts/StepperContext';
 
 const HelpAndLogin = () => {
   // Destructuring the necessary values and functions from StepperContext

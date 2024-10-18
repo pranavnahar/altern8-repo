@@ -3,10 +3,10 @@ import { motion } from 'framer-motion'; // for animations
 import Link from 'next/link';
 import LinearBuffer from '../LinearBuffer'; //for progress animation
 import { destroyCookie, parseCookies, setCookie } from 'nookies';
-import { setAccessTokenCookie, setRefreshTokenCookie, removeTokenCookie } from '../../utils/auth';
+import { setAccessTokenCookie, setRefreshTokenCookie, removeTokenCookie } from '../../Utils/auth';
 import AnimatedLogo from '../Header/AnimatedLogo';
 import { useRouter } from 'next/navigation';
-import { useToast } from '../../utils/show-toasts';
+import { useToast } from '../../Utils/show-toasts';
 
 let accessToken = parseCookies().altern8_useraccess;
 

@@ -1,4 +1,4 @@
-import { authSVGProps } from '../../types/types';
+import { authSVGProps } from '../../Types/types';
 import React from 'react';
 
 const ToggleSVG: React.FC<authSVGProps> = ({ showPassword, setShowPassword }) => {
