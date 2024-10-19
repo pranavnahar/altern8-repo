@@ -12,6 +12,7 @@ import { useDropzone } from 'react-dropzone';
 import ImageSlider from './Account Aggregator/ImageSlider';
 import { AA_videos } from './Account Aggregator/AA_Videos';
 import { useToast } from '../../Utils/show-toasts';
+import CarouselImage from './Account Aggregator/Carousel';
 
 type Props = {
   demo: boolean;
@@ -286,11 +287,11 @@ const BankDetails = ({ demo }: Props) => {
   }, [showKnowMore]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col ">
       {!needManualUpload && (
         <div className="mb-10">
-          <div className="w-full mx-2  flex-1 flex flex-row items-center justify-center">
-            <div className="font-semibold   text-gray-300 text-sm text-center leading-8 uppercase">
+          <div className="w-full mx-2 flex-1 flex flex-row items-center justify-center">
+            <div className="font-semibold  text-gray-300 text-sm text-center leading-8 uppercase">
               Unified Bank Interface
             </div>
             <div>
@@ -329,7 +330,7 @@ const BankDetails = ({ demo }: Props) => {
             ></iframe>
           ) : (
             <>
-              <ImageSlider />
+              {/* <CarouselImage /> */}
               <AA_videos />
             </>
           )}
