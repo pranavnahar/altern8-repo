@@ -38,8 +38,7 @@ const JoinUsSection = () => {
                     Join us and never worry about your finances
                 </div>
                 <div className="hidden lg:inline absolute my-0 mx-[!important] lg:w-[68.29%] top-[199px] lg:left-[31.71%] text-xl tracking-[-0.5px] items-center justify-center z-[1]">
-                    Get instant working capital within 24-72 hrs and scale up your
-                    business
+                Get instant real estate capital within 24-72 hrs and scale up your business
                 </div>
 
                 <img
