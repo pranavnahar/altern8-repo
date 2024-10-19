@@ -28,7 +28,7 @@ const ChartCalender: React.FC<{ sanctionedLimit: number }> = ({ sanctionedLimit 
           </div>
         </div>
       </div>
-      <div className="mb-10">
+      <div className="mb-10  ">
         <div className="text-5xl font-semibold text-gray-300 text-center pb-5">Event Calendar</div>
         <SmallCalendar />
       </div>

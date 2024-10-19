@@ -11,7 +11,7 @@ const page = () => {
   return (
     <>
       <div className="flex mt-8">
-        <div className=" flex-[3]">
+        <div className=" flex-[3] mx-16">
           <ActionItems
             latePayments="test"
             showActionItems="test"

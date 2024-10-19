@@ -17,7 +17,7 @@ const ActionItems: React.FC<actionItems> = ({
 
   return (
     <div className="rounded-lg  pb-1 [background:linear-gradient(65.92deg,_#021457,_#170a3f_31.84%,_#251431_51.79%,_#301941_64.24%,_#8e295d_99.08%),_#d9d9d9] shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)]">
-      <div className="flex items-center px-2 pt-3">
+      <div className="flex items-center px-2 pt-3 ">
         <div className="text-center text-gray-300 text-xl font-relative-medium flex-grow">
           Action Items
         </div>
@@ -36,9 +36,8 @@ const ActionItems: React.FC<actionItems> = ({
                   ? () => showActionItemsTables(item.action)
                   : (showActionItemsTables('') as MouseEventHandler<HTMLDivElement> | undefined)
               }
-              className={`text-gray-900 font-medium rounded-full mt-5 px-5 py-3 bg-font-light-blue ${
-                isClickable ? 'cursor-pointer ' : 'cursor-auto'
-              }`}
+              className={`text-gray-900 font-medium rounded-full mt-5 px-5 py-3 bg-font-light-blue ${isClickable ? 'cursor-pointer ' : 'cursor-auto'
+                }`}
             >
               <div className="flex justify-between items-center">
                 <div className="flex">
