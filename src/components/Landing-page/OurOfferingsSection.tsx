@@ -11,7 +11,7 @@ const offeringsCards = [
         body: 'Get loans for your real estate projects by issuing debt instruments to a pool of interested patrons and fund your projects',
       },
     ],
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Fractional Ownership',
@@ -23,7 +23,7 @@ const offeringsCards = [
       },
     ],
     link: 'https://www.nahar.om/transactions',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Real Estate Investment Trusts',
@@ -35,7 +35,7 @@ const offeringsCards = [
       },
     ],
     link: 'http://www.ethyx.club/',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Debentures',
@@ -47,7 +47,7 @@ const offeringsCards = [
       },
     ],
     link: 'https://www.nahar.om/ott-media-financing',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Secured Debt',
@@ -59,7 +59,7 @@ const offeringsCards = [
       },
     ],
     link: 'http://www.ethyx.club/',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Structured Notes',
@@ -71,7 +71,7 @@ const offeringsCards = [
       },
     ],
     link: 'https://www.nahar.om/contact',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Commercial Papers',
@@ -83,7 +83,7 @@ const offeringsCards = [
       },
     ],
     link: 'https://www.nahar.om/contact',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   ,
   {
@@ -96,7 +96,7 @@ const offeringsCards = [
       },
     ],
     link: 'https://www.nahar.om/contact',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
 ];
 
