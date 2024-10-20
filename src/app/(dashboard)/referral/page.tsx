@@ -68,7 +68,7 @@ const Page = () => {
     <div className="min-h-screen mt-10 text-xl font-semibold text-center">
       <div className="w-4/5 mx-auto">
         <h1 className="py-5 text-3xl text-white font-medium tracking-tight text-center">
-          Invite New User
+        Invite other borrowers
         </h1>
         <div className="flex-1 w-3/5 mx-auto pt-12">
           <Snippet

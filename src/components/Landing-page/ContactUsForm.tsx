@@ -200,7 +200,7 @@ const ContactUsForm = () => {
           <div className="mt-6 text-center">
             <Button
               type="submit"
-              className="inline-flex items-center justify-center px-6 py-3 text-white transition duration-300 ease-in-out"
+              className="inline-flex items-center justify-center hover:bg-[#318bc0] bg-[#319ae0] px-6 py-3 text-white transition duration-300 ease-in-out"
             >
               Submit
             </Button>
