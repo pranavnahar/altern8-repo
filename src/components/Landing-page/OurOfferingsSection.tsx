@@ -8,10 +8,10 @@ const offeringsCards = [
     description: [
       {
         heading: 'How It Works?',
-        body: 'Provide loans to real estate developers and property owners, helping fund their projects.',
+        body: 'Get loans for your real estate projects by issuing debt instruments to a pool of interested patrons and fund your projects',
       },
     ],
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Fractional Ownership',
@@ -19,11 +19,11 @@ const offeringsCards = [
     description: [
       {
         heading: 'How It Works?',
-        body: 'Invest in a portion of high-value real estate with minimal capital and own a share of prime properties.',
+        body: 'Offer a portion of your high-value real estate as equity ownership to patrons who can invest in factorial units',
       },
     ],
     link: 'https://www.nahar.om/transactions',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Real Estate Investment Trusts',
@@ -31,23 +31,23 @@ const offeringsCards = [
     description: [
       {
         heading: 'How It Works?',
-        body: 'Invest in a professionally managed portfolio of income-generating real estate assets such as shopping malls, office buildings, and residential complexes, with shares traded like stocks.',
+        body: 'Offer a portfolio of income generating and real estate assets such as shopping malls, office buildings, warehouses in the form of Real estate investment trusts',
       },
     ],
     link: 'http://www.ethyx.club/',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
-    headingFront: 'High Yield Debenture',
-    headingBack: 'High Yield Debenture',
+    headingFront: 'Debentures',
+    headingBack: 'Debentures',
     description: [
       {
         heading: 'How It Works?',
-        body: 'Invest in unsecured debt issued by real estate companies looking to raise capital. These debentures offer higher interest rates compared to traditional bonds due to the associated risk.',
+        body: 'Offer patrons secured debentures and raise capital for your real estate project',
       },
     ],
     link: 'https://www.nahar.om/ott-media-financing',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Secured Debt',
@@ -55,11 +55,11 @@ const offeringsCards = [
     description: [
       {
         heading: 'How It Works?',
-        body: 'Invest in real estate loans backed by collateral, such as properties or other assets. In case of default, the collateral can be claimed to recover the investment.',
+        body: 'Receive loans backed by collatoral such as land, buildings and properties',
       },
     ],
     link: 'http://www.ethyx.club/',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Structured Notes',
@@ -67,11 +67,11 @@ const offeringsCards = [
     description: [
       {
         heading: 'How It Works?',
-        body: 'Invest in customized financial products linked to real estate performance, combining debt and equity elements to offer variable returns based on property market conditions.',
+        body: 'Our customised financial products linked to real estate performance , combining debt and equity elements to offer variable returns to patrons, to offer variables returns based on property market conditions',
       },
     ],
     link: 'https://www.nahar.om/contact',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Commercial Papers',
@@ -79,11 +79,24 @@ const offeringsCards = [
     description: [
       {
         heading: 'How It Works?',
-        body: 'Invest in short-term debt instruments issued by real estate companies to finance immediate operational needs. These papers offer a fixed rate of return over a short duration.',
+        body: 'Offer short term debt instruments of less than a year to finance immediate operational needs',
       },
     ],
     link: 'https://www.nahar.om/contact',
-    icon: '/ethyx_club.png',
+    icon: '/images/altern8logo.png',
+  },
+  ,
+  {
+    headingFront: 'Distressed Situations Finance',
+    headingBack: 'Distressed Situations Finance',
+    description: [
+      {
+        heading: 'How It Works?',
+        body: 'Get urgent finance over stuck projects, over leveraged or NCLT case projects with innovative financial innovations to our risk taking patrons',
+      },
+    ],
+    link: 'https://www.nahar.om/contact',
+    icon: '/images/altern8logo.png',
   },
 ];
 
@@ -103,125 +116,116 @@ interface FlipAnimationCardProps {
 }
 
 const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
-  // Local states
-  const [flip, setFlip] = useState(false);
-  const [flipCardSide, setFlipCardSide] = useState(false); // Set initial state to not flipped
-  const hoverTimer = useRef<NodeJS.Timeout | null>(null);
-
-  // Destructure data props
+  const [isHovered, setIsHovered] = useState(false);
   const { headingFront, headingBack, icon, description, link } = data;
-  const image = icon ? icon : '/nahar_conscious_capital.jpg'; // Ensure the icon is present or fallback
-
-  // Hover start
-  const handleHoverStart = () => {
-    hoverTimer.current = setTimeout(() => {
-      setFlip(true);
-      setTimeout(() => setFlipCardSide(true), 200);
-    }, 200); // Delay before flipping
-  };
-
-  // Hover end
-  const handleHoverEnd = () => {
-    setTimeout(() => setFlipCardSide(false), 280); // Delay before flipping back
-    clearTimeout(hoverTimer.current!);
-    setFlip(false);
-  };
-
-  // Clean up effect for hoverTimer
-  useEffect(() => {
-    return () => {
-      clearTimeout(hoverTimer.current!);
-      setTimeout(() => setFlipCardSide(false), 280); // Delay before flipping back
-    };
-  }, []);
+  const image = icon || '/nahar_conscious_capital.jpg';
 
   return (
-    <motion.div
-      className="h-[300px] w-[180px] mx-auto md:w-full sm:h-[300px] sm:w-full lg:h-[320px] lg:w-full flip-card"
-      onHoverStart={handleHoverStart}
-      onHoverEnd={handleHoverEnd}
+    <div
+      className="flip-card-container w-96 h-96"
+      style={{
+        perspective: '1000px',
+        margin: '1rem',  // This creates gap between cards
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <motion.div
-        className="flex flex-col items-center justify-center w-full h-full overflow-hidden bg-white flip-card-inner card-shadow rounded-3xl"
-        transition={{ duration: 0.08, ease: 'easeInOut' }}
-        animate={{ rotateY: flip ? 360 : 0 }} // Card flip logic
-        initial={{ rotateY: 0 }} // Ensure the card starts in the unflipped state
+        className="flip-card"
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+          transformStyle: 'preserve-3d',
+          transition: 'transform 0.6s',
+        }}
+        animate={{ rotateY: isHovered ? 180 : 0 }}
       >
-        {/* Front side of the card */}
-        <motion.div
-          className={`h-full w-full flip-card-front p-2 sm:p-2 ${
-            !flipCardSide ? 'block' : 'hidden'
-          }`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+        <div
+          className="flip-card-front"
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            backfaceVisibility: 'hidden',
+            backgroundColor: 'white',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '1rem',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+          }}
         >
-          <h6 className="h-20 p-2 text-base font-medium text-center lg:p-2 lg:px-4 text-background-black-fade-font">
-            {headingFront}
-          </h6>
-          <div className="relative h-[220px] sm:h-[240px] lg:h-[240px] w-full">
+          <h6 className="text-[1.50] font-medium text-center text-zinc-500">{headingFront}</h6>
+          <div className="w-full h-3/4">
             <img
               src={image}
               alt={headingFront}
-              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+              className="w-full h-full object-cover rounded-lg"
             />
           </div>
-        </motion.div>
-
-        {/* Back side of the card */}
-        <motion.div
-          className={`h-full w-full flip-card-back flex flex-col p-2 items-center ${
-            flipCardSide ? 'block' : 'hidden'
-          }`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+        </div>
+        <div
+          className="flip-card-back"
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            backfaceVisibility: 'hidden',
+            backgroundColor: 'white',
+            transform: 'rotateY(180deg)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '1rem',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+          }}
         >
-          <h6 className="w-full p-2 text-base font-medium text-center lg:p-2 lg:px-4 h-fit text-background-black-fade-font">
-            {headingBack}
-          </h6>
-
-          {/* List for the description */}
-          <div className="w-full mt-2 text-sm text-center">
+          <h6 className="text-[1.50] font-medium text-center text-zinc-500">{headingBack}</h6>
+          <div className="flex-grow overflow-auto">
             {description.map((item, index) => (
-              <div key={index} className="my-2">
-                <h6 className="font-semibold">{item.heading}</h6>
-                <p className="text-xs">{item.body}</p>
+              <div key={index} className="my-2 mt-10">
+                <h6 className="font-semibold text-center">{item.heading}</h6>
+                <p className="text-sm text-center mt-3">{item.body}</p>
               </div>
             ))}
           </div>
-
-          <div className="text-center w-full h-[35%] mt-4">
-            <a href={link} target="_blank" rel="noreferrer" className="m-auto text-blue-500">
-              Explore
-            </a>
-            <div
-              className="m-auto relative h-[100px] w-[100px] mt-2"
-              style={{
-                backgroundImage: `url(${image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}
+          <a
+            href={link}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2 text-blue-500"
+          >
+            Explore
+          </a>
+          <div className="mt-2 w-16 h-16">
+            <img
+              src={image}
+              alt="Logo"
+              className="w-full h-full object-contain"
             />
           </div>
-        </motion.div>
+        </div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 
+
 //Main Function
 function OurOfferingsSection() {
-  //data for the cards
-
-  //hooks
+  // Hooks
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   const mainControls = useAnimation();
 
   useEffect(() => {
     if (isInView) {
-      // fire the  animation
+      // Fire the animation
       mainControls.start('visible');
     }
   }, [isInView]);
@@ -234,10 +238,9 @@ function OurOfferingsSection() {
       }}
       initial="hidden"
       animate={mainControls}
-      transition={{ duration: 1, delay: 0.4 }}
+      transition={{ duration: 0.5, delay: 0.03 }}
     >
-      jk
-      <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto">
+      <div className="phone:w-[90%] md:w-[70%] xl:w-[76%] xxl:w-[55%] my-10 mx-auto">
         <h1 className="py-5 mb-3 font-semibold tracking-tighter text-center text-21xl lg:mb-3 text-white-font">
           Ready to invest in Real-Estate?
         </h1>
@@ -250,12 +253,11 @@ function OurOfferingsSection() {
 
           <div
             ref={ref}
-            className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3+ lg:grid-cols-4 xl:grid-cols-4 gap-4 justify-center my-[4%]"
+            className="flex flex-wrap justify-center my-[4%]"
           >
-            {/* {Looping the data of cards and passing to a Flip ANimation component} */}
             {offeringsCards.map((offerings, index) => (
-              <div key={index}>
-                <FlipAnimationCard data={offerings} />
+              <div key={index} className="w-full sm:w-1/2 md:w-1/4 flex justify-center">
+                <FlipAnimationCard data={offerings!} />
               </div>
             ))}
           </div>
@@ -266,3 +268,9 @@ function OurOfferingsSection() {
 }
 
 export default OurOfferingsSection;
+
+
+
+
+
+

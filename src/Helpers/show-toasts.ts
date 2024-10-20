@@ -1,5 +1,6 @@
 import { toast, ToastPosition } from 'react-toastify';
 
+
 const defaultOptions = {
   position: 'bottom-center' as ToastPosition,
   autoClose: 2000,

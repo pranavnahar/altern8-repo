@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { fetchWithAuth } from '../../Utils/fetch-with-auth';
 import { showToast } from '../../Helpers/show-toasts';
 
+
 interface FormState {
   company_name: string;
   company_email: string;
@@ -56,7 +57,8 @@ const ContactUsForm = () => {
       (name === 'company_query' && value.length > 400)
     ) {
       showToast(
-        `${name === 'company_name' ? 'Company name' : 'Comments'} should be less than ${name === 'company_name' ? 200 : 400
+        `${name === 'company_name' ? 'Company name' : 'Comments'} should be less than ${
+          name === 'company_name' ? 200 : 400
         } characters`,
         'info',
       );
@@ -74,6 +76,7 @@ const ContactUsForm = () => {
   // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("form submission trigegr start");
 
     const { company_name, company_email, company_query } = formData;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -94,6 +97,7 @@ const ContactUsForm = () => {
 
     setLoading(true);
     try {
+      console.log("test------------");
       const response = await fetchWithAuth('/landing-page/contact-us/', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
@@ -110,6 +114,7 @@ const ContactUsForm = () => {
         throw new Error('Submission failed');
       }
     } catch (error) {
+      console.log("form submission trigegr start errrro part");
       console.error('Error submitting form:', error);
       showToast(`Submission failed!`, 'info');
     } finally {
@@ -118,7 +123,7 @@ const ContactUsForm = () => {
   };
 
   return (
-    <div className="phone:w-full xl:w-[60%] mx-auto mt-32 mb-32">
+    <div className="phone:w-full xl:w-[100%] mx-auto mt-32 mb-32">
       <div className="relative box-border h-[3px] border-t-[3px] border-solid border-white-font" />
       <motion.div
         variants={{
@@ -151,8 +156,8 @@ const ContactUsForm = () => {
                   field === 'company_email'
                     ? 'email'
                     : field === 'company_phone_number'
-                      ? 'number'
-                      : 'text'
+                    ? 'number'
+                    : 'text'
                 }
                 name={field}
                 value={formData[field] as string}
@@ -172,10 +177,11 @@ const ContactUsForm = () => {
                     id={choice}
                     checked={formData[choice] as boolean}
                     onCheckedChange={() => handleCheckboxChange(choice)}
+                    borderColor="border-[#A1A1BC]"
                   />
                   <label
                     htmlFor={choice}
-                    className="text-sm font-medium leading-none text-gray-300 cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-sm font-medium leading-none text-gray-300 cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-90"
                   >
                     {choice}
                   </label>
@@ -184,7 +190,7 @@ const ContactUsForm = () => {
             </div>
           </div>
 
-          <div className="p-2 mb-4 rounded-md card-cover">
+          <div className="p-2 mb-4 rounded-md bg-slate-500/10 backdrop-blur-md border border-white/5">
             <label className="block mb-2 text-xs text-gray-400 uppercase">
               Comments and questions
             </label>
