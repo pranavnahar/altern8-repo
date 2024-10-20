@@ -192,7 +192,7 @@ const PrivacyPolicy = () => {
           transaction for which the service of the platform is availed by the real estate borrower.
           We may share, disclose and in some cases transfer your information to such entities as
           required to provide Services to you, improve our Services, and to provide value added
-          services or other third party services, to the extent permitted by applicable law.  We
+          services or other third party services, to the extent permitted by applicable law. We
           reserve the right to disclose any information We may have about You if We determine that
           such disclosure is necessary in connection with any investigation or complaint regarding
           Your use of the Platform, or to identify, contact or bring legal action against someone
@@ -271,7 +271,7 @@ const PrivacyPolicy = () => {
           counterfeit websites where the user is tricked into entering their details, such as card
           numbers, user names and passwords. <br/>• If you receive such an e-mail or are asked for your
           password by anyone claiming to work for us please forward the e-mail or report the
-          incident by e-mail to our Data Protection Officer. <br/>• Opt-Out Options and Service
+          incident by e-mail to our Data Protection Officer. <br/>• Opt-Out Options and Service
           Notifications As a courtesy to Your privacy, We provide the option to opt out of any
           Services offered on the Website. If You do not opt out of any service, You agree to
           receive information about those Services. We only send You information if You have
@@ -286,7 +286,7 @@ const PrivacyPolicy = () => {
           discretion from time to time, as required or in pursuance of changes in relevant laws. If
           Altern8 decides to make any changes to this privacy policy, it will post those changes on
           this page so that you are always aware of what information we collect, how we use it, and
-          under what circumstances we disclose it.  However, the Altern8 is not responsible for
+          under what circumstances we disclose it. However, the Altern8 is not responsible for
           communicating you about any such changes and you are required to be informed yourself
           about any such changes made to this privacy policy. Your use of the Website's Services
           following a change in its Privacy Policy constitutes acceptance of the updated Privacy

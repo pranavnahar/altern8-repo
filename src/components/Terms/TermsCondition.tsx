@@ -653,7 +653,7 @@ const TermsCondition = () => {
           <h2 className="font-bold mt-4">• Third party sites </h2><br/>
           <p>
             The Website or the mails for communication may contain links to third-party
-            websites. However, these links are merely for advertisement purposes only and the
+            websites. However, these links are merely for advertisement purposes only and the
             company has no connection or affiliation with any of these third party sites or their
             products. The company neither provides for the endorsement of any other product or
             services through its platform. The provision of Third-Party Content is for general
