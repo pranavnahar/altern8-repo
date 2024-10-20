@@ -48,9 +48,9 @@ const Footer = () => {
                 <div className="w-full text-gray-500 px-10 mx-auto">
                     <div className="text-center">
                         <div>
-                            Copyright 2023
+                            Copyright 2024
                             <strong>
-                                <span> Ethyx. </span>
+                                <span> altern8. </span>
                             </strong>
                             All Rights Reserved.
                         </div>
