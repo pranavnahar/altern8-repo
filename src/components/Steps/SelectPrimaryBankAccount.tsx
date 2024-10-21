@@ -44,7 +44,6 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log(responseData);
         if (responseData.accounts) {
           setBankAccountsList(responseData.accounts);
         } else {
@@ -63,6 +62,13 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
   useEffect(() => {
     if (!demo) {
       GetBankAccountList();
+    } else {
+      setBankAccountsList([
+        { accountNumber: '987654321098', bankName: 'SBI' },
+        { accountNumber: '123456789123', bankName: 'Kotak Mahindra Bank' },
+        { accountNumber: '456789012345', bankName: 'Bank of India' },
+      ]);
+      return;
     }
   }, []);
 

@@ -10,7 +10,7 @@ type Props = {
 
 const PAN = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [panNumberList, setPanNumberList] = useState([]);
+  const [panNumberList, setPanNumberList] = useState<string[]>([]);
   const [userData, setUserData] = useState<{
     panNumber?: string;
     [key: string]: string | undefined;
@@ -70,6 +70,11 @@ const PAN = ({ demo }: Props) => {
   useEffect(() => {
     if (!demo) {
       GetPanList();
+    } else {
+      setPanNumberList([
+        'ABCDE1234F',
+        'PQRST5678G'
+      ]);
     }
   }, []);
 

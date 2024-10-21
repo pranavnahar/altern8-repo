@@ -48,14 +48,14 @@ const BankDetails = ({ demo }: Props) => {
     }
     // if button is next the submit data to backend api
     else if (direction === 'next') {
-      if (demo) {
-        router.push('/register?demo=true&step=4');
-        return;
-      }
       const bodyData = {};
 
       if (!needManualUpload) {
         try {
+          if (demo) {
+            setNeedManualUpload(true);
+            return;
+          }
           if (bodyData) {
             const body = bodyData;
             setLoading(true);
@@ -112,6 +112,10 @@ const BankDetails = ({ demo }: Props) => {
 
       if (needManualUpload) {
         try {
+          if (demo) {
+            router.push('/register?demo=true&step=4');
+            return;
+          }
           await handleFileChange();
         } catch (error) {
           console.log(error);
@@ -251,6 +255,9 @@ const BankDetails = ({ demo }: Props) => {
   //Digitap SDK PART
   const handleConnectClick = async () => {
     setIsLoading(true);
+    if (demo) {
+      window.open('https://aa.peedeefinvest.in/boost-money/login', '_blank', 'noopener,noreferrer');
+    }
 
     try {
       const response = await fetch('/api/generate-url', {

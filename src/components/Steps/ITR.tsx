@@ -80,6 +80,11 @@ const ITR = ({ demo }: Props) => {
   useEffect(() => {
     if (!demo) {
       GetItrUsername();
+    } else {
+      setUserData({
+        itrUsername: 'AFZPK7190K',
+        itrPassword: ''
+      });
     }
   }, []);
 

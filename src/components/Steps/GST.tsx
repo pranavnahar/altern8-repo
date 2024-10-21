@@ -24,9 +24,11 @@ const GST = ({ demo }: Props) => {
   const [atleastOneGstinSubmitted, setAtleastOneGstinSubmitted] = useState(false);
   const [isIasEnabled, setIsIasEnabled] = useState(true);
   const [currentGstinList, setCurrentGstinList] = useState([
-    '123321123321',
-    'gjkgj1232jkgh',
-    'gjkgj1232jk00',
+    '29AALFP3236R1Z7',
+    '33BCHPQ7890T2Z1',
+    '27DKJLM4567N8Z9',
+    '19FGHIJ1234P5Z3',
+    '06MNOPQ7890R3Z8'
   ]);
   const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } =
     useContext(StepperContext);
@@ -72,7 +74,6 @@ const GST = ({ demo }: Props) => {
         console.log(responseData);
         if (responseData.data) {
           const gstinNumbers = responseData.data;
-          console.log('gstin list:', gstinNumbers);
           setCurrentGstinList(gstinNumbers);
 
           if (gstinNumbers.length > 0) {
@@ -98,6 +99,9 @@ const GST = ({ demo }: Props) => {
   useEffect(() => {
     if (!demo) {
       GetGSTINList();
+    } else {
+      setAlreadyHaveGstin(true);
+      return;
     }
   }, []);
 
@@ -325,21 +329,19 @@ const GST = ({ demo }: Props) => {
                 Select GST Number
               </div>
               <div className="flex justify-start py-1 my-2 ">
-                <div>
+                <select
+                  name="gstNumber"
+                  value={userData.gstNumber}
+                  onChange={(e) => setUserData({ ...userData, gstNumber: e.target.value })}
+                  className="py-1 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
+                >
+                  <option value="">Select a GSTIN</option>
                   {currentGstinList.map((currentGstin, index) => (
-                    <label key={index} className="block mx-2 font-medium text-gray-300 text-start">
-                      <input
-                        type="checkbox"
-                        onChange={handleChangeInSelect}
-                        checked={userData.gstNumber === currentGstin}
-                        name="gstNumber"
-                        value={currentGstin}
-                        className="mr-2"
-                      />
+                    <option key={index} value={currentGstin}>
                       {currentGstin}
-                    </label>
+                    </option>
                   ))}
-                </div>
+                </select>
               </div>
             </div>
           )}

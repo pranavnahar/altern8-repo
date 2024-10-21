@@ -172,7 +172,7 @@ const UploadContract = ({ demo }: Props) => {
   return (
     <div className="flex flex-col">
       <div className="mb-5 mt-3 flex flex-col justify-center">
-        <div className="text-gray-200 flex flex-row items-center text-base2 p-2 mx-auto rounded-lg">
+        {/* <div className="text-gray-200 flex flex-row items-center text-base2 p-2 mx-auto rounded-lg">
           <div>Please upload your contract's with buyers (xls, csv, pdf)</div>
         </div>
         <div className="mb-5 mt-10 text-center">
@@ -205,7 +205,7 @@ const UploadContract = ({ demo }: Props) => {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
       </div>
 
       {/* pdc or post dated cheques  */}
@@ -253,8 +253,8 @@ const UploadContract = ({ demo }: Props) => {
               onChange={handleCheckboxChange}
             />
             <span className="ml-2 text-gray-300">
-              I agree that the platform can contact by partners to offer Invoice Discounting
-              services in return for a discount on my Invoice Yield/Discount Rate.
+              I agree that the platform can contact my partners to offer Altern8 lending
+              services in return for a discount on my project Yield/Discount Rate.
             </span>
           </label>
         </div>

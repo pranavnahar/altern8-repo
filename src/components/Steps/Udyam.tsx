@@ -137,6 +137,10 @@ const Udyam = ({ demo }: Props) => {
           </button>
           <button
             onClick={() => {
+              if (demo) {
+                router.push('/register?demo=true&step=12')
+                return;
+              }
               getRegistrationState('Upload Contract');
             }}
             className="bg-gray-500 text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-gray-700 hover:text-white transition duration-200 ease-in-out"
