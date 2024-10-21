@@ -2,6 +2,7 @@ import React from 'react';
 import { ColumnDef } from "@tanstack/react-table";
 import Link from 'next/link';
 import { CheckCircle, X } from 'lucide-react';
+import ApplyProduct from './components/apply-product';
 
 const toTitleCase = (str: string) => {
   return str.split('_')
@@ -200,6 +201,17 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ getValue }) => {
       const date = getValue();
       return date && typeof date === "string" ? formatDate(date) : "-";
+    },
+  },
+  {
+    header: 'Actions',
+    accessorKey: 'actions',
+    cell: ({ row }) => {
+      const projectId = row.original.id;
+      const productId = row.original.product_id; // Make sure this field exists in your data
+      return (
+        <ApplyProduct projectId={projectId} productId={productId} />
+      )
     },
   },
   {

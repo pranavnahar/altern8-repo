@@ -129,7 +129,7 @@ const LineItemSettings = () => {
       title: "Line Item Name",
       classname: "",
       key: "name",
-    },    
+    },
     {
       title: "Category",
       classname: "",

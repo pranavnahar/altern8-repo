@@ -27,8 +27,8 @@ const POC = ({ demo }: Props) => {
   const [currentPocId, setCurrentPocId] = useState(''); // to show previous poc details
 
   const [userData, setUserData] = useState({
-    name: '',
-    email: '',
+    name: 'Vivek Kumar',
+    email: 'vivek@mail.com',
     phoneNumber: '',
     designation: '',
   });
@@ -100,7 +100,7 @@ const POC = ({ demo }: Props) => {
         if (newPocDetails.length < 1) {
           setShowAddDetails(true);
         }
-        setPocDetails(() => [...newPocDetails]);
+       setPocDetails (() => [...newPocDetails]);
       } else {
         console.log("user don't have any poc details");
       }
@@ -153,6 +153,15 @@ const POC = ({ demo }: Props) => {
     if (!demo) {
       GetFetchedPersonalDetails();
       GetPoc();
+    } else {
+      setUserData({
+        name: "Anurag Das",
+        email: "oeuvars@gmail.com",
+        phoneNumber: "8335924401",
+        designation: "",
+      });
+
+      setShowAddDetails(true);
     }
   }, []);
 
@@ -272,6 +281,10 @@ const POC = ({ demo }: Props) => {
   };
 
   const submitAddedPOC = async () => {
+    if (demo) {
+      router.push('register?demo=true&step=3')
+      return;
+    }
     if (!validateName(userData.name)) {
       showToast(`Valid Name is required`, 'info');
       return;
@@ -292,11 +305,9 @@ const POC = ({ demo }: Props) => {
       designation: userData['designation'].trim(),
       source: 'user_register_page',
     };
-    console.log(bodyData);
     try {
       if (bodyData) {
         const body = bodyData;
-        console.log(accessToken);
         setLoading(true);
         const response = await fetch(`${apiUrl}/user-api/poc/`, {
           method: 'POST',
@@ -314,8 +325,6 @@ const POC = ({ demo }: Props) => {
 
         if (response.ok) {
           let server_message = await response.json();
-          console.log(`POC Form data submitted successfully!-- ${currentStep}`, server_message);
-
           showToast(`Submission Successful`, 'info');
 
           // update poc details list
@@ -324,8 +333,6 @@ const POC = ({ demo }: Props) => {
           setShowAddDetails(false);
         } else {
           let server_error = await response.json();
-          console.error(`Failed to submit poc form data.`, server_error);
-
           showToast(`Submission failed!`, 'info');
         }
       }
@@ -342,7 +349,17 @@ const POC = ({ demo }: Props) => {
 
   const handleNextButtonClick = async () => {
     if (demo) {
-      router.push('/register?demo=true&step=3');
+      setShowAddDetails(false);
+      setPocDetails([
+        {
+          id: "1",
+          name: "Anurag Das",
+          email: "oeuvars@gmail.com",
+          phoneNumber: "8335924401",
+          designation: "Manager",
+        }
+      ])
+      setShowAddDetails(true);
       return;
     }
     if (pocDetails && pocDetails.length === 0) {
@@ -367,7 +384,7 @@ const POC = ({ demo }: Props) => {
           </div>
 
           {pocDetails.length > 0 && (
-            <table className="w-full  overflow-hidden">
+            <table className="w-[75%] mx-auto overflow-hidden">
               <thead className=" border-b-2 border-gray-400  overflow-hidden">
                 <tr>
                   <th className="p-3 text-sm text-gray-300 font-semibold tracking-wide text-left">

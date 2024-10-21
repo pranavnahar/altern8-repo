@@ -27,7 +27,7 @@ const Tab = ({ tabsList, buttons, subMenuList }: Props) => {
   return (
     <Tabs value={selectedTab}>
       <div
-        className={`flex justify-between tabs-header-sticky py-5 w-full [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]`}
+        className={`flex justify-between rounded-lg tabs-header-sticky py-5 w-full [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]`}
         // style={{ top: `${stickyAtTop}px` }}
       >
         <TabsList className="flex items-center px-5 justify-between bg-transparent text-white">

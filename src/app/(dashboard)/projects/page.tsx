@@ -1,16 +1,19 @@
-import DashboardTableFilter from '../../../components/DashboardTableFilter/DashboardTableFilter';
 
-export type datasList = {
-  label: string;
-  value: string;
-};
+import { fetchProjectSummary } from "../../(dashboard)/project/actions/fetch-project-summary.actions";
+import type { SummaryResponse } from "./types";
+import Filters from "./components/filters";
+import { fetchProjectData } from "./actions";
 
-export default function Home() {
+const Page = async () => {
+  const projectsData = await fetchProjectData();
+  const summaryResponse = await fetchProjectSummary(1) as SummaryResponse;
+
   return (
-    <main className=" overflow-x-hidden text-white">
-      <div className="flex justify-center gap-[1%] p-1">
-        <DashboardTableFilter />
-      </div>
-    </main>
+    <Filters
+      projects={projectsData.results || []}
+      summaryData={summaryResponse.results}
+    />
   );
 }
+
+export default Page

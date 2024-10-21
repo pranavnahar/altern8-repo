@@ -2,8 +2,14 @@ import { toast, ToastT } from 'sonner';
 
 type ToastType = 'success' | 'error' | 'info' | 'warning';
 
+interface ShowToastOptions {
+  message: string;
+  type?: ToastType;
+  duration?: number;
+}
+
 export const useToast = () => {
-  const showToast = (message: string, type: ToastType = 'info', duration: number = 2000) => {
+  const showToast = ({ message, type = 'info', duration = 2000 }: ShowToastOptions) => {
     const toastOptions: Partial<ToastT> = {
       duration,
       style: {

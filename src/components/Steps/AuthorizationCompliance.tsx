@@ -88,6 +88,19 @@ const AuthorizationCompliance = ({ demo }: Props) => {
 
     if (!demo) {
       fetchData();
+    } else {
+      setUserData({
+        companyName: 'Oeuvars LLC',
+        companyRegNumber: 'U72200MH2023PTC123456',
+        repName: 'Anurag Das',
+        position: 'Chief Executive Officer',
+        email: 'oeuvars@gmail.com',
+        resolutionConfirmed: true,
+        powerOfAttorneyConfirmed: true,
+        authorizedPersons: 'Anurag Das',
+        authorizedPositions: 'Chief Executive Officer',
+        additionalDocsConfirmed: true,
+      });
     }
   }, []);
 

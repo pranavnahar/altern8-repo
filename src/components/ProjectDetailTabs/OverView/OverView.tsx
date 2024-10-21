@@ -1,584 +1,299 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
-import { Button } from '../../../components/ui/button';
-import { Card } from '../../../components/ui/card';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import { Progress } from '../../../components/ui/progress';
-import List from '../../../components/List/List';
-import TodoList from '../../../components/TodoList/TodoList';
-import { datasList } from '../../../app/(dashboard)/projects/page';
-import ProgressCircle from '../../../components/ProgressCircle/ProgressCircle';
-import { useParams, useRouter } from 'next/navigation';
-import { FilterSheet } from '../../../components/TimeLine/FilterSheet';
-import StakeHolderModal from './StakeHolderModal';
-import DrawTable from '../../../components/CustomizedTable/CustomizedTable';
-import { BaseHeaderProps, BaseTableData } from '../../../lib/componentProps';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../../../components/ui/table';
-import { Input } from '../../../components/ui/input';
-import { formatINR, formatDate } from '../../../Utils/formatter';
-import { Sheet, SheetContent, SheetTrigger } from '../../ui/sheet';
-import InventorySheet from './InventorySheet';
-import { fetchTranchData } from '../../../app/(dashboard)/project/actions/fetch-tranch.actions';
+import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
+import ProgressCircle from "@/components/ProgressCircle/ProgressCircle";
+import BasicTable from "@/components/global/basic-table";
+import { InventoryColumns } from "./columns/inventory-columns";
+import fundingColumns from "../ProjectSettings/columns/funding-columns";
+import SummaryList from "../../../app/(dashboard)/projects/components/summary-list";
+import { Inventory, FundingSource, SummaryItem, Project, InventoryResponse, FundingSourceResponse, SummaryResponse, ProjectData, TrancheData } from "./types";
+import { fetchProjectInventory } from "@/app/(dashboard)/project/actions/fetch-project-inventory.actions";
+import { fetchProjectFunding } from "@/app/(dashboard)/project/actions/get-project-funding";
+import { fetchTranchData } from "@/app/(dashboard)/project/actions/fetch-tranche-data";
+import { fetchProjectSummary } from "@/app/(dashboard)/project/actions/fetch-project-summary.actions";
+import { fetchProjectTask } from "@/app/(dashboard)/project/actions/fetch-project-task.actions";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { formatDate, formatINR } from "@/Utils/formatter";
+import { IconChevronRight } from "@tabler/icons-react";
+import StakeHolderModal from "./StakeHolderModal";
+import taskColumns from "@/components/TimeLine/columns/task-columns";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface ProjectOverViewProps {
-  user: 'customer' | 'borrower';
-  openDrawForm?: () => void;
+type Props = {
+  user: string;
+  openDrawForm: () => void;
 }
 
-interface ProjectData {
-  date: string;
-  label: string;
-  percentage: number;
-}
-
-interface DataRow {
-  category: string;
-  count: number | string;
-  amount: string;
-}
-
-//
-const InventoryTable: React.FC = () => {
-  const initialData: DataRow[] = [
-    { category: 'Lots', count: 101, amount: 'N/A' },
-    // { category: "Specs", count: 50, amount: "N/A" },
-    { category: 'Foundation Starts', count: 12, amount: 'N/A' },
-    { category: 'Models', count: 10, amount: 'N/A' },
-    { category: 'Started/Completed', count: 20, amount: 'N/A' },
-    { category: 'Units', count: 100, amount: 'N/A' },
-    { category: 'Contingent Sales', count: 0, amount: 'N/A' },
-  ];
-
-  const [data, setData] = useState<DataRow[]>(initialData);
-
-  const handleInputChange = (index: number, field: keyof DataRow, value: string) => {
-    const updatedData = [...data];
-    updatedData[index][field] = value;
-    setData(updatedData);
-  };
-
+const ProjectInfo = ({ projectId, user, openStakeholderModal }: any) => {
   return (
-    <Card className="border-0 [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] p-2 text-white rounded-lg ">
-      <div className="flex items-center justify-between text-sm">
-        <h2 className="text-nowrap py-2">Inventory</h2>
-        <Sheet>
-          <SheetTrigger>
-            <Button
-              variant={'outline'}
-              className=" bg-themeBlue border-0 text-white hover:bg-themeBlue hover:bg-transparent bg-[#1565c0]"
-            >
-              Add Inventory
-            </Button>
-          </SheetTrigger>
-          <SheetContent className="overflow-auto w-full [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] text-white border-0">
-            <InventorySheet />
-          </SheetContent>
-        </Sheet>
+    <Card className="flex items-center [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] border-0 text-white gap-3 p-4">
+      <div className="relative h-[230px] w-[250px]">
+        <Image
+          src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          layout="fill"
+          alt="project_image"
+          className="rounded-l-xl"
+        />
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Category</TableHead>
-            <TableHead className="text-center">Count</TableHead>
-            <TableHead className="text-center">Amount</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>{item.category}</TableCell>
-              <TableCell>
-                <Input
-                  type="number"
-                  value={item.count}
-                  className="text-black bg-gray-200"
-                  onChange={e => handleInputChange(index, 'count', e.target.value)}
-                />
-              </TableCell>
-              <TableCell>
-                <Input
-                  type="text"
-                  value={item.amount}
-                  className="text-black bg-gray-200"
-                  onChange={e => handleInputChange(index, 'amount', e.target.value)}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <div>
+        {user === "borrower" && <p className="text-xs mb-1">{"BO-0001"}</p>}
+        <p className="text-base">1460 Comal Project</p>
+        <p className="text-xs uppercase">Delhi, India</p>
+        <div className="my-1">
+          <div className="text-blue-600 text-[13px] cursor-pointer">
+            Tranche 3 - started on 9/14/2023
+          </div>
+        </div>
+        <div className="my-1">
+          <p className="text-sm uppercase">BORROWER</p>
+          <p className="text-sm">Joseph Contracting</p>
+        </div>
+        <div className="my-2">
+          <p className="text-sm uppercase">General Contractor</p>
+          <p className="text-sm">Joseph Contracting</p>
+        </div>
+        <div
+          className="text-blue-600 text-[13px] cursor-pointer"
+          onClick={openStakeholderModal}
+        >
+          View all stakeholders
+        </div>
+      </div>
     </Card>
   );
 };
 
-const OverView = ({ user, openDrawForm }: ProjectOverViewProps) => {
-  const [tranches, setTranches] = useState<string[]>([]);
-
-  const [stakeHolderModal, setStakeHolderModal] = useState<boolean>(false);
-  const radius = 30;
-  const stroke = 10;
-  //Datas for budget table
-  const projectDatas: BaseTableData[] = [
-    {
-      category: 'Fees & Interest',
-      used: '₹ 254,932.5',
-      budget: '₹ 904,133.0',
-    },
-    {
-      category: 'Soft Costs',
-      used: '₹ 167,350.0',
-      budget: '₹ 392,827.0',
-    },
-    // {
-    //   category: "Land Costs",
-    //   used: "₹ 1,205,836.0",
-    //   budget: "₹ 3,158,302.0",
-    // },
-    {
-      category: 'Hard Costs',
-      used: '₹ 610,615.8',
-      budget: '₹ 681,543.8',
-    },
-    {
-      category: 'Total',
-      used: '₹ 2,238,734.3',
-      budget: '₹ 11,324,431.0',
-    },
-  ];
-  //headers for the budget table
-  const tableHeaders: BaseHeaderProps[] = [
-    {
-      key: 'category',
-      title: '',
-    },
-    {
-      key: 'used',
-      title: 'Used',
-    },
-    {
-      key: '',
-      compareKeys: ['used', 'budget'] as (keyof BaseTableData)[],
-      title: '',
-    },
-    {
-      key: 'budget',
-      title: 'Budget',
-    },
-  ];
-  const listData: datasList[] = [
-    {
-      label: 'Interest Reserves',
-      value: '₹ 10,00,438.00',
-    },
-    {
-      label: 'Development Fee',
-      value: '₹ 50,04,219.00',
-    },
-    {
-      label: 'Tranche/Inspector Fees',
-      value: '₹ 1,66,805.00',
-    },
-    {
-      label: 'Legal',
-      value: '₹ 10,83,445.00',
-    },
-    {
-      label: 'Architect',
-      value: '₹ 19,99,861.00',
-    },
-    {
-      label: 'Engineering',
-      value: '₹ 5,83,017.00',
-    },
-    {
-      label: 'Title Insurance',
-      value: '₹ 3,16,927.00',
-    },
-    {
-      label: 'Environmental',
-      value: '₹ 3,99,534.00',
-    },
-    {
-      label: 'Soft Cost Contingency',
-      value: '₹ 37,35,000.00',
-    },
-    {
-      label: 'Site Acquisition',
-      value: '₹ 1,00,08,388.00',
-    },
-    {
-      label: 'GENERAL REQUIREMENTS',
-      value: '₹ 44,03,413.00',
-    },
-    {
-      label: 'CONCRETE',
-      value: '₹ 1,34,69,621.00',
-    },
-    {
-      label: 'MASONRY',
-      value: '₹ 52,12,000.00',
-    },
-    {
-      label: 'METAL',
-      value: '₹ 30,06,000.00',
-    },
-    {
-      label: 'WOOD & PLASTICS',
-      value: '₹ 1,70,65,031.00',
-    },
-    {
-      label: 'THERMAL & MOISTURE',
-      value: '₹ 78,39,433.00',
-    },
-    {
-      label: 'OPENINGS',
-      value: '₹ 40,16,949.00',
-    },
-    {
-      label: 'FINISHES',
-      value: '₹ 40,16,949.00',
-    },
-    {
-      label: 'SPECIALTIES',
-      value: '₹ 46,231.00',
-    },
-  ];
-
-  // for the Task List data
-  const taskListData = [
-    {
-      label: 'Land Acqusion  1',
-      value: 'Complete',
-      date: '01/02/2024',
-    },
-    {
-      label: 'Land Acqusion  2',
-      value: 'Complete',
-      date: '01/02/2024',
-    },
-    {
-      label: 'Land Acqusion  3',
-      value: 'Complete',
-      date: '01/02/2024',
-    },
-  ];
-  const projectCompletion: ProjectData[] = [
-    {
-      date: '06/27/2024',
-      label: 'Project Completion',
-      percentage: 50,
-    },
-    {
-      date: '06/27/2024',
-      label: 'Tranche Completion',
-      percentage: 50,
-    },
-  ];
-  const router = useRouter();
-  const params = useParams();
-  const projectId = Number(params.id);
-  const [open, setOpen] = useState<boolean>(false);
-  // Budget Table
-  const BudgetTable = () => {
-    return (
-      <Card className="rounded-lg border-0 my-2 [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] p-2 text-white ">
-        <DrawTable tableData={projectDatas} headers={tableHeaders} />
-      </Card>
-    );
-  };
-  // Funding source progress
-  const FundingSource = () => {
-    const data = [
-      {
-        type: 'EQUITY',
-        contributed: '₹ 1,590,709.00',
-        total: '₹ 1,590,709.00',
-      },
-      {
-        type: 'DEBT',
-        contributed: '₹ 1,590,709.00',
-        total: '₹ 9,733,722.00',
-      },
-      {
-        type: 'SECONDARY DEBT',
-        contributed: '₹  8,090,709.00',
-        total: '₹ 11,324,431.00',
-      },
-      {
-        type: 'TOTAL',
-        contributed: '₹  1,590,709.00',
-        total: '₹ 11,324,431.00',
-      },
-    ];
-
-    const parseValue = (value: string) => {
-      // Remove currency symbol and commas, then parse as float
-      return parseFloat(value.replace(/[^0-9.-]+/g, ''));
-    };
-
-    return (
-      <Card className="p-2 text-sm [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] border-0 text-white h-fit">
-        <div className="flex items-center justify-between text-sm">
-          <p className="text-nowrap">Funding Sources Overview</p>
-          <Button
-            variant={'link'}
-            className="text-themeBlue text-sm"
-            onClick={() => router.push('/draw/3?current_tab=Funding%20Sources')}
-          >
-            Funding Source Details
-          </Button>
-        </div>
-        <div>
-          {data.map((item, index) => {
-            const contributedValue = parseValue(item.contributed);
-            const totalValue = parseValue(item.total);
-            const progressValue = (contributedValue / totalValue) * 100;
-
-            return (
-              <div key={index}>
-                <div>{item.type}</div>
-                <div className="flex items-center justify-between">
-                  <p>
-                    {item.contributed} <strong>Contributed</strong>
-                  </p>
-                  <p>{item.total}</p>
-                </div>
-                <Progress value={progressValue} className="h-[8px] my-3 bg-black" />
-              </div>
-            );
-          })}
-        </div>
-      </Card>
-    );
-  };
-
-  useEffect(() => {
-    const handleFetchTranch = async (projectId: number) => {
-      //@ts-expect-error data types
-      const data: { results: string[] } = await fetchTranchData(projectId);
-      setTranches(data.results);
-    };
-
-    handleFetchTranch(projectId);
-  }, []);
-
-  const DrawContainer = ({
-    tranch,
-  }: {
-    tranch: {
-      id: string;
-      tranche_name: string;
-      tranche_end_date: string;
-      tranche_total: string;
-    };
-  }) => {
-    const handleClick = () => {
-      const route =
-        user === 'customer' ? `/draw/${projectId}` : `/borrower/project/draw/${projectId}`;
-      router.push(route);
-    };
-    return (
-      <Card
-        onClick={handleClick}
-        className="p-2 px-4 text-sm z-50 [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] text-white border-l-8 cursor-pointer bg-slate-100 hover:border-themeBlue"
-      >
-        <h1 className="capitalize">
-          {tranch.id}: {tranch.tranche_name}
-        </h1>
-        <div className="my-2">
-          <p className=" capitalize text-base">Active</p>
-          <p className="text-xs">{formatDate(tranch.tranche_end_date)}</p>
-        </div>
-        <div className="my-2 flex gap-3">
-          <p>Tranche Total:</p>
-          <p>{formatINR(tranch.tranche_total)}</p>
-        </div>
-      </Card>
-    );
-  };
-
+const ProjectCompletion = ({ projectCompletion }: any) => {
   return (
-    <>
-      <div className=" flex p-2">
-        <div className={user === 'customer' ? 'w-[73%]' : 'w-[100%]'}>
-          <div className="flex ">
-            <div className="p-2">
-              <div className="my-2">
-                <p className="text-white">PROJECT</p>
-                {/* info card */}
-                <Card className="flex items-center [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] border-0 text-white gap-3 ">
-                  <div className="flex items-center gap-3">
-                    <div className="relative h-[230px] w-[250px]">
-                      <Image
-                        src={
-                          'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                        }
-                        layout="fill"
-                        alt="project_image"
-                        className=" rounded-l-xl"
-                      />
-                    </div>
-                    <div>
-                      {user === 'borrower' && <p className="text-xs mb-1">{'BO-0001'}</p>}
-                      <p className="text-base">1460 Comal Project</p>
-                      <p className="text-xs uppercase ">Delhi, India</p>
-
-                      <div className="my-1">
-                        <div
-                          className="text-blue-600 text-[13px] cursor-pointer"
-                          onClick={() => router.push('/draw/3')}
-                        >
-                          Tranche 3 - started on 9/14/2023
-                        </div>
-                      </div>
-
-                      <div className="my-1">
-                        <p className="text-sm uppercase">BORROWER</p>
-                        <p className="text-sm">Joseph Contracting</p>
-                      </div>
-
-                      <div className="my-2">
-                        <p className="text-sm uppercase">General Contractor</p>
-                        <p className="text-sm">Joseph Contracting</p>
-                      </div>
-
-                      <div
-                        className="text-blue-600 text-[13px] cursor-pointer"
-                        onClick={() => setStakeHolderModal(true)}
-                      >
-                        View all stakeholders
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mx-3 w-[33%] flex items-center flex-col gap-4 justify-center">
-                    <div className="flex items-center gap-4 justify-between">
-                      {projectCompletion.map((data, index) => (
-                        <div
-                          key={index}
-                          className="text-sm flex justify-center items-center flex-col"
-                        >
-                          <p className="text-center text-sm">{data?.label}</p>
-                          <div className="my-2">
-                            <ProgressCircle
-                              radius={radius}
-                              stroke={stroke}
-                              progress={data?.percentage}
-                            />
-                          </div>
-                          <strong className=" my-2">{data?.date}</strong>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </Card>
-              </div>
-              {/*  Tranche section*/}
-              <div className="my-2">
-                <p className="text-white">TRANCHE'S</p>
-                <Card className="p-2 px-5 [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] border-0 text-white">
-                  <Button
-                    className="bg-transparent text-white hover:bg-transparent hover:text-white"
-                    variant="outline"
-                    onClick={openDrawForm}
-                  >
-                    Create New Tranche
-                  </Button>
-                  <div className="flex flex-wrap my-3 items-center gap-3">
-                    {tranches &&
-                      tranches.map((tranch: any, index: number) => (
-                        <DrawContainer tranch={tranch} key={index} />
-                      ))}
-                  </div>
-                </Card>
-              </div>
-            </div>
-            {/* Comment section */}
-            {user === 'customer' ? (
-              // <div className="py-4 px-2 w-[35%]">
-              //   <p className="text-white">PROJECT CHAT</p>
-              //   <Textarea
-              //     placeholder="Type a comment here."
-              //     className="h-48 [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] border-0 text-white"
-              //   />
-              //   <div className="my-2 h-[310px] overflow-y-scroll">
-              //     <Comments />
-              //     <Comments />
-              //     <Comments />
-              //     <Comments />
-              //     <Comments />
-              //   </div>
-              // </div>
-              <></>
-            ) : (
-              // budget table and funcing table
-              <div className="mt-10 flex flex-col gap-5 ml-5 w-1/2">
-                <BudgetTable />
-                <FundingSource />
-              </div>
-            )}
+    <div className="grid items-center gap-4 w-full">
+      {projectCompletion.map((data: ProjectData, index: number) => (
+        <div key={index} className="text-sm flex justify-center items-center flex-col w-full bg-white/20 p-2 rounded-lg">
+          <p className="text-center text-sm font-medium text-zinc-200">{data?.label}</p>
+          <div className="my-2">
+            <ProgressCircle radius={30} stroke={10} progress={data?.percentage} />
           </div>
-          {/*budget table */}
-          {user === 'customer' && (
-            <div className="my-1 flex gap-4">
-              <div className="w-1/2">
-                <InventoryTable />
-              </div>
-              {/* Funding source overview */}
-              <div className="w-1/2 ">
-                <FundingSource />
-                <BudgetTable />
-              </div>
-            </div>
-          )}
+          <p className="text-zinc-400">{data?.date}</p>
         </div>
-
-        {/* todo list */}
-        {user === 'customer' && (
-          <div className="w-[27%] p-2 text-white">
-            <TodoList listData={listData} />
-            <Card className="my-2 m-1 p-1 border-none text-white [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]">
-              <div className="flex items-center justify-between pl-2 border-b-gray-100 text-sm">
-                <p className="text-nowrap">Tasks</p>
-                <div className="flex items-center">
-                  <Button
-                    variant={'link'}
-                    className="text-themeBlue text-sm"
-                    onClick={() => setOpen(true)}
-                  >
-                    Add Tasks
-                  </Button>
-                  <Button
-                    variant={'link'}
-                    className="text-themeBlue text-sm"
-                    onClick={() => router.push('?current_tab=Timeline')}
-                  >
-                    Edit Tasks
-                  </Button>
-                </div>
-              </div>
-              <div className="mb-1">
-                <List
-                  data={taskListData}
-                  keyToMap={['label', 'date', 'value']}
-                  className={'text-sm'}
-                />
-              </div>
-            </Card>
-            <FilterSheet open={open} onOpenChange={() => setOpen(false)} />
-          </div>
-        )}
-        <StakeHolderModal open={stakeHolderModal} onHide={() => setStakeHolderModal(false)} />
-      </div>
-    </>
+      ))}
+    </div>
   );
 };
 
-export default OverView;
+const TrancheSection = ({ tranches, openDrawForm }: any) => {
+  const router = useRouter();
+
+  if (!tranches || tranches.length === 0) {
+    return (
+      <Card className="p-5 flex flex-col gap-3 [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] border-0 text-white">
+        <Skeleton className="h-8 w-40 bg-white/30" />
+        <div className="flex flex-wrap items-center gap-3">
+          {[...Array(2)].map((_, index) => (
+            <Card
+              key={index}
+              className="p-2 px-4 text-sm z-50 [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] text-white border-l-8 cursor-pointer bg-slate-100/20 w-64"
+            >
+              <Skeleton className="h-5 w-40 bg-white/30 mb-2" /> {/* Tranche name skeleton */}
+              <div className="my-2">
+                <Skeleton className="h-4 w-20 bg-white/30 mb-1" /> {/* Active status skeleton */}
+                <Skeleton className="h-3 w-24 bg-white/30" /> {/* Date skeleton */}
+              </div>
+              <div className="my-2 flex gap-3">
+                <Skeleton className="h-4 w-24 bg-white/30" /> {/* Tranche Total label skeleton */}
+                <Skeleton className="h-4 w-20 bg-white/30" /> {/* Tranche Total value skeleton */}
+              </div>
+            </Card>
+          ))}
+        </div>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="p-5 flex flex-col gap-3 [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] border-0 text-white">
+      <Button
+        variant="expandIcon"
+        size="sm"
+        className="text-sm max-w-max"
+        Icon={IconChevronRight}
+        iconPlacement="right"
+        onClick={openDrawForm}
+      >
+        Create New Tranche
+      </Button>
+      <div className="flex flex-wrap items-center gap-3">
+        {tranches.map((tranch: any, index: number) => (
+          <Card
+            key={index}
+            onClick={() => router.push(`/draw/${tranch.id}`)}
+            className="p-2 px-4 text-sm z-50 [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] text-white border-l-8 cursor-pointer bg-slate-100 hover:border-blue-500 transition-all duration-500 ease-in-out"
+          >
+            <h1 className="capitalize">
+              {tranch.id}: {tranch.tranche_name}
+            </h1>
+            <div className="my-2">
+              <p className="capitalize text-base">Active</p>
+              <p className="text-xs">{formatDate(tranch.tranche_end_date)}</p>
+            </div>
+            <div className="my-2 flex gap-3">
+              <p>Tranche Total:</p>
+              <p>{formatINR(tranch.tranche_total)}</p>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </Card>
+  );
+};
+
+const InventoryTable = (inventory: any) => {
+  return (
+    <Card className="border-0 [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] text-white rounded-lg p-5">
+      <div className="flex items-center justify-between text-sm">
+        <h2 className="text-nowrap py-2 text-2xl tracking-tight">Inventory</h2>
+      </div>
+      <BasicTable data={inventory.inventory || []} columns={InventoryColumns} filters={[]} needFilters={false} />
+    </Card>
+  );
+};
+
+const Funding = (fundingSource: any) => {
+  const router = useRouter()
+  return (
+    <Card className="text-sm [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] border-0 text-white p-5">
+      <div className="flex items-center justify-between text-sm">
+        <p className="text-nowrap text-2xl">Funding Sources Overview</p>
+        <Button
+          variant="default"
+          size="xs"
+          className="text-zinc-100 text-xs"
+          onClick={() => router.push("/draw/3?current_tab=Funding%20Sources")}
+        >
+          Funding Source Details
+        </Button>
+      </div>
+      <BasicTable
+        data={fundingSource.fundingSource}
+        columns={fundingColumns}
+        filters={[]}
+        needFilters={false}
+      />
+    </Card>
+  );
+};
+
+const TasksSection = ({ tasks, setOpen }: any) => {
+  return (
+    <Card className="p-5 border-none text-white [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] mt-3">
+      <div className="flex items-center justify-between pl-2 border-b-gray-100 text-2xl">Tasks</div>
+      <BasicTable data={tasks} columns={taskColumns} filters={[]} needFilters={false} />
+    </Card>
+  );
+};
+
+const Overview = ({ user, openDrawForm }: Props) => {
+  const [inventory, setInventory] = useState<Inventory[]>([]);
+  const [fundingSources, setFundingSources] = useState<FundingSource[]>([]);
+  const [tranches, setTranches] = useState<TrancheData[]>([]);
+  const [summary, setSummary] = useState<SummaryItem[]>([]);
+  const [tasks, setTasks] = useState<any[]>([]);
+  const [stakeHolderModal, setStakeHolderModal] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
+
+  const params = useParams();
+  const projectId = Number(params.id);
+
+  const projectCompletion: ProjectData[] = [
+    { date: "06/27/2024", label: "Project Completion", percentage: 50 },
+    { date: "06/27/2024", label: "Tranche Completion", percentage: 50 },
+  ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const inventoryData = await fetchProjectInventory(projectId) as InventoryResponse;
+      const fundingData = await fetchProjectFunding(projectId) as FundingSourceResponse;
+      const tranchData = await fetchTranchData(projectId) as { results: TrancheData[] };
+      const summaryData = await fetchProjectSummary(projectId) as SummaryResponse;
+      const taskData = await fetchProjectTask(projectId) as any[];
+
+      setInventory(inventoryData.results);
+      setFundingSources(fundingData.results);
+      setTranches(tranchData.results);
+      setSummary(summaryData.results);
+      setTasks([
+        {
+          id: 1,
+          name: "Task 1",
+          startDate: "2024-01-01",
+          endDate: "2024-01-15",
+          status: "In Progress",
+          owner: "Rahul Sharma",
+        },
+        {
+          id: 2,
+          name: "Task 2",
+          startDate: "2024-01-10",
+          endDate: "2024-02-05",
+          status: "Not Started",
+          owner: "Priya Patel",
+        },
+        {
+          id: 3,
+          name: "Task 3",
+          startDate: "2024-02-01",
+          endDate: "2024-02-28",
+          status: "Completed",
+          owner: "Amit Kumar",
+        },
+        {
+          id: 4,
+          name: "Task 4",
+          startDate: "2024-02-15",
+          endDate: "2024-03-15",
+          status: "In Progress",
+          owner: "Neha Gupta",
+        },
+        {
+          id: 5,
+          name: "Task 5",
+          startDate: "2024-03-01",
+          endDate: "2024-03-31",
+          status: "Not Started",
+          owner: "Vikram Singh",
+        },
+      ])
+    };
+
+    fetchData();
+  }, [projectId]);
+
+  return (
+    <div className="flex p-2">
+      <div className="w-1/3 p-2">
+        <p className="text-white mb-2 font-semibold text-2xl">Project</p>
+        <div className="grid grid-cols-[3fr_1fr] gap-3">
+          <ProjectInfo projectId={projectId} user={user} openStakeholderModal={() => setStakeHolderModal(true)} />
+          <ProjectCompletion projectCompletion={projectCompletion} />
+        </div>
+        <p className="text-white mt-4 mb-2 text-2xl font-semibold">Tranches</p>
+        <TrancheSection tranches={tranches} openDrawForm={openDrawForm} />
+        <TasksSection tasks={tasks} setOpen={setOpen} />
+      </div>
+
+      <div className="w-[45%] p-3 space-y-3">
+        {inventory && <InventoryTable inventory={inventory} />}
+        {fundingSources && <Funding fundingSource={fundingSources} /> }
+      </div>
+
+      <div className="w-1/3 p-2 text-white">
+        <SummaryList data={summary} />
+      </div>
+
+      {/* Add your modal components here */}
+      <StakeHolderModal open={stakeHolderModal} onHide={() => setStakeHolderModal(false)} />
+      {/* <FilterSheet open={open} onOpenChange={() => setOpen(false)} /> */}
+    </div>
+  );
+};
+
+export default Overview;

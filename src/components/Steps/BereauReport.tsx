@@ -367,7 +367,7 @@ const BureauReport = ({ demo }: Props) => {
             <div className="flex justify-center items-center">
               <button
                 onClick={() => handleClick('next')}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                className="px-4 py-2 bg-blue-600 text-white rounded-full"
               >
                 Next
               </button>
