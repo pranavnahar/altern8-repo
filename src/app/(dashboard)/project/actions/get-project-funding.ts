@@ -1,12 +1,13 @@
+"use server"
 
 import ky from 'ky';
 import { notFound } from 'next/navigation';
-import { getAuthToken } from '../helpers';
+import { getAuthToken } from '../../../../Utils/helpers';
 
-export async function fetchTranchData(projectID: number, timeoutMs: number = 60000) {
+export async function fetchProjectFunding(projectID: number, timeoutMs: number = 60000) {
   try {
     const token = await getAuthToken();
-    const response = await ky.get(`${process.env.NEXT_PUBLIC_API_URL}/rablet-api/projects/${projectID}/tranches/`, {
+    const response = await ky.get(`${process.env.SERVER_URL}/rablet-api/projects/${projectID}/funding-sources/`, {
       timeout: timeoutMs,
       retry: 3,
       headers: {

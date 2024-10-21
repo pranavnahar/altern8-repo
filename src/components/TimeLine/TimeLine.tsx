@@ -1,40 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
-import { Button } from "../ui/button";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { Input } from "../ui/input";
-import {
-  Boxes,
-  ChevronLeft,
-  ChevronRight,
-  File,
-  Filter,
-  Save,
-  SlidersHorizontal,
-  View,
-} from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import DrawTable from "../CustomizedTable/CustomizedTable";
-import { FilterSheet } from "./FilterSheet";
-import { BaseHeaderProps, BaseTableData } from "../../lib/componentProps";
 import GanttChart from "../Charts/GranttChart";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import BasicTable from "../global/basic-table";
+import { useParams } from "next/navigation";
+import { fetchProjectTask } from "../../app/(dashboard)/project/actions/fetch-project-task.actions";
+import AddTaskSheet from "./AddTaskSheet";
+import taskColumns from "./columns/task-columns";
+import { Button } from "../ui/button";
 
 export interface TaskData {
   Task: string;
@@ -65,24 +41,6 @@ interface TimeRanges {
     min: number;
     max: number;
     format:
-      | false
-      | "millisecond"
-      | "second"
-      | "minute"
-      | "hour"
-      | "day"
-      | "week"
-      | "month"
-      | "quarter"
-      | "year"
-      | undefined;
-  };
-}
-
-interface chartTimeProps {
-  min: number;
-  max: number;
-  format:
     | false
     | "millisecond"
     | "second"
@@ -94,6 +52,24 @@ interface chartTimeProps {
     | "quarter"
     | "year"
     | undefined;
+  };
+}
+
+interface chartTimeProps {
+  min: number;
+  max: number;
+  format:
+  | false
+  | "millisecond"
+  | "second"
+  | "minute"
+  | "hour"
+  | "day"
+  | "week"
+  | "month"
+  | "quarter"
+  | "year"
+  | undefined;
 }
 
 const data: ChartDataPoint[] = [
@@ -123,77 +99,60 @@ export const TimelineTab = () => {
     max: new Date("2024-01-31").getTime(),
     format: "day",
   });
-  const [showGantt, setShowGantt] = useState<boolean>(true);
-  const tableData: BaseTableData[] = [
-    {
-      Task: "Delivery",
-      Owner: "N/A",
-      Status: "Not Started",
-      OriginalStartDate: "02/29/2024",
-      ProjectedActualStartDate: "02/29/2024",
-      OriginalCompletionDate: "02/29/2024",
-      ProjectedActualCompletionDate: "02/29/2024",
-      CompletionDateVariance: "0 days",
-    },
-    {
-      Task: "Phase 3",
-      Owner: "N/A",
-      Status: "In Progress",
-      OriginalStartDate: "02/29/2024",
-      ProjectedActualStartDate: "02/29/2024",
-      OriginalCompletionDate: "02/29/2024",
-      ProjectedActualCompletionDate: "02/29/2024",
-      CompletionDateVariance: "0 days",
-    },
-  ];
+  const [showGantt, setShowGantt] = useState<boolean>(false);
   const [formUsage, setFormUsage] = useState<"create" | "edit">("create");
-  const documentsTableHeaders: BaseHeaderProps[] = [
-    {
-      title: "Task",
-      classname: "w-[100px]",
-      key: "Task",
-    },
-    {
-      title: "Owner",
-      classname: "",
-      key: "Owner",
-    },
-    {
-      title: "Status",
-      classname: "",
-      key: "Status",
-    },
-    {
-      title: "Original Start Date",
-      classname: "",
-      key: "OriginalStartDate",
-    },
-    {
-      title: "Projected Actual Start Date",
-      classname: "",
-      key: "ProjectedActualStartDate",
-    },
-    {
-      title: "Original Completion Date",
-      classname: "",
-      key: "OriginalCompletionDate",
-    },
-    {
-      title: "Projected Actual Completion Date",
-      classname: "",
-      key: "ProjectedActualCompletionDate",
-    },
-    {
-      title: "Completion Date Variance",
-      classname: "",
-      key: "CompletionDateVariance",
-    },
-  ];
+  const params = useParams();
+  const projectId = Number(params.id);
+  const [taskList, setTaskList] = useState<any[]>([]);
 
-  const OpenChange = () => {
-    setOpen(false);
-    setFormUsage("create");
-  };
+  useEffect(() => {
+    const handleFetchTask = async () => {
+      const data: any = await fetchProjectTask(projectId)
+      setTaskList([
+        {
+          id: 1,
+          name: "Task 1",
+          startDate: "2024-01-01",
+          endDate: "2024-01-15",
+          status: "In Progress",
+          owner: "Rahul Sharma",
+        },
+        {
+          id: 2,
+          name: "Task 2",
+          startDate: "2024-01-10",
+          endDate: "2024-02-05",
+          status: "Not Started",
+          owner: "Priya Patel",
+        },
+        {
+          id: 3,
+          name: "Task 3",
+          startDate: "2024-02-01",
+          endDate: "2024-02-28",
+          status: "Completed",
+          owner: "Amit Kumar",
+        },
+        {
+          id: 4,
+          name: "Task 4",
+          startDate: "2024-02-15",
+          endDate: "2024-03-15",
+          status: "In Progress",
+          owner: "Neha Gupta",
+        },
+        {
+          id: 5,
+          name: "Task 5",
+          startDate: "2024-03-01",
+          endDate: "2024-03-31",
+          status: "Not Started",
+          owner: "Vikram Singh",
+        },
+      ])
+    }
+    handleFetchTask()
+  }, [])
 
   const handleRadioChange = (value: string) => {
     const time: TimeRanges = {
@@ -215,7 +174,7 @@ export const TimelineTab = () => {
     };
     setChartTime(time[value]);
   };
-  
+
 
   const handleEdit = () => {
     setOpen(true);
@@ -223,9 +182,9 @@ export const TimelineTab = () => {
   };
 
   return (
-    <div>
-      <div className=" px-5">
-        <div className="flex items-center justify-between text-white my-5">
+    <section>
+      <div className="px-5">
+        <div className="flex items-center justify-between text-white my-5 w-[97%] mx-auto">
           <p> 1460 Comal Project Timeline</p>
           <div className="flex items-center gap-5">
             <p>View By : </p>
@@ -274,123 +233,14 @@ export const TimelineTab = () => {
           </motion.div>
         )}
       </div>
-      <motion.div
-        className="flex items-end justify-between px-5 my-3 m-2"
-        initial={{ y: -10, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="flex items-end gap-3">
-          <div className="text-black">
-            <strong className="text-xs text-white">Search By:</strong>
-            <Select>
-              <SelectTrigger className="w-[180px]   ">
-                <SelectValue
-                  className="text-black"
-                  placeholder="Select by column"
-                />
-              </SelectTrigger>
-              <SelectContent className="text-black">
-                <SelectGroup>
-                  <SelectItem value="Projects">Projects</SelectItem>
-                  <SelectItem value="location">Location</SelectItem>
-                  <SelectItem value="commitments">Commitments</SelectItem>
-                  <SelectItem value="projectTotal">Project Total</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Input className="text-black" type="search" placeholder="Search" />
-          </div>
-          <div>
-            <Button variant="secondary">
-              <Filter />
-            </Button>
-          </div>
+      <div className="grid w-[95%] mx-auto mt-10">
+        <div className="grid grid-cols-3">
+          <div></div>
+          <h1 className="text-3xl text-white font-semibold text-center">TaskList</h1>
+          <AddTaskSheet />
         </div>
-        <div className="flex gap-3">
-          <div className="text-black">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">Take Actions</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>
-                  <SlidersHorizontal size={18} className="mr-2" />
-                  Customize Columns...
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Boxes size={18} className="mr-2" />
-                  Group By...
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Save size={18} className="mr-2" />
-                  Save Current View...
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <View size={18} className="mr-2" />
-                  Manage Views...
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <File size={18} className="mr-2" />
-                  Export to csv
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <File size={18} className="mr-2" />
-                  Export to Excel
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <Button variant="secondary" className="">
-            <ChevronLeft />
-          </Button>
-          <Button variant="secondary">
-            <ChevronRight />
-          </Button>
-
-          <Button
-            variant={"outline"}
-            className="bg-transparent text-white hover:bg-transparent hover:text-white"
-            onClick={() => setShowGantt(!showGantt)}
-          >
-            {showGantt ? "Hide" : "Show"} Gantt
-          </Button>
-
-          <Button
-            variant="default"
-            className="bg-themeBlue hover:bg-themeBlue"
-            onClick={() => setOpen(true)}
-          >
-            Add New Task
-          </Button>
-        </div>
-      </motion.div>
-      <div className="px-5">
-        <DrawTable
-          tableData={tableData}
-          headers={documentsTableHeaders}
-          edit={true}
-          editFunction={handleEdit}
-        />
+        <BasicTable data={taskList} columns={taskColumns} filters={[]} needFilters={false} />
       </div>
-      <FilterSheet
-        open={open}
-        onOpenChange={OpenChange}
-        type={formUsage}
-        data={{
-          Task: "Delivery",
-          Owner: "N/A",
-          Status: "Not Started",
-          OriginalStartDate: "02/29/2024",
-          ProjectedActualStartDate: "02/29/2024",
-          OriginalCompletionDate: "02/29/2024",
-          ProjectedActualCompletionDate: "02/29/2024",
-          CompletionDateVariance: "0",
-        }}
-      />
-    </div>
+    </section>
   );
 };

@@ -18,6 +18,7 @@ import FileUpload from "../../../components/FileUpload/FileUpload";
 import { useRecoilValue } from "recoil";
 import { userRole } from "../../../atom/atom";
 import { GenearlContracter } from "./GenearlContracter";
+import { useParams } from "next/navigation";
 
 type AccordianProps = {
   data: menuItemsProps;
@@ -96,6 +97,8 @@ type menuItemsProps = {
 export const Timeline = () => {
   const [accordianValues, setAccordianValues] = useState<string[]>([]);
   const admin = useRecoilValue(userRole);
+  const params = useParams();
+  const projectId = Number(params.id);
 
   const stakeholders: Stakeholder[] = [
     {
@@ -172,7 +175,7 @@ export const Timeline = () => {
   const menuItems: menuItemsProps[] = [
     {
       name: "Funding Sources",
-      child: <FundingSources />,
+      child: <FundingSources projectId={projectId}/>,
     },
     {
       name: "Line Item Settings",
@@ -216,35 +219,25 @@ export const Timeline = () => {
 
   return (
     <div className="h-[65vh] overflow-auto">
-      <motion.div
-        className="flex justify-between px-4 items-center gap-3"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
+      <div className="flex justify-between px-4 items-center gap-3">
         <Button className="bg-themeBlue" onClick={() => handleAccordian(true)}>
           Expand all
         </Button>
         <Button className="bg-themeBlue" onClick={() => handleAccordian(false)}>
           Collapse All
         </Button>
-      </motion.div>
+      </div>
       <div className="p-2 w-[99%] text-white mx-auto">
         <Accordion type="multiple" value={accordianValues}>
           {menus.map((data: menuItemsProps, key: number) => (
-            <motion.div
-              key={key}
-              initial={{ x: "100%", opacity: 0 }}
-              animate={{ x: "0%", opacity: 1 }}
-              transition={{ delay: 0.5 + key * 0.1, duration: 0.5 }}
-            >
+            <div key={key}>
               <AccordianSettings
                 data={data}
                 index={key}
                 setAccordianValues={setAccordianValues}
                 accordianValues={accordianValues}
               />
-            </motion.div>
+            </div>
           ))}
         </Accordion>
       </div>

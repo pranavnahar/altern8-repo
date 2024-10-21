@@ -2,12 +2,12 @@
 
 import ky from 'ky';
 import { notFound } from 'next/navigation';
-import { getAuthToken } from '../../../../Utils/helpers';
+import { getAuthToken } from '../helpers';
 
-export async function fetchProjectBudget(projectID: number, timeoutMs: number = 60000) {
+export async function fetchTranchData(projectID: number, timeoutMs: number = 60000) {
   try {
     const token = await getAuthToken();
-    const response = await ky.get(`${process.env.SERVER_URL}/rablet-api/projects/budgets/${projectID}/`, {
+    const response = await ky.get(`${process.env.NEXT_PUBLIC_API_URL}/rablet-api/projects/${projectID}/tranches/`, {
       timeout: timeoutMs,
       retry: 3,
       headers: {
