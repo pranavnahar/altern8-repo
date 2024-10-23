@@ -32,28 +32,28 @@ const AddBudgetSheet = () => {
     }));
   };
 
-  let altern8_adminaccess = parseCookies().altern8_adminaccess;
+  let altern8_useraccess = parseCookies().altern8_useraccess;
 
   const ReplaceTokenOrRedirect = async (): Promise<void> => {
     const token = await getAccessToken();
     if (!token) {
       window.location.replace('/login');
     } else {
-      altern8_adminaccess = token;
+      altern8_useraccess = token;
     }
   };
 
   const handleSubmit = async () => {
     console.log(formData);
     try {
-      if (!altern8_adminaccess) {
+      if (!altern8_useraccess) {
         await ReplaceTokenOrRedirect();
       }
 
       let response = await fetch(`${apiUrl}/rablet-api/budgets/tranches/${templateId}/`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${altern8_adminaccess}`,
+          Authorization: `Bearer ${altern8_useraccess}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
@@ -64,7 +64,7 @@ const AddBudgetSheet = () => {
         response = await fetch(`${apiUrl}/rablet-api/budgets/tranches/${templateId}/`, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${altern8_adminaccess}`,
+            Authorization: `Bearer ${altern8_useraccess}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
