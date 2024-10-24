@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
@@ -15,7 +15,9 @@ const Page = () => {
   const { showToast } = useToast();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [loadingSpinner, setLoadingSpinner] = useState<boolean>(false); // for loading animation
+  const [documents, setDocuments] = useState<any[]>([]);
 
+  const router = useRouter();
   // mui default styles for the upload button
   const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -28,8 +30,6 @@ const Page = () => {
     whiteSpace: 'nowrap',
     width: 1,
   });
-
-  const router = useRouter();
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccess; //access token from cookies
@@ -45,6 +45,55 @@ const Page = () => {
       accessToken = token;
     }
   };
+
+  // docs fetching
+  const fetchDocuments = async () => {
+    try {
+      setLoadingSpinner(true);
+
+      if (!accessToken) {
+        await ReplaceTokenOrRedirect();
+      }
+
+      let response = await fetch(`${apiUrl}/user-dashboard-api/other-document/`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.status === 401) {
+        await ReplaceTokenOrRedirect();
+        response = await fetch(`${apiUrl}/user-dashboard-api/other-document/`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+      }
+
+      if (response.ok) {
+        const data = await response.json();
+        setDocuments(data.data || []); // Accessing the 'data' array properly
+      } else {
+        showToast({
+          message: `Failed to fetch documents!`,
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      showToast({
+        message: `Error fetching documents!`,
+        type: 'error',
+      });
+    } finally {
+      setLoadingSpinner(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDocuments();
+  }, []);
 
   // handle file change
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,10 +111,10 @@ const Page = () => {
         file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       ) {
         // Check if the file size is below 5MB
-        if (file.size <= 15 * 1024 * 1024) {
+        if (file.size <= 10 * 1024 * 1024) {
           // You can handle the file here or pass it to a parent component using the onFileChange callback
 
-         // console.log('file is ready:', file);
+          // console.log('file is ready:', file);
           setFile(file);
 
           const formData = new FormData();
@@ -101,22 +150,31 @@ const Page = () => {
             if (response.ok) {
               await response.json();
               // console.log("File uploaded successfully:", responseData);
-              showToast(`File uploaded successfully`, 'info');
+              showToast({
+                message: `File uploaded successfully`,
+                type: 'info',
+              });
             } else {
               // console.error('Error uploading file:');
-              showToast(`File upload failed!`, `info`);
+              showToast({
+                message: `File uploaded failed!`,
+                type: 'info',
+              });
             }
 
             // after using the file, clear the input to allow selecting a new file.
             fileInput.value = '';
           } catch (error) {
             // console.log('Error uploading file', error);
-            showToast(`File upload failed!`,`info`);
+            showToast({
+              message: `File uploaded failed!`,
+              type: 'info',
+            });
           } finally {
             setLoadingSpinner(false);
           }
         } else {
-          alert('File size exceeds 5MB limit. Please choose a smaller file.');
+          alert('File size exceeds 10MB limit. Please choose a smaller file.');
           fileInput.value = ''; // Clear the input to allow selecting a new file
         }
       } else {
@@ -124,6 +182,11 @@ const Page = () => {
         fileInput.value = ''; // Clear the input to allow selecting a new file
       }
     }
+  };
+
+  const handleDocumentClick = (docUrl: string) => {
+    // Open the document in the same tab
+    window.open(docUrl, "_blank");
   };
 
   return (
@@ -138,27 +201,25 @@ const Page = () => {
       <div className="mt-15 pb-10 rounded-lg flex flex-col gap-12">
         <div className="text-3xl text-white font-semibold text-center py-5">Files & Documents</div>
         {/* previous file uploads */}
+      
+
+        {/* Render the list of documents */}
+
         <div className="flex justify-center gap-20 mx-6">
-          <div className="text-center cursor-pointer grid gap-5">
-            <Pdf />
-            <div className="text-zinc-300">Accounts.pdf</div>
-          </div>
-          <div className="text-center cursor-pointer grid gap-5">
-            <Pdf />
-            <div className="text-zinc-300">Accounts.pdf</div>
-          </div>
-          <div className="text-center cursor-pointer grid gap-5">
-            <Pdf />
-            <div className="text-zinc-300">Accounts.pdf</div>
-          </div>
-          <div className="text-center cursor-pointer grid gap-5">
-            <Pdf />
-            <div className="text-zinc-300">Accounts.pdf</div>
-          </div>
-          <div className="text-center cursor-pointer grid gap-5">
-            <Pdf />
-            <div className="text-zinc-300">Accounts.pdf</div>
-          </div>
+          {documents.length > 0 ? (
+            documents.map((doc, index) => (
+              <div
+                key={index}
+                className="text-center cursor-pointer grid gap-5"
+                onClick={() => handleDocumentClick(`http://64.227.135.153:8000${doc.file_url}`)}
+              >
+                <Pdf />
+                <div className="text-zinc-300">{doc.file_name}</div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center text-zinc-300">No documents available</div>
+          )}
         </div>
 
         {/* file upload button */}
