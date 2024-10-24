@@ -2,7 +2,7 @@
 // control the top register page element
 
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import { StepperContext } from '../../contexts/StepperContext';
+import { StepperContext } from '../../Contexts/StepperContext';
 import AnimatedLogo from '../Header/AnimatedLogo';
 
 const Stepper = () => {

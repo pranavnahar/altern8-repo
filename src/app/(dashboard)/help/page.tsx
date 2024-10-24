@@ -6,8 +6,8 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import { IconSend2 } from '@tabler/icons-react';
 import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/mui/Chatbox';
-import { DashboardContext } from '../../../contexts/DashboardContext';
-import { fetchWithAuth } from '../../../utils/fetch-with-auth';
+import { DashboardContext } from '../../../Contexts/DashboardContext';
+import { fetchWithAuth } from '../../../Utils/fetch-with-auth';
 import Accordion from '../../../components/ui/accordion2';
 
 const dummyFaqs = [

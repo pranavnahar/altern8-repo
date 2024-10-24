@@ -1,9 +1,12 @@
+# On every pull request it checks that the next js build is working or not
 name: Next.js Build Check
 
 on:
   pull_request:
     branches:
       - main
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       version:
@@ -16,113 +19,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          clean: true
-          fetch-depth: 0
-
-      - name: Configure git to be case sensitive
-        run: |
-          git config --global core.ignorecase false
-          git config --local core.ignorecase false
-
-      - name: Debug file structure before fixes
-        run: |
-          echo "Current directory structure:"
-          ls -R
-          echo "\nGit status:"
-          git status
-          echo "\nList all directories case-sensitively:"
-          find . -type d | sort
-
-      - name: Verify imports with case issues
-        run: |
-          echo "Checking for potential case-sensitive import issues..."
-          find . -type f -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | \
-          xargs grep -l "from.*[\"'].*Utils\|Contexts\|Components\|Pages\|Styles" || true
-
-          echo "\nChecking for all import statements..."
-          find . -type f -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | \
-          xargs grep "from.*[\"']\.\./" || true
-
-      - name: Fix specific folders
-        run: |
-          for dir in Utils Contexts Components Pages Styles; do
-            if [ -d "$dir" ]; then
-              echo "Found directory with uppercase: $dir"
-              lc_dir=$(echo "$dir" | tr '[:upper:]' '[:lower:]')
-              git mv -f "$dir" "${dir}_tmp" 2>/dev/null || echo "Could not rename $dir to tmp"
-              git mv -f "${dir}_tmp" "$lc_dir" 2>/dev/null || echo "Could not rename tmp to $lc_dir"
-            else
-              echo "Directory not found: $dir"
-            fi
-          done
-          git status
-
-      # Force git to acknowledge case changes
-      - name: Fix case sensitivity issues
-        run: |
-          echo "Starting case sensitivity fixes..."
-          git ls-files | while read -r file; do
-            dir=$(dirname "$file")
-            if [ "$dir" != "." ]; then
-              echo "Processing directory: $dir"
-              mkdir -p "$dir"
-            fi
-            if [ -f "$file" ]; then
-              echo "Processing file: $file"
-              # Rename the file to a temporary name and back to force git to acknowledge case changes
-              git mv -f "$file" "$file.tmp" 2>/dev/null || echo "Could not rename $file to tmp"
-              git mv -f "$file.tmp" "$file" 2>/dev/null || echo "Could not rename tmp back to $file"
-            fi
-          done
-          git status
-
-      - name: Debug file structure after fixes
-        run: |
-          echo "Current directory structure after fixes:"
-          ls -R
-          echo "\nGit status after fixes:"
-          git status
-          echo "\nList all directories case-sensitively after fixes:"
-          find . -type d | sort
-
-      - name: Verify file paths match imports
-        run: |
-          echo "Checking if all imported paths exist..."
-          find . -type f -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | while read -r file; do
-            echo "Checking imports in $file"
-            grep "from.*[\"']\.\./" "$file" | while read -r line; do
-              path=$(echo "$line" | sed -n "s/.*from.*[\"']\(.*\)[\"'].*/\1/p")
-              if [[ "$path" == "../"* ]]; then
-                full_path=$(realpath "$(dirname "$file")/$path")
-                if [ ! -e "$full_path" ] && [ ! -e "$full_path.ts" ] && [ ! -e "$full_path.tsx" ] && [ ! -e "$full_path.js" ] && [ ! -e "$full_path.jsx" ]; then
-                  echo "WARNING: Import path not found: $path in $file"
-                fi
-              fi
-            done
-          done
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-
-      # Clean caches first
-      - name: Clean caches
-        run: |
-          rm -rf .next
-          rm -rf node_modules
-          git rm -r --cached .
+          node-version: "20"
 
       - name: Install dependencies
-        run: bun install
+        run: npm install
 
       - name: Run Next.js build
-        run: |
-          echo "Node version: $(node -v)"
-          echo "Bun version: $(bun -v)"
-          bun run build
+        run: npm run build
 
     #   - name: Run tests
-    #     run: bun test
+    #     run: npm test

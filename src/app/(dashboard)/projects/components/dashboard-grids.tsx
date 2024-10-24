@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Card, CardContent } from "../../../../components/ui/card";
-import { formatINR } from "../../../../utils/formatter";
+import { formatINR } from "../../../../Utils/formatter";
 import { Progress } from "../../../../components/ui/progress";
 
 interface DashboardGridsProps {

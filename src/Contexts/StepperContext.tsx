@@ -1,5 +1,5 @@
 'use client';
-import { apiUrl } from '../utils/auth';
+import { apiUrl } from '../Utils/auth';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { createContext, useContext, useState, ReactNode } from 'react';

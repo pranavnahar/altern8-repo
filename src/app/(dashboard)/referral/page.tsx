@@ -6,7 +6,7 @@ import { Button } from '../../../components/ui/button';
 import { IconChevronRight, IconUpload } from '@tabler/icons-react';
 import { Snippet } from '@nextui-org/snippet';
 import { sendInvite, uploadBulkInvites, getReferralLink, type ActionState } from './actions';
-import { useToast } from '../../../utils/show-toasts';
+import { useToast } from '../../../Utils/show-toasts';
 import { Input } from '../../../components/ui/input';
 
 const Page = () => {

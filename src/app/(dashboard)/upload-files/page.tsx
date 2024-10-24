@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { IconCloudUpload, IconUpload } from '@tabler/icons-react';
-import { useToast } from '../../../utils/show-toasts';
+import { useToast } from '../../../Utils/show-toasts';
 import Pdf from '../../../assets/pdf';
-import { getAccessToken } from '../../../utils/auth';
+import { getAccessToken } from '../../../Utils/auth';
 import { Button } from '../../../components/ui/button';
 
 const Page = () => {
