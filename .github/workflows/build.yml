@@ -15,8 +15,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Configure git to be case sensitive
+        run: git config --global core.ignorecase false
+
       - name: Checkout code
         uses: actions/checkout@v3
+
+      # Force git to acknowledge case changes
+      - name: Fix case sensitivity issues
+        run: |
+          git ls-files | while read -r file; do
+            dir=$(dirname "$file")
+            if [ "$dir" != "." ]; then
+              mkdir -p "$dir"
+            fi
+            # Rename the file to a temporary name and back to force git to acknowledge case changes
+            git mv -f "$file" "$file.tmp" || true
+            git mv -f "$file.tmp" "$file" || true
+          done
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
