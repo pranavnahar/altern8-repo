@@ -24,6 +24,14 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      # Clean caches first
+      - name: Clean caches
+        run: |
+          rm -rf .next
+          rm -rf node_modules
+          npm cache clean --force
+          git rm -r --cached .
+
       - name: Cache Next.js build
         uses: actions/cache@v3
         with:
@@ -35,9 +43,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Clean .next folder
-        run: rm -rf .next
 
       - name: Run Next.js build
         run: npm run build
