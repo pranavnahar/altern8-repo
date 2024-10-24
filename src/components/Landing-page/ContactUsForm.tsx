@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import LoadingSpinner from '../LoadingSpinner';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Button } from '../ui/button';
-import { fetchWithAuth } from '../../Utils/fetch-with-auth';
-import { showToast } from '../../Helpers/show-toasts';
+import { fetchWithAuth } from '../../utils/fetch-with-auth';
+import { useToast } from '@/utils/show-toasts';
 
 
 interface FormState {
@@ -46,6 +46,7 @@ const ContactUsForm = () => {
   });
 
   const [loading, setLoading] = useState<boolean>(false);
+  const { showToast } = useToast()
 
   // Handle input change for text and email fields
   const handleInput = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -56,12 +57,12 @@ const ContactUsForm = () => {
       (name === 'company_name' && value.length > 200) ||
       (name === 'company_query' && value.length > 400)
     ) {
-      showToast(
-        `${name === 'company_name' ? 'Company name' : 'Comments'} should be less than ${
+      showToast({
+        message: `${name === 'company_name' ? 'Company name' : 'Comments'} should be less than ${
           name === 'company_name' ? 200 : 400
         } characters`,
-        'info',
-      );
+        type: 'info',
+      });
       return;
     }
 
@@ -83,16 +84,25 @@ const ContactUsForm = () => {
     //console.log(formData);
 
     if (company_name.length < 3 || company_email.length < 3 || company_query.length < 10) {
-      showToast(`Input value should not be too small or empty`, 'info');
+      showToast({
+        message: `Input value should not be too small or empty`,
+        type: 'info'
+      });
     }
 
     if (!emailRegex.test(company_email)) {
-      showToast(`Invalid email format`, 'info');
+      showToast({
+        message: `Invalid email format`,
+        type: 'info'
+      });
     }
 
     const isAnyChoiceSelected = choices.some(choice => formData[choice] === true);
     if (!isAnyChoiceSelected) {
-      showToast(`Choose at least one area of interest`, 'info');
+      showToast({
+        message: `Choose at least one area of interest`,
+        type: 'info'
+      });
     }
 
     setLoading(true);
@@ -105,7 +115,10 @@ const ContactUsForm = () => {
       });
 
       if (response?.ok) {
-        showToast(`Form submitted successfully!`, 'info');
+        showToast({
+          message: `Form submitted successfully!`,
+          type: 'info'
+        });
         setFormData({
           ...initialFormState,
           ...Object.fromEntries(choices.map(choice => [choice, false])),
@@ -114,9 +127,10 @@ const ContactUsForm = () => {
         throw new Error('Submission failed');
       }
     } catch (error) {
-      console.log("form submission trigegr start errrro part");
-      console.error('Error submitting form:', error);
-      showToast(`Submission failed!`, 'info');
+      showToast({
+        message: `Submission failed!`,
+        type:'error'
+      });
     } finally {
       setLoading(false);
     }

@@ -1,34 +1,19 @@
 'use client';
 import React, { useState } from 'react';
-import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../../Utils/auth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import { IconCloudUpload } from '@tabler/icons-react';
-import { useToast } from '../../../Utils/show-toasts';
+import { IconCloudUpload, IconUpload } from '@tabler/icons-react';
+import { useToast } from '../../../utils/show-toasts';
 import Pdf from '../../../assets/pdf';
+import { getAccessToken } from '../../../utils/auth';
+import { Button } from '@/components/ui/button';
 
 const Page = () => {
   const [file, setFile] = useState<File>();
   const { showToast } = useToast();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [loadingSpinner, setLoadingSpinner] = useState<boolean>(false); // for loading animation
-
-  // mui default styles for the upload button
-  const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-  });
-
   const router = useRouter();
 
   // Handle token
@@ -101,17 +86,24 @@ const Page = () => {
             if (response.ok) {
               await response.json();
               // console.log("File uploaded successfully:", responseData);
-              showToast(`File uploaded successfully`, 'info');
+              showToast({
+                message: `File uploaded successfully`,
+                type: 'success'
+              });
             } else {
-              console.error('Error uploading file:');
-              showToast(`File upload failed!`, 'info');
+              showToast({
+                message: `File upload failed!`,
+                type: 'error'
+              });
             }
 
             // after using the file, clear the input to allow selecting a new file.
             fileInput.value = '';
           } catch (error) {
-            console.log('Error uploading file', error);
-            showToast(`File upload failed!`, 'info');
+            showToast({
+              message: `File upload failed!`,
+              type: 'error'
+            });
           } finally {
             setLoadingSpinner(false);
           }
@@ -164,16 +156,11 @@ const Page = () => {
         {/* file upload button */}
         <div className="mt-10 text-center">
           <Button
-            style={{
-              backgroundColor: '#1565c0',
-              borderRadius: '25px',
-            }}
-            component="label"
-            variant="contained"
-            startIcon={<IconCloudUpload />}
+            variant="expandIcon"
+            iconPlacement='right'
+            Icon={IconUpload}
           >
             Upload file
-            <VisuallyHiddenInput type="file" onChange={handleFileChange} />
           </Button>
         </div>
       </div>

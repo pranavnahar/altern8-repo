@@ -1,13 +1,12 @@
-// Mui element for loading spinner animation
+import React from 'react';
+import { Loader2 } from "lucide-react";
 
-import * as React from "react";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
-
-export default function LoadingSpinner() {
+const LoadingSpinner = () => {
   return (
-    <Box>
-      <CircularProgress />
-    </Box>
+    <div className="flex items-center justify-center">
+      <Loader2 className="size-10 animate-spin text-primary" />
+    </div>
   );
-}
+};
+
+export default LoadingSpinner;

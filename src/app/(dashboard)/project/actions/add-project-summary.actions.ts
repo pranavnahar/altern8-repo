@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache';
-import { getAuthToken } from '../../../../Utils/helpers';
+import { getAuthToken } from '../../../../utils/helpers';
 
 export async function addProjectSummary(projectID: number, data: any) {
   try {

@@ -7,14 +7,14 @@ import { IconLogout, IconSend2, IconUserCircle } from '@tabler/icons-react';
 import { Separator } from '../../../components/ui/separator';
 import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/mui/Chatbox';
-import { fetchWithAuth } from '../../../Utils/fetch-with-auth';
-import { DashboardContext } from '../../../Contexts/DashboardContext';
-import { showToast } from '../../../Helpers/show-toasts';
+import { fetchWithAuth } from '../../../utils/fetch-with-auth';
+import { DashboardContext } from '../../../contexts/DashboardContext';
 import { useRouter } from 'next/compat/router';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../../Utils/auth';
+import { getAccessToken } from '../../../utils/auth';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '../../../components/ui/dialog';
+import { useToast } from '@/utils/show-toasts';
 
 export const Navbar: FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -82,9 +82,8 @@ export const Navbar: FC = () => {
     current_amount: string;
   }>();
 
-  const [errors, setErrors] = useState({});
   const [files, setFiles] = useState<File[] | null>(null);
-
+  const { showToast } = useToast()
   const [loadingSpinner, setLoadingSpinner] = useState(true); // for loading animation
   const router = useRouter();
 
@@ -195,7 +194,10 @@ export const Navbar: FC = () => {
     // Validate the amount length
     const amount = userData['amount']?.trim() || '';
     if (amount.length <= 2) {
-      showToast('Please enter a valid amount', 'info');
+      showToast({
+        message: 'Please enter a valid amount',
+        type: 'info'
+      });
       return;
     }
 
@@ -215,16 +217,25 @@ export const Navbar: FC = () => {
               // Check if the file size is below 5MB
               formData.append('files', file); // Append each file to the FormData object
             } else {
-              showToast('File size exceeds 5MB limit. Please choose a smaller file.', 'info');
+              showToast({
+                message: 'File size exceeds 5MB limit. Please choose a smaller file.',
+                type: 'info'
+              });
               return; // Stop processing files if size limit exceeded
             }
           } else {
-            showToast('Please choose PDF or Excel files only.', 'info');
+            showToast({
+              message: 'Please choose PDF or Excel files only.',
+              type: 'info'
+            });
             return; // Stop processing files if file type is not supported
           }
         }
       } else {
-        showToast('Please drag and drop files to upload.', 'info');
+        showToast({
+          message: 'Please drag and drop files to upload.',
+          type: 'info'
+        });
         return;
       }
 
@@ -253,18 +264,25 @@ export const Navbar: FC = () => {
 
       if (response.ok) {
         await response.json();
-        showToast('Request submitted successfully', 'info');
-        // Handle successful submission, e.g., reset form
+        showToast({
+          message: 'Request submitted successfully',
+          type: 'info'
+        });
         setUserData({ amount: '', comments: '' });
         setFiles(null);
         GetOldCredit();
       } else {
         const serverError = await response.json();
-        showToast('Request submission failed, server error', 'info');
+        showToast({
+          message: 'Request submission failed, server error',
+          type: 'info'
+        });
       }
     } catch (error) {
-      console.log('error', error);
-      showToast('Request submission failed, system error', 'info');
+      showToast({
+        message: 'Request submission failed, system error',
+        type: 'info'
+      });
     } finally {
       setLoadingSpinner(false);
     }
@@ -281,9 +299,10 @@ export const Navbar: FC = () => {
   // handle file upload and drag and drop
 
   const onDrop = useCallback(async (acceptedFiles: any) => {
-    // Do something with the files
-    console.log(acceptedFiles);
-    showToast('Files uploaded successfully');
+    showToast({
+      message: 'Files uploaded successfully',
+      type: "success"
+    });
     setFiles(acceptedFiles);
   }, []);
 
@@ -303,7 +322,6 @@ export const Navbar: FC = () => {
             <Dialog>
               <DialogTrigger>
                 <Button
-                  //@ts-expect-error variant type
                   variant="expandIcon"
                   Icon={IconSend2}
                   size={'sm'}
@@ -469,7 +487,6 @@ export const Navbar: FC = () => {
             <div>
               <div className=" text-center">
                 <Button
-                  //@ts-expect-error variant type
                   variant="expandIcon"
                   Icon={IconSend2}
                   size={'sm'}

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { RootFiClient } from 'rootfi-api';
 import { RootFiEnvironment } from 'rootfi-api';
 import Image from 'next/image';
-import { Box, CircularProgress } from '@mui/material';
 import { parseCookies } from 'nookies';
 import { IntegrationCategory, IntegrationType } from 'rootfi-api/api';
-import { useToast } from '../../Utils/show-toasts';
+import { useToast } from '../../utils/show-toasts';
+import { IconLoader } from '@tabler/icons-react';
 
 type InviteLinkData = {
   data: {
@@ -70,15 +70,14 @@ const ConnectSDK: React.FC<{
 
       if (response.ok) {
         await response.json();
-        console.log('Rootfi ID successfully saved');
       } else {
         let server_error = await response.json();
-
-        console.error('Failed to upload accounting data details', server_error);
       }
     } catch (error) {
-      console.error('Server Connection Error updating accounting data:', error);
-      showToast('Failed to send otp, system error', 'error');
+      showToast({
+        message: 'Failed to send otp, system error',
+        type: 'error'
+      });
     } finally {
       setLoadingSpinner(false);
     }
@@ -185,9 +184,9 @@ const ConnectSDK: React.FC<{
               className="rounded-full"
             />
           ) : (
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <CircularProgress />
-            </Box>
+            <div className="flex items-center justify-center">
+              <IconLoader className="h-8 w-8 animate-spin text-primary" />
+            </div>
           )}
         </div>
       </button>

@@ -1,15 +1,16 @@
 // This is a dashboard page component for showing users bank details
 
 import React, { useState, useEffect } from 'react';
-import { showToast } from '../../Helpers/show-toasts';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../Utils/auth';
+import { getAccessToken } from '../../utils/auth';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import Button from '@mui/material/Button';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 import { Check } from 'lucide-react';
+import { useToast } from '@/utils/show-toasts';
+import { Button } from '../ui/button';
+import { IconChevronRight } from '@tabler/icons-react';
 
 const BankDetailsPage = () => {
   const [bankAccountsList, setBankAccountsList] = useState<
@@ -24,6 +25,7 @@ const BankDetailsPage = () => {
   const [loadingSpinner, setLoadingSpinner] = useState(true);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [currentPrimaryAccount, setCurrentPrimaryAccount] = useState('');
+  const { showToast } = useToast();
   const [formData, setFormData] = useState({
     bankName: '',
     accountNumber: '',
@@ -121,8 +123,10 @@ const BankDetailsPage = () => {
     };
 
     if (currentPrimaryAccount.length < 5) {
-      console.log('Please select a bank account for primary account');
-      showToast(`Please select a bank account for primary account`, 'info');
+      showToast({
+        message: 'Please select a bank account for primary account',
+        type: 'info'
+      });
       return;
     }
 
@@ -163,13 +167,16 @@ const BankDetailsPage = () => {
         console.log('Primary account updated successfully');
       } else {
         let server_error = await response.json();
-
-        console.error('Failed to updated primary account', server_error);
-        showToast(`${server_error.message} `, 'info');
+        showToast({
+          message: 'Failed to updated primary account',
+          type: 'error'
+        });
       }
     } catch (error) {
-      console.error('Server Connection Error updating primary bank account:', error);
-      showToast(`Failed to send otp, system error`, 'info');
+      showToast({
+        message: 'Server Connection Error updating primary bank account',
+        type: 'error'
+      });
     } finally {
       setLoadingSpinner(false);
     }
@@ -177,20 +184,28 @@ const BankDetailsPage = () => {
 
   const handleAddBankAccount = async () => {
     if (formData['bankName'].length < 5) {
-      console.log('Please enter a valid bank name');
-      showToast(`Please enter a valid bank name`, 'info');
+      showToast({
+        message: 'Please enter a valid bank name',
+        type: 'info'
+      });
       return;
     } else if (formData['accountNumber'].length < 5) {
-      console.log('Please enter a valid bank account number');
-      showToast(`Please enter a valid bank account number`, 'info');
+      showToast({
+        message: 'Please enter a valid bank account number',
+        type: 'info'
+      });
       return;
     } else if (formData['ifscCode'].length < 3) {
-      console.log('Please enter valid ifsc code');
-      showToast(`Please enter a valid IFSC code`, 'info');
+      showToast({
+        message: 'Please enter a valid IFSC code',
+        type: 'info'
+      });
       return;
     } else if (formData['ifscCode'].length > 11) {
-      console.log('Please enter valid ifsc code');
-      showToast(`Please enter a valid IFSC code`, 'info');
+      showToast({
+        message: 'Please enter a valid IFSC code',
+        type: 'info'
+      });
       return;
     }
 
@@ -236,17 +251,22 @@ const BankDetailsPage = () => {
           accountNumber: '',
           ifscCode: '',
         });
-        console.log('Bank account added successfully');
+        showToast({
+          message: 'Bank account added successfully',
+          type: 'success'
+        });
       } else {
         let server_error = await response.json();
-
-        console.error('Bank account add got failed!', server_error.message);
-
-        showToast(`${server_error.message}`, 'info');
+        showToast({
+          message: server_error.message,
+          type: 'error'
+        });
       }
     } catch (error) {
-      console.error('Failed to add bank account, server error:', error);
-      showToast(`Failed to add bank account, server error`, 'info');
+      showToast({
+        message: 'Failed to add bank account, server error',
+        type: 'error'
+      });
     } finally {
       setLoadingSpinner(false);
     }
@@ -345,13 +365,8 @@ const BankDetailsPage = () => {
             <div className="flex justify-center pt-5">
               <Button
                 onClick={handleChangePrimaryAccount}
-                style={{
-                  backgroundColor: '#1565c0',
-                  borderRadius: '25px', // Adjust the pixel value for the desired border radius
-                }}
-                variant="contained"
                 type="submit"
-                endIcon={<ArrowForwardIcon />}
+                size="sm"
               >
                 Proceed
               </Button>
@@ -414,13 +429,11 @@ const BankDetailsPage = () => {
           <div className="flex justify-center pt-5">
             <Button
               onClick={handleAddBankAccount}
-              style={{
-                backgroundColor: '#1565c0',
-                borderRadius: '25px', // Adjust the pixel value for the desired border radius
-              }}
-              variant="contained"
               type="submit"
-              endIcon={<ArrowUpwardOutlinedIcon />}
+              size="sm"
+              variant="expandIcon"
+              iconPlacement='right'
+              Icon={IconChevronRight}
             >
               Add
             </Button>

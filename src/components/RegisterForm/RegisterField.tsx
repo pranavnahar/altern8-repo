@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { StepperContext } from '../../Contexts/StepperContext';
-import { Button } from '@mui/material';
+import { StepperContext } from '../../contexts/StepperContext';
 import { useSearchParams, useRouter } from 'next/navigation';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
-import { useToast } from '../../Utils/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 import { setCookie } from 'nookies';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
+import { Button } from '../ui/button';
 
 type Props = {
   demo: boolean;
@@ -58,7 +58,6 @@ const Register = ({ demo }: Props) => {
   };
 
   const handleSubmission = async (direction?: string) => {
-    console.log('handle Submission');
     if (direction !== 'next') {
       router.push('/');
     } else if (direction === 'next') {
@@ -80,31 +79,43 @@ const Register = ({ demo }: Props) => {
         const isValidPassword = passwordRegex.test(updatedRecord.password);
 
         if (updatedRecord.first_name.length < 3) {
-          showToast(`Please enter a valid name`, 'info');
+          showToast({
+            message: `Please enter a valid name`,
+            type: 'info'
+          });
           return;
         }
         if (updatedRecord.phone_number.length !== 10) {
-          showToast(`Phone number must be a 10-digit number`, 'info');
+          showToast({
+            message: `Phone number must be a 10-digit number`,
+            type: 'info'
+          });
           setUserData(prevUserData => ({
             ...prevUserData,
             phoneNumber: '',
           }));
           return;
         }
-        if (!updatedRecord.entity_type) return showToast('Select entity type', 'info');
+        if (!updatedRecord.entity_type) return showToast({ message: 'Select entity type', type: 'info'});
         if (!isValidPassword) {
           showToast(
-            `Password must be at least 8 characters long and include at least one letter, one digit, and one special character. Allowed special characters are: @$!%*?&#:`,
-            'info',
-          );
+            {message: `Password must be at least 8 characters long and include at least one letter, one digit, and one special character. Allowed special characters are: @$!%*?&#:`,
+            type: 'info',
+          });
           return;
         }
         if (updatedRecord.password !== updatedRecord.reenter_password) {
-          showToast(`Both password should match`, 'info');
+          showToast({
+            message: `Both password should match`,
+            type: 'info'
+          });
           return;
         }
         if (!termsAccepted) {
-          showToast(`You must accept the terms and conditions`, 'info');
+          showToast({
+            message: `You must accept the terms and conditions`,
+            type :'info'
+          });
           return;
         }
 
@@ -120,19 +131,19 @@ const Register = ({ demo }: Props) => {
           });
 
           if (response.status === 409) {
-            showToast(`Phone number is already registered. Please login`, 'info');
-
+            showToast({
+              message: `Phone number is already registered. Please login`,
+              type: 'info'
+            });
             setTimeout(() => {
               router.push('/login');
             }, 3000);
           } else if (response.ok) {
             let serverMessage = await response.json();
-            console.log(
-              `Register Form data submitted successfully!-- ${currentStep}`,
-              serverMessage,
-            );
-
-            showToast(`Submission Successful`, 'info');
+            showToast({
+              message: `Submission Successful`,
+              type: 'info'
+            });
 
             let data = serverMessage;
 
@@ -144,13 +155,16 @@ const Register = ({ demo }: Props) => {
             getRegistrationState();
           } else {
             let server_error = await response.json();
-            console.error(`Failed to submit register form data.-- ${currentStep}`, server_error);
-
-            console.log(server_error.message);
-            showToast(`${server_error.message.phone_number[0]}`, 'info');
+            showToast({
+              message: `${server_error.message.phone_number[0]}`,
+              type: 'info'
+            });
 
             if (!server_error.message.phone_number) {
-              showToast(`Submission Failed`, 'info');
+              showToast({
+                message: `Submission Failed`,
+                type: 'info'
+              });
             }
           }
         } catch (error) {
@@ -158,7 +172,10 @@ const Register = ({ demo }: Props) => {
             `Error submitting register form data, Error in fetching api (${currentStep}) :`,
             error,
           );
-          showToast(`Submission failed, system error!`, 'info');
+          showToast({
+            message: `Submission failed, system error!`,
+            type: 'error'
+          });
         } finally {
           setLoading(false);
         }
@@ -441,25 +458,15 @@ const Register = ({ demo }: Props) => {
                     <div className="flex items-center justify-end p-6  rounded-b">
                       <div>
                         <Button
-                          style={{
-                            backgroundColor: '#1565c0',
-                            borderRadius: '25px', // Adjust the pixel value for the desired border radius
-                            marginRight: '20px',
-                          }}
-                          variant="contained"
                           onClick={handleNoButtonClick}
+                          size="sm"
                         >
                           No
                         </Button>
                       </div>
                       <div>
                         <Button
-                          style={{
-                            backgroundColor: '#1565c0',
-                            borderRadius: '25px',
-                            marginRight: '20px',
-                          }}
-                          variant="contained"
+                          size="sm"
                           onClick={handleYesButtonClick}
                         >
                           Yes

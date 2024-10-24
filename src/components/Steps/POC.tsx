@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { StepperContext } from '../../Contexts/StepperContext';
+import { StepperContext } from '../../contexts/StepperContext';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
-import { Button } from '@mui/material';
 import { IconChevronUpRight } from '@tabler/icons-react';
-import { useToast } from '../../Utils/show-toasts';
+import { useToast } from '../../utils/show-toasts';
+import { Button } from '../ui/button';
 
 type Props = {
   demo: boolean;
@@ -274,7 +274,10 @@ const POC = ({ demo }: Props) => {
         `Error submitting POC form data, Error in fetching api, (${currentStep}) :`,
         error,
       );
-      showToast(`Submission failed, system error!`, 'info');
+      showToast({
+        message: `Submission failed, system error!`,
+        type: 'info'
+      });
     } finally {
       setLoading(false);
     }
@@ -286,16 +289,28 @@ const POC = ({ demo }: Props) => {
       return;
     }
     if (!validateName(userData.name)) {
-      showToast(`Valid Name is required`, 'info');
+      showToast({
+        message: `Valid Name is required`,
+        type: 'info'
+      });
       return;
     } else if (!validateEmail(userData.email)) {
-      showToast(`Invalid email address`, 'info');
+      showToast({
+        message: `Invalid email address`,
+        type: 'info'
+      });
       return;
     } else if (!validatePhoneNumber(userData.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, 'info');
+      showToast({
+        message: `Phone number must be a 10-digit number`,
+        type: 'info'
+      });
       return;
     } else if (userData.designation.length < 3) {
-      showToast(`Please add a valid designation`, 'info');
+      showToast({
+        message: `Please add a valid designation`,
+        type: 'info'
+      });
       return;
     }
     const bodyData = {
@@ -325,23 +340,24 @@ const POC = ({ demo }: Props) => {
 
         if (response.ok) {
           let server_message = await response.json();
-          showToast(`Submission Successful`, 'info');
-
-          // update poc details list
+          showToast({
+            message: `Submission Successful`,
+            type: 'info'
+          });
           GetPoc();
-          // close add details box
           setShowAddDetails(false);
         } else {
-          let server_error = await response.json();
-          showToast(`Submission failed!`, 'info');
+          showToast({
+            message: `Submission failed!`,
+            type: 'info'
+          });
         }
       }
     } catch (error) {
-      console.error(
-        `Error submitting poc form data, Error in fetching api :, (${currentStep}) :`,
-        error,
-      );
-      showToast(`Submission failed, system error!`, 'info');
+      showToast({
+        message: `Submission failed, system error!`,
+        type: 'info'
+      });
     } finally {
       setLoading(false);
     }
@@ -435,12 +451,7 @@ const POC = ({ demo }: Props) => {
             <div className="flex  justify-center pt-8">
               <Button
                 onClick={handleAddButtonClick}
-                style={{
-                  backgroundColor: '#1565c0',
-                  borderRadius: '25px', // Adjust the pixel value for the desired border radius
-                }}
-                variant="contained"
-                endIcon={<IconChevronUpRight />}
+                size="sm"
               >
                 Add poc
               </Button>
@@ -610,12 +621,7 @@ const POC = ({ demo }: Props) => {
               <div className="flex  justify-center pt-8">
                 <Button
                   onClick={submitAddedPOC}
-                  style={{
-                    backgroundColor: '#1565c0',
-                    borderRadius: '25px',
-                  }}
-                  variant="contained"
-                  endIcon={<IconChevronUpRight />}
+                  size="sm"
                 >
                   Add Details
                 </Button>
@@ -631,12 +637,12 @@ const POC = ({ demo }: Props) => {
           <div className="flex justify-center items-center mt-4 mb-8">
             {/* back button  */}
             <div>
-              <button
+              <Button
                 onClick={() => handleNextButtonClick()}
                 className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
               >
                 Next
-              </button>
+              </Button>
             </div>
 
             {/* button for submitting edited details  */}

@@ -1,4 +1,4 @@
-import { getTransactions } from '../../Utils/ledger/ledgerService';
+import { getTransactions } from '../../utils/ledger/ledgerService';
 import { useState, useEffect } from 'react';
 
 const useLedgerTransactions = (id: string) => {

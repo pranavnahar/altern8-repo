@@ -1,4 +1,4 @@
-import { fetchWithAuth } from '../../Utils/fetch-with-auth';
+import { fetchWithAuth } from '../../utils/fetch-with-auth';
 import { useState, useEffect } from 'react';
 
 export const useGetGstList = () => {
