@@ -115,10 +115,16 @@ export default function page() {
           contactDetails: {},
         });
         setFile(null);
-        showToast('File Uploaded Successfully!', 'success');
+        showToast({
+          message: 'File Uploaded Successfully!',
+          type: 'success'
+        });
       }
     } catch (err) {
-      showToast('Error! Something went wrong.', 'warning');
+      showToast({
+        message: 'Error! Something went wrong.',
+        type: 'warning'
+      });
     }
   };
 

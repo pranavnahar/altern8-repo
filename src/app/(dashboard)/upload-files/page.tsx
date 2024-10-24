@@ -7,7 +7,7 @@ import { IconCloudUpload, IconUpload } from '@tabler/icons-react';
 import { useToast } from '../../../utils/show-toasts';
 import Pdf from '../../../assets/pdf';
 import { getAccessToken } from '../../../utils/auth';
-import { Button } from '@/components/ui/button';
+import { Button } from '../../../components/ui/button';
 
 const Page = () => {
   const [file, setFile] = useState<File>();

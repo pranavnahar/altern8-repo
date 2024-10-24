@@ -96,10 +96,10 @@ const PAN = ({ demo }: Props) => {
       newRecord.pan_number = userData.panNumber!;
 
       if (!/^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$/.test(newRecord.pan_number)) {
-        showToast(
-          'PAN Number must be exactly 10 characters long, with the format: 5 letters, 4 digits, 1 letter.',
-          'info',
-        );
+        showToast({
+          message: 'PAN Number must be exactly 10 characters long, with the format: 5 letters, 4 digits, 1 letter.',
+          type: 'info',
+        });
         return;
       }
 
@@ -125,16 +125,17 @@ const PAN = ({ demo }: Props) => {
 
           if (response.ok) {
             let server_message = await response.json();
-            console.log(`PAN page data submitted successfully.`, server_message);
-
-            showToast(`Submission Successful`, 'info');
-
-            // Change the step after click and submitting the data
+            showToast({
+              message: `Submission Successful`,
+              type: 'info'
+            });
             getRegistrationState();
           } else {
             let server_error = await response.json();
-            console.error(`PAN page data submission failed`, server_error);
-            showToast(`Submission failed! ${server_error.message}`, 'info');
+            showToast({
+              message: `Submission failed! ${server_error.message}`,
+              type: 'info'
+            });
           }
         }
       } catch (error) {
@@ -142,7 +143,10 @@ const PAN = ({ demo }: Props) => {
           `PAN page data submission failed, Error in fetching api, (${currentStep}) :`,
           error,
         );
-        showToast(`Submission failed, system error!`, 'info');
+        showToast({
+          message: `Submission failed, system error!`,
+          type: 'info'
+        });
       } finally {
         setLoading(false);
       }

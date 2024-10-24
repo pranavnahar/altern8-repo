@@ -70,7 +70,10 @@ const BureauReport = ({ demo }: Props) => {
             setOtpSent(true);
           } else {
             setTimeout(() => {
-              showToast(`Unable to get reference ID, please try again later.`, 'info');
+              showToast({
+                message: `Unable to get reference ID, please try again later.`,
+                type: 'info'
+            });
             }, 1000);
           }
         }
@@ -112,14 +115,16 @@ const BureauReport = ({ demo }: Props) => {
         newRecord.referenceId = referenceId;
 
         if (newRecord['otp'].length < 3) {
-          showToast(`Please enter valid otp`, 'info');
+          showToast({
+            message: `Please enter valid otp`,
+            type: 'info'
+          });
           return;
         }
 
         try {
           if (newRecord) {
             const body = newRecord;
-            console.log(body);
             setLoading(true);
             const response = await fetch(`${apiUrl}/scoreme-api/bda/external/validateotp/`, {
               method: 'POST',
@@ -132,20 +137,24 @@ const BureauReport = ({ demo }: Props) => {
 
             if (response.ok) {
               let server_message = await response.json();
-              console.log(`Bureau Report submission successful`, server_message);
-              showToast(`Submission Successful`, 'info');
-
-              // change the step after click and submitting the data
+              showToast({
+                message: `Submission Successful`,
+                type: 'info'
+              });
               getRegistrationState();
             } else {
               let server_error = await response.json();
-              console.error(`Bureau Report submission failed!`, server_error);
-              showToast(`Submission failed! ${server_error.message}`, 'info');
+              showToast({
+                message: `Submission failed! ${server_error.message}`,
+                type: 'info'
+              });
             }
           }
         } catch (error) {
-          console.error(`Bureau Report submission failed!, (${currentStep}) :`, error);
-          showToast(`Submission failed, system error!`, 'info');
+          showToast({
+            message: `Submission failed, system error!`,
+            type: 'info'
+          });
         } finally {
           setLoading(false);
         }
@@ -158,7 +167,10 @@ const BureauReport = ({ demo }: Props) => {
         });
 
         if (Array.from(formData.values()).length === 0) {
-          showToast('Please select files', 'info');
+          showToast({
+            message: 'Please select files',
+            type: 'info'
+          });
           return;
         }
 
@@ -177,14 +189,22 @@ const BureauReport = ({ demo }: Props) => {
           }
 
           if (response.ok) {
-            showToast('Files uploaded successfully', 'info');
+            showToast({
+              message: 'Files uploaded successfully',
+              type: 'info'
+            });
             getRegistrationState();
           } else {
-            showToast('File upload failed', 'info');
+            showToast({
+              message: 'File upload failed',
+              type: 'info'
+            });
           }
         } catch (error) {
-          console.error('Error uploading files:', error);
-          showToast('Error uploading files', 'info');
+          showToast({
+            message: 'Error uploading files',
+            type: 'info'
+          });
         } finally {
           setLoading(false);
         }
@@ -219,13 +239,16 @@ const BureauReport = ({ demo }: Props) => {
 
         // empty previous otp in login form field
         otpForm.otp = '';
-        console.error('Failed to send otp', server_error);
-        showToast(`Failed to send otp,${server_error.message}`, 'info');
+        showToast({
+          message: `Failed to send otp,${server_error.message}`,
+          type: 'info'
+        });
       }
     } catch (error) {
-      console.log(error);
-      console.error('Server Connection Error during otp, (${currentStep}) :', error);
-      showToast(`Failed to send otp, system error`, 'info');
+      showToast({
+        message: `Failed to send otp, system error`,
+        type: 'info'
+      });
     } finally {
       setLoading(false);
     }

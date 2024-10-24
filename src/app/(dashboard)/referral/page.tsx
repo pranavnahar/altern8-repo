@@ -24,17 +24,29 @@ const Page = () => {
 
   useEffect(() => {
     if (inviteState?.status === 'success') {
-      showToast(inviteState.message, 'success');
+      showToast({
+        message: inviteState.message,
+        type: 'success'
+      });
     } else if (inviteState?.status === 'error') {
-      showToast(inviteState.message, 'error');
+      showToast({
+        message: inviteState.message,
+        type: 'error'
+      });
     }
   }, [inviteState, showToast]);
 
   useEffect(() => {
     if (uploadState?.status === 'success') {
-      showToast(uploadState.message, 'success');
+      showToast({
+        message: uploadState.message,
+        type: 'success'
+      });
     } else if (uploadState?.status === 'error') {
-      showToast(uploadState.message, 'error');
+      showToast({
+        message: uploadState.message,
+        type: 'error'
+      });
     }
   }, [uploadState, showToast]);
 
@@ -46,12 +58,18 @@ const Page = () => {
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
 
     if (!allowedExtensions.includes(fileExtension!)) {
-      showToast('Please upload a valid Excel file (.xlsx or .xls)', 'warning');
+      showToast({
+        message: 'Please upload a valid Excel file (.xlsx or .xls)',
+        type: 'warning'
+      });
       return;
     }
 
     if (file.size > 2 * 1024 * 1024) {
-      showToast('File size should be less than 2 MB', 'warning');
+      showToast({
+        message: 'File size should be less than 2 MB',
+        type: 'warning'
+      });
       return;
     }
 
@@ -89,7 +107,6 @@ const Page = () => {
               required
             />
             <Button
-              //@ts-expect-error variant type
               variant="expandIcon"
               size="sm"
               iconPlacement="right"
@@ -113,7 +130,6 @@ const Page = () => {
           />
           <label htmlFor="upload-excel-file">
             <Button
-              //@ts-expect-error variant type
               variant="expandIcon"
               size="sm"
               iconPlacement="right"

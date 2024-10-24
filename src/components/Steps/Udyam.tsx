@@ -43,7 +43,10 @@ const Udyam = ({ demo }: Props) => {
 
       // Validation: At least one field should be filled, and length should be greater than 5
       if ((!udyam_number || udyam_number.length <= 5) && (!uam_number || uam_number.length <= 5)) {
-        showToast('Please provide a valid Udyam or UAM Number.', 'info');
+        showToast({
+          message: 'Please provide a valid Udyam or UAM Number.',
+          type: 'info'
+        });
         return;
       }
 
@@ -70,18 +73,23 @@ const Udyam = ({ demo }: Props) => {
 
         if (response.ok) {
           let server_message = await response.json();
-          console.log('Udyam data submitted successfully', server_message);
-
-          showToast('Submission Successful', 'info');
+          showToast({
+            message: 'Submission Successful',
+            type: 'success'
+          });
           getRegistrationState();
         } else {
           let server_error = await response.json();
-          console.error('Udyam submission failed', server_error);
-          showToast('Submission failed!', 'info');
+          showToast({
+            message: 'Submission failed!',
+            type: 'error'
+          });
         }
       } catch (error) {
-        console.error(`Error in submitting udyam data, (${currentStep}) :`, error);
-        showToast('Submission failed, system error!', 'info');
+        showToast({
+          message: 'Submission failed, system error!',
+          type: 'error'
+        });
       } finally {
         setLoading(false);
       }

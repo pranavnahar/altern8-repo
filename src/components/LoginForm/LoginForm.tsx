@@ -60,18 +60,17 @@ const login = () => {
       if (registrationStep === 'Approved') {
         router.push('/dashboard');
       } else {
-        // setCookie(null, 'altern8_registeruseraccess', accessToken, {
-        //   expires: 30,
-        //   path: '/',
-        // });
-        // destroyCookie(null, 'altern8_useraccess');
-        // destroyCookie(null, 'altern8_userrefresh');
         router.push('/register');
-        showToast(`Please complete the registration`, 'info');
+        showToast({
+          message: `Please complete the registration`,
+          type: 'info'
+        });
       }
     } catch (error) {
-      showToast('Please try again later', 'error');
-      console.log('login page, error during fetching seller registration states', error);
+      showToast({
+        message: 'Please try again later',
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
@@ -82,12 +81,18 @@ const login = () => {
     e.preventDefault();
 
     if (!validatePhoneNumber(LoginForm.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, 'info');
+      showToast({
+        message: `Phone number must be a 10-digit number`,
+        type: 'info'
+      });
       return;
     }
 
     if (!validatePassword(LoginForm.password)) {
-      showToast(`Password must be at least 8 characters`, 'info');
+      showToast({
+        message: `Password must be at least 8 characters`,
+        type: 'info'
+      });
       return;
     }
 
@@ -109,26 +114,27 @@ const login = () => {
 
       if (response.ok) {
         let data = await response.json();
-
-        // Set the access token in a cookie
         setAccessTokenCookie(data.access);
         setRefreshTokenCookie(data.refresh);
         accessToken = data.access;
         await getUserState();
       } else {
         let serverError = await response.json();
-        console.error('Login failed.', serverError.message);
-        showToast(`Invalid Credentials`, 'info');
+        showToast({
+          message: `Invalid Credentials`,
+          type: 'info'
+        });
       }
     } catch (error) {
-      console.error('System Error during login:', error);
-      showToast(`Login Failed, system error`, 'info');
+      showToast({
+        message: `Login Failed, system error`,
+        type: 'info'
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  // handle login with phone number & otp
   const handleLoginWithOtpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -137,7 +143,10 @@ const login = () => {
     }
 
     if (!validatePhoneNumber(LoginForm.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, 'info');
+      showToast({
+        message: `Phone number must be a 10-digit number`,
+        type: 'info'
+      });
       return;
     }
 
@@ -167,12 +176,16 @@ const login = () => {
         await getUserState();
       } else {
         let server_error = await response.json();
-        console.error('Login failed.', server_error);
-        showToast(`Invalid Credentials, ${server_error.message}`, 'info');
+        showToast({
+          message: `Invalid Credentials, ${server_error.message}`,
+          type: 'error'
+        });
       }
     } catch (error) {
-      console.error('System Error during login:', error);
-      showToast(`Login Failed, system error`, 'info');
+      showToast({
+        message: `Login Failed, system error`,
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
@@ -186,10 +199,12 @@ const login = () => {
     setPageState('otpLogin');
   };
 
-  // login with otp link click
   const handleSendOtp = async () => {
     if (!validatePhoneNumber(LoginForm.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, 'info');
+      showToast({
+        message: `Phone number must be a 10-digit number`,
+        type: 'info'
+      });
       return;
     }
 
@@ -216,21 +231,22 @@ const login = () => {
         LoginForm.otp = '';
       } else {
         let server_error = await response.json();
-        console.error('Failed to send otp', server_error);
-        showToast(`Failed to send otp,${server_error.message}`, 'info');
-
-        // temp
+        showToast({
+          message: `Failed to send otp,${server_error.message}`,
+          type: 'info'
+        });
         setOtpSent(true);
       }
     } catch (error) {
-      console.error('System Error during otp', error);
-      showToast(`Failed to send otp, system error`, 'info');
+      showToast({
+        message: `Failed to send otp, system error`,
+        type: 'info'
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  // login with password link click
   const handleForgotPasswordClick = () => {
     router.push('/reset-password');
   };

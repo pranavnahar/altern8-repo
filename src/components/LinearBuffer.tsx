@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react';
-import { Progress } from "@/components/ui/progress";
+import { Progress } from "../components/ui/progress";
 
 const LinearBuffer = () => {
   const [progress, setProgress] = useState(0);

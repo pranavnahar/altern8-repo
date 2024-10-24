@@ -9,7 +9,9 @@ const BorrowerProjectTab = () => {
   const tabs: tabsProps[] = [
     {
       name: "Overview",
-      content: <OverView user="borrower" />,
+      content: <OverView user="borrower" openDrawForm={function (): void {
+        console.log("hi")
+      } } />,
     },
     { name: "Budget", content: <Budget /> },
   ];

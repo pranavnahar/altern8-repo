@@ -212,16 +212,28 @@ const POC = ({ demo }: Props) => {
 
     // Validate Name
     if (!validateName(userData.name)) {
-      showToast(`Valid Name is required`, 'info');
+      showToast({
+        message:`Valid Name is required`,
+        type:'info'
+      });
       return;
     } else if (!validateEmail(userData.email)) {
-      showToast(`Invalid email address`, 'info');
+      showToast({
+        message: `Invalid email address`,
+        type: 'info'
+      });
       return;
     } else if (!validatePhoneNumber(userData.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, 'info');
+      showToast({
+        message:`Phone number must be a 10-digit number`,
+        type: 'info'
+      });
       return;
     } else if (userData.designation.length < 3) {
-      showToast(`Invalid designation`, 'info');
+      showToast({
+        message: `Invalid designation`,
+        type: 'info'
+      });
       return;
     }
 
@@ -254,26 +266,21 @@ const POC = ({ demo }: Props) => {
         }
 
         if (response.ok) {
-          let server_message = await response.json();
-          console.log(`POC Form data submitted successfully!`, server_message);
-          showToast(`Submission Successful`, 'info');
-
-          //  update the poc details list
+          showToast({
+            message: `Submission Successful`,
+            type: 'info'
+          });
           GetPoc();
           // hide edit box
           setShowEditDetails(false);
         } else {
-          let server_error = await response.json();
-          console.error(`Failed to submit poc data`, server_error);
-
-          showToast(`Submission failed!`, 'info');
+          showToast({
+            message: `Submission failed, please try again!`,
+            type: 'info'
+          });
         }
       }
     } catch (error) {
-      console.error(
-        `Error submitting POC form data, Error in fetching api, (${currentStep}) :`,
-        error,
-      );
       showToast({
         message: `Submission failed, system error!`,
         type: 'info'
@@ -383,7 +390,10 @@ const POC = ({ demo }: Props) => {
     } else if (pocDetails && pocDetails.length > 0) {
       getRegistrationState('Bank Details');
     } else {
-      showToast(`Please add atleast one point of contact detail`, 'info');
+      showToast({
+        message: `Please add atleast one point of contact detail`,
+        type: 'info'
+      });
     }
   };
 
@@ -533,12 +543,7 @@ const POC = ({ demo }: Props) => {
             <div className="flex  justify-center pt-8">
               <Button
                 onClick={submitEditedPOC}
-                style={{
-                  backgroundColor: '#1565c0',
-                  borderRadius: '25px', // Adjust the pixel value for the desired border radius
-                }}
-                variant="contained"
-                endIcon={<IconChevronUpRight />}
+                size="sm"
               >
                 Submit Details
               </Button>

@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { getAccessToken } from '../../utils/auth';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { useToast } from '@/utils/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 import { Button } from '../ui/button';
 import { IconChevronRight, IconPlus } from '@tabler/icons-react';
 

@@ -43,7 +43,10 @@ const RERA = ({ demo }: Props) => {
 
       // Validation: At least one field should be filled, and length should be greater than 5
       if (Rera_username.length < 3 || Rera_password.length < 5) {
-        showToast('Please provide a valid RERA name and password.', 'info');
+        showToast({
+          message: 'Please provide a valid RERA name and password.',
+          type: 'info'
+        });
         return;
       }
 
@@ -70,18 +73,23 @@ const RERA = ({ demo }: Props) => {
 
         if (response.ok) {
           let server_message = await response.json();
-          console.log('RERA data submitted successfully', server_message);
-
-          showToast('Submission Successful', 'info');
+          showToast({
+            message: 'Submission Successful',
+            type: 'success'
+          });
           getRegistrationState();
         } else {
           let server_error = await response.json();
-          console.error('RERA submission failed', server_error);
-          showToast('Submission failed!', 'info');
+          showToast({
+            message: 'Submission failed!',
+            type: 'error'
+          });
         }
       } catch (error) {
-        console.error(`Error in submitting RERA data, (${currentStep}) :`, error);
-        showToast('Submission failed, system error!', 'info');
+        showToast({
+          message: 'Submission failed, system error!',
+          type: 'info'
+        });
       } finally {
         setLoading(false);
       }

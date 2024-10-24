@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import ProgressCircle from "@/components/ProgressCircle/ProgressCircle";
-import BasicTable from "@/components/global/basic-table";
+import ProgressCircle from "../../../components/ProgressCircle/ProgressCircle";
+import BasicTable from "../../../components/global/basic-table";
 import { InventoryColumns } from "./columns/inventory-columns";
 import fundingColumns from "../ProjectSettings/columns/funding-columns";
 import SummaryList from "../../../app/(dashboard)/projects/components/summary-list";
 import { Inventory, FundingSource, SummaryItem, Project, InventoryResponse, FundingSourceResponse, SummaryResponse, ProjectData, TrancheData } from "./types";
-import { fetchProjectInventory } from "@/app/(dashboard)/project/actions/fetch-project-inventory.actions";
-import { fetchProjectFunding } from "@/app/(dashboard)/project/actions/get-project-funding";
-import { fetchTranchData } from "@/app/(dashboard)/project/actions/fetch-tranche-data";
-import { fetchProjectSummary } from "@/app/(dashboard)/project/actions/fetch-project-summary.actions";
-import { fetchProjectTask } from "@/app/(dashboard)/project/actions/fetch-project-task.actions";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { formatDate, formatINR } from "@/utils/formatter";
+import { fetchProjectInventory } from "../../../app/(dashboard)/project/actions/fetch-project-inventory.actions";
+import { fetchProjectFunding } from "../../../app/(dashboard)/project/actions/get-project-funding";
+import { fetchTranchData } from "../../../app/(dashboard)/project/actions/fetch-tranche-data";
+import { fetchProjectSummary } from "../../../app/(dashboard)/project/actions/fetch-project-summary.actions";
+import { fetchProjectTask } from "../../../app/(dashboard)/project/actions/fetch-project-task.actions";
+import { Button } from "../../../components/ui/button";
+import { Card } from "../../../components/ui/card";
+import { formatDate, formatINR } from "../../../utils/formatter";
 import { IconChevronRight } from "@tabler/icons-react";
 import StakeHolderModal from "./StakeHolderModal";
-import taskColumns from "@/components/TimeLine/columns/task-columns";
-import { Skeleton } from "@/components/ui/skeleton";
+import taskColumns from "../../../components/TimeLine/columns/task-columns";
+import { Skeleton } from "../../../components/ui/skeleton";
 
 type Props = {
   user: string;

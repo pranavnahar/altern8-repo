@@ -2,7 +2,6 @@
 
 import React, { useContext, useState, useCallback, useEffect } from 'react';
 import { StepperContext } from '../../contexts/StepperContext';
-//import HelpAndLogin from "./stepsComponents/HelpAndLogin";
 import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import { useRouter } from 'next/navigation';
@@ -108,14 +107,18 @@ const ITR = ({ demo }: Props) => {
         };
         newRecord.username = userData.itrUsername;
         newRecord.password = userData.itrPassword;
-
-        // data validation
         if (newRecord.username.length !== 10) {
-          showToast(`PAN Number or username must contain 10 digits`, 'info');
+          showToast({
+            message: `PAN Number or username must contain 10 digits`,
+            type: 'warning'
+          });
           return;
         }
         if (newRecord.password.length < 4) {
-          showToast(`Please enter valid ITR password`, 'info');
+          showToast({
+            message: `Please enter valid ITR password`,
+            type: 'info'
+          });
           return;
         }
 
@@ -143,19 +146,20 @@ const ITR = ({ demo }: Props) => {
 
             if (response.ok) {
               let serverMessage = await response.json();
-              console.log(`ITR data submitted successfully`, serverMessage);
-
-              showToast(`Submission Successful`, 'info');
-
-              // change the step after click and submitting the data
+              showToast({
+                message: `Submission Successful`,
+                type: 'info'
+              });
               getRegistrationState();
             } else {
               let server_error = await response.json();
-              console.error(`Failed to submit ITR data`, server_error);
               setExternalApiErrorCounts(
                 prevExternalApiErrorCounts => prevExternalApiErrorCounts + 1,
               );
-              showToast(`Submission failed! ${server_error.message}`, 'info');
+              showToast({
+                message: `Submission failed! ${server_error.message}`,
+                type: 'error'
+              });
 
               if (externalApiErrorCounts > 1) {
                 setNeedManualUpload(true);
@@ -164,12 +168,10 @@ const ITR = ({ demo }: Props) => {
             }
           }
         } catch (error) {
-          console.error(
-            `Error submitting ITR form data, Error in fetching api, (${currentStep}) :`,
-            error,
-          );
-          showToast(`Submission failed, system error!`, 'info');
-
+          showToast({
+            message: `Submission failed, system error!`,
+            type: 'info'
+          });
           setNeedManualUpload(true);
           setApiFailedIcon(true);
         } finally {
@@ -253,29 +255,31 @@ const ITR = ({ demo }: Props) => {
 
         if (response.ok) {
           await response.json();
-
-          console.log('Files uploaded successfully:');
-          showToast(`Files uploaded successfully`, 'info');
-
-          // add a tick in the stepper instead of red cross
+          showToast({
+            message: `Files uploaded successfully`,
+            type: 'success'
+          });
           setApiFailedIcon(false);
-
-          // change the step after click and submitting the data
           getRegistrationState();
         } else {
-          const responseData = await response.json();
-          console.log(responseData);
-          console.error('Error uploading files:', responseData);
-          showToast('Files upload failed!', 'info');
+          showToast({
+            message: 'Files upload failed!',
+            type: 'error'
+          });
         }
       } catch (error) {
-        console.log(`Error uploading files, (${currentStep}) :`, error);
-        showToast(`Files upload failed!`, 'info');
+        showToast({
+          message: `Files upload failed!`,
+          type: 'error'
+        });
       } finally {
         setLoading(false);
       }
     } else {
-      showToast(`Please drag and drop files to upload.`, 'info');
+      showToast({
+        message: `Please drag and drop files to upload.`,
+        type: 'info'
+      });
     }
   };
 

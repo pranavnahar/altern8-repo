@@ -88,9 +88,10 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
         return;
       }
       if (currentBankAccount == '') {
-        console.log('Please select a valid bank account');
-        showToast(`Please select a valid bank account`, 'info');
-
+        showToast({
+          message: `Please select a valid bank account`,
+          type: 'info'
+        });
         return;
       }
 
@@ -120,22 +121,24 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
 
           if (response.ok) {
             let server_message = await response.json();
-            console.log(`Primary bank account data submitted successfully!`, server_message);
-
-            showToast(`Submission Successful`, 'info');
-
-            // change the step after click and submitting the data
+            showToast({
+              message: `Submission Successful`,
+              type: 'success'
+            });
             getRegistrationState();
           } else {
             let server_error = await response.json();
-            console.error(`Failed to submit primary bank account data.`, server_error);
-
-            showToast(`Submission failed! ${server_error.message}`, 'info');
+            showToast({
+              message: `Submission failed! ${server_error.message}`,
+              type: 'error'
+            });
           }
         }
       } catch (error) {
-        console.error(`Error submitting data, Error in fetching api (${currentStep}) :`, error);
-        showToast(`Submission failed, system error!`, 'info');
+        showToast({
+          message: `Submission failed, system error!`,
+          type: 'error'
+        });
       } finally {
         setLoading(false);
       }

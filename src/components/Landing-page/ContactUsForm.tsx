@@ -4,8 +4,7 @@ import LoadingSpinner from '../LoadingSpinner';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Button } from '../ui/button';
 import { fetchWithAuth } from '../../utils/fetch-with-auth';
-import { useToast } from '@/utils/show-toasts';
-
+import { useToast } from '../../utils/show-toasts';
 
 interface FormState {
   company_name: string;

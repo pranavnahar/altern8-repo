@@ -14,7 +14,7 @@ import { parseCookies } from 'nookies';
 import { getAccessToken } from '../../../utils/auth';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '../../../components/ui/dialog';
-import { useToast } from '@/utils/show-toasts';
+import { useToast } from '../../../utils/show-toasts';
 
 export const Navbar: FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

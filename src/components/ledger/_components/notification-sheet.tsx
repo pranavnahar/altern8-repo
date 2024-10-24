@@ -76,7 +76,6 @@ export function NotificationSheet() {
     <Sheet>
       <SheetTrigger asChild>
         <Button
-          //@ts-expect-error iconPlacement types
           iconPlacement="right"
           size="sm"
           Icon={IconNotification}

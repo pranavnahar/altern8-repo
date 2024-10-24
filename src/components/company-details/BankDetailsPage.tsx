@@ -5,10 +5,8 @@ import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { getAccessToken } from '../../utils/auth';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 import { Check } from 'lucide-react';
-import { useToast } from '@/utils/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 import { Button } from '../ui/button';
 import { IconChevronRight } from '@tabler/icons-react';
 
