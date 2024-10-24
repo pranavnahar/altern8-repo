@@ -48,13 +48,13 @@ const Page = () => {
 
   // handle file change
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('Button clicked');
+    // console.log('Button clicked');
 
     const fileInput = event.target;
     const file: File | null = fileInput.files?.[0] || null;
 
     if (file) {
-      console.log('Selected file:', file);
+      // console.log('Selected file:', file);
       // Check if the selected file is a PDF
 
       if (
@@ -62,10 +62,10 @@ const Page = () => {
         file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       ) {
         // Check if the file size is below 5MB
-        if (file.size <= 5 * 1024 * 1024) {
+        if (file.size <= 15 * 1024 * 1024) {
           // You can handle the file here or pass it to a parent component using the onFileChange callback
 
-          console.log('file is ready:', file);
+         // console.log('file is ready:', file);
           setFile(file);
 
           const formData = new FormData();
@@ -103,15 +103,15 @@ const Page = () => {
               // console.log("File uploaded successfully:", responseData);
               showToast(`File uploaded successfully`, 'info');
             } else {
-              console.error('Error uploading file:');
-              showToast(`File upload failed!`, 'info');
+              // console.error('Error uploading file:');
+              showToast(`File upload failed!`, `info`);
             }
 
             // after using the file, clear the input to allow selecting a new file.
             fileInput.value = '';
           } catch (error) {
-            console.log('Error uploading file', error);
-            showToast(`File upload failed!`, 'info');
+            // console.log('Error uploading file', error);
+            showToast(`File upload failed!`,`info`);
           } finally {
             setLoadingSpinner(false);
           }
