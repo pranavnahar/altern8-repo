@@ -1,6 +1,6 @@
-import { showToast } from '../../Helpers/show-toasts';
 import { formData } from '../../components/DashboardTableFilter/AddProjectFormModal';
 import { fetchWithAuth } from '../fetch-with-auth';
+import { useToast } from '../show-toasts';
 
 
 export const getTransactions = async (id: string) => {
@@ -192,6 +192,7 @@ export const getLedgerDetails = async () => {
 };
 
 export const createTransactions = async (formData: formData) => {
+  const { showToast } = useToast()
   try {
     const response = await fetchWithAuth('/user-dashboard-api/transactions/', {
       method: 'POST',
@@ -204,14 +205,23 @@ export const createTransactions = async (formData: formData) => {
     if (!response?.ok) {
       const errorData = await response?.json();
       const errorMessage = errorData.message || 'Failed to add transactions';
-      showToast(errorMessage);
+      showToast({
+        message: errorMessage,
+        type: "error"
+      });
       return null;
     } else {
-      showToast('Transaction submitted');
+      showToast({
+        message: 'Transaction submitted',
+        type: "error"
+      });
       return response.json();
     }
   } catch (error) {
-    showToast('An unexpected error occurred. Please try again later.');
+    showToast({
+      message: 'An unexpected error occurred. Please try again later.',
+      type: "error"
+    });
     return null;
   }
 };

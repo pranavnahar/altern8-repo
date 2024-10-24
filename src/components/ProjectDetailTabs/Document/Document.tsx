@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { fetchProjectDocument } from "../../../app/(dashboard)/project/actions/fetch-project-document.actions";
 import { useParams } from "next/navigation";
 import columns from "./columns";
-import { InputForms } from "@/components/InputForms/InputForms";
-import { Button } from "@/components/ui/button";
+import { InputForms } from "../../../components/InputForms/InputForms";
+import { Button } from "../../../components/ui/button";
 
 const Document = () => {
   const [open, setOpen] = useState<boolean>(false);

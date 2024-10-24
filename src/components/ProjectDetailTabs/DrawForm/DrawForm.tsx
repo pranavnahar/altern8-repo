@@ -5,10 +5,10 @@ import { Input } from '../../ui/input';
 import DatePicker from '../../../components/DatePicker/DatePicker';
 import { Button } from '../../../components/ui/button';
 import { Checkbox } from '../../../components/ui/checkbox';
-import { toast } from 'react-toastify';
 import { apiUrl, getAccessToken } from '../../../Utils/auth';
 import { parseCookies } from 'nookies';
 import { useParams } from 'next/navigation';
+import { useToast } from '../../../Utils/show-toasts';
 
 interface DrawFormTypes {
   open: boolean;
@@ -18,6 +18,7 @@ interface DrawFormTypes {
 export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
   const [name, setName] = useState('');
   const [Id, setId] = useState('');
+  const { showToast } = useToast()
   const [submissionDate, setSubmissionDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date());
 
@@ -33,14 +34,14 @@ export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
     if (day) setEndDate(day);
   };
 
-  let altern8_adminaccess = parseCookies().altern8_adminaccess;
+  let altern8_useraccess = parseCookies().altern8_useraccess;
 
   const ReplaceTokenOrRedirect = async (): Promise<void> => {
     const token = await getAccessToken();
     if (!token) {
       window.location.replace('/login');
     } else {
-      altern8_adminaccess = token;
+      altern8_useraccess = token;
     }
   };
   const [idParam, setIdParam] = useState<string | null>(null);
@@ -70,14 +71,14 @@ export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
     console.log(formData);
 
     try {
-      if (!altern8_adminaccess) {
+      if (!altern8_useraccess) {
         await ReplaceTokenOrRedirect();
       }
 
       let response = await fetch(`${apiUrl}/rablet-api/projects/${idParam}/tranches/`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${altern8_adminaccess}`,
+          Authorization: `Bearer ${altern8_useraccess}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
@@ -88,7 +89,7 @@ export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
         response = await fetch(`${apiUrl}/rablet-api/projects/${idParam}/tranches/`, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${altern8_adminaccess}`,
+            Authorization: `Bearer ${altern8_useraccess}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
@@ -96,15 +97,22 @@ export const DrawForm = ({ open, onOpenChange }: DrawFormTypes) => {
       }
       if (response.ok) {
         const responseData = await response.json();
-        console.log(responseData);
-        toast('Document saved !');
+        showToast({
+          message: 'Document saved',
+          type: "error"
+        })
+
       } else {
-        console.error('Failed to add profile data:', response.status);
-        toast('Failure');
+        showToast({
+          message: 'Failed to add profile data',
+          type: "error"
+        })
       }
     } catch (error) {
-      console.log('Error during adding profile data:', error);
-      toast('UI Is Initialized');
+      showToast({
+        message: 'Failed to add profile data',
+        type: "error"
+      })
     }
   };
   return (

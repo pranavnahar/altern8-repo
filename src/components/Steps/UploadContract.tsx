@@ -42,8 +42,10 @@ const UploadContract = ({ demo }: Props) => {
         await handleCheckboxSubmit(`${apiUrl}/user-api/referral-checkbox/`);
       }
     } catch (error) {
-      console.error(`Error uploading files, (${currentStep}) :`, error);
-      showToast(`Error uploading files`, 'info');
+      showToast({
+        message: `Error uploading files`,
+        type: 'error'
+      });
     } finally {
       getRegistrationState();
     }
@@ -56,8 +58,10 @@ const UploadContract = ({ demo }: Props) => {
       if (file.size <= 5 * 1024 * 1024) {
         formData.append('files', file);
       } else {
-        showToast(`File size exceeds 5MB limit. Please choose a smaller file.`, 'info');
-
+        showToast({
+          message: `File size exceeds 5MB limit. Please choose a smaller file.`,
+          type: 'error'
+        });
         return;
       }
     }
@@ -78,13 +82,21 @@ const UploadContract = ({ demo }: Props) => {
       }
 
       if (response.ok) {
-        showToast(`Files uploaded successfully`, 'info');
+        showToast({
+          message: `Files uploaded successfully`,
+          type: 'success'
+        });
       } else {
-        showToast(`File upload failed`, 'info');
+        showToast({
+          message: `File upload failed`,
+          type: 'error'
+        });
       }
     } catch (error) {
-      console.error(`Error uploading files, (${currentStep}) :`, error);
-      showToast(`Error uploading files`, 'info');
+      showToast({
+        message: `Error uploading files`,
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }
@@ -128,7 +140,10 @@ const UploadContract = ({ demo }: Props) => {
       validExtensions.includes(file.name.slice(file.name.lastIndexOf('.')).toLowerCase()),
     );
     if (filteredFiles.length !== acceptedFiles.length) {
-      showToast(`Invalid file extension provided. Please upload only PDF or Excel files.`, 'info');
+      showToast({
+        message: `Invalid file extension provided. Please upload only PDF or Excel files.`,
+        type: 'info'
+      });
     }
     setContractFiles(prevFiles => [...prevFiles, ...filteredFiles]);
   }, []);
@@ -139,10 +154,10 @@ const UploadContract = ({ demo }: Props) => {
       validExtensions.includes(file.name.slice(file.name.lastIndexOf('.')).toLowerCase()),
     );
     if (filteredFiles.length !== acceptedFiles.length) {
-      showToast(
-        `Invalid file extension provided. Please upload only PDF, JPG, JPEG, PNG, or GIF files.`,
-        'info',
-      );
+      showToast({
+        message: `Invalid file extension provided. Please upload only PDF, JPG, JPEG, PNG, or GIF files.`,
+        type: 'info',
+      });
     }
     setPdcFiles(prevFiles => [...prevFiles, ...filteredFiles]);
   }, []);

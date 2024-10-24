@@ -125,13 +125,19 @@ const GST = ({ demo }: Props) => {
 
       if (!alreadyHaveGstin) {
         if (newRecord.gstIn.length !== 15) {
-          showToast(`GSTIN Number must contain 15 digits`, 'info');
+          showToast({
+            message: `GSTIN Number must contain 15 digits`,
+            type: 'info'
+          });
           return;
         }
       }
 
       if (newRecord.username.length < 3) {
-        showToast(`Enter a valid gst username`, 'info');
+        showToast({
+          message: `Enter a valid gst username`,
+          type: 'info'
+        });
         return;
       }
       if (!isIasEnabled) {
@@ -140,9 +146,6 @@ const GST = ({ demo }: Props) => {
           if (newRecord) {
             const body = newRecord;
             setLoading(true);
-            // temp
-            // setOtpSent(true);
-            // return;
             const response = await fetch(`${apiUrl}/scoreme-api/gst/external/gstgenerateotp/`, {
               method: 'POST',
               headers: {
@@ -154,25 +157,24 @@ const GST = ({ demo }: Props) => {
 
             if (response.ok) {
               let server_message = await response.json();
-              console.log(`GST data submitted successfully`, server_message);
-
-              // set otp state
               setOtpSent(true);
-              showToast(`Submission successful`, 'info');
+              showToast({
+                message: `Submission successful`,
+                type: 'info'
+              });
             } else {
               let server_error = await response.json();
-              console.error(`Failed to submit GST data`, server_error);
-
-              // temp
-              // set otp state
-              // setOtpSent(true);
-
-              showToast(`Submission failed! ${server_error.message}`, 'info');
+              showToast({
+                message: `Submission failed! ${server_error.message}`,
+                type: 'info'
+              });
             }
           }
         } catch (error) {
-          console.error(`Error submitting GST form data, (${currentStep}) :`, error);
-          showToast(`Submission failed, system error!`, 'info');
+          showToast({
+            message: `Submission failed, system error!`,
+            type: 'info'
+          });
         } finally {
           setLoading(false);
         }
@@ -180,7 +182,10 @@ const GST = ({ demo }: Props) => {
         // for IAS GST Scoreme api
         newRecord.password = userData.gstPassword;
         if (newRecord.password.length < 3) {
-          showToast(`Please enter a valid gst password`, 'info');
+          showToast({
+            message: `Please enter a valid gst password`,
+            type: 'info'
+          });
           return;
         }
         console.log(newRecord);
@@ -199,18 +204,23 @@ const GST = ({ demo }: Props) => {
 
             if (response.ok) {
               let server_message = await response.json();
-              console.log(`GST data submitted successfully`, server_message);
-
-              showToast(`Submission successful`, 'info');
+              showToast({
+                message: `Submission successful`,
+                type: 'info'
+              });
             } else {
               let server_error = await response.json();
-              console.error(`Failed to submit GST data`, server_error);
-              showToast(`Submission failed! ${server_error.message}`, 'info');
+              showToast({
+                message: `Submission failed! ${server_error.message}`,
+                type: 'info'
+              });
             }
           }
         } catch (error) {
-          console.error(`Error submitting GST form data, (${currentStep}) :`, error);
-          showToast(`Submission failed, system error!`, 'info');
+          showToast({
+            message: `Submission failed, system error!`,
+            type: 'info'
+          });
         } finally {
           setLoading(false);
         }
@@ -224,7 +234,10 @@ const GST = ({ demo }: Props) => {
       setCurrentStep(9);
     }
     if (userData.otp.length < 4) {
-      showToast(`Enter valid OTP`, 'info');
+      showToast({
+        message: `Enter valid OTP`,
+        type: 'warning'
+      });
       return;
     }
 
@@ -236,9 +249,6 @@ const GST = ({ demo }: Props) => {
         otp: userData.otp.trim(),
         gstin: userData.gstNumber.trim(),
       };
-      console.log(body);
-      // temp
-      // return;
       const response = await fetch(`${apiUrl}/scoreme-api/gst/external/gstauthentication/`, {
         method: 'POST',
         headers: {
@@ -250,9 +260,6 @@ const GST = ({ demo }: Props) => {
       });
 
       if (response.ok) {
-        let responseData = await response.json();
-        console.log(responseData);
-        console.log('Otp submitted, get success');
         setAtleastOneGstinSubmitted(true);
 
         if (atleastOneGstinSubmitted) {
@@ -261,16 +268,22 @@ const GST = ({ demo }: Props) => {
       } else {
         let server_error = await response.json();
         if (server_error.message) {
-          console.error('Failed to submit otp', server_error.message);
-          showToast(`Failed to submit otp, ${server_error.message}`, 'info');
+          showToast({
+            message: `Failed to submit otp, ${server_error.message}`,
+            type: 'info'
+          });
         } else {
-          console.error('Failed to submit otp', server_error);
-          showToast(`Failed to submit otp`, 'info');
+          showToast({
+            message: `Failed to submit otp`,
+            type: 'info'
+          });
         }
       }
     } catch (error) {
-      console.error(`Server Connection Error during otp, (${currentStep}) :`, error);
-      showToast(`Failed to send otp, system error`, 'info');
+      showToast({
+        message: `Failed to send otp, system error`,
+        type: 'info'
+      });
     } finally {
       setLoading(false);
     }

@@ -118,7 +118,6 @@ const Help = () => {
 
           <div className="mt-10 text-center">
             <Button
-              //@ts-expect-error variant type
               variant="expandIcon"
               Icon={IconSend2}
               iconPlacement="right"

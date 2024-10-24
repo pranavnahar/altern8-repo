@@ -13,11 +13,11 @@ async function getAuthToken() {
   return authCookie.value;
 }
 
-const fetchProjects = async (altern8_adminaccess: string): Promise<ProjectsResponse> => {
+const fetchProjects = async (altern8_useraccess: string): Promise<ProjectsResponse> => {
   try {
     let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-dashboard-api/calendar/`, {
       headers: {
-        Authorization: `Bearer ${altern8_adminaccess}`,
+        Authorization: `Bearer ${altern8_useraccess}`,
       },
     })
 
@@ -48,14 +48,14 @@ const fetchProjects = async (altern8_adminaccess: string): Promise<ProjectsRespo
 
 export async function getCalendarEvents(): Promise<{ projects: Project[], error?: string }> {
   const cookieStore = cookies()
-  const altern8_adminaccess = cookieStore.get('altern8_useraccess')
+  const altern8_useraccess = cookieStore.get('altern8_useraccess')
 
-  if (!altern8_adminaccess) {
+  if (!altern8_useraccess) {
     return { projects: [], error: "Access token is missing" }
   }
 
   try {
-    const response: ProjectsResponse = await fetchProjects(altern8_adminaccess.value)
+    const response: ProjectsResponse = await fetchProjects(altern8_useraccess.value)
     return { projects: response.project_data }
   } catch (error) {
     console.error('Error fetching calendar projects:', error)
