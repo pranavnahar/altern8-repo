@@ -29,7 +29,7 @@ import {
 } from "../../../../components/ui/form";
 import { format } from "date-fns";
 import { createProject, fetchBorrowersUids } from "../actions";
-import { useToast } from "../../../../Utils/show-toasts";
+import { useToast } from "../../../../utils/show-toasts";
 import { ChevronRight } from "lucide-react";
 import FileUpload from "../../../../components/global/file-upload";
 

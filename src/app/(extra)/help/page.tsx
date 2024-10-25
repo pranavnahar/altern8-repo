@@ -7,9 +7,9 @@ import { IconSend2 } from '@tabler/icons-react';
 import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/mui/Chatbox';
 import { DashboardContext } from '../../../Contexts/DashboardContext';
-import { fetchWithAuth } from '../../../Utils/fetch-with-auth';
+import { fetchWithAuth } from '../../../utils/fetch-with-auth';
 import Accordion from '../../../components/ui/accordion2';
-import { accessToken, apiUrl } from '@/Utils/auth';
+import { accessToken, apiUrl } from '@/utils/auth';
 
 const dummyFaqs = [
   {
@@ -134,7 +134,7 @@ const Help = () => {
               <ChatBox onClose={handleCloseMessageBox} showMessageBox={showMessageBox} />
             )}
           </div>}
-        
+
         </div>
       )}
     </div>
