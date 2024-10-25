@@ -1,8 +1,14 @@
 import Link from "next/link";
 import { FC } from "react";
 import AnimatedLogo from "../Header/AnimatedLogo";
+import { parseCookies } from "nookies";
 
 const Header: FC = () => {
+    const cookies = parseCookies();
+    const accessToken = cookies.altern8_useraccess;
+
+    // dynamiaclly create a redirection url based on whether hes logged in already or not
+    const redirectUrl = accessToken && accessToken.length > 5 ? '/dashboard' : '/register';
     return (
         <header className="max-w-[1320px] flex flex-row items-center mx-auto px-5 2xl:px-0 pt-8 justify-between text-left text-5xl sm:text-21xl lg:text-29xl text-white-font">
             {/* logo or website name */}
@@ -15,7 +21,7 @@ const Header: FC = () => {
 
             {/* register button link */}
             <Link
-                href="/register"
+                href={redirectUrl}
                 className="relative inline-flex items-center h-[40px] w-[130px] sm:h-[50px] sm:w-[200px] justify-center p-4 px-6 py-3 overflow-hidden font-medium text-white-font transition duration-300 ease-out rounded-full group"
             >
                 <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white-font duration-300 -translate-x-full bg-[#1565c0] group-hover:translate-x-0 ease">

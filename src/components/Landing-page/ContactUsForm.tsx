@@ -10,6 +10,7 @@ interface FormState {
   company_name: string;
   company_email: string;
   company_query: string;
+  company_phone_number: string;
   [key: string]: string | boolean; // For dynamic checkbox fields
 }
 
@@ -18,6 +19,7 @@ const ContactUsForm = () => {
     company_name: '',
     company_email: '',
     company_query: '',
+    company_phone_number: '',
   };
 
   const choices = [
@@ -73,27 +75,38 @@ const ContactUsForm = () => {
     setFormData(prev => ({ ...prev, [choice]: !prev[choice] }));
   };
 
-  // Handle form submission
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("form submission trigegr start");
-
-    const { company_name, company_email, company_query } = formData;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    //console.log(formData);
-
-    if (company_name.length < 3 || company_email.length < 3 || company_query.length < 10) {
+  const validateForm = (): boolean => {
+    if (formData.company_name.length < 3) {
       showToast({
-        message: `Input value should not be too small or empty`,
+        message: `Company name should be at least 3 characters`,
         type: 'info'
       });
+      return false;
     }
 
-    if (!emailRegex.test(company_email)) {
+    if (formData.company_query.length < 10) {
+      showToast({
+        message: `Comments and questions should be at least 10 characters`,
+        type: 'info'
+      });
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(formData.company_email)) {
       showToast({
         message: `Invalid email format`,
         type: 'info'
       });
+      return false;
+    }
+
+    if (formData.company_phone_number.length !== 10) {
+      showToast({
+        message: `Phone number must be exactly 10 digits`,
+        type: 'info'
+      });
+      return false;
     }
 
     const isAnyChoiceSelected = choices.some(choice => formData[choice] === true);
@@ -102,6 +115,20 @@ const ContactUsForm = () => {
         message: `Choose at least one area of interest`,
         type: 'info'
       });
+      return false;
+    }
+
+    return true;
+  }
+
+  // Handle form submission
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("form submission trigegr start");
+
+    if (!validateForm()) {
+      console.log("form data not validated");
+      return;
     }
 
     setLoading(true);
@@ -127,7 +154,7 @@ const ContactUsForm = () => {
       }
     } catch (error) {
       showToast({
-        message: `Submission failed!`,
+        message: `Submission failed, please retry once again!`,
         type:'error'
       });
     } finally {
@@ -159,27 +186,54 @@ const ContactUsForm = () => {
             Contact us
           </h2>
 
-          {['company_name', 'company_email', 'company_phone_number'].map(field => (
-            <div key={field} className="mb-4">
-              <label className="block mb-2 text-xs text-gray-400 uppercase">
-                {field.replace('_', ' ')}
-              </label>
-              <input
-                type={
-                  field === 'company_email'
-                    ? 'email'
-                    : field === 'company_phone_number'
-                    ? 'number'
-                    : 'text'
-                }
-                name={field}
-                value={formData[field] as string}
-                onChange={handleInput}
-                className="w-full px-2 py-1 text-sm text-gray-100 bg-transparent border-b-2 outline-none focus:border-purple-600 placeholder:text-sm"
-                required
-              />
-            </div>
-          ))}
+          <div className="mb-4">
+            <label className="block mb-2 text-xs text-gray-400 uppercase">
+              Company Name
+            </label>
+            <input
+              type="text"
+              name="company_name"
+              value={formData.company_name}
+              onChange={handleInput}
+              placeholder="Enter your company name"
+              className="w-full px-2 py-1 text-sm text-gray-100 bg-transparent border-b-2 outline-none focus:border-purple-600 placeholder:text-sm"
+              required
+            />
+          </div>
+
+          {/* Email Input */}
+          <div className="mb-4">
+            <label className="block mb-2 text-xs text-gray-400 uppercase">
+              Company Email
+            </label>
+            <input
+              type="email"
+              name="company_email"
+              value={formData.company_email}
+              onChange={handleInput}
+              placeholder="Enter your company email"
+              className="w-full px-2 py-1 text-sm text-gray-100 bg-transparent border-b-2 outline-none focus:border-purple-600 placeholder:text-sm"
+              required
+            />
+          </div>
+
+          {/* Phone Number Input */}
+          <div className="mb-4">
+            <label className="block mb-2 text-xs text-gray-400 uppercase">
+              Company Phone Number
+            </label>
+            <input
+              type="tel"
+              name="company_phone_number"
+              value={formData.company_phone_number}
+              onChange={handleInput}
+              pattern="[0-9]{10}"
+              maxLength={10}
+              placeholder="Enter 10 digit number"
+              className="w-full px-2 py-1 text-sm text-gray-100 bg-transparent border-b-2 outline-none focus:border-purple-600 placeholder:text-sm"
+              required
+            />
+          </div>
 
           <div className="mb-4">
             <label className="block mb-2 text-xs text-gray-400 uppercase">Area of Interest</label>

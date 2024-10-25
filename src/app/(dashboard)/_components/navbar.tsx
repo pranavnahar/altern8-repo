@@ -15,10 +15,12 @@ import { getAccessToken } from '../../../Utils/auth';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '../../../components/ui/dialog';
 import { useToast } from '../../../Utils/show-toasts';
+import { X } from 'lucide-react';
 
 export const Navbar: FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { chatCount, setChatCount } = useContext(DashboardContext);
 
@@ -82,7 +84,10 @@ export const Navbar: FC = () => {
     current_amount: string;
   }>();
 
-  const [files, setFiles] = useState<File[] | null>(null);
+  const [errors, setErrors] = useState({});
+  const [files, setFiles] = useState<File[]>([]);
+  const [showFiles, setShowFiles] = useState(true);
+
   const { showToast } = useToast()
   const [loadingSpinner, setLoadingSpinner] = useState(true); // for loading animation
   const router = useRouter();
@@ -127,20 +132,20 @@ export const Navbar: FC = () => {
 
       // if (response.ok) {
       if (true) {
-        // const responseData = await response.json();
-        const responseData = {
-          id: 12,
-          user_amount: '600000.00',
-          admin_amount: '0.00',
-          limit_status: 'Pending for Maker',
-          comments: 'required for loan amount',
-          created_at: '2024-09-30T12:25:47.326118+05:30',
-          modified_at: '2024-09-30T12:25:47.333588+05:30',
-          uid: 'YSRBRV6195',
-          maker: null,
-          checker: null,
-          current_amount: 320000,
-        };
+        const responseData = await response.json();
+        // const responseData = {
+        //   id: 12,
+        //   user_amount: '600000.00',
+        //   admin_amount: '0.00',
+        //   limit_status: 'Pending for Maker',
+        //   comments: 'required for loan amount',
+        //   created_at: '2024-09-30T12:25:47.326118+05:30',
+        //   modified_at: '2024-09-30T12:25:47.333588+05:30',
+        //   uid: 'YSRBRV6195',
+        //   maker: null,
+        //   checker: null,
+        //   current_amount: 320000,
+        // };
         let newData = {
           id: responseData['id'],
           requested_amount: parseInt(responseData['user_amount']),
@@ -157,6 +162,14 @@ export const Navbar: FC = () => {
       console.log("user don't have any old credit request details");
     } finally {
     }
+  };
+
+  const checkNewFiles = (index: number) => {
+    setFiles(prevFiles => {
+      const newFiles = prevFiles.filter((_, i) => i !== index); 
+      setShowFiles(newFiles.length > 0); 
+      return newFiles;
+    });
   };
 
   useEffect(() => {
@@ -269,8 +282,10 @@ export const Navbar: FC = () => {
           type: 'info'
         });
         setUserData({ amount: '', comments: '' });
-        setFiles(null);
+        setFiles([]);
         GetOldCredit();
+        setShowGetMoreCreditBox(false);
+        setIsDialogOpen(false);
       } else {
         const serverError = await response.json();
         showToast({
@@ -290,10 +305,12 @@ export const Navbar: FC = () => {
 
   const handleGetMoreCreditOpen = () => {
     setShowGetMoreCreditBox(true);
+    setIsDialogOpen(true);
   };
 
   const handleGetMoreCreditClose = () => {
     setShowGetMoreCreditBox(false);
+    setIsDialogOpen(false);
   };
 
   // handle file upload and drag and drop
@@ -304,6 +321,12 @@ export const Navbar: FC = () => {
       type: "success"
     });
     setFiles(acceptedFiles);
+    setShowFiles(acceptedFiles.length > 0);
+    showToast({
+      message: 'File uploaded successfully!',
+      type: 'info'
+    });
+
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -319,7 +342,7 @@ export const Navbar: FC = () => {
           </div>
           <div className="flex gap-5 items-center">
             {/* increase credit */}
-            <Dialog>
+            <Dialog  open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger>
                 <Button
                   variant="expandIcon"
@@ -340,7 +363,7 @@ export const Navbar: FC = () => {
                       {/* Header */}
                       <div className="flex items-start justify-between p-5 rounded-t">
                         <h3 className="text-2xl font-semibold text-white">Get More Credit</h3>
-                        <DialogTrigger asChild>
+                        {/* <DialogTrigger asChild>
                           <Button
                             size={'sm'}
                             className="float-right p-1 ml-auto text-3xl font-semibold leading-none text-black bg-transparent border-0 outline-none focus:outline-none"
@@ -350,7 +373,9 @@ export const Navbar: FC = () => {
                               ×
                             </span>
                           </Button>
-                        </DialogTrigger>
+                        </DialogTrigger> 
+                        REMOVED as X icon is already present in the dialog
+                        */}
                       </div>
                       {/* Body */}
                       <div className=" flex-auto p-6">
@@ -364,7 +389,7 @@ export const Navbar: FC = () => {
                               onChange={handleAmountChange}
                               value={userData['amount'] || ''}
                               name="amount"
-                              placeholder="amount"
+                              placeholder="Amount"
                               className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
                               type="text"
                               required
@@ -407,6 +432,31 @@ export const Navbar: FC = () => {
                                 <p>Drag 'n' drop some files here, or click to select files</p>
                               )}
                             </div>
+
+                             {/* Uploaded files */}
+                             {files.length > 0 && showFiles && (
+                              <div className="flex items-center mt-3 text-left">
+                                <p className="text-gray-200 text-md inline-block mr-0.5">
+                                  Your uploaded files:
+                                </p>
+                                <ul className="inline text-gray-200 text-sm">
+                                  {files.map((file, index) => (
+                                    <li key={index} className="flex items-center ml-2">
+                                      {/* File name */}
+                                      {file.name}
+                                      {/* "X" icon for removing the file */}
+                                      <button
+                                        className="ml-2 text-red-500 hover:text-red-700 focus:outline-none"
+                                        onClick={() => checkNewFiles(index)} // Pass index here
+                                      >
+                                        <X className="h-4 w-4" />
+                                      </button>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
                           </div>
                         </div>
 
@@ -465,11 +515,7 @@ export const Navbar: FC = () => {
                       {/* Footer */}
                       <div className="flex items-center justify-end p-6 rounded-b">
                         <Button
-                          style={{
-                            backgroundColor: '#1565c0',
-                            borderRadius: '25px', // Adjust the pixel value for the desired border radius
-                            marginRight: '20px',
-                          }}
+                          className="mr-5 rounded-full text-sm border-r-20 text-gray-200 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
                           variant="secondary"
                           onClick={handleGetMoreCreditSubmit}
                         >
@@ -534,7 +580,7 @@ export const Navbar: FC = () => {
                           </div>
                         </div>
                         <Separator className="opacity-70" />
-                        <Link href="/developer-entry" className="w">
+                        <Link href="/login" className="w">
                           <Button
                             size="sm"
                             className="text-xs text-white w-full"
