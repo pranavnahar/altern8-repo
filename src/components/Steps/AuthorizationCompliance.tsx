@@ -4,7 +4,7 @@ import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
-import { useToast } from '../../utils/show-toasts';
+import { useToast } from '../../Utils/show-toasts';
 
 interface UserData {
   companyName: string;

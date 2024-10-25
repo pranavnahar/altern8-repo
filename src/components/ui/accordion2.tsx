@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { renderHTML } from '../../utils/render-html';
+import { renderHTML } from '../../Utils/render-html';
 interface type {
   title: string;
   content: any;

@@ -5,7 +5,7 @@ import { StepperContext } from '../../Contexts/StepperContext';
 import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import { useRouter } from 'next/navigation';
-import { useToast } from '../../utils/show-toasts';
+import { useToast } from '../../Utils/show-toasts';
 
 type Props = {
   demo: boolean;
