@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 import { parseCookies } from 'nookies';
 import LinearBuffer from '../../../components/LinearBuffer';
 import AnimatedLogo from '../../../components/Header/AnimatedLogo';
-import { useToast } from '../../../utils/show-toasts';
-import { setAccessTokenCookie, setRefreshTokenCookie } from '../../../utils/auth';
+import { useToast } from '../../../Utils/show-toasts';
+import { setAccessTokenCookie, setRefreshTokenCookie } from '../../../Utils/auth';
 let accessToken = parseCookies().altern8_useraccess;
 
 const page = () => {

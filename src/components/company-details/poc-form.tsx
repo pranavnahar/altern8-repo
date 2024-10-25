@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../utils/auth';
+import { getAccessToken } from '../../Utils/auth';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { useToast } from '../../utils/show-toasts';
+import { useToast } from '../../Utils/show-toasts';
 import { Button } from '../ui/button';
 import { IconChevronRight, IconPlus } from '@tabler/icons-react';
 

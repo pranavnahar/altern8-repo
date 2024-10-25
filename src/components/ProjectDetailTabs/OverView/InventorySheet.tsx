@@ -4,10 +4,10 @@ import { Label } from '../../../components/ui/label';
 import { Input } from '../../../components//ui/input';
 import { Button } from '../../../components//ui/button';
 import { useParams } from 'next/navigation';
-import { getAccessToken } from '../../../utils/auth';
+import { getAccessToken } from '../../../Utils/auth';
 import { parseCookies } from 'nookies';
-import { apiUrl } from '../../../utils/auth';
-import { useToast } from '../../../utils/show-toasts';
+import { apiUrl } from '../../../Utils/auth';
+import { useToast } from '../../../Utils/show-toasts';
 
 const InventorySheet = () => {
   const params = useParams();
