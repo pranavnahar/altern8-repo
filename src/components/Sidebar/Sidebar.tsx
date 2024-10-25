@@ -170,7 +170,7 @@ const SideBar: React.FC<SideBarProps> = ({
                   </div>
                 </>
               ) : (
-                <div className="mr-4 text-base font-medium">Loading...</div>
+                <div className="mr-4 text-base font-medium"></div>
               )}
             </div>
           </div>

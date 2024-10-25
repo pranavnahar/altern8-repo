@@ -442,7 +442,7 @@ const BankDetails = ({ demo }: Props) => {
                   className=" bg-teal-400 text-white px-4 mx-3 py-2 rounded-full transition-transform transform hover:scale-110"
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Loading...' : 'Connect Bank Accounts'}
+                  {isLoading ? '' : 'Connect Bank Accounts'}
                 </button>
               </div>
             )}
