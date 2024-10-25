@@ -72,6 +72,7 @@ const ConnectSDK: React.FC<{
         await response.json();
       } else {
         let server_error = await response.json();
+        showToast({message : `${server_error}`,type:'error'})
       }
     } catch (error) {
       showToast({
@@ -125,6 +126,7 @@ const ConnectSDK: React.FC<{
       setRootFiID(data.data.rootfi_company_id);
       setIsReady(true);
     } catch (e) {
+      showToast({message : `${e}`,type:'error'})
       console.log('error: ' + e);
     }
   }

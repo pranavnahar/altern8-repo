@@ -337,10 +337,10 @@ const BankDetails = ({ demo }: Props) => {
               title="Account Aggregator"
             ></iframe>
           ) : (
-            <>
-              {/* <CarouselImage /> */}
+            <div className=' flex-col justify-between items-center my-5'>
+              <ImageSlider/>
               <AA_videos />
-            </>
+            </div>
           )}
         </div>
       )}

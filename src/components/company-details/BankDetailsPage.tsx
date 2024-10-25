@@ -9,7 +9,7 @@ import { Check } from 'lucide-react';
 import { useToast } from '../../Utils/show-toasts';
 import { Button } from '../ui/button';
 import { IconChevronRight } from '@tabler/icons-react';
-
+ 
 const BankDetailsPage = () => {
   const [bankAccountsList, setBankAccountsList] = useState<
     {
@@ -162,6 +162,10 @@ const BankDetailsPage = () => {
       if (response.ok) {
         await response.json();
         await GetBankDetails();
+        showToast({
+          message: 'Successsfully updated primary account',
+          type: 'success'
+        });
         console.log('Primary account updated successfully');
       } else {
         let server_error = await response.json();

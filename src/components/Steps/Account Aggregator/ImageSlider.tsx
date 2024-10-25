@@ -1,5 +1,8 @@
 import React from "react";
 import Slider from "react-slick";
+// 
+import "./slick-overrides.css";
+
 import Image from "next/image";
 import { images } from "./Logos";
 
@@ -38,13 +41,11 @@ const ImageSlider = () => {
         },
       },
     ],
-    prevArrow: undefined,
-    nextArrow: undefined,
   };
-
+  
   return (
     <div className="imageSliderContainer">
-      <Slider {...settings}>
+      <Slider {...settings} >
         {images.map((image, index) => (
           <div key={index} className="pl-24 imageSlide">
             <div className="imageWrapper">
