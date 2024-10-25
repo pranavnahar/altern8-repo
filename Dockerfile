@@ -47,10 +47,10 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/.next/standalone ./
 
 # Expose port 3000
-EXPOSE 3001
+EXPOSE 3000
 
 # Set host and port environment variables
-ENV PORT=3001
+ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 # Start the Next.js application
