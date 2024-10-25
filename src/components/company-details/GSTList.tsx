@@ -4,7 +4,7 @@ import { MultiSelect } from '../../components/ui/multi-select';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from '../../components/ui/table';
 import { useGetGstList } from './use-gst-gstlist';
 import { Button } from '../../components/ui/button';
-import { apiUrl, getAccessToken } from '@/Utils/auth';
+import { apiUrl, getAccessToken } from '../../Utils/auth';
 import { parseCookies } from 'nookies';
 import { useToast } from '../../Utils/show-toasts';
 import { useRouter } from 'next/navigation';
@@ -119,7 +119,7 @@ const GSTList = () => {
       ...formData,
       [name]: value,
     });
-  
+
   };
 
   const gstinOptions = [...gstList.map(gstin => ({ label: gstin, value: gstin }))];
