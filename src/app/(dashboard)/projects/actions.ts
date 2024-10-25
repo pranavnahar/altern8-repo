@@ -1,7 +1,7 @@
 'use server'
 
 import ky from 'ky';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { ProjectResponse } from './types';
@@ -10,7 +10,7 @@ async function getAuthToken() {
   const cookieStore = cookies();
   const authCookie = cookieStore.get('altern8_useraccess');
   if (!authCookie) {
-    throw new Error('Not authenticated');
+    redirect('/login')
   }
   return authCookie.value;
 }
@@ -30,8 +30,6 @@ export async function fetchProjectData(timeoutMs: number = 60000): Promise<Proje
     if (response.status === 401) {
       throw new Error('Unauthorized');
     }
-
-
     return await response.json() as ProjectResponse;
   } catch (error) {
     if (error instanceof Error) {
@@ -88,7 +86,6 @@ export async function createProject(formData: FormData) {
     const responseData = await response.json();
 
     if (!response.ok) {
-      console.log("The response was not OK");
       throw new Error(responseData.error || `HTTP error! status: ${response.status}`);
     }
 

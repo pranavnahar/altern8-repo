@@ -162,6 +162,10 @@ const BankDetailsPage = () => {
       if (response.ok) {
         await response.json();
         await GetBankDetails();
+        showToast({
+          message: 'Successsfully updated primary account',
+          type: 'success'
+        });
         console.log('Primary account updated successfully');
       } else {
         let server_error = await response.json();

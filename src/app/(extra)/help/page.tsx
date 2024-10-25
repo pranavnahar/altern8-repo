@@ -9,6 +9,7 @@ import ChatBox from '../../../components/mui/Chatbox';
 import { DashboardContext } from '../../../Contexts/DashboardContext';
 import { fetchWithAuth } from '../../../Utils/fetch-with-auth';
 import Accordion from '../../../components/ui/accordion2';
+import { accessToken, apiUrl } from '@/Utils/auth';
 
 const dummyFaqs = [
   {
@@ -39,11 +40,15 @@ const Help = () => {
   const [faqs, setFaqs] = useState(dummyFaqs);
   const [loadingSpinner, setLoadingSpinner] = useState(true);
 
+  const isAuth = () => {
+    return accessToken
+  }
+
   const { chatCount, setChatCount } = useContext(DashboardContext);
   useEffect(() => {
     const GetFaq = async () => {
       try {
-        const response = await fetchWithAuth(`/user-dashboard-api/faq/`);
+        const response = await fetch(`${apiUrl}/user-dashboard-api/faq/`);
 
         if (response) {
           const responseData = await response.json();
@@ -115,8 +120,7 @@ const Help = () => {
               }))}
             />
           </div>
-
-          <div className="mt-10 text-center">
+          {isAuth()?.length &&   <div className="mt-10 text-center">
             <Button
               variant="expandIcon"
               Icon={IconSend2}
@@ -126,10 +130,11 @@ const Help = () => {
             >
               Chat With Admin
             </Button>
-            {showMessageBox && (
+            {showMessageBox &&  (
               <ChatBox onClose={handleCloseMessageBox} showMessageBox={showMessageBox} />
             )}
-          </div>
+          </div>}
+
         </div>
       )}
     </div>

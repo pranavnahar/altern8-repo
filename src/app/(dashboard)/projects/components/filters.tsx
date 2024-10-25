@@ -9,12 +9,11 @@ import DashboardGrids from "./dashboard-grids";
 import { Button } from "../../../../components/ui/button";
 import { Project, SummaryItem } from "../types";
 
-interface DashboardTableFilterClientProps {
+type Props = {
   projects: Project[];
-  summaryData: SummaryItem[];
 }
 
-const Filters = ({ projects, summaryData }: DashboardTableFilterClientProps) => {
+const Filters = ({ projects }: Props) => {
   const [gridType, setGridType] = useState<boolean>(false);
 
   return (
