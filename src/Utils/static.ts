@@ -1,10 +1,24 @@
+const PROJECT_TYPE_CHOICES = [
+  { value: 'Commercial', label: 'Commercial' },
+  { value: 'Residential', label: 'Residential' },
+  { value: 'Raw Land', label: 'Raw Land' },
+  { value: 'Industrial', label: 'Industrial' },
+  { value: 'Warehouse', label: 'Warehouse' },
+  { value: 'Plotted Land', label: 'Plotted Land' },
+  { value: 'Hospitality', label: 'Hospitality' },
+  { value: 'Affordable Housing', label: 'Affordable Housing' },
+  { value: 'Student Housing', label: 'Student Housing' },
+  { value: 'Others', label: 'Others' },
+];
+
+
 export const formTemplate = [
   {
     type: "text",
     label: "User ID",
     name: "user_id",
     placeholder: "User Id",
-    required: false,
+    required: true, //was false previously
     formData: "basicInfo",
   },
   {
@@ -20,7 +34,7 @@ export const formTemplate = [
     label: "Project Name",
     name: "project_name",
     placeholder: "Project Name",
-    required: false,
+    required: true,
     formData: "basicInfo",
   },
   {
@@ -32,12 +46,13 @@ export const formTemplate = [
     required: false,
   },
   {
-    type: "text",
+    type: "select", // Changed from "text" to "select"
     label: "Project Type",
     name: "project_type",
-    placeholder: "Project Type",
-    required: false,
+    placeholder: "Select Project Type",
+    required: true,
     formData: "basicInfo",
+    options: PROJECT_TYPE_CHOICES, // Added options array
   },
   {
     type: "date",
@@ -60,7 +75,7 @@ export const formTemplate = [
     label: "Original Start Date ",
     name: "original_start_date",
     placeholder: "Original Start Date ",
-    required: false,
+    required: true,
     formData: "basicInfo",
   },
   {
@@ -76,7 +91,7 @@ export const formTemplate = [
     label: "Declared Date Of Completion",
     name: "declared_date_of_completion",
     placeholder: "Declared Date Of Completion",
-    required: false,
+    required: true,
     formData: "basicInfo",
   },
   {
@@ -84,7 +99,7 @@ export const formTemplate = [
     label: "Project Location",
     name: "project_location",
     placeholder: "Project Location",
-    required: false,
+    required: true,
     formData: "basicInfo",
   },
   {
