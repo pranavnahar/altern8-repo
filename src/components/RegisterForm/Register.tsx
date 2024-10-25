@@ -15,7 +15,7 @@ import BureauReport from '../Steps/BereauReport';
 import AuthorizationCompliance from '../Steps/AuthorizationCompliance';
 import UploadContract from '../Steps/UploadContract';
 import BankDetails from '../Steps/BankDetails';
-import HelpPage from '../../app/(dashboard)/help/page';
+import HelpPage from '../../app/(extra)/help/page';
 import Accounting from '../Steps/Accounting';
 import RERA from '../Steps/RERA';
 import Udyam from '../Steps/Udyam';

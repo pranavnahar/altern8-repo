@@ -4,9 +4,13 @@ import { MultiSelect } from '../../components/ui/multi-select';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from '../../components/ui/table';
 import { useGetGstList } from './use-gst-gstlist';
 import { Button } from '../../components/ui/button';
+import { apiUrl, getAccessToken } from '@/Utils/auth';
+import { parseCookies } from 'nookies';
+import { useToast } from '../../Utils/show-toasts';
+import { useRouter } from 'next/navigation';
 
 const GSTList = () => {
-  const [loadingSpinner] = useState(false);
+  const [loadingSpinner,setLoadingSpinner] = useState(false);
   const { gstList, message } = useGetGstList();
   const [currentGstin, setCurrentGstin] = useState('');
   console.log(currentGstin);
@@ -14,6 +18,8 @@ const GSTList = () => {
   const [formData, setFormData] = useState({
     gstin: '',
   });
+  const router = useRouter()
+  const {showToast }= useToast()
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
@@ -31,14 +37,89 @@ const GSTList = () => {
     });
   };
 
-  const handleSubmitGstin = () => { };
+  let accessToken = parseCookies().accessToken;
 
-  const handleAddGstinInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const ReplaceTokenOrRedirect = async () => {
+    // get new access token with help of Refresh token
+    const token = await getAccessToken();
+    // if not able to get the token then redirect to login
+    if (!token) {
+      router.push('/login');
+    } else {
+      accessToken = token;
+    }
+  };
+
+
+  const handleSubmitGstin = async () => {   if (formData.gstin.length < 10) {
+    showToast({
+      message: 'Please type a correct GSTIN number',
+      type: 'info'
+    });
+    return;
+  }
+
+  // submitting the data to backend
+  try {
+    // Set loading to true when starting the fetch
+    setLoadingSpinner(true);
+
+    let body = formData
+    // console.log(body);
+    let response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-account/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+
+      body: JSON.stringify(body),
+    });
+
+    if (response.status === 401) {
+      await ReplaceTokenOrRedirect();
+      // Again try to fetch the data
+      response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-account/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+
+        body: JSON.stringify(body),
+      });
+    }
+
+    if (response.ok) {
+      await response.json();
+      showToast({
+        message: 'Successsfully updated GSTIN',
+        type: 'success'
+      });
+      console.log('GSTIN updated successfully');
+    } else {
+      await response.json();
+      showToast({
+        message: 'Failed to update GSTIN',
+        type: 'error'
+      });
+    }
+  } catch (error) {
+    showToast({
+      message: 'Server Connection Error updating GSTIN',
+      type: 'error'
+    });
+  } finally {
+    setLoadingSpinner(false);
+  }};
+
+  const handleAddGstinInputChange = async(e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+  
   };
 
   const gstinOptions = [...gstList.map(gstin => ({ label: gstin, value: gstin }))];
@@ -152,3 +233,7 @@ const GSTList = () => {
 };
 
 export default GSTList;
+function showToast(arg0: { message: string; type: string; }) {
+  throw new Error('Function not implemented.');
+}
+
