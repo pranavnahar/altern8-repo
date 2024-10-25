@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { IconCloudUpload, IconUpload } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
 import { fetchDocuments, uploadDocument } from './actions'
-import { useToast } from '../../../Utils/show-toasts'
+import { useToast } from '../../../utils/show-toasts'
 import Pdf from '../../../assets/pdf'
 
 type Document = {

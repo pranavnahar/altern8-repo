@@ -4,7 +4,7 @@ import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { IconChevronUpRight } from '@tabler/icons-react';
-import { useToast } from '../../Utils/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 import { Button } from '../ui/button';
 
 type Props = {

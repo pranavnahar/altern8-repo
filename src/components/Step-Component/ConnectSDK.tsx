@@ -4,7 +4,7 @@ import { RootFiEnvironment } from 'rootfi-api';
 import Image from 'next/image';
 import { parseCookies } from 'nookies';
 import { IntegrationCategory, IntegrationType } from 'rootfi-api/api';
-import { useToast } from '../../Utils/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 import { IconLoader } from '@tabler/icons-react';
 
 type InviteLinkData = {
