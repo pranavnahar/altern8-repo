@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { showToast } from '../../Helpers/show-toasts';
 import { createTransactions } from '../../Utils/ledger/ledgerService';
+import { useToast } from '../../Utils/show-toasts';
 
 const useTransactionForm = () => {
   const [showAddTransactionBox, setShowAddTransactionBox] = useState(false);
+  const { showToast } = useToast()
   const [formData, setFormData] = useState({
     transaction_id: '',
     purpose: '',
@@ -40,7 +41,10 @@ const useTransactionForm = () => {
       resetFormData();
       return true;
     } catch (error) {
-      showToast(`${error}`);
+      showToast({
+        message: 'Failed to add transaction, server error',
+        type: 'error'
+      });
       return false;
     }
   };

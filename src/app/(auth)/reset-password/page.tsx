@@ -67,7 +67,10 @@ const page = () => {
     e.preventDefault();
     if (otpSent) {
       if (!validatePhoneNumber(otpForm.phoneNumber)) {
-        showToast(`Phone number must be a 10-digit number`, 'info');
+        showToast({
+          message: `Phone number must be a 10-digit number`,
+          type: 'error'
+        });
         return;
       }
 
@@ -103,12 +106,16 @@ const page = () => {
           setShowResetPasswordPage(true);
         } else {
           let server_error = await response.json();
-          console.error('Login failed.', server_error);
-          showToast(`OTP verification failed, ${server_error.message}`, 'info');
+          showToast({
+            message: `OTP verification failed, ${server_error.message}`,
+            type: 'info'
+          });
         }
       } catch (error) {
-        console.error('OTP verification failed', error);
-        showToast(`OTP verification failed, system error`, 'info');
+        showToast({
+          message: `OTP verification failed, system error`,
+          type: 'info'
+        });
       } finally {
         setLoading(false);
       }
@@ -120,13 +127,16 @@ const page = () => {
     e.preventDefault();
 
     if (resetPassword.resetPassword1.trim() !== resetPassword.resetPassword2.trim()) {
-      showToast(`Both password should match`, 'info');
+      showToast({
+        message: `Both password should match`,
+        type: 'info'
+      });
       return;
     } else if (!validatePassword(resetPassword.resetPassword1)) {
-      showToast(
-        `Password must be at least 8 characters long and contain at least one letter, one digit, and one special character.`,
-        'info',
-      );
+      showToast({
+        message: `Password must be at least 8 characters long and contain at least one letter, one digit, and one special character.`,
+        type: 'info',
+      });
       return;
     }
 
@@ -155,12 +165,16 @@ const page = () => {
         router.push('/login');
       } else {
         let server_error = await response.json();
-        console.error('Password change failed.', server_error);
-        showToast(`Password change failed, ${server_error.message}`, 'info');
+        showToast({
+          message: `Password change failed, ${server_error.message}`,
+          type: 'info'
+        });
       }
     } catch (error) {
-      console.error('Password change failed', error);
-      showToast(`Password change failed, system error`, 'info');
+      showToast({
+        message: `Password change failed, system error`,
+        type: 'info'
+      });
     } finally {
       setLoading(false);
     }
@@ -172,7 +186,10 @@ const page = () => {
 
   const handleSendOtp = async () => {
     if (!validatePhoneNumber(otpForm.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, 'info');
+      showToast({
+        message: `Phone number must be a 10-digit number`,
+        type: 'info'
+      });
       return;
     }
 
@@ -202,15 +219,16 @@ const page = () => {
       } else {
         let server_error = await response.json();
         otpForm.otp = '';
-        console.error('Failed to send otp', server_error);
-        showToast(`${server_error.message} `, 'info');
-
-        // temp
-        // setOtpSent(true);
+        showToast({
+          message: `${server_error.message} `,
+          type: 'error'
+        });
       }
     } catch (error) {
-      console.error('Server Connection Error during otp:', error);
-      showToast(`Failed to send otp, system error`, 'info');
+      showToast({
+        message: `Failed to send otp, system error`,
+        type: 'error'
+      });
     } finally {
       setLoading(false);
     }

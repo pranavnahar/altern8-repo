@@ -169,12 +169,12 @@ export const InputForms = ({
     if (!token) {
       window.location.replace('/login');
     } else {
-      altern8_adminaccess = token;
+      altern8_useraccess = token;
     }
   };
   // Form Input Sections as object
   const [formData, setFormData] = useState<FormData>({});
-  let altern8_adminaccess = parseCookies().altern8_adminaccess;
+  let altern8_useraccess = parseCookies().altern8_useraccess;
   const [id, setId] = useState<string | null>(null);
   const params = useParams();
   let URL = '';

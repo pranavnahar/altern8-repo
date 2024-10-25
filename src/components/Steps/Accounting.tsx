@@ -72,7 +72,10 @@ const Accounting = ({ demo }: Props) => {
       }
       if (!needManualUpload) {
         if (userData.platform === '') {
-          showToast(`Please select an accounting data platform`, 'info');
+          showToast({
+            message: `Please select an accounting data platform`,
+            type: 'info'
+          });
           return;
         }
 
@@ -99,20 +102,26 @@ const Accounting = ({ demo }: Props) => {
 
             if (response.ok) {
               const serverMessage = await response.json();
-              console.log(`Accounting data submission successful`, serverMessage);
-              showToast(`Submission Successful`, 'info');
+              showToast({
+                message: `Submission Successful`,
+                type: 'info'
+              });
               getRegistrationState();
             } else {
               const serverError = await response.json();
-              console.error(`Accounting data submission failed!`, serverError);
-              showToast(`Submission failed! ${serverError.message}`, 'info');
+              showToast({
+                message: `Submission failed! ${serverError.message}`,
+                type: 'info'
+              });
               setNeedManualUpload(true);
               setApiFailedIcon(true);
             }
           }
         } catch (error) {
-          console.error(`Accounting data submission failed!, (${currentStep}) :`, error);
-          showToast(`Submission failed, system error!`, 'info');
+          showToast({
+            message: `Submission failed, system error!`,
+            type: 'error'
+          });
           setNeedManualUpload(true);
           setApiFailedIcon(true);
         } finally {
@@ -178,20 +187,31 @@ const Accounting = ({ demo }: Props) => {
 
         if (response.ok) {
           await response.json();
-          showToast(`Files uploaded successfully`, 'info');
+          showToast({
+            message: `Files uploaded successfully`,
+            type: 'info'
+          });
           setApiFailedIcon(false);
           getRegistrationState();
         } else {
-          showToast(`Files upload failed!`, 'info');
+          showToast({
+            message: `Files upload failed!`,
+            type: 'info'
+          });
         }
       } catch (error) {
-        console.log(`Error uploading files, (${currentStep}) :`, error);
-        showToast(`Files upload failed!`, 'info');
+        showToast({
+          message: `Files upload failed!`,
+          type: 'info'
+        });
       } finally {
         setLoading(false);
       }
     } else {
-      showToast(`Please drag and drop files to upload.`, 'info');
+      showToast({
+        message: `Please drag and drop files to upload.`,
+        type: 'info'
+      });
     }
   };
 

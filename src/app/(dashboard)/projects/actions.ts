@@ -8,7 +8,7 @@ import { ProjectResponse } from './types';
 
 async function getAuthToken() {
   const cookieStore = cookies();
-  const authCookie = cookieStore.get('altern8_adminaccess');
+  const authCookie = cookieStore.get('altern8_useraccess');
   if (!authCookie) {
     throw new Error('Not authenticated');
   }
@@ -52,7 +52,7 @@ export async function fetchProjectData(timeoutMs: number = 60000): Promise<Proje
 export async function fetchBorrowersUids(timeoutMs = 60000) {
   try {
     const token = await getAuthToken();
-
+    console.log(token)
     const response = await fetch(`${process.env.SERVER_URL}/admin-api/borrowers-uids/`, {
       method: 'GET',
       headers: {

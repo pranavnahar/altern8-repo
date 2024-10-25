@@ -5,11 +5,10 @@ import List from '../List/List';
 import { Card } from '../ui/card';
 import { motion } from 'framer-motion';
 import { MessageSquareText } from 'lucide-react';
-import { datasList } from '../../app/(dashboard)/projects/page';
 import Message from '../Message/Message';
 
 type Props = {
-  listData: datasList[];
+  listData: any[];
   className?: string;
 };
 

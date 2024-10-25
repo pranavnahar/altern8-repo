@@ -1,14 +1,11 @@
-// This is a dashboard page component getting point of contact person details
-
 import React, { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
-import { showToast } from '../../Helpers/show-toasts';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { getAccessToken } from '../../Utils/auth';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useToast } from '../../Utils/show-toasts';
+import { Button } from '../ui/button';
+import { IconChevronRight, IconPlus } from '@tabler/icons-react';
 
 // main return page
 const PocForm = () => {
@@ -35,9 +32,10 @@ const PocForm = () => {
   const [loadingSpinner, setLoadingSpinner] = useState(true);
   const [currentPrimaryPoc, setCurrentPrimaryPoc] = useState('');
   const router = useRouter();
+  const { showToast } = useToast()
 
   // Handle token
-  let accessToken = parseCookies().accessToken;
+  let accessToken = parseCookies().altern8_useraccess;
 
   const ReplaceTokenOrRedirect = async () => {
     const token = await getAccessToken();
@@ -149,22 +147,34 @@ const PocForm = () => {
 
   const handleSendOtp = async () => {
     if (!validateName(formData.name)) {
-      showToast(`Valid Name is required`, 'info');
+      showToast({
+        message: `Valid Name is required`,
+        type: 'info'
+      });
       return;
     }
 
     if (!validateEmail(formData.email)) {
-      showToast(`Invalid email address`, 'info');
+      showToast({
+        message: `Invalid email address`,
+        type: 'info'
+      });
       return;
     }
 
     if (!validatePhoneNumber(formData.phoneNumber)) {
-      showToast(`Phone number must be a 10-digit number`, 'info');
+      showToast({
+        message: `Phone number must be a 10-digit number`,
+        type: 'info'
+      });
       return;
     }
 
     if (formData.designation.length < 3) {
-      showToast(`Please add valid designation`, 'info');
+      showToast({
+        message: `Please add valid designation`,
+        type: 'info'
+      });
       return;
     }
 
@@ -216,11 +226,16 @@ const PocForm = () => {
         formData.otp = '';
 
         console.error('Failed to send otp', server_error);
-        showToast(`${server_error.message}`, 'info');
+        showToast({
+          message :`${server_error.message}`,
+          type: 'info'
+        });
       }
     } catch (error) {
-      console.error('Server Connection Error during otp:', error);
-      showToast(`Failed to send otp, system error`, 'info');
+      showToast({
+        message: `Failed to send otp, system error`,
+        type: 'info'
+      });
     } finally {
       setLoadingSpinner(false);
     }
@@ -232,7 +247,10 @@ const PocForm = () => {
       return;
     }
     if (formData.otp.length < 3) {
-      showToast(`Please enter a valid otp`, 'info');
+      showToast({
+        message: `Please enter a valid otp`,
+        type: 'info'
+      });
       return;
     }
 
@@ -268,19 +286,24 @@ const PocForm = () => {
       }
 
       if (response.ok) {
-        console.log('poc details submitted successfully');
-        showToast(`POC details submitted successfully`, 'info');
+        showToast({
+          message: `POC details submitted successfully`,
+          type: 'info'
+        });
         GetPoc();
         setOtpSent(false);
         setFormData({ name: '', email: '', phoneNumber: '', designation: '', otp: '' });
       } else {
-        let server_error = await response.json();
-        console.log('poc details submission failed!', server_error);
-        showToast(`'POC details submission failed, server error`, 'info');
+        showToast({
+            message: `POC details submission failed, server error`,
+            type: 'info'
+        });
       }
     } catch (error) {
-      console.log('error during submitting poc details', error);
-      showToast(`POC details submission failed, system error`, 'info');
+      showToast({
+        message: `POC details submission failed, system error`,
+        type: 'info'
+      });
     } finally {
       setLoadingSpinner(false);
     }
@@ -308,8 +331,10 @@ const PocForm = () => {
 
   const handleChangePrimaryPOC = async () => {
     if (currentPrimaryPoc === '') {
-      console.log('Please select a valid poc');
-      showToast(`Please select a valid poc`, 'info');
+      showToast({
+        message: `Please select a valid poc`,
+        type: 'info'
+      });
       return;
     }
 
@@ -347,18 +372,25 @@ const PocForm = () => {
       if (response.ok) {
         await response.json();
         await GetPoc();
-        console.log('Primary poc updated successfully');
-        showToast(`Primary POC updated successfully.`, 'info');
+        showToast({
+          message: `Primary POC updated successfully.`,
+          type: 'info'
+        });
       } else {
         let server_error = await response.json();
 
         console.error('Failed to updated primary poc', server_error);
 
-        showToast(`${server_error.message} `, 'info');
+        showToast({
+          message: `${server_error.message} `,
+          type: 'info'
+        });
       }
     } catch (error) {
-      console.error('Server Connection Error updating primary POC:', error);
-      showToast(`Server Connection Error updating primary POC`, 'info');
+      showToast({
+        message: `Server Connection Error updating primary POC`,
+        type: 'info'
+      });
     } finally {
       setLoadingSpinner(false);
     }
@@ -450,13 +482,8 @@ const PocForm = () => {
           <div className="flex justify-center pt-5">
             <Button
               onClick={handleChangePrimaryPOC}
-              style={{
-                backgroundColor: '#1565c0',
-                borderRadius: '25px', // Adjust the pixel value for the desired border radius
-              }}
-              variant="contained"
+              size="sm"
               type="submit"
-              endIcon={<ArrowForwardIcon />}
             >
               Proceed
             </Button>
@@ -543,13 +570,10 @@ const PocForm = () => {
           <div className="flex justify-center pt-8">
             <Button
               onClick={handleSendOtp}
-              style={{
-                backgroundColor: '#1565c0',
-                borderRadius: '25px', // Adjust the pixel value for the desired border radius
-              }}
-              variant="contained"
               type="submit"
-              endIcon={<ArrowUpwardOutlinedIcon />}
+              variant="expandIcon"
+              Icon={IconPlus}
+              iconPlacement='right'
             >
               Add
             </Button>
@@ -593,15 +617,12 @@ const PocForm = () => {
           <div className="flex justify-center pt-8">
             <Button
               onClick={handleSubmitOtp}
-              style={{
-                backgroundColor: '#1565c0',
-                borderRadius: '25px', // Adjust the pixel value for the desired border radius
-              }}
-              variant="contained"
               type="submit"
-              endIcon={<ArrowUpwardOutlinedIcon />}
+              variant="expandIcon"
+              iconPlacement='right'
+              Icon={IconChevronRight}
             >
-              Submit
+              Add
             </Button>
           </div>
         </div>

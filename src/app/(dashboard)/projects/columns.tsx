@@ -204,17 +204,6 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    header: 'Actions',
-    accessorKey: 'actions',
-    cell: ({ row }) => {
-      const projectId = row.original.id;
-      const productId = row.original.product_id; // Make sure this field exists in your data
-      return (
-        <ApplyProduct projectId={projectId} productId={productId} />
-      )
-    },
-  },
-  {
     header: 'Approved Status',
     accessorKey: 'approved_by_admin',
     cell: ({ getValue }) => {

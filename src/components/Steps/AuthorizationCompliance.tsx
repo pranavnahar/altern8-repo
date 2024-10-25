@@ -78,11 +78,16 @@ const AuthorizationCompliance = ({ demo }: Props) => {
         } else if (response.status === 401) {
           router.push('/login');
         } else {
-          showToast('Failed to fetch data', 'info');
+          showToast({
+            message: `Failed to fetch data`,
+            type: 'info'
+          });
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
-        showToast('Failed to fetch data, system error!', 'info');
+        showToast({
+          message: 'Failed to fetch data, system error!',
+          type: 'info'
+        });
       }
     };
 
@@ -140,7 +145,10 @@ const AuthorizationCompliance = ({ demo }: Props) => {
         !authorizedPositions ||
         !additionalDocsConfirmed
       ) {
-        showToast('Please fill all fields and confirm all checkboxes before submission.', 'info');
+        showToast({
+          message: 'Please fill all fields and confirm all checkboxes before submission.',
+          type: 'info'
+        });
         return;
       }
 
@@ -175,14 +183,22 @@ const AuthorizationCompliance = ({ demo }: Props) => {
         }
 
         if (response.ok) {
-          showToast('Submission Successful', 'info');
+          showToast({
+            message: `Submission successful`,
+            type: 'info'
+          });
           getRegistrationState();
         } else {
-          showToast('Submission failed!', 'info');
+          showToast({
+            message: `Submission failed`,
+            type: 'info'
+          });
         }
       } catch (error) {
-        console.error('Submission failed:', error);
-        showToast('Submission failed, system error!', 'info');
+        showToast({
+          message: `Submission failed, system error`,
+          type: 'error'
+        });
       } finally {
         setLoading(false);
       }

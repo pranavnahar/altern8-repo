@@ -4,14 +4,15 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useParams } from 'next/navigation';
-import { toast } from 'react-toastify';
 import { getAccessToken } from '../../Utils/auth';
 import { parseCookies } from 'nookies';
 import { apiUrl } from '../../Utils/auth';
+import { useToast } from '../../Utils/show-toasts';
 
 const AddBudgetSheet = () => {
   const params = useParams();
   const templateId = params?.id;
+  const { showToast } = useToast()
   const [formData, setFormData] = useState({
     project: Number(templateId),
     tranche: 2,
@@ -32,28 +33,28 @@ const AddBudgetSheet = () => {
     }));
   };
 
-  let altern8_adminaccess = parseCookies().altern8_adminaccess;
+  let altern8_useraccess = parseCookies().altern8_useraccess;
 
   const ReplaceTokenOrRedirect = async (): Promise<void> => {
     const token = await getAccessToken();
     if (!token) {
       window.location.replace('/login');
     } else {
-      altern8_adminaccess = token;
+      altern8_useraccess = token;
     }
   };
 
   const handleSubmit = async () => {
     console.log(formData);
     try {
-      if (!altern8_adminaccess) {
+      if (!altern8_useraccess) {
         await ReplaceTokenOrRedirect();
       }
 
       let response = await fetch(`${apiUrl}/rablet-api/budgets/tranches/${templateId}/`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${altern8_adminaccess}`,
+          Authorization: `Bearer ${altern8_useraccess}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
@@ -64,7 +65,7 @@ const AddBudgetSheet = () => {
         response = await fetch(`${apiUrl}/rablet-api/budgets/tranches/${templateId}/`, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${altern8_adminaccess}`,
+            Authorization: `Bearer ${altern8_useraccess}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData),
@@ -72,15 +73,21 @@ const AddBudgetSheet = () => {
       }
       if (response.ok) {
         const responseData = await response.json();
-        console.log(responseData);
-        toast('Document saved !');
+        showToast({
+          message: 'Document saved',
+          type: "success"
+        })
       } else {
-        console.error('Failed to add profile data:', response.status);
-        toast('Failure');
+        showToast({
+          message: 'Failed to add profile data',
+          type: "error"
+        })
       }
     } catch (error) {
-      console.log('Error during adding profile data:', error);
-      toast('UI Is Initialized');
+      showToast({
+        message: 'Error during addition of profile data',
+        type: "error"
+      })
     }
   };
 

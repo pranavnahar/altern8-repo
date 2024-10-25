@@ -1,14 +1,15 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../../Utils/auth';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import { IconCloudUpload } from '@tabler/icons-react';
+import { IconCloudUpload, IconUpload } from '@tabler/icons-react';
 import { useToast } from '../../../Utils/show-toasts';
 import Pdf from '../../../assets/pdf';
+import { getAccessToken } from '../../../Utils/auth';
+import { Button } from '../../../components/ui/button';
 
 const Page = () => {
   const [file, setFile] = useState<File>();
@@ -74,7 +75,7 @@ const Page = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setDocuments(data.data || []); // Accessing the 'data' array properly
+        setDocuments(data.data || []); 
       } else {
         showToast({
           message: `Failed to fetch documents!`,
@@ -151,24 +152,22 @@ const Page = () => {
               await response.json();
               // console.log("File uploaded successfully:", responseData);
               showToast({
-                message: `File uploaded successfully`,
-                type: 'info',
+                message: `File upload failed!`,
+                type: 'error'
               });
             } else {
-              // console.error('Error uploading file:');
               showToast({
-                message: `File uploaded failed!`,
-                type: 'info',
+                message: `File upload failed!`,
+                type: 'error'
               });
             }
 
             // after using the file, clear the input to allow selecting a new file.
             fileInput.value = '';
           } catch (error) {
-            // console.log('Error uploading file', error);
             showToast({
-              message: `File uploaded failed!`,
-              type: 'info',
+              message: `File upload failed!`,
+              type: 'error'
             });
           } finally {
             setLoadingSpinner(false);
@@ -225,16 +224,11 @@ const Page = () => {
         {/* file upload button */}
         <div className="mt-10 text-center">
           <Button
-            style={{
-              backgroundColor: '#1565c0',
-              borderRadius: '25px',
-            }}
-            component="label"
-            variant="contained"
-            startIcon={<IconCloudUpload />}
+            variant="expandIcon"
+            iconPlacement='right'
+            Icon={IconUpload}
           >
             Upload file
-            <VisuallyHiddenInput type="file" onChange={handleFileChange} />
           </Button>
         </div>
       </div>

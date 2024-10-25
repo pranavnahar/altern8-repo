@@ -12,7 +12,6 @@ import { useDropzone } from 'react-dropzone';
 import ImageSlider from './Account Aggregator/ImageSlider';
 import { AA_videos } from './Account Aggregator/AA_Videos';
 import { useToast } from '../../Utils/show-toasts';
-import CarouselImage from './Account Aggregator/Carousel';
 
 type Props = {
   demo: boolean;
@@ -75,36 +74,31 @@ const BankDetails = ({ demo }: Props) => {
 
             if (response.ok) {
               let server_message = await response.json();
-              console.log(`AA data submitted successfully`, server_message);
-
-              showToast(`Submission Successful`, 'info');
-
-              // change the step after click and submitting the data
+              showToast({
+                message: `Submission Successful`,
+                type: 'success'
+              });
               getRegistrationState();
             } else {
               let server_error = await response.json();
-              console.error(`failed to submit AA data`, server_error);
-
-              // if api fails then go for manaual upload
               setNeedManualUpload(true);
-              // add a cross in the stepper instead of tick
               setApiFailedIcon(true);
-
-              showToast(`Submission failed!`, 'info');
+              showToast({
+                message: `Submission failed!`,
+                type: 'info'
+              });
             }
           }
         } catch (error) {
-          console.error(
-            `Error submitting AA data, Error in fetching api (${currentStep}) :`,
-            error,
-          );
-
           // if api fails then go for manaual upload
           setNeedManualUpload(true);
           // add a cross in the stepper instead of tick
           setApiFailedIcon(true);
 
-          showToast(`Submission failed, system error!`, 'info');
+          showToast({
+            message: `Submission failed, system error!`,
+            type: 'info'
+          });
         } finally {
           setLoading(false);
         }
@@ -223,27 +217,34 @@ const BankDetails = ({ demo }: Props) => {
 
         if (response.ok) {
           await response.json();
-          showToast(`Files uploaded successfully`, 'info');
-          console.log('Files uploaded successfully:');
+          showToast({
+            message: `Files uploaded successfully`,
+            type: 'info'
+          });
 
           // add a tick in the stepper instead of red cross
           setApiFailedIcon(false);
           // change the step after click and submitting the data
           getRegistrationState();
         } else {
-          const responseData = await response.json();
-          console.log(responseData);
-          console.error('Error uploading files:');
-          showToast('Files upload failed!', 'info');
+          showToast({
+            message: 'Files upload failed!',
+            type: 'error'
+          });
         }
       } catch (error) {
-        console.log(`Error uploading files  (${currentStep}) :`, error);
-        showToast(`Files upload failed!`, 'info');
+        showToast({
+          message: `Files upload failed!`,
+          type: 'error'
+        });
       } finally {
         setLoading(false);
       }
     } else {
-      showToast(`Please drag and drop files to upload.`, 'info');
+      showToast({
+        message: `Please drag and drop files to upload.`,
+        type: 'info'
+      });
     }
   };
 
