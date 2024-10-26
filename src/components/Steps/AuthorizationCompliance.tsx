@@ -1,10 +1,10 @@
 import { useContext, useState, useCallback, useEffect } from 'react';
-import { StepperContext } from '../../Contexts/StepperContext';
+import { StepperContext } from '../../contxts/stepper-context';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
-import { useToast } from '../../utilities/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 
 interface UserData {
   companyName: string;

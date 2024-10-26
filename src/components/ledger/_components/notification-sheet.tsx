@@ -10,7 +10,7 @@ import {
 import { CheckCheck, Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { IconNotification } from '@tabler/icons-react';
-import { fetchWithAuth } from '../../../utilities/fetch-with-auth';
+import { fetchWithAuth } from '../../../utils/fetch-with-auth';
 
 export function NotificationSheet() {
   const [notifications, setNotifications] = useState<

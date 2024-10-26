@@ -11,7 +11,7 @@ import useLedgerTransactions from './hooks/use-ledger-ransactions';
 import BasicTable from '@/components/global/basic-table';
 import useLedgerDetails from './hooks/use-ledger-details';
 import { ColumnDef } from '@tanstack/react-table';
-import { formatDate, formatINR } from '@/utilities/formatter';
+import { formatDate, formatINR } from '@/utils/formatter';
 
 export const accountsColumns = [
   {

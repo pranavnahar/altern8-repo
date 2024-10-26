@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { StepperContext } from '../../Contexts/StepperContext';
+import { StepperContext } from '../../contxts/stepper-context';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { IconChevronUpRight } from '@tabler/icons-react';
-import { useToast } from '../../utilities/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 import { Button } from '../ui/button';
 
 type Props = {

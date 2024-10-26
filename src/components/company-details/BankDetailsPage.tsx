@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../utilities/auth';
+import { getAccessToken } from '../../utils/auth';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { Check } from 'lucide-react';
-import { useToast } from '../../utilities/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 import { Button } from '../ui/button';
 import { IconChevronRight } from '@tabler/icons-react';
 

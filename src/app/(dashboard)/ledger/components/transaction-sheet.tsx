@@ -11,7 +11,7 @@ import FileField from './fields/file-field'
 import { fieldData } from './field-data'
 import { Field, FieldType, SelectOption } from '../types'
 import { createTransaction } from '../actions'
-import { useToast } from '@/utilities/show-toasts'
+import { useToast } from '@/utils/show-toasts'
 import { IconChevronRight, IconLoader2 } from '@tabler/icons-react'
 
 type Props = {

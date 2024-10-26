@@ -1,11 +1,11 @@
 // get the gst details of the user
 
 import { useContext, useState, useEffect } from 'react';
-import { StepperContext } from '../../Contexts/StepperContext';
+import { StepperContext } from '../../contxts/stepper-context';
 //import HelpAndLogin from "./stepsComponents/HelpAndLogin";
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
-import { useToast } from '../../utilities/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 
 type Props = {
   demo: boolean;
