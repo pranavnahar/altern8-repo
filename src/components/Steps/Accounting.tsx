@@ -1,5 +1,5 @@
 import { useContext, useState, useCallback } from 'react';
-import { StepperContext } from '../../contxts/stepper-context';
+import { StepperContext } from '../../contexts/stepper-context';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';

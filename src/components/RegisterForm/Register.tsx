@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, Suspense } from 'react';
-import { StepperContext } from '../../contxts/stepper-context';
+import { StepperContext } from '../../contexts/stepper-context';
 import Stepper from '../../components/RegisterForm/Stepper';
 import RegisterField from '../../components/RegisterForm/RegisterField';
 import SelectPrimaryBankAccount from '../../components/Steps/SelectPrimaryBankAccount';

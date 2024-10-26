@@ -6,7 +6,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import { IconSend2 } from '@tabler/icons-react';
 import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/global/Chatbox';
-import { DashboardContext } from '../../../contxts/dashboard-context';
+import { DashboardContext } from '../../../contexts/dashboard-context';
 import { fetchWithAuth } from '../../../utils/fetch-with-auth';
 import Accordion from '../../../components/ui/accordion2';
 import { accessToken, apiUrl } from '@/utils/auth';

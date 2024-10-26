@@ -1,7 +1,7 @@
 // get the ITR details of the user
 
 import React, { useContext, useState, useCallback, useEffect } from 'react';
-import { StepperContext } from '../../contxts/stepper-context';
+import { StepperContext } from '../../contexts/stepper-context';
 import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import { useRouter } from 'next/navigation';
