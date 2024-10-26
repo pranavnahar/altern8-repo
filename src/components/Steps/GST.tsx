@@ -1,7 +1,7 @@
 // get the gst details of the user
 
 import { useContext, useState, useEffect } from 'react';
-import { StepperContext } from '../../contxts/stepper-context';
+import { StepperContext } from '../../contexts/stepper-context';
 //import HelpAndLogin from "./stepsComponents/HelpAndLogin";
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';

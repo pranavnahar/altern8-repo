@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { StepperContext } from '../../contxts/stepper-context';
+import { StepperContext } from '../../contexts/stepper-context';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';

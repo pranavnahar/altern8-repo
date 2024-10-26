@@ -8,7 +8,7 @@ import { Separator } from '../../../components/ui/separator';
 import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/global/Chatbox';
 import { fetchWithAuth } from '../../../utils/fetch-with-auth';
-import { DashboardContext } from '../../../contxts/dashboard-context';
+import { DashboardContext } from '../../../contexts/dashboard-context';
 import { useRouter } from 'next/compat/router';
 import { parseCookies } from 'nookies';
 import { getAccessToken } from '../../../utils/auth';

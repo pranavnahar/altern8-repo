@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { StepperContext } from '../../contxts/stepper-context';
+import { StepperContext } from '../../contexts/stepper-context';
 import { useSearchParams, useRouter } from 'next/navigation';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { useToast } from '../../utils/show-toasts';
