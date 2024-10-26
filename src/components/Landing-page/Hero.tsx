@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 import Link from "next/link";
+import { parseCookies } from 'nookies';
 
 //For Cursor Animation
 const CursorBlinker: React.FC = () => {
@@ -29,17 +30,22 @@ const CursorBlinker: React.FC = () => {
 //For Typing Animation
 const TypingAnimation: React.FC = () => {
     const taglines = [
-        "Conscious Capitalism",
-        "Invoice Discounting",
-        "Receivables Factoring",
-        "Purchase Order Finance",
-        "Inventory Leaseback Finance",
-        "Deep Tier Trade Finance",
-        "Working Capital Finance",
-        "ESG Finance",
-        "MSME Unsecured Finance",
-        "Revenue Finance",
-        "Ecommerce Sales Finance",
+        'Rental assets',
+    'Retirement communities',
+    'Co living',
+    'Hospitality projects',
+    'Warehousing',
+    'Residential',
+    'Commercial',
+    'Townships',
+    'Vacation properties',
+    'International properties',
+    'Redevelopment',
+    'Student accommodation',
+    'Serviced apartments',
+    'Mixed use property',
+    'Affordable housing',
+    'Plotted land',
     ];
 
     const textIndex = useMotionValue(0);
@@ -55,7 +61,7 @@ const TypingAnimation: React.FC = () => {
         animate(count, 60, {
             type: "tween",
             delay: 0.5,
-            duration: 4,
+            duration: 3.0,
             ease: "easeIn",
             repeat: Infinity,
             repeatType: "reverse",
@@ -80,6 +86,11 @@ const TypingAnimation: React.FC = () => {
 
 // main return function
 const HeroSection: React.FC = () => {
+    const cookies = parseCookies();
+    const accessToken = cookies.altern8_useraccess;
+
+    // dynamiaclly create a redirection url based on whether user is logged in already or not
+    const redirectUrl = accessToken && accessToken.length > 5 ? '/dashboard' : '/register';
     return (
         <div>
             <div className="max-w-[1320px] h-[300px] mx-auto px-5 sm:px-0 xl:px-0">
@@ -97,7 +108,7 @@ const HeroSection: React.FC = () => {
 
                         {/* Get Credit button link */}
                         <Link
-                            href="/register"
+                            href={redirectUrl}
                             className="relative inline-flex items-center h-[40px] w-[130px] 
                 sm:h-[50px] sm:w-[200px] mt-[300px] sm:mt-[260px] justify-center p-4 px-6 py-3 overflow-hidden
                 font-medium font-roboto text-white-font transition duration-300 ease-out

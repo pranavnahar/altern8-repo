@@ -22,10 +22,13 @@ import {
   IconWallet,
 } from '@tabler/icons-react';
 import AnimatedLogo from '../../../components/Header/AnimatedLogo';
+import { jwtDecode } from 'jwt-decode';
+import { parseCookies } from 'nookies';
 
 const Sidebar = () => {
   const [open, setOpen] = useState<boolean>(false);
   const pathname = usePathname();
+  const [uId, setUId] = useState<string>('Loading..');
 
   const links = [
     {
@@ -72,6 +75,27 @@ const Sidebar = () => {
     },
   ];
 
+  useEffect(() => {
+    const fetchTokenAndSetUserId = async () => {
+      try {
+        const accessToken = parseCookies().altern8_useraccess;
+        const token = accessToken;
+
+        if (token) {
+          const decodedToken: { uid: string } = jwtDecode(token);
+          // console.log(decodedToken.uid);
+          const userId = decodedToken.uid;
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          setUId(userId);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchTokenAndSetUserId();
+  }, []);
+
   return (
     <SidebarLayout open={open} setOpen={setOpen}>
       <SidebarBody className="flex flex-col justify-between h-full shadow-2xl bg-white/10 backdrop-blur-md z-20">
@@ -95,7 +119,7 @@ const Sidebar = () => {
         <div>
           <SidebarLink
             link={{
-              label: 'Chikorita',
+              label: `Chikorita\n${uId}`,
               href: '/profile',
               icon: (
                 <IconUserCircle className="flex-shrink-0 size-6 text-zinc-200" strokeWidth={1.5} />

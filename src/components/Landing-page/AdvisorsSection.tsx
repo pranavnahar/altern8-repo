@@ -57,8 +57,8 @@ const AdvisorsSection: React.FC = () => {
                         <motion.div
                             key={index}
                             initial={{ scale: 1 }} 
-                            animate={{ scale: hoveredIndex === index ? 0.935 : 1 }} 
-                            transition={{ duration: 0.3 }} 
+                            animate={{ scale: hoveredIndex === index ? 0.885 : 1 }} 
+                            transition={{ duration: 0.6 }} 
                             onHoverStart={() => setHoveredIndex(index)} 
                             onHoverEnd={() => setHoveredIndex(null)} 
                             onClick={() => handleDivClick(advisor?.url)}

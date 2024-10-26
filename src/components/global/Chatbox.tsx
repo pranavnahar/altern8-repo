@@ -9,10 +9,10 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../../components/ui/dialog";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { ScrollArea } from "../../components/ui/scroll-area";
+} from "../ui/dialog";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { ScrollArea } from "../ui/scroll-area";
 import { IconSend, IconSend2 } from '@tabler/icons-react';
 
 type Message = {
@@ -180,35 +180,46 @@ const ChatBox: React.FC<{
         </DialogHeader>
 
         <ScrollArea className="h-[500px] pr-4 mt-5">
-          <div ref={chatContainerRef} className="space-y-4">
-            {messages.map((message, index) => (
-              <div key={index} className={`flex items-center ${message.sender === 'admin' ? '' : 'justify-end'}`}>
-                {message.sender === 'admin' && (
-                  <div className="bg-gray-700 mr-2 w-8 h-8 rounded-full flex items-center justify-center text-gray-300">
-                    A
-                  </div>
-                )}
+  <div ref={chatContainerRef} className="space-y-4">
+    {messages.map((message, index) => (
+      <div key={index} className={`flex items-center ${message.sender === 'admin' ? '' : 'justify-end'}`}>
 
-                <div className={`p-3 rounded-lg max-w-[300px] ${
-                  message.sender === 'admin' ? 'bg-white/10 text-gray-300' : 'bg-blue-600 text-white'
-                }`}>
-                  <div>{message.text}</div>
-                  {message.file && (
-                    <div className="text-gray-400 text-sm mt-1">
-                      {message.file.split('/').pop()}
-                    </div>
-                  )}
-                </div>
-
-                {message.sender === 'user' && (
-                  <div className="bg-blue-600 ml-2 w-8 h-8 rounded-full flex items-center justify-center text-white">
-                    U
-                  </div>
-                )}
-              </div>
-            ))}
+        {/* Avatar for Admin */}
+        {message.sender === 'admin' && (
+          <div className="bg-gray-700 mr-2 w-8 h-8 rounded-full flex items-center justify-center text-gray-300">
+            A
           </div>
-        </ScrollArea>
+        )}
+
+        {/* Message Bubble */}
+        <div className={`p-3 rounded-lg max-w-[300px] ${
+          message.sender === 'admin' ? 'bg-white/10 text-gray-300' : 'bg-blue-600 text-white'
+        }`}>
+          <div>{message.text}</div>
+          {message.file && (
+            <div className="text-gray-400 text-sm mt-1">
+              <a
+                href={message.file}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline text-blue-400"
+              >
+                {message.file.split('/').pop()}
+              </a>
+            </div>
+          )}
+        </div>
+
+        {/* Avatar for User */}
+        {message.sender === 'user' && (
+          <div className="bg-blue-600 ml-2 w-8 h-8 rounded-full flex items-center justify-center text-white">
+            U
+          </div>
+        )}
+      </div>
+    ))}
+  </div>
+</ScrollArea>
 
         {file && (
           <div className="text-gray-400 text-sm">

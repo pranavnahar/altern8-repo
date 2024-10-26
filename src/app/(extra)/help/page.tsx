@@ -5,7 +5,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { IconSend2 } from '@tabler/icons-react';
 import { Button } from '../../../components/ui/button';
-import ChatBox from '../../../components/mui/Chatbox';
+import ChatBox from '../../../components/global/Chatbox';
 import { DashboardContext } from '../../../Contexts/DashboardContext';
 import { fetchWithAuth } from '../../../utilities/fetch-with-auth';
 import Accordion from '../../../components/ui/accordion2';

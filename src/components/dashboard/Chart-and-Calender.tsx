@@ -2,7 +2,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import SmallCalendar from '../../components/SmallCalender/SmallCalender';
 
-const MyPieChart = dynamic(() => import('../../components/mui/Piechart-Project'), {
+const MyPieChart = dynamic(() => import('../global/Piechart-Project'), {
   ssr: false,
 });
 
