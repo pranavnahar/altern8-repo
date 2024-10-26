@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { Paperclip, Send, X } from 'lucide-react';
-import { useToast } from '../../Utils/show-toasts';
-import { getAccessToken } from '../../Utils/auth';
+import { useToast } from '../../utilities/show-toasts';
+import { getAccessToken } from '../../utilities/auth';
 import {
   Dialog,
   DialogContent,

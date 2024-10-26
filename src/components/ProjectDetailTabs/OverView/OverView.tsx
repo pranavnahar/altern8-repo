@@ -14,7 +14,7 @@ import { fetchProjectSummary } from "../../../app/(dashboard)/project/actions/fe
 import { fetchProjectTask } from "../../../app/(dashboard)/project/actions/fetch-project-task.actions";
 import { Button } from "../../../components/ui/button";
 import { Card } from "../../../components/ui/card";
-import { formatDate, formatINR } from "../../../Utils/formatter";
+import { formatDate, formatINR } from "../../../utilities/formatter";
 import { IconChevronRight } from "@tabler/icons-react";
 import StakeHolderModal from "./StakeHolderModal";
 import taskColumns from "../../../components/TimeLine/columns/task-columns";

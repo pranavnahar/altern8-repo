@@ -1,11 +1,13 @@
+import { Calendar } from "@/components/ui/calendar";
 import React from "react";
-import { Calendar } from "../../../../components/ui/calendar";
 
-const CalendarField: React.FC<{
+interface CalendarFieldProps {
   label: string;
-  selected: Date | string;
+  selected: Date | null;
   onSelect: (day: Date | undefined) => void;
-}> = ({ label, selected, onSelect }) => {
+}
+
+const CalendarField: React.FC<CalendarFieldProps> = ({ label, selected, onSelect }) => {
   return (
     <div className="flex-1 w-full">
       <div className="h-6 mt-3 text-xs font-medium leading-8 text-gray-400 uppercase">
@@ -13,9 +15,9 @@ const CalendarField: React.FC<{
       </div>
       <Calendar
         mode="single"
-        selected={selected as Date}
+        selected={selected || undefined}
         onSelect={onSelect}
-        className="my-2 border text-white rounded-lg"
+        className="rounded-md border"
       />
     </div>
   );

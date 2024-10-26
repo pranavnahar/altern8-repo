@@ -11,7 +11,7 @@ import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import ImageSlider from './Account Aggregator/ImageSlider';
 import { AA_videos } from './Account Aggregator/AA_Videos';
-import { useToast } from '../../Utils/show-toasts';
+import { useToast } from '../../utilities/show-toasts';
 
 type Props = {
   demo: boolean;

@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import LoadingSpinner from '../LoadingSpinner';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Button } from '../ui/button';
-import { fetchWithAuth } from '../../Utils/fetch-with-auth';
-import { useToast } from '../../Utils/show-toasts';
+import { fetchWithAuth } from '../../utilities/fetch-with-auth';
+import { useToast } from '../../utilities/show-toasts';
 
 interface FormState {
   company_name: string;

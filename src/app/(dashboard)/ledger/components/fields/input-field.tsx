@@ -1,3 +1,4 @@
+import { Input } from "@/components/ui/input";
 import React from "react";
 
 const InputField: React.FC<{
@@ -28,7 +29,7 @@ const InputField: React.FC<{
             {...rest}
           />
         ) : (
-          <input
+          <Input
             onChange={onChange}
             value={value!}
             placeholder={label}

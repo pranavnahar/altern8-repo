@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
-import { useToast } from '../../Utils/show-toasts';
+import { useToast } from '../../utilities/show-toasts';
 
 type Props = {
   demo: boolean;
