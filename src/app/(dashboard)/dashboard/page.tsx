@@ -68,12 +68,22 @@ const Page = () => {
     <>
       <div className="flex mt-8">
         <div className=" flex-[3] mx-16">
-          <ActionItems
-            latePayments="test"
-            showActionItems="test"
-            upcomingPayments="test"
-            showActionItemsTables={setShowTable}
-          />
+        <ActionItems
+          latePayments={[
+            { id: '1', amount: '$1000', dueDate: '2024-10-15', daysOverdue: 5 },
+            { id: '2', amount: '$2000', dueDate: '2024-10-10', daysOverdue: 10 }
+          ]}
+          upcomingPayments={[
+            { id: '3', amount: '$1500', dueDate: '2024-11-01', daysUntilDue: 7 },
+            { id: '4', amount: '$23455', dueDate: '2024-11-05', daysUntilDue: 11 },
+            { id: '11', amount: '$13500', dueDate: '2024-11-01', daysUntilDue: 6 },
+            { id: '23', amount: '$33000', dueDate: '2024-11-05', daysUntilDue: 8 },
+            { id: '33', amount: '$16500', dueDate: '2024-11-01', daysUntilDue: 2 },
+            { id: '41', amount: '$355000', dueDate: '2024-11-05', daysUntilDue: 10 }
+          ]}
+          showActionItems={true}
+          showActionItemsTables={setShowTable}
+        />
           <UpcomingProjects />
         </div>
         <div className="flex-1">
