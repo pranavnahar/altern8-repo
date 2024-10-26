@@ -2,17 +2,17 @@ import React, { useState, useRef, useEffect } from 'react';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { Paperclip, Send, X } from 'lucide-react';
-import { useToast } from '../../Utils/show-toasts';
-import { getAccessToken } from '../../Utils/auth';
+import { useToast } from '../../utilities/show-toasts';
+import { getAccessToken } from '../../utilities/auth';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "../../components/ui/dialog";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { ScrollArea } from "../../components/ui/scroll-area";
+} from "../ui/dialog";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { ScrollArea } from "../ui/scroll-area";
 import { IconSend, IconSend2 } from '@tabler/icons-react';
 
 type Message = {
@@ -183,7 +183,7 @@ const ChatBox: React.FC<{
   <div ref={chatContainerRef} className="space-y-4">
     {messages.map((message, index) => (
       <div key={index} className={`flex items-center ${message.sender === 'admin' ? '' : 'justify-end'}`}>
-        
+
         {/* Avatar for Admin */}
         {message.sender === 'admin' && (
           <div className="bg-gray-700 mr-2 w-8 h-8 rounded-full flex items-center justify-center text-gray-300">

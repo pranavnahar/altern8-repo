@@ -1,3 +1,5 @@
+import { FieldData } from "../types";
+
 const TRANSACTION_PURPOSES = [
   "Principal",
   "Interest",
@@ -10,16 +12,20 @@ const TRANSACTION_PURPOSES = [
   "Insurance charges",
   "Prepayment",
   "Other charges",
-];
+] as const;
 
 const TRANSACTION_TYPE = [
   "Recievable",
   "Payable",
   "Bank Transaction",
   "Virtual Transaction",
-];
+] as const;
 
-export const fieldData = {
+type ArrayElement<T> = T extends readonly (infer U)[] ? U : never;
+type TransactionPurpose = ArrayElement<typeof TRANSACTION_PURPOSES>;
+type TransactionType = ArrayElement<typeof TRANSACTION_TYPE>;
+
+export const fieldData: FieldData = {
   transaction_id: {
     label: "Transaction Id",
     type: "text",
@@ -28,7 +34,7 @@ export const fieldData = {
   purpose: {
     label: "Purpose",
     type: "select",
-    options: TRANSACTION_PURPOSES,
+    options: Array.from(TRANSACTION_PURPOSES),
   },
   amount: {
     label: "Amount (₹)",
@@ -46,14 +52,14 @@ export const fieldData = {
   status: {
     label: "Type",
     type: "select",
-    options: TRANSACTION_TYPE,
+    options: Array.from(TRANSACTION_TYPE),
   },
   timestamp: {
     label: "Date & Time",
     type: "calendar",
   },
-  invoice_product: {
-    label: "Invoice Id",
+  tranche: {
+    label: "Tranche Id",
     type: "select",
     options: [],
   },
@@ -71,4 +77,4 @@ export const fieldData = {
     label: "Receipt",
     type: "file",
   },
-};
+} as const;

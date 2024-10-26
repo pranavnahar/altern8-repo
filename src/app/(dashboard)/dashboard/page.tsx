@@ -4,15 +4,14 @@ import ChartCalender from '../../../components/dashboard/Chart-and-Calender';
 import React, { useState, useEffect } from 'react';
 import UpcomingProjects from '../../../components/dashboard/Upcoming-Projects/UpcomingProjects';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '@/Utils/auth';
 import { useRouter } from 'next/navigation';
-
+import { getAccessToken } from '@/utilities/auth';
 
 const Page = () => {
   const router = useRouter();
 
   const [showTable, setShowTable] = useState<string>('');
-  const [sanctionedLimit, setSanctionedLimit] = useState<number | null>(null); 
+  const [sanctionedLimit, setSanctionedLimit] = useState<number | null>(null);
   // console.log(showTable);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -55,7 +54,7 @@ const Page = () => {
         if (response.ok) {
           const responseData = await response.json();
           setSanctionedLimit(responseData.limit);
-          // console.log(responseData); 
+          // console.log(responseData);
         }
       } catch (error) {
         console.error("An error occurred during the limit fetching:", error);

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import ConnectSDK from '../Step-Component/ConnectSDK';
-import { useToast } from '../../Utils/show-toasts';
+import { useToast } from '../../utilities/show-toasts';
 
 type Props = {
   demo: boolean;

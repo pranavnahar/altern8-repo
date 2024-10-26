@@ -2,7 +2,7 @@
 
 import ky from 'ky';
 import { notFound } from 'next/navigation';
-import { getAuthToken } from '../../../../Utils/helpers';
+import { getAuthToken } from '../../../../utilities/helpers';
 
 export async function fetchProjectDocument(projectID: number, timeoutMs: number = 60000) {
   try {

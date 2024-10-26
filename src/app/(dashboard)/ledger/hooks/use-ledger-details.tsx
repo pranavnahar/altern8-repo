@@ -1,19 +1,28 @@
-import { getLedgerDetails } from '../../Utils/ledger/ledgerService';
 import { useState, useEffect } from 'react';
+import { getLedgerDetails } from '../actions';
+import { Account } from '../types';
+
+interface LedgerDetails {
+  invoiceIDs: string[];
+  accounts: Account[];
+  otherAccounts: Account[];
+}
 
 const useLedgerDetails = () => {
-  const [invoiceIDs, setInvoiceIDs] = useState([]);
-  const [accounts, setAccounts] = useState([]);
-  const [otherAccounts, setOtherAccounts] = useState([]);
+  const [invoiceIDs, setInvoiceIDs] = useState<string[]>([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [otherAccounts, setOtherAccounts] = useState<Account[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleFetchLedgerDetails = async () => {
     try {
       setIsLoading(true);
       const data = await getLedgerDetails();
-      setInvoiceIDs(data.invoice_ids || []);
-      setAccounts(data.accounts || []);
-      setOtherAccounts(data.other_accounts || []);
+      if (data) {
+        setInvoiceIDs(data.trancheIDs || []);
+        setAccounts(data.accounts || []);
+        setOtherAccounts(data.otherAccounts || []);
+      }
       return true;
     } catch (error) {
       console.error('Error fetching ledger details:', error);

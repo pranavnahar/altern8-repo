@@ -3,19 +3,18 @@
 import React, { FC, useState, useRef, useEffect, useContext, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { IconLogout, IconSend2, IconUserCircle } from '@tabler/icons-react';
+import { IconLogout, IconSend2, IconUserCircle, IconX } from '@tabler/icons-react';
 import { Separator } from '../../../components/ui/separator';
 import { Button } from '../../../components/ui/button';
-import ChatBox from '../../../components/mui/Chatbox';
-import { fetchWithAuth } from '../../../Utils/fetch-with-auth';
+import ChatBox from '../../../components/global/Chatbox';
+import { fetchWithAuth } from '../../../utilities/fetch-with-auth';
 import { DashboardContext } from '../../../Contexts/DashboardContext';
 import { useRouter } from 'next/compat/router';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../../Utils/auth';
+import { getAccessToken } from '../../../utilities/auth';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '../../../components/ui/dialog';
-import { useToast } from '../../../Utils/show-toasts';
-import { X } from 'lucide-react';
+import { useToast } from '@/utilities/show-toasts';
 
 export const Navbar: FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -166,8 +165,8 @@ export const Navbar: FC = () => {
 
   const checkNewFiles = (index: number) => {
     setFiles(prevFiles => {
-      const newFiles = prevFiles.filter((_, i) => i !== index); 
-      setShowFiles(newFiles.length > 0); 
+      const newFiles = prevFiles.filter((_, i) => i !== index);
+      setShowFiles(newFiles.length > 0);
       return newFiles;
     });
   };
@@ -373,7 +372,7 @@ export const Navbar: FC = () => {
                               ×
                             </span>
                           </Button>
-                        </DialogTrigger> 
+                        </DialogTrigger>
                         REMOVED as X icon is already present in the dialog
                         */}
                       </div>
@@ -449,7 +448,7 @@ export const Navbar: FC = () => {
                                         className="ml-2 text-red-500 hover:text-red-700 focus:outline-none"
                                         onClick={() => checkNewFiles(index)} // Pass index here
                                       >
-                                        <X className="h-4 w-4" />
+                                        <IconX className="h-4 w-4" />
                                       </button>
                                     </li>
                                   ))}

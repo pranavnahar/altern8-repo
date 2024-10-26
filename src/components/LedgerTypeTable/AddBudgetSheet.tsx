@@ -4,10 +4,10 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useParams } from 'next/navigation';
-import { getAccessToken } from '../../Utils/auth';
+import { getAccessToken } from '../../utilities/auth';
 import { parseCookies } from 'nookies';
-import { apiUrl } from '../../Utils/auth';
-import { useToast } from '../../Utils/show-toasts';
+import { apiUrl } from '../../utilities/auth';
+import { useToast } from '../../utilities/show-toasts';
 
 const AddBudgetSheet = () => {
   const params = useParams();

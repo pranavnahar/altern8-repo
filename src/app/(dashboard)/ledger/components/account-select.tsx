@@ -5,7 +5,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../components/ui/select";
+} from "@/components/ui/select";
 
 const AccountSelect: React.FC<{
   accounts: { id: string; name: string }[];
@@ -31,7 +31,7 @@ const AccountSelect: React.FC<{
               value={account.id.toString()}
               className="rounded-md"
             >
-              <h1 className="truncate rounded-md max-w-[180px]">
+              <h1 className="truncate rounded-md max-w-[180px] hover:bg-white/90">
                 {account.name}
               </h1>
             </SelectItem>

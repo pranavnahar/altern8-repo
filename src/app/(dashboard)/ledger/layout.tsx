@@ -1,3 +1,4 @@
+import BasicTableSkeleton from "@/components/global/basic-table-skeleton";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -12,8 +13,8 @@ export default function ProductLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Suspense fallback={<div>loading</div>}>
-      <main className="ledger-main" id="ledger-main-page">
+    <Suspense fallback={<BasicTableSkeleton />}>
+      <main className="ledger-main px-10 pt-20" id="ledger-main-page">
         {children}
       </main>
     </Suspense>
