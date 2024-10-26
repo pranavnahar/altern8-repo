@@ -4,14 +4,14 @@
 // 2. if it fails then manually upload bank statement
 
 import { useContext, useState, useCallback, useEffect } from 'react';
-import { StepperContext } from '../../Contexts/StepperContext';
+import { StepperContext } from '../../contxts/stepper-context';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import ImageSlider from './Account Aggregator/ImageSlider';
 import { AA_videos } from './Account Aggregator/AA_Videos';
-import { useToast } from '../../utilities/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 
 type Props = {
   demo: boolean;

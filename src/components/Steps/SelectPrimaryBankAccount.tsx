@@ -1,10 +1,10 @@
 // choose the primary bank account
 
 import { useContext, useState, useEffect } from 'react';
-import { StepperContext } from '../../Contexts/StepperContext';
+import { StepperContext } from '../../contxts/stepper-context';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
-import { useToast } from '../../utilities/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 
 type Props = {
   demo: boolean;

@@ -7,14 +7,14 @@ import { IconLogout, IconSend2, IconUserCircle, IconX } from '@tabler/icons-reac
 import { Separator } from '../../../components/ui/separator';
 import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/global/Chatbox';
-import { fetchWithAuth } from '../../../utilities/fetch-with-auth';
-import { DashboardContext } from '../../../Contexts/DashboardContext';
+import { fetchWithAuth } from '../../../utils/fetch-with-auth';
+import { DashboardContext } from '../../../contxts/dashboard-context';
 import { useRouter } from 'next/compat/router';
 import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../../utilities/auth';
+import { getAccessToken } from '../../../utils/auth';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '../../../components/ui/dialog';
-import { useToast } from '@/utilities/show-toasts';
+import { useToast } from '@/utils/show-toasts';
 
 export const Navbar: FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

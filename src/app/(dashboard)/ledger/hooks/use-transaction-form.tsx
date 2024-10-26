@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createTransaction } from '../actions';
-import { useToast } from '@/utilities/show-toasts';
+import { useToast } from '@/utils/show-toasts';
 
 const useTransactionForm = () => {
   const [showAddTransactionBox, setShowAddTransactionBox] = useState(false);

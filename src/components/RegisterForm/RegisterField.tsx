@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { StepperContext } from '../../Contexts/StepperContext';
+import { StepperContext } from '../../contxts/stepper-context';
 import { useSearchParams, useRouter } from 'next/navigation';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
-import { useToast } from '../../utilities/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 import { setCookie } from 'nookies';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
 import { Button } from '../ui/button';

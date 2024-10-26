@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { StepperContext } from '../../Contexts/StepperContext';
+import { StepperContext } from '../../contxts/stepper-context';
 
 const HelpAndLogin = () => {
   // Destructuring the necessary values and functions from StepperContext

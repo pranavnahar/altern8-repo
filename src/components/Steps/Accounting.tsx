@@ -1,11 +1,11 @@
 import { useContext, useState, useCallback } from 'react';
-import { StepperContext } from '../../Contexts/StepperContext';
+import { StepperContext } from '../../contxts/stepper-context';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import ConnectSDK from '../Step-Component/ConnectSDK';
-import { useToast } from '../../utilities/show-toasts';
+import { useToast } from '../../utils/show-toasts';
 
 type Props = {
   demo: boolean;

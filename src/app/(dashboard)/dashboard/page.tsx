@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import UpcomingProjects from '../../../components/dashboard/Upcoming-Projects/UpcomingProjects';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
-import { getAccessToken } from '@/utilities/auth';
+import { getAccessToken } from '@/utils/auth';
 
 const Page = () => {
   const router = useRouter();
