@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { Account, Transaction } from './types'
 import { parseCookies } from 'nookies'
-import { setAccessTokenCookie } from '@/Utils/auth'
+import { setAccessTokenCookie } from '@/utils/auth'
 
 async function getAuthToken() {
   const cookieStore = cookies()
@@ -111,7 +111,7 @@ export async function createTransaction(formData: FormData): Promise<{ success: 
     return { success: true, error: "" };
 
   } catch (error) {
-    console.log(error);
+    console.log(error,'}test');
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to add transaction'
