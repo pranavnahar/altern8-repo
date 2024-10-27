@@ -4,6 +4,8 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { Account, Transaction } from './types'
+import { parseCookies } from 'nookies'
+import { setAccessTokenCookie } from '@/Utils/auth'
 
 async function getAuthToken() {
   const cookieStore = cookies()
@@ -13,6 +15,34 @@ async function getAuthToken() {
   }
   return accessToken.value
 }
+
+
+// get new access token from a refresh token
+export const getAccessToken = async () => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
+
+  const cookies = parseCookies();
+  const refreshToken = cookies.altern8_userrefresh || localStorage.getItem("Rtoken");
+
+  let accessToken = "";
+  const body = { refresh: refreshToken };
+
+  const response = await fetch(`${apiUrl}/token/refresh/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  const responseData = await response.json();
+  accessToken = responseData.access;
+  if (accessToken) {
+    setAccessTokenCookie(accessToken);
+    return accessToken;
+  }
+  return false;
+};
 
 async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<any> {
   const token = await getAuthToken()
@@ -26,7 +56,7 @@ async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<an
   })
 
   if (response.status === 401) {
-    const newToken = await getAuthToken()
+    const newToken = await getAccessToken()
     if (newToken) {
       return fetchWithAuth(url, options)
     } else {
@@ -61,27 +91,22 @@ export async function getLedgerDetails(): Promise<{
 
 export async function createTransaction(formData: FormData): Promise<{ success: boolean, error?: string }> {
   try {
-    const payload = {
-      transaction_id: formData.get('transaction_id'),
-      purpose: formData.get('purpose'),
-      amount: formData.get('amount'),
-      description: formData.get('description') || '',
-      status: formData.get('status'),
-      receipt: formData.get('receipt'),
-      timestamp: formData.get('timestamp') || new Date().toISOString(),
-      tranche: Number(formData.get('tranche')),
-      from_account: Number(formData.get('from_account')),
-      to_account: Number(formData.get('to_account'))
-    };
-
+    // const payload = {
+    //   transaction_id: formData.get('transaction_id'),
+    //   purpose: formData.get('purpose'),
+    //   amount: formData.get('amount'),
+    //   description: formData.get('description') || '',
+    //   status: formData.get('status'),
+    //   receipt: formData.get('receipt'),
+    //   timestamp: formData.get('timestamp') || new Date().toISOString(),
+    //   tranche: Number(formData.get('tranche')),
+    //   from_account: Number(formData.get('from_account')),
+    //   to_account: Number(formData.get('to_account'))
+    // };
     const data = await fetchWithAuth('/user-dashboard-api/transactions/', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
+      body: formData,
     });
-
     revalidatePath('/ledger');
     return { success: true, error: "" };
 
