@@ -1,4 +1,5 @@
 "use client"
+
 import React from 'react';
 import { PieChart, Pie, Tooltip } from 'recharts';
 
@@ -7,7 +8,6 @@ const myData = [
   { name: 'Amount Used', value: 44.45, fill: '#0088FE' },
 ];
 
-// custom tool tip to add percentage sign in the end
 const CustomTooltip: React.FC<{ active?: string; payload?: { name: string; value: string }[] }> = ({
   active,
   payload,
@@ -24,7 +24,6 @@ const CustomTooltip: React.FC<{ active?: string; payload?: { name: string; value
         }}
       >
         <p className="label">{`${payload[0]?.name} : ${payload[0]?.value}`} %</p>
-        {/* <p className="desc">Anything you want can be displayed here.</p> */}
       </div>
     );
   }
@@ -32,13 +31,12 @@ const CustomTooltip: React.FC<{ active?: string; payload?: { name: string; value
   return null;
 };
 
-const MyPieChart = () => {
+const ProjectPiechart = () => {
   return (
     <PieChart width={240} height={240}>
       <Pie
         dataKey="value"
         isAnimationActive={true}
-        // isAnimationActive={!isServer} // Disable animation during server-side rendering
         data={myData}
         outerRadius={120}
         innerRadius={70}
@@ -46,17 +44,11 @@ const MyPieChart = () => {
         id="recharts1"
         stroke="none"
         strokeWidth={0}
-        // sx={{
-        //   border: 'none',
-        //   outline: 'none',
-        // }}
-        // label
       />
 
-      {/* Display the tooltips */}
       <Tooltip content={<CustomTooltip />} />
     </PieChart>
   );
 };
 
-export default MyPieChart;
+export default ProjectPiechart;

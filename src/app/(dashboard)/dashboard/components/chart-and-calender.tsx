@@ -1,10 +1,7 @@
 import React, { FC } from 'react';
 import dynamic from 'next/dynamic';
 import SmallCalendar from '../../../../components/SmallCalender/SmallCalender';
-
-const MyPieChart = dynamic(() => import('../../../../components/global/piechart-project'), {
-  ssr: false,
-});
+import ProjectPiechart from './piechart-project';
 
 const ChartCalender: FC<{ sanctionedLimit: number }> = ({ sanctionedLimit }) => {
   return (
@@ -15,7 +12,7 @@ const ChartCalender: FC<{ sanctionedLimit: number }> = ({ sanctionedLimit }) => 
           {sanctionedLimit !== undefined ? `₹ ${sanctionedLimit.toLocaleString('en-IN')}` : '--'}
         </div>
         <div className="flex justify-center max-w-[200px] mx-auto mt-5 text-center">
-          <MyPieChart />
+          <ProjectPiechart />
         </div>
         <div className="flex text-center mx-auto justify-center">
           <div className="flex flex-row mt-3 mb-5 items-center">
