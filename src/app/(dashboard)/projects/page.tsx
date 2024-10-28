@@ -3,7 +3,6 @@ import { fetchProjectData } from "./actions";
 
 const Page = async () => {
   const projectsData = await fetchProjectData();
-  console.log(projectsData)
 
   return (
     <Filters

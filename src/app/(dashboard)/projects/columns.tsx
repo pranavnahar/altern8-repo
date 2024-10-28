@@ -1,8 +1,8 @@
 import React from 'react';
 import { ColumnDef } from "@tanstack/react-table";
 import Link from 'next/link';
-import { CheckCircle, X } from 'lucide-react';
 import ApplyProduct from './components/apply-product';
+import { IconCheck, IconX } from '@tabler/icons-react';
 
 const toTitleCase = (str: string) => {
   return str.split('_')
@@ -209,9 +209,9 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ getValue }) => {
       const isApproved = getValue();
       return isApproved ? (
-        <CheckCircle size={20} />
+        <IconCheck size={20} />
       ) : (
-        <X size={20} />
+        <IconX size={20} />
       );
     },
   }

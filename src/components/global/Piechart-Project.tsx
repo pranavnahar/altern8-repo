@@ -1,4 +1,4 @@
-// This is a dashboard page component for showing piechart at main dashboardHome page
+"use client"
 import React from 'react';
 import { PieChart, Pie, Tooltip } from 'recharts';
 

@@ -1,7 +1,7 @@
 "use client"
 
-import { getAccessToken } from "./auth";
 import { parseCookies } from "nookies";
+import { getAccessToken } from "./auth";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

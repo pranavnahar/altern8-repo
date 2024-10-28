@@ -4,6 +4,8 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { Account, Transaction } from './types'
+import { parseCookies } from 'nookies'
+import { setAccessTokenCookie } from '@/utils/auth'
 
 async function getAuthToken() {
   const cookieStore = cookies()
@@ -13,6 +15,31 @@ async function getAuthToken() {
   }
   return accessToken.value
 }
+
+
+export const getAccessToken = async () => {
+  const cookies = parseCookies();
+  const refreshToken = cookies.altern8_userrefresh;
+
+  let accessToken = "";
+  const body = { refresh: refreshToken };
+
+  const response = await fetch(`${process.env.SERVER_URL}/token/refresh/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  const responseData = await response.json();
+  accessToken = responseData.access;
+  if (accessToken) {
+    setAccessTokenCookie(accessToken);
+    return accessToken;
+  }
+  return false;
+};
 
 async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<any> {
   const token = await getAuthToken()
@@ -25,7 +52,7 @@ async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<an
   })
 
   if (response.status === 401) {
-    const newToken = await getAuthToken()
+    const newToken = await getAccessToken()
     if (newToken) {
       return fetchWithAuth(url, options)
     } else {
@@ -40,8 +67,7 @@ async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<an
   return response.json()
 }
 
-export async function getLedgerDetails(): Promise<{
-  accounts: Account[]
+export async function getLedgerDetails(): Promise<{ accounts: Account[]
   otherAccounts: Account[]
   trancheIDs: string[]
   error?: string
@@ -60,34 +86,15 @@ export async function getLedgerDetails(): Promise<{
 
 export async function createTransaction(formData: FormData): Promise<{ success: boolean, error?: string }> {
   try {
-    const payload = {
-      transaction_id: formData.get('transaction_id'),
-      purpose: formData.get('purpose'),
-      amount: formData.get('amount'),
-      description: formData.get('description') || '',
-      status: formData.get('status'),
-      receipt: formData.get('receipt'),
-      timestamp: formData.get('timestamp') || new Date().toISOString(),
-      tranche: Number(formData.get('tranche')),
-      from_account: Number(formData.get('from_account')),
-      to_account: Number(formData.get('to_account'))
-    };
-
     const data = await fetchWithAuth('/user-dashboard-api/transactions/', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
+      body: formData,
     });
-
-    console.log(data)
-
     revalidatePath('/ledger');
     return { success: true, error: "" };
 
   } catch (error) {
-    console.log(error);
+    console.log(error,'}test');
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to add transaction'
