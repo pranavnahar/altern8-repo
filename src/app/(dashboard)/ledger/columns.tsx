@@ -58,7 +58,7 @@ export const accountsColumns = [
               <DialogHeader>
                 <DialogTitle className="text-2xl text-white">Transactions</DialogTitle>
               </DialogHeader>
-              <div>
+              <div className='overflow-hidden'>
                 {transactions && transactions.length > 0 ? (
                   <BasicTable
                     data={transactions}
