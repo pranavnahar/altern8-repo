@@ -36,3 +36,30 @@ export interface actionItems {
   upcomingPayments: string;
   showActionItemsTables: (s: string) => void;
 }
+
+
+// additional interfaces decalred for handling the dummy data 
+
+export interface ActionItemDetails {
+  title: string;
+  description: string;
+  columns: string[];
+}
+
+export interface ActionItemRow {
+  [key: string]: string | number;
+}
+
+export interface ActionItemData {
+  label: string;
+  action: string;
+  data: ActionItemRow[];
+  details: ActionItemDetails;
+}
+
+export interface ActionItems {
+  showActionItems: boolean;
+  latePayments: ActionItemRow[];
+  upcomingPayments: ActionItemRow[];
+  showActionItemsTables: (action: string) => void;
+}
