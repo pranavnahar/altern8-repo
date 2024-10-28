@@ -260,12 +260,12 @@ const Register = ({ demo }: Props) => {
       </div>
       {!showWarningText && (
         <div className="text-gray-300 mx-2 text-sm">
-          Please input mobile number connected with PAN of the entity requesting Invoice Discounting
+          Please input mobile number connected with PAN of the entity requesting Real estate project
         </div>
       )}
       {showWarningText && (
         <div className="text-yellow-600 mx-2 text-sm">
-          Please input mobile number connected with PAN of the entity requesting Invoice Discounting
+          Please input mobile number connected with PAN of the entity requesting Real estate project
         </div>
       )}
       <div className="text-gray-300 mx-2 text-sm">

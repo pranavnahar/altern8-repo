@@ -77,7 +77,7 @@ export const statusColors: Record<string, string> = {
   'Bureau Report': '#fcca83',
   'Select GST': '#fcca83',
   GST: '#fcca83',
-  'Select Invoice': '#fcca83',
+  'Select Project': '#fcca83',
   'Accounting Data': '#fcca83',
   Questions: '#fcca83',
   Ecommerce: '#fcca83',
