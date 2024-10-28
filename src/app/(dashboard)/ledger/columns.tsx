@@ -66,7 +66,7 @@ export const accountsColumns = [
                     filters={[]}
                     needFilters={false}                />
                 ) : (
-                  <h1 className="text-2xl font-semibold text-center">
+                  <h1 className="text-2xl font-semibold text-center text-white py-10">
                     No Transactions available for this account
                   </h1>
                 )}
