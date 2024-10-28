@@ -16,7 +16,6 @@ async function getAuthToken() {
 
 async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<any> {
   const token = await getAuthToken()
-  console.log(token)
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
     ...options,
     headers: {
@@ -81,6 +80,8 @@ export async function createTransaction(formData: FormData): Promise<{ success: 
       },
       body: JSON.stringify(payload),
     });
+
+    console.log(data)
 
     revalidatePath('/ledger');
     return { success: true, error: "" };
