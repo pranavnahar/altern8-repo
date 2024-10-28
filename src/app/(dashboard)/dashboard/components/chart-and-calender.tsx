@@ -1,12 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import dynamic from 'next/dynamic';
-import SmallCalendar from '../../components/SmallCalender/SmallCalender';
+import SmallCalendar from '../../../../components/SmallCalender/SmallCalender';
+import ProjectPiechart from './piechart-project';
 
-const MyPieChart = dynamic(() => import('../global/Piechart-Project'), {
-  ssr: false,
-});
-
-const ChartCalender: React.FC<{ sanctionedLimit: number }> = ({ sanctionedLimit }) => {
+const ChartCalender: FC<{ sanctionedLimit: number }> = ({ sanctionedLimit }) => {
   return (
     <div className="col-span-2 w-full ml-2 xl:ml-5 justify-self-end">
       <div className="mb-10 w-full rounded-lg [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] items-start justify-start relative [&.animate]:animate-[1s_ease_0s_1_normal_forwards_shake-horizontal] opacity-[1]">
@@ -15,7 +12,7 @@ const ChartCalender: React.FC<{ sanctionedLimit: number }> = ({ sanctionedLimit 
           {sanctionedLimit !== undefined ? `₹ ${sanctionedLimit.toLocaleString('en-IN')}` : '--'}
         </div>
         <div className="flex justify-center max-w-[200px] mx-auto mt-5 text-center">
-          <MyPieChart />
+          <ProjectPiechart />
         </div>
         <div className="flex text-center mx-auto justify-center">
           <div className="flex flex-row mt-3 mb-5 items-center">

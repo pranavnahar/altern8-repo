@@ -37,8 +37,39 @@ export interface actionItems {
   showActionItemsTables: (s: string) => void;
 }
 
+export interface Projects {
+  id: string;
+  project_total: string;
+  project_name: string;
+  project_location: string;
+  approved_by_admin: boolean;
+}
 
-// additional interfaces decalred for handling the dummy data 
+interface Payment {
+  id: string
+  amount: string
+  dueDate: string
+  daysOverdue?: number
+  daysUntilDue?: number
+}
+
+export type Props = {
+  showActionItems: boolean
+  latePayments: Payment[]
+  upcomingPayments: Payment[]
+  showActionItemsPath: string
+}
+
+export interface ActionItemData {
+  label: string
+  action: string
+  data: Payment[]
+  details: {
+    title: string
+    description: string
+    columns: string[]
+  }
+}
 
 export interface ActionItemDetails {
   title: string;
@@ -50,12 +81,6 @@ export interface ActionItemRow {
   [key: string]: string | number;
 }
 
-export interface ActionItemData {
-  label: string;
-  action: string;
-  data: ActionItemRow[];
-  details: ActionItemDetails;
-}
 
 export interface ActionItems {
   showActionItems: boolean;

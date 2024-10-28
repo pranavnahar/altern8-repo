@@ -34,7 +34,7 @@ export const removeTokenCookie = () => {
 // get new access token from a refresh token
 export const getAccessToken = async () => {
   const cookies = parseCookies();
-  const refreshToken = cookies.altern8_userrefresh || localStorage.getItem("Rtoken");
+  const refreshToken = cookies.altern8_userrefresh
 
   let accessToken = "";
   const body = { refresh: refreshToken };

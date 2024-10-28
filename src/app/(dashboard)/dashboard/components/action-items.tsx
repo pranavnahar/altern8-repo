@@ -1,37 +1,25 @@
-import React, { useState } from 'react';
-import { EllipsisVertical } from 'lucide-react';
-import { ActionItems as ActionItemsProps, ActionItemData } from './types';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '../../components/ui/dialog';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../../components/ui/table';
-import { Button } from '../../components/ui/button';
+"use client"
 
-const ActionItems: React.FC<ActionItemsProps> = ({
+import React, { FC, useState } from 'react'
+import { EllipsisVertical } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Button } from '@/components/ui/button'
+import { ActionItemData, Props } from '../types'
+import { IconInfoCircle, IconMenu, IconMenu3 } from '@tabler/icons-react'
+
+const ActionItems: FC<Props> = ({
   showActionItems,
   latePayments,
   upcomingPayments,
-  showActionItemsTables,
+  showActionItemsPath,
 }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedAction, setSelectedAction] = useState<ActionItemData | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [selectedAction, setSelectedAction] = useState<ActionItemData | null>(null)
 
-  if (!showActionItems) return null;
+  if (!showActionItems) return null
 
-  // these are the column titles for the Dialouge that will open
-  const items = [
+  const items: ActionItemData[] = [
     {
       label: 'Late Payment',
       action: 'late',
@@ -52,53 +40,49 @@ const ActionItems: React.FC<ActionItemsProps> = ({
         columns: ['Payment ID', 'Amount', 'Due Date', 'Days Until Due'],
       },
     },
-  ];
+  ]
 
-  const handleItemClick = (item: (typeof items)[0]) => {
+  const handleItemClick = (item: ActionItemData) => {
     if (item.data.length > 0) {
-      setSelectedAction(item);
-      setIsDialogOpen(true);
-      showActionItemsTables(item.action);
+      setSelectedAction(item)
+      setIsDialogOpen(true)
     }
-  };
+  }
 
   return (
     <>
-      <div className="rounded-lg pb-1 [background:linear-gradient(65.92deg,_#021457,_#170a3f_31.84%,_#251431_51.79%,_#301941_64.24%,_#8e295d_99.08%),_#d9d9d9] shadow-[0px_4px_4px_rgba(0,_0,_0,_0.25)]">
+      <div className="rounded-lg pb-1 background">
         <div className="flex items-center px-2 pt-3">
           <div className="text-center text-gray-300 text-xl font-relative-medium flex-grow">
             Action Items
           </div>
-          <div title="Important Actions">
-            <EllipsisVertical className="size-5 text-neutral-100 my-auto p-0 cursor-pointer" />
-          </div>
         </div>
         <div className="mx-5 mb-8">
           {items.map((item, index) => {
-            const isClickable = item.data.length > 0;
+            const isClickable = item.data.length > 0
             return (
               <div
                 key={index}
                 onClick={() => isClickable && handleItemClick(item)}
-                className={`text-gray-900 font-medium rounded-full mt-5 px-5 py-3 bg-font-light-blue ${
+                className={`text-zinc-200 font-normal rounded-full mt-5 px-5 py-3 bg-white/30 ${
                   isClickable ? 'cursor-pointer hover:bg-opacity-90' : 'cursor-auto'
                 }`}
               >
                 <div className="flex justify-between items-center">
                   <div className="flex">
                     <div className="pr-2">
-                      <img src="dashboard/warning.svg" alt="" />
+                      <IconInfoCircle className='text-zinc-200'/>
                     </div>
                     <div>{item.label}</div>
                   </div>
                   <div>
-                    <div className="hover:bg-gray-400 p-1 px-2 text-[18px] font-bold rounded-lg">
+                    <div className="hover:bg-gray-400 p-1 px-2 text-[18px] font-medium rounded-lg">
                       {item.data.length}
                     </div>
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
       </div>
@@ -118,31 +102,34 @@ const ActionItems: React.FC<ActionItemsProps> = ({
               <TableHeader>
                 <TableRow>
                   {selectedAction?.details.columns.map((column, index) => (
-                    <TableHead key={index}>{column}</TableHead>
+                    <TableHead key={index} className="text-zinc-300">{column}</TableHead>
                   ))}
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {/* Render your table data here */}
                 {selectedAction?.data.map((row, index) => (
                   <TableRow key={index}>
-                    {Object.values(row).map((cell, cellIndex) => (
-                      <TableCell className="text-zinc-300 text-sm" key={cellIndex}>
-                        {cell}
-                      </TableCell>
-                    ))}
+                    <TableCell className="text-zinc-300 text-sm">{row.id}</TableCell>
+                    <TableCell className="text-zinc-300 text-sm">{row.amount}</TableCell>
+                    <TableCell className="text-zinc-300 text-sm">{row.dueDate}</TableCell>
+                    <TableCell className="text-zinc-300 text-sm">
+                      {row.daysOverdue !== undefined ? row.daysOverdue : row.daysUntilDue}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </div>
           <DialogFooter>
-            <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
+            <form action={showActionItemsPath}>
+              <input type="hidden" name="action" value={selectedAction?.action || ''} />
+              <Button type="submit" onClick={() => setIsDialogOpen(false)}>Close</Button>
+            </form>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
-  );
-};
+  )
+}
 
-export default ActionItems;
+export default ActionItems

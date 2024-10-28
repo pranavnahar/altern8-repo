@@ -17,17 +17,14 @@ async function getAuthToken() {
 }
 
 
-// get new access token from a refresh token
 export const getAccessToken = async () => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL!;
-
   const cookies = parseCookies();
-  const refreshToken = cookies.altern8_userrefresh || localStorage.getItem("Rtoken");
+  const refreshToken = cookies.altern8_userrefresh;
 
   let accessToken = "";
   const body = { refresh: refreshToken };
 
-  const response = await fetch(`${apiUrl}/token/refresh/`, {
+  const response = await fetch(`${process.env.SERVER_URL}/token/refresh/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -46,7 +43,6 @@ export const getAccessToken = async () => {
 
 async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<any> {
   const token = await getAuthToken()
-  console.log(token)
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
     ...options,
     headers: {
@@ -71,8 +67,7 @@ async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<an
   return response.json()
 }
 
-export async function getLedgerDetails(): Promise<{
-  accounts: Account[]
+export async function getLedgerDetails(): Promise<{ accounts: Account[]
   otherAccounts: Account[]
   trancheIDs: string[]
   error?: string
@@ -91,18 +86,6 @@ export async function getLedgerDetails(): Promise<{
 
 export async function createTransaction(formData: FormData): Promise<{ success: boolean, error?: string }> {
   try {
-    // const payload = {
-    //   transaction_id: formData.get('transaction_id'),
-    //   purpose: formData.get('purpose'),
-    //   amount: formData.get('amount'),
-    //   description: formData.get('description') || '',
-    //   status: formData.get('status'),
-    //   receipt: formData.get('receipt'),
-    //   timestamp: formData.get('timestamp') || new Date().toISOString(),
-    //   tranche: Number(formData.get('tranche')),
-    //   from_account: Number(formData.get('from_account')),
-    //   to_account: Number(formData.get('to_account'))
-    // };
     const data = await fetchWithAuth('/user-dashboard-api/transactions/', {
       method: 'POST',
       body: formData,
