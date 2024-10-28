@@ -18,7 +18,7 @@ const EventModal: React.FC<Props> = ({ projects, isOpen, onClose }) => {
         <DialogHeader className="flex flex-row items-center justify-between">
           <IconArrowBack onClick={onClose} className="text-[#d4d4d4] cursor-pointer" />
           <DialogTitle className="text-xl font-semibold text-gray-300">
-            Invoices & Payment Dates
+            Projects and timelines
           </DialogTitle>
           <IconX onClick={onClose} className="text-[#d4d4d4] cursor-pointer" />
         </DialogHeader>
