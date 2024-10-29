@@ -54,6 +54,8 @@ export const StepperProvider = ({ children }: StepperProviderProps) => {
   };
 
   const setRegistrationState = async (stateName?: string, currentPage?: string) => {
+    console.log("Function starts");
+    
     if (stateName === 'selectedPages') {
       const selectedPages = JSON.parse(localStorage.getItem('selectedPages')!);
       if (selectedPages && currentPage) {
@@ -73,6 +75,8 @@ export const StepperProvider = ({ children }: StepperProviderProps) => {
       setCurrentStep(1);
     } else {
       try {
+        console.log("request starts");
+        
         setLoading(true);
         const response = await fetch(`${apiUrl}/user-api/states/`, {
           headers: {

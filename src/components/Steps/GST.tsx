@@ -6,6 +6,7 @@ import { StepperContext } from '../../contexts/stepper-context';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
 
 type Props = {
   demo: boolean;
@@ -475,7 +476,7 @@ const GST = ({ demo }: Props) => {
               </button>
             )}
           </div>
-          {/* <HelpAndLogin /> */}
+          <HelpAndLogin />
         </div>
       )}
     </div>
