@@ -1,84 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import { RootFiClient } from 'rootfi-api';
-import { RootFiEnvironment } from 'rootfi-api';
-import Image from 'next/image';
-import { parseCookies } from 'nookies';
-import { IntegrationCategory, IntegrationType } from 'rootfi-api/api';
-import { useToast } from '../../utils/show-toasts';
-import { IconLoader } from '@tabler/icons-react';
+'use client';
 
-type InviteLinkData = {
+import React, { useEffect, useState } from 'react';
+import Script from 'next/script';
+import { RootFiClient, RootFiEnvironment } from 'rootfi-api';
+import Image from 'next/image';
+import { Box, CircularProgress } from '@mui/material';
+import { parseCookies } from 'nookies';
+import { useToast } from '../../utils/show-toasts';
+
+interface InviteLinkData {
   data: {
     invite_link_id: string;
-    rootfi_company_id?: string;
+    rootfi_company_id?: string; // Optional property
   };
-};
+}
 
 declare global {
   interface Window {
-    RootfiLink: {
-      initialize: (config: {
-        linkToken: string;
-        onSuccess: () => void;
-        onReady: () => void;
-        onExit: () => void;
-      }) => void;
-      openLink: () => void;
-      closeLink: () => void;
-    };
+    RootfiLink: any;
   }
 }
 
-const ConnectSDK: React.FC<{
-  integration: string;
-  category: string;
-  onEventChange: (s: string) => void;
-}> = ({ integration, category, onEventChange }) => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  let accessToken = parseCookies().altern8_useraccessForRegister;
+const ConnectSDK: React.FC<{ integration: any; category: any; onEventChange: any }> = ({ integration, category, onEventChange }) => {
   const { showToast } = useToast();
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  let accessToken = parseCookies().altern8_useraccess;
 
   const [loadingSpinner, setLoadingSpinner] = useState(false);
-  console.log(loadingSpinner);
-
-  const [rootFiID, setRootFiID] = useState<string>();
+  const [rootFiID, setRootFiID] = useState<string | null>(null);
+  const [inviteLinkId, setInviteLinkId] = useState('');
+  const [isReady, setIsReady] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const SendRootfiRespToDB = async () => {
-    // trim the fields before send
     let newRecord = {
       company_name: 'NAHAR',
       integration_type: category,
       company_id: rootFiID,
     };
 
-    // submitting the data to backend
     try {
-      // Set loading to true when starting the fetch
       setLoadingSpinner(true);
-
-      let body = newRecord;
-      console.log(body);
-      let response = await fetch(`${apiUrl}/user-api/submit-rootfi-company-id/`, {
+      let response = await fetch(`${apiUrl}/user-dashboard-api/submit-rootfi-company-id/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-
-        body: JSON.stringify(body),
+        body: JSON.stringify(newRecord),
       });
 
       if (response.ok) {
-        await response.json();
+        let data = await response.json();
+        console.log('Rootfi ID successfully saved');
       } else {
         let server_error = await response.json();
-        showToast({message : `${server_error}`,type:'error'})
+        console.error('Failed to upload accounting data details', server_error);
       }
     } catch (error) {
-      showToast({
-        message: 'Failed to send otp, system error',
-        type: 'error'
-      });
+      console.error('Server Connection Error updating accounting data:', error);
+      showToast({ message: 'Failed to send otp, system error duration', type: 'error' });
     } finally {
       setLoadingSpinner(false);
     }
@@ -95,7 +76,6 @@ const ConnectSDK: React.FC<{
     case 'PAYMENTS':
       logoUrl = `/Pos_platform_logos/${integration}.png`;
       break;
-
     case 'OTHERS':
       logoUrl = `/others.svg`;
       break;
@@ -108,57 +88,50 @@ const ConnectSDK: React.FC<{
     environment: RootFiEnvironment.Global,
   });
 
-  const [inviteLinkId, setInviteLinkId] = useState('');
-  const [isReady, setIsReady] = useState(false);
-  console.log(isReady);
-
-  const [isLoading, setLoading] = useState(false);
-
   async function createLink() {
     try {
       const data: InviteLinkData = await rootfi.core.inviteLinks.create({
-        company_name: 'NAHAR', //pending for an company name fetch
-        integration_categories: [category as IntegrationCategory],
-        integrations: [integration as IntegrationType],
+        company_name: 'NAHAR',
+        integration_categories: [category],
+        integrations: [integration],
       });
       setInviteLinkId(data.data.invite_link_id);
-      //console.log(data.data)
-      setRootFiID(data.data.rootfi_company_id);
+      setRootFiID(data.data.rootfi_company_id ?? null);
       setIsReady(true);
     } catch (e) {
-      showToast({message : `${e}`,type:'error'})
       console.log('error: ' + e);
     }
   }
 
-  const RootfiLink = window.RootfiLink;
   async function loadRootFi() {
-    RootfiLink.initialize({
-      linkToken: inviteLinkId, // invite_link_id returned from Create Invite Link API
-      onSuccess: () => {
-        // connection succeeded
-        RootfiLink.closeLink(); // Close the SDK
-        alert('Connection Success');
-        onEventChange('success');
-        SendRootfiRespToDB();
-        // Make an API call to save success status to your db
-      },
-      onReady: () => {
-        // Open SDK when ready. You can open on a button Click.
-        RootfiLink.openLink();
-      },
-      onExit: () => {
-        // Close SDK when user clicks closed.
-        RootfiLink.closeLink();
-        onEventChange('incomplete');
-        // Or you can show an alert msg instead of closing iframe
-        alert('Please complete the setup');
-      },
-    });
+    const { RootfiLink } = window;
+    if (RootfiLink) {
+      console.log('Initializing RootFiLink with linkToken:', inviteLinkId);
+      RootfiLink.initialize({
+        linkToken: inviteLinkId,
+        onSuccess: () => {
+          RootfiLink.closeLink();
+          alert('Connection Success');
+          onEventChange('success');
+          SendRootfiRespToDB();
+        },
+        onReady: () => {
+          console.log('RootFiLink is ready, opening link...');
+          RootfiLink.openLink();
+        },
+        onExit: () => {
+          RootfiLink.closeLink();
+          onEventChange('incomplete');
+          alert('Please complete the setup');
+        },
+      });
+    } else {
+      console.error('RootfiLink is not defined on the window object.');
+    }
   }
 
   useEffect(() => {
-    if (inviteLinkId) {
+    if (window.RootfiLink && inviteLinkId) {
       loadRootFi();
       setLoading(false);
     }
@@ -170,30 +143,23 @@ const ConnectSDK: React.FC<{
   }
 
   return (
-    <div className="flex flex-col items-center justify-center mx-6">
-      <button onClick={handleSubmit}>
-        <div
-          className={`h-14 w-14 overflow-hidden rounded-full relative ${
-            isLoading ? 'bg-black' : 'bg-white'
-          }`}
-        >
-          {!isLoading ? (
-            <Image
-              src={logoUrl}
-              alt="Open RootFi SDK"
-              layout="fill"
-              objectFit="contain"
-              className="rounded-full"
-            />
-          ) : (
-            <div className="flex items-center justify-center">
-              <IconLoader className="h-8 w-8 animate-spin text-primary" />
-            </div>
-          )}
-        </div>
-      </button>
-      <p className="my-4 mt-1 text-sm text-white">{integration}</p>
-    </div>
+    <>
+      <Script src="https://app.rootfi.dev/sdk.js" type="text/javascript"/>
+      <div className="flex flex-col items-center justify-center mx-6">
+        <button onClick={handleSubmit}>
+          <div className={`h-14 w-14 overflow-hidden rounded-full relative ${isLoading ? 'bg-black' : 'bg-white'}`}>
+            {!isLoading ? (
+              <Image src={logoUrl} alt="Open RootFi SDK" objectFit="contain" className="rounded-full" width={200} height={200} />
+            ) : (
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <CircularProgress />
+              </Box>
+            )}
+          </div>
+        </button>
+        <p className="my-4 mt-1 text-sm text-white">{integration}</p>
+      </div>
+    </>
   );
 };
 

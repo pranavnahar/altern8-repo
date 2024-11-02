@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const AnimatedLogo: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -13,11 +14,13 @@ const AnimatedLogo: React.FC = () => {
     return () => clearInterval(interval); // Cleanup the interval on unmount
   }, []);
 
+  const router = useRouter()
+
   return (
     <div className=" self-center">
-      <Link
+      <div
         className="[text-decoration:none] relative tracking-[6px] font-semibold text-5xl sm:text-21xl lg:text-10xl header_font font-exo"
-        href="/"
+        onClick={()=>{router.push('/')}}
       >
         <div className="flex items-center gap-1">
           <motion.img
@@ -34,7 +37,7 @@ const AnimatedLogo: React.FC = () => {
             transition={{ duration: 0.5 }}
           />
         </div>
-      </Link>
+      </div>
     </div>
   );
 };

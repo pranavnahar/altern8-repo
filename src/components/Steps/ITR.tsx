@@ -6,6 +6,7 @@ import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
 
 type Props = {
   demo: boolean;
@@ -461,6 +462,7 @@ const ITR = ({ demo }: Props) => {
           {/* <HelpAndLogin /> */}
         </div>
       )}
+      <HelpAndLogin/>
     </div>
   );
 };

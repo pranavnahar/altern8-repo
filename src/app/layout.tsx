@@ -13,14 +13,13 @@ const figtree = Figtree({ subsets: ['latin'] });
 // };
 
 export default function RootLayout({
-  children,
+children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <RecoilRoot>
-        {' '}
         <body className={`${figtree.className}`}>
           {children}
           <Toaster position="bottom-center" />

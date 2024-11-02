@@ -92,7 +92,7 @@ export const Navbar: FC = () => {
   const router = useRouter();
 
   // Handle token
-  let accessToken = parseCookies().accessToken; //access token from cookies
+  let accessToken = parseCookies().altern8_useraccess; //access token from cookies
 
   // if not accessToken then ask for refresh token
   const ReplaceTokenOrRedirect = async () => {
@@ -342,7 +342,7 @@ export const Navbar: FC = () => {
           <div className="flex gap-5 items-center">
             {/* increase credit */}
             <Dialog  open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger>
+             
                 <Button
                   variant="expandIcon"
                   Icon={IconSend2}
@@ -351,9 +351,8 @@ export const Navbar: FC = () => {
                   className="text-sm text-white bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
                   onClick={handleGetMoreCreditOpen}
                 >
-                  Increase Credit
+                   <DialogTrigger> Increase Credit</DialogTrigger>
                 </Button>
-              </DialogTrigger>
               {/* Increase Credit modal box */}
               <DialogContent className="border-none none p-0 h-5/5 w-4/5">
                 {showGetMoreCreditBox && (
