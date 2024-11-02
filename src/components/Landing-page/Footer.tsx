@@ -1,64 +1,66 @@
 // footer for landing page
 
-import Link from "next/link";
+import Link from 'next/link';
 
 const Footer = () => {
-    return (
-        <footer>
-            <div className="container  max-w-[1320px] py-10 mx-auto text-gray-600">
-                <div className=" mx-7 ">
-                    <div className="grid grid-cols-1 md:grid-cols-2 justify-between  gap-2 text-center sm:text-left">
-                        {/* contact us section  */}
-                        <div className="mb-5 ">
-                            <div className="text-5xl  font-medium font-roboto text-gray-300 my-5">
-                                Contact Us
-                            </div>
-                            <a className=" text-base2  text-gray-400  " href="tel:+123400123">
-                                Call : +123 400 123
-                            </a>
-                            <div className="text-base2 text-gray-400 my-1 mx-10 sm:mx-0 lg:w-1/2">
-                                Praesent nulla massa, hendrerit vestibulum gravida in, feugiat
-                                auctor felis.
-                            </div>
-                            <a
-                                className="text-base2 text-gray-400"
-                                href="mailto:example@gmail.com?subject=Ethyx Club"
-                            >
-                                Email: example@mail.com
-                            </a>
-                        </div>
-
-                        {/* terms and policy  */}
-                        <div className="mb-5 ">
-                            <div className="text-5xl  font-medium font-roboto text-gray-300  my-5">
-                                Terms and Policy
-                            </div>
-                            <Link className="text-base2 text-gray-400 " href="/terms-and-conditions">
-                                Terms and Conditions
-                            </Link>
-                            <br />
-                            <br />
-                            <Link className="text-base2 text-gray-400 " href="/privacy-policy">
-                                Privacy Policy
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-                {/* Copyright section  */}
-                <div className="w-full text-gray-500 px-10 mx-auto">
-                    <div className="text-center">
-                        <div>
-                            Copyright 2024
-                            <strong>
-                                <span> altern8. </span>
-                            </strong>
-                            All Rights Reserved.
-                        </div>
-                    </div>
-                </div>
+  return (
+    <footer>
+      <div className="container  max-w-[1320px] py-10 mx-auto text-gray-600">
+        <div className=" mx-7 ">
+          <div className="grid grid-cols-1 md:grid-cols-2 justify-between  gap-2 text-center sm:text-left">
+            {/* contact us section  */}
+            <div className="mb-5 ">
+              <div className="text-5xl  font-medium font-roboto text-gray-300 my-5">Contact Us</div>
+              {/* <a className=" text-base2  text-gray-400  " href="tel:+123400123">
+                Call : +123 400 123
+              </a> */}
+              <div className="text-base2 text-gray-400 my-1 mx-10 sm:mx-0 lg:w-1/2">
+              46 College Road, Nungambakkam, Chennai
+              </div>
+              <a
+                className="text-base2 text-gray-400"
+                href="mailto:blend@nahar.om?subject=Altern8 Enquiry"
+              >
+                Email: blend@nahar.om
+              </a>
             </div>
-        </footer>
-    );
+
+            {/* terms and policy  */}
+            <div className="mb-5 ">
+              <div className="text-5xl  font-medium font-roboto text-gray-300  my-5">
+                Terms and Policy
+              </div>
+              <Link className="text-base2 text-gray-400 " href="/terms-and-conditions">
+                Terms and Conditions
+              </Link>
+              <br />
+              <br />
+              <Link className="text-base2 text-gray-400 " href="/privacy-policy">
+                Privacy Policy
+              </Link>
+              <br />
+              <br />
+              <Link className="text-base2 text-gray-400 " href="/refund-and-cancellations">
+                Refund And Cancellations
+              </Link>
+            </div>
+          </div>
+        </div>
+        {/* Copyright section  */}
+        <div className="w-full text-gray-500 px-10 mx-auto">
+          <div className="text-center">
+            <div>
+              Copyright 2024
+              <strong>
+                <span> altern8. </span>
+              </strong>
+              All Rights Reserved.
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;
