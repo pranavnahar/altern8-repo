@@ -34,7 +34,7 @@ const PrivacyPolicy = () => {
           <br />
           <p>
             This Platform i.e. domain name _________ including the related mobile site and mobile
-            application is owned by ____________ (CIN: ____________), having its registered office
+            application is owned by ____________ (CIN: U62099TN2024PTC169251), having its registered office
             at ________________, person(s)/entity(ies) associated/connected with it (hereinafter
             referred to as “Altern8”/ “We”/”Us”/Our/”), a technological service provider that
             collects, uses, discloses, and protects your information when you use our platform to
@@ -303,7 +303,7 @@ const PrivacyPolicy = () => {
           
           <br /><br/>
           <h2 className="font-bold mt-4">• Contact </h2><br/>
-          <p>For any queries related to privacy policy You can contact Us at _________ if You have any
+          <p>For any queries related to privacy policy You can contact Us at <a href="mailto:blend@nahar.om">blend@nahar.om</a> if You have any
           feedback or comments, believe We are not following Our Privacy Policy, or wish to remove
           something that violates a specific regulation.</p>
         </div>

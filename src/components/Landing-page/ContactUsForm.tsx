@@ -39,6 +39,14 @@ const ContactUsForm = () => {
     'Mixed use property',
     'Affordable housing',
     'Plotted land',
+    'Advance Loans',
+    'Fractional Ownership',
+    'Real Estate Investment Trusts',
+    'Debentures',
+    'Secured Debt',
+    'Structured Notes',
+    'Commercial Papers',
+    'Distressed Situations Finance',
   ];
 
   const [formData, setFormData] = useState<FormState>({
@@ -124,16 +132,16 @@ const ContactUsForm = () => {
   // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("form submission trigegr start");
+    // console.log("form submission trigegr start");
 
     if (!validateForm()) {
-      console.log("form data not validated");
+      // console.log("form data not validated");
       return;
     }
 
     setLoading(true);
     try {
-      console.log("test------------");
+      // console.log("test------------");
       const response = await fetchWithAuth('/landing-page/contact-us/', {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },

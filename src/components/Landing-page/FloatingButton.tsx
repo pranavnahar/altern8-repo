@@ -14,11 +14,13 @@ const FloatingButton = () => {
         { name: 'LinkedIn', bg: ' bg-blue-700', icon: '/icons/linkedIn.png' },
         { name: 'Twitter', bg: ' bg-black', icon: '/icons/twitter.png' },
         { name: 'Facebook', bg: 'bg-blue-600', icon: '/icons/facebook.svg' },
-        // {
-        //   name: 'Instagram',
-        //   bg: 'bg-gradient-to-r from-purple-400 via-pink-500 to-red-500',
-        //   icon: '/instagram.png',
-        // },
+        {
+          name: 'Instagram',
+          bg: 'bg-gradient-to-r from-purple-400 via-pink-500 to-red-500',
+          icon: '/icons/instagram.png',
+         
+        },
+
     ];
 
     const handleShare = (platform: string) => {
@@ -45,9 +47,9 @@ const FloatingButton = () => {
                     linkUrl as string,
                 )}`;
                 break;
-            // case 'Instagram':
-            //   shareUrl = `https://www.instagram.com/`;
-            //   break;
+            case 'Instagram':
+              shareUrl = `https://www.instagram.com/`;
+              break;
             default:
                 return;
         }
