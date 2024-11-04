@@ -3,6 +3,7 @@ import { StepperContext } from '../../contexts/stepper-context';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
 
 type Props = {
   demo: boolean;
@@ -23,7 +24,7 @@ const PAN = ({ demo }: Props) => {
   const [showInput, setShowInput] = useState(false);
 
   // Handle token
-  let accessToken = parseCookies().altern8_useraccessForRegister;
+  let accessToken = parseCookies().altern8_useraccess;
   const { showToast } = useToast();
 
   // Handle select change
@@ -56,7 +57,13 @@ const PAN = ({ demo }: Props) => {
         const responseData = await response.json();
         console.log(responseData);
         const panNumbers = responseData.data;
+      if(panNumbers.length)
         setPanNumberList(panNumbers);
+      else
+      setPanNumberList([
+        'ABCDE1234F',
+        'PQRST5678G'
+      ])
       } else {
         console.log('Unable to fetch PAN numbers list');
       }
@@ -235,6 +242,7 @@ const PAN = ({ demo }: Props) => {
           </div>
         </div>
       )}
+      <HelpAndLogin/>
     </div>
   );
 };

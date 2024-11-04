@@ -6,6 +6,7 @@ import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';
+import HelpAndLogin from '../Step-Component/HelpAndLogin';
 
 type Props = {
   demo: boolean;
@@ -34,7 +35,7 @@ const ITR = ({ demo }: Props) => {
   const { showToast } = useToast();
 
   // Handle token
-  let accessToken = parseCookies().altern8_useraccessForRegister;
+  let accessToken = parseCookies().altern8_useraccess;
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -461,6 +462,7 @@ const ITR = ({ demo }: Props) => {
           {/* <HelpAndLogin /> */}
         </div>
       )}
+      <HelpAndLogin/>
     </div>
   );
 };

@@ -19,7 +19,7 @@ const RERA = ({ demo }: Props) => {
     Rera_username: '',
     Rera_password: '',
   });
-  let accessToken = parseCookies().altern8_useraccessForRegister;
+  let accessToken = parseCookies().altern8_useraccess;
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

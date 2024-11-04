@@ -19,7 +19,7 @@ type Props = {
 
 const BankDetails = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [needManualUpload, setNeedManualUpload] = useState(false);
+  const [needManualUpload, setNeedManualUpload] = useState(true);
   const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState, setApiFailedIcon } =
     useContext(StepperContext);
   const [files, setFiles] = useState<{ file: File; password: string }[]>([]); // state for file upload
@@ -30,7 +30,7 @@ const BankDetails = ({ demo }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const iframeUrl = '';
   // Handle token
-  let accessToken = parseCookies().altern8_useraccessForRegister;
+  let accessToken = parseCookies().altern8_useraccess;
 
   const router = useRouter();
 

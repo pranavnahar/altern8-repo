@@ -47,7 +47,7 @@ const Accounting = ({ demo }: Props) => {
   const [files, setFiles] = useState<File[]>([]); // state for file upload
 
   // Handle token
-  let accessToken = parseCookies().altern8_useraccessForRegister;
+  let accessToken = parseCookies().altern8_useraccess;
 
   function changeUserPlatform(platform: string) {
     if (platform === 'Others') {
