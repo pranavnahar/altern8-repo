@@ -19,7 +19,7 @@ const UploadContract = ({ demo }: Props) => {
   const [contractFiles, setContractFiles] = useState<File[]>([]);
   const [pdcFiles, setPdcFiles] = useState<File[]>([]);
   const [checkbox, setCheckbox] = useState(true);
-  const accessToken = parseCookies().altern8_useraccessForRegister;
+  const accessToken = parseCookies().altern8_useraccess;
   const router = useRouter();
 
   const handleCheckboxChange = () => {

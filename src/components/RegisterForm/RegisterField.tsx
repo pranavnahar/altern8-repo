@@ -147,11 +147,11 @@ const Register = ({ demo }: Props) => {
 
             let data = serverMessage;
 
-            setCookie(null, 'accessTokenForRegister', data.access, {
+            setCookie(null, 'altern8_useraccess', data.access, {
               maxAge: 60 * 60,
               path: '/',
             });
-
+ 
             getRegistrationState();
           } else {
             let server_error = await response.json();

@@ -60,8 +60,8 @@ const Help = () => {
               image: faq.image,
             }),
           );
-
-          setFaqs(newFaqs);
+          if(newFaqs.length)
+            setFaqs(newFaqs);
         } else {
           console.error('Failed to fetch FAQs');
         }

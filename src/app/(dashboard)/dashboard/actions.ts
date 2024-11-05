@@ -58,7 +58,7 @@ export async function fetchProjectData(timeoutMs: number = 60000): Promise<Proje
     });
 
     if (response.status === 401) {
-      throw new Error('Unauthorized');
+     redirect('/login')
     }
     return await response.json() as ProjectResponse;
   } catch (error) {

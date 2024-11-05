@@ -33,7 +33,7 @@ const Register = ({ demo }: Props) => {
   const [showHelpPage, setShowHelpPage] = useState(false); // display help page
   const [loading, setLoading] = useState(false); //for loading animation;
   const [pageLoading, setPageLoading] = useState(true);
-  console.log(pageLoading);
+  //console.log(pageLoading);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -57,6 +57,8 @@ const Register = ({ demo }: Props) => {
   // set current page state if stepName is provided
   const setRegistrationState = async (stateName: string, currentPage?: string) => {
     const registrationStepIndex = steps.indexOf(stateName);
+    console.log(stateName,registrationStepIndex);
+    
     if (registrationStepIndex !== -1) {
       setCurrentStep(registrationStepIndex + 1);
     } else {
@@ -94,9 +96,14 @@ const Register = ({ demo }: Props) => {
             return router.push('/login');
           }
 
+          console.log(response);
+          
+
           if (response.ok) {
             let server_message = await response.json();
             const registration_step = server_message.user_state;
+            console.log(server_message,registration_step);
+            
             if (registration_step === 'Approved') return router.push('/dashboard');
             console.log(`Seller step fetched successfully! ${registration_step}`, server_message);
             setRegistrationState(registration_step);
