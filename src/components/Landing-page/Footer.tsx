@@ -23,25 +23,37 @@ const Footer = () => {
               >
                 Email: blend@nahar.om
               </a>
+              <br />
+              <a
+                className="text-base2 text-gray-400"
+                href="mailto:grievance@nahar.om?subject=Altern8"
+              >
+                Nodal Officer: grievance@nahar.om
+              </a>
             </div>
 
             {/* terms and policy  */}
-            <div className="mb-5 ">
-              <div className="text-5xl  font-medium font-roboto text-gray-300  my-5">
+            <div className="mb-5">
+              <div className="text-5xl font-medium font-roboto text-gray-300 my-5">
                 Terms and Policy
               </div>
-              <Link className="text-base2 text-gray-400 " href="/terms-and-conditions">
+              <Link
+                className="text-base2 text-gray-400 block mb-2 hover:underline"
+                href="/terms-and-conditions"
+              >
                 Terms and Conditions
               </Link>
-              <br />
-              <br />
-              <Link className="text-base2 text-gray-400 " href="/privacy-policy">
+              <Link
+                className="text-base2 text-gray-400 block mb-2 hover:underline"
+                href="/privacy-policy"
+              >
                 Privacy Policy
               </Link>
-              <br />
-              <br />
-              <Link className="text-base2 text-gray-400 " href="/refund-and-cancellations">
-                Refund And Cancellations
+              <Link
+                className="text-base2 text-gray-400 block mb-2 hover:underline"
+                href="/refund-and-cancellations"
+              >
+                Refund and Cancellations
               </Link>
             </div>
           </div>

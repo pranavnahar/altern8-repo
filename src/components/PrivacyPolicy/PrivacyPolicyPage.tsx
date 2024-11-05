@@ -35,7 +35,7 @@ const PrivacyPolicy = () => {
           <p>
             This Platform i.e. domain name _________ including the related mobile site and mobile
             application is owned by ____________ (CIN: U62099TN2024PTC169251), having its registered office
-            at ________________, person(s)/entity(ies) associated/connected with it (hereinafter
+            at 46 College Road, Nungambakkam, Chennai, person(s)/entity(ies) associated/connected with it (hereinafter
             referred to as “Altern8”/ “We”/”Us”/Our/”), a technological service provider that
             collects, uses, discloses, and protects your information when you use our platform to
             facilitate real estate developers borrowing through the issuance of Non-Convertible
