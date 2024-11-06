@@ -61,3 +61,15 @@ export type ProjectResponse = {
   previous: string | null;
   results: Project[];
 };
+
+
+export type EsignStatus = {
+  projectId: number;
+  status: string;
+}
+
+export type EsignResponse = {
+  success: boolean;
+  data: EsignStatus[];
+  error?: string;
+}
