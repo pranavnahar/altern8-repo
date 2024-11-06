@@ -34,8 +34,8 @@ const TermsCondition = () => {
           <p>
             These terms and conditions of use ("Terms of Use") of the Platform between _________, a
             private company limited by shares incorporated under the provisions of Companies Act,
-            2013 (Act No. 18 of 2013) with corporate identification number (CIN) ____________, and
-            having its registered office at ___________ (hereinafter referred to as “Altern8” which
+            2013 (Act No. 18 of 2013) with corporate identification number (CIN) U62099TN2024PTC169251, and
+            having its registered office at 46 College Road, Nungambakkam, Chennai (hereinafter referred to as “Altern8” which
             includes the person(s)/entity(ies) associated/connected with it) and users registering
             itself/himself on the Platform ("You" or "Your" or "Yourself" or "User") describe the
             terms on which Altern8 offers You access to the Platform and the Services (as defined
@@ -87,8 +87,8 @@ const TermsCondition = () => {
           <h2 className="font-bold mt-4">• Definitions and Interpretations</h2>
           <br />
           <p>
-            "Altern8", "The Company", "Ourselves", "We", "Our" and "Us", refers to ______________
-            Private Limited bearing CIN: __, and other assignees, group and sister firms being the
+            "Altern8", "The Company", "Ourselves", "We", "Our" and "Us", refers to Ekarth Ventures
+            Private Limited bearing CIN: U62099TN2024PTC169251, and other assignees, group and sister firms being the
             primary platform for real estate borrowers intending to seek debt funding through
             issuance of debt securities.
           </p>
@@ -594,7 +594,7 @@ const TermsCondition = () => {
           <br />
           <p>
             The borrower agrees and undertakes to severally keep and hold the Patron(s), and/or
-            Ethyx and their respective directors, officers, shareholders, employees, agents and
+            Altern8 and their respective directors, officers, shareholders, employees, agents and
             representatives (collectively, the “Indemnified Parties”) indemnified and harmless
             against all costs, expenses, claims (including third party claims), liabilities,
             demands, prosecutions, damages and proceedings which may be caused to or suffered by or

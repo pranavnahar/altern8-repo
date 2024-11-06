@@ -200,7 +200,7 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
             rel="noreferrer"
             className="mt-2 text-blue-500"
           >
-            Explore
+          Inquire
           </a>
           <div className="mt-2 w-16 h-16">
             <img
