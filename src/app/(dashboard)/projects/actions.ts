@@ -5,6 +5,7 @@ import { notFound, redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { ProjectResponse } from './types';
+import { EsignResponse, EsignStatus } from './types';
 
 async function getAuthToken() {
   const cookieStore = cookies();
@@ -30,7 +31,8 @@ export async function fetchProjectData(timeoutMs: number = 60000): Promise<Proje
     if (response.status === 401) {
       throw new Error('Unauthorized');
     }
-    return await response.json() as ProjectResponse;
+    const jsonResponse = await response.json();
+    return jsonResponse as ProjectResponse;
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === 'Unauthorized') {
@@ -65,6 +67,7 @@ export async function fetchBorrowersUids(timeoutMs = 60000) {
       throw new Error(`Failed to fetch borrowers UIDs: ${response.statusText}`);
     }
 
+    // console.log("hello 1 yeah response: ", await response.json());
     return await response.json();
   } catch (error) {
     console.error('Error fetching borrowers UIDs:', error);
@@ -127,6 +130,49 @@ export async function adminApplyProduct(projectId: string, body: AdminApplyProdu
   } catch (error) {
     console.error('Error in adminApplyProduct:', error)
     return { success: false, error: (error as Error).message }
+  }
+}
+
+
+
+export async function checkEsignStatus(projectIds: number[]): Promise<EsignResponse> {
+  const token = await getAuthToken();
+
+  try {
+    console.log("The call was made to this API with these project IDs:", projectIds);
+
+    const body = {
+      projectId: projectIds
+    };
+
+    const response = await fetch(`${process.env.SERVER_URL}/emudhra-api/checkEsignStatus/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`, 
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    const data: Record<string, string | null> = await response.json();
+
+    console.log("The server returned this data:", data);
+
+    const parsedData: EsignStatus[] = Object.entries(data).map(([projectId, status]) => ({
+      projectId: parseInt(projectId),
+      status: status === null || status === 'incomplete' ? 'not started' : status
+    }));
+
+    console.log("Parsed project statuses:", parsedData);
+
+    return { success: true, data: parsedData };
+  } catch (error) {
+    console.error('Error in check esign status:', error);
+    return { success: false, data: [], error: (error as Error).message };
   }
 }
 

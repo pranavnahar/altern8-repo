@@ -214,6 +214,26 @@ export const columns: ColumnDef<any>[] = [
         <IconX size={20} />
       );
     },
+  },
+  {
+    header: 'Agreement Signing status',
+    accessorKey: 'esign_status',
+    cell: ({ row }) => {
+      const esignStatus = row.original.esign_status;
+      
+      return esignStatus && esignStatus !== 'not started' ? (
+        <Link 
+          href={esignStatus}
+          target="_blank"
+          rel="noopener noreferrer" 
+          className="text-blue-500 underline"
+        >
+          Sign Document
+        </Link>
+      ) : (
+        <span>No Actions Needed</span>
+      );
+    },
   }
 ];
 
