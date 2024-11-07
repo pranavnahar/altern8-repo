@@ -18,7 +18,7 @@ a. Node Js
 b. Navigate to .env file and un-comment local machine configuration(if already not active)
 
 ```bash
-git clone https://github.com/pranavnahar/Invoice_discounting_frontend.git
+git clone https://github.com/Nahar-OM/altern8-frontend-user.git
 ```
 
 ```bash
