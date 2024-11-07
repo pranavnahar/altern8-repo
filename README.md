@@ -39,7 +39,10 @@ http://localhost:3000/
 ```
 
 ```bash
-http://localhost:3000/
+http://localhost:3000/register
+```
+```bash
+http://localhost:3000/dashboard
 ```
 
 ```bash
