@@ -4,7 +4,7 @@ import { parseCookies } from 'nookies';
 
 export const useAccountingData = () => {
   const [loadingSpinner, setLoadingSpinner] = useState(false);
-  const accountingSoftwareList = ['TALLY', 'ZOHO_BOOKS', 'QUICKBOOKS'];
+  const accountingSoftwareList = ['TALLY', 'ZOHO_BOOKS', 'QUICKBOOKS','CLEARBOOKS'];
   const [currentAccountingSoftware, setCurrentAccountingSoftware] = useState('NONE');
   const [companyId, setCompanyId] = useState(6891);
   console.log(companyId);

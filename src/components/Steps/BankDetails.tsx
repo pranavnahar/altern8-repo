@@ -256,9 +256,9 @@ const BankDetails = ({ demo }: Props) => {
   //Digitap SDK PART
   const handleConnectClick = async () => {
     setIsLoading(true);
-    if (demo) {
+    
       window.open('https://aa.peedeefinvest.in/boost-money/login', '_blank', 'noopener,noreferrer');
-    }
+    
 
     try {
       const response = await fetch('/api/generate-url', {

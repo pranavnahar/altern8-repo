@@ -38,7 +38,7 @@ const GST = ({ demo }: Props) => {
   const { showToast } = useToast();
 
   // Handle token
-  let accessToken = parseCookies().altern8_useraccessForRegister;
+  let accessToken = parseCookies().altern8_useraccess;
 
   // handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -31,7 +31,7 @@ const BureauReport = ({ demo }: Props) => {
   const { showToast } = useToast();
 
   // Handle token
-  let accessToken = parseCookies().altern8_useraccessForRegister;
+  let accessToken = parseCookies().altern8_useraccess || localStorage.getItem('altern8_useraccess');
   const router = useRouter();
 
   // handle form input for phone number and otp
@@ -44,6 +44,7 @@ const BureauReport = ({ demo }: Props) => {
   const GetBureauResponseId = async () => {
     try {
       setLoading(true);
+      //console.log(accessToken); 
       let response = await fetch(`${apiUrl}/user-api/bureau-report/`, {
         method: 'POST',
         headers: {
