@@ -116,7 +116,7 @@ const RERA = ({ demo }: Props) => {
       </div>
       <div className="w-full mx-2 flex-1">
         <div className="font-semibold h-6 mt-3 text-gray-300 text-sm leading-8 uppercase">
-          Password
+          Please enter your RERA password
         </div>
         <div className="mt-2 py-1 flex text-gray-200">
           <input

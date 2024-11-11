@@ -22,10 +22,7 @@ const UploadContract = ({ demo }: Props) => {
   const accessToken = parseCookies().altern8_useraccess;
   const router = useRouter();
 
-  const handleCheckboxChange = () => {
-    setCheckbox(!checkbox);
-  };
-
+ 
   const handleNextClick = async () => {
     try {
       if (demo) {
@@ -258,22 +255,7 @@ const UploadContract = ({ demo }: Props) => {
         </div>
       </div>
 
-      <div className="w-full mx-2 flex-1">
-        <div className="mt-1 py-1 flex text-gray-200">
-          <label className="inline-flex items-start">
-            <input
-              type="checkbox"
-              className="form-checkbox h-5 w-5 text-indigo-500"
-              checked={checkbox}
-              onChange={handleCheckboxChange}
-            />
-            <span className="ml-2 text-gray-300">
-              I agree that the platform can contact my partners to offer Altern8 lending
-              services in return for a discount on my project Yield/Discount Rate.
-            </span>
-          </label>
-        </div>
-      </div>
+    
 
       {currentStep !== steps.length && (
         <div className="mt-4 container flex flex-col">

@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useContext, useEffect } from 'react';
-
+import { useRouter } from 'next/navigation';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import { IconSend2 } from '@tabler/icons-react';
+import { IconSend2, IconArrowLeft } from '@tabler/icons-react';
 import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/global/Chatbox';
 import { DashboardContext } from '../../../contexts/dashboard-context';
@@ -36,15 +36,17 @@ const dummyFaqs = [
 ];
 
 const Help = () => {
+  const router = useRouter();
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [faqs, setFaqs] = useState(dummyFaqs);
   const [loadingSpinner, setLoadingSpinner] = useState(true);
 
   const isAuth = () => {
-    return accessToken
-  }
+    return accessToken;
+  };
 
   const { chatCount, setChatCount } = useContext(DashboardContext);
+
   useEffect(() => {
     const GetFaq = async () => {
       try {
@@ -60,8 +62,7 @@ const Help = () => {
               image: faq.image,
             }),
           );
-          if(newFaqs.length)
-            setFaqs(newFaqs);
+          if (newFaqs.length) setFaqs(newFaqs);
         } else {
           console.error('Failed to fetch FAQs');
         }
@@ -79,6 +80,7 @@ const Help = () => {
     setShowMessageBox(true);
     makeServerUnreadChatZero();
   };
+
   const handleCloseMessageBox = () => {
     setShowMessageBox(false);
   };
@@ -98,6 +100,10 @@ const Help = () => {
     }
   };
 
+  const handleBackClick = () => {
+    router.back();
+  };
+
   return (
     <div className="min-h-screen mt-10">
       {loadingSpinner && (
@@ -110,6 +116,17 @@ const Help = () => {
 
       {!loadingSpinner && (
         <div className="w-4/5 mx-auto pb-10 rounded-lg mt-15">
+          <div className="py-5">
+            <Button
+              variant="expandIcon"
+              Icon={IconArrowLeft}
+              iconPlacement="left"
+              className="text-sm text-white bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
+              onClick={handleBackClick}
+            >
+              Back
+            </Button>
+          </div>
           <div className="py-5 text-5xl font-semibold text-center text-white">FAQs</div>
           <div className="mx-6">
             <Accordion
@@ -120,21 +137,22 @@ const Help = () => {
               }))}
             />
           </div>
-          {isAuth()?.length &&   <div className="mt-10 text-center">
-            <Button
-              variant="expandIcon"
-              Icon={IconSend2}
-              iconPlacement="right"
-              className="text-sm text-white bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
-              onClick={handleChatClick}
-            >
-              Chat With Admin
-            </Button>
-            {showMessageBox &&  (
-              <ChatBox onClose={handleCloseMessageBox} showMessageBox={showMessageBox} />
-            )}
-          </div>}
-
+          {isAuth()?.length && (
+            <div className="mt-10 text-center">
+              <Button
+                variant="expandIcon"
+                Icon={IconSend2}
+                iconPlacement="right"
+                className="text-sm text-white bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
+                onClick={handleChatClick}
+              >
+                Chat With Admin
+              </Button>
+              {showMessageBox && (
+                <ChatBox onClose={handleCloseMessageBox} showMessageBox={showMessageBox} />
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

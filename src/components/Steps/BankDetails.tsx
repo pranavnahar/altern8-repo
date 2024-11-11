@@ -19,7 +19,7 @@ type Props = {
 
 const BankDetails = ({ demo }: Props) => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [needManualUpload, setNeedManualUpload] = useState(true);
+  const [needManualUpload, setNeedManualUpload] = useState(false);
   const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState, setApiFailedIcon } =
     useContext(StepperContext);
   const [files, setFiles] = useState<{ file: File; password: string }[]>([]); // state for file upload
@@ -257,7 +257,7 @@ const BankDetails = ({ demo }: Props) => {
   const handleConnectClick = async () => {
     setIsLoading(true);
     
-      window.open('https://aa.peedeefinvest.in/boost-money/login', '_blank', 'noopener,noreferrer');
+      router.push('https://aa.peedeefinvest.in/boost-money/login');
     
 
     try {
@@ -300,7 +300,7 @@ const BankDetails = ({ demo }: Props) => {
         <div className="mb-10">
           <div className="w-full mx-2 flex-1 flex flex-row items-center justify-center">
             <div className="font-semibold  text-gray-300 text-sm text-center leading-8 uppercase">
-              Unified Bank Interface
+             Welcome to Altern8 verified bank interface
             </div>
             <div>
               <button

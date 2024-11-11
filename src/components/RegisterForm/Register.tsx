@@ -203,9 +203,9 @@ const Register = ({ demo }: Props) => {
           // animate={mainControls}
           transition={{ duration: 0.7, delay: 0.3 }}
           // whileHover={{ scale: 1.01, opacity: 1, duration: 0.5 }}
-          className="m-5 w-11/12 lg:w-4/6 mx-auto shadow-xl rounded-2xl pb-2  [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]"
+          className="m-5 w-11/12 lg:w-[90%] mx-auto shadow-xl rounded-2xl pb-2  [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]"
         >
-          <div className="mx-5 my-5  rounded-lg">
+          <div className=" rounded-lg">
             {/* progress animation   */}
             {/* Show LinearProgress when loading is true */}
             {loading && <LinearBuffer />}
