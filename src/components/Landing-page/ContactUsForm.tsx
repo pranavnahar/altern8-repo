@@ -171,7 +171,7 @@ const ContactUsForm = () => {
   };
 
   return (
-    <div className="phone:w-full xl:w-[100%] mx-auto mt-32 mb-32">
+    <div id="contact-form" className="phone:w-full xl:w-[100%] mx-auto mt-32 mb-32">
       <div className="relative box-border h-[3px] border-t-[3px] border-solid border-white-font" />
       <motion.div
         variants={{

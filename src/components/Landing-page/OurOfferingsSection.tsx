@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
+import { Link } from 'react-scroll';
 
 const offeringsCards = [
   {
@@ -26,8 +27,8 @@ const offeringsCards = [
     icon: '/images/altern8logo.png',
   },
   {
-    headingFront: 'Real Estate Investment Trusts',
-    headingBack: 'Real Estate Investment Trusts',
+    headingFront: 'Real Estate Investment Trusts(SMREIT)',
+    headingBack: 'Real Estate Investment Trusts(SMREIT)',
     description: [
       {
         heading: 'How It Works?',
@@ -194,14 +195,24 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
               </div>
             ))}
           </div>
-          <a
+          {/* <a
             href={link}
             target="_blank"
             rel="noreferrer"
             className="mt-2 text-blue-500"
           >
           Inquire
-          </a>
+          </a> */}
+
+                <Link 
+              to="contact-form" 
+              className=" text-blue-500 mt-2  hover:cursor-pointer"
+             
+              smooth={true}
+              duration={500}
+            >
+              Inquire
+            </Link>
           <div className="mt-2 w-16 h-16">
             <img
               src={image}

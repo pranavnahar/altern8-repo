@@ -91,3 +91,8 @@
   background-color: #ffffff13 !important;
   border-radius: 8px !important;
 }
+
+
+html {
+  scroll-behavior: smooth;
+}
