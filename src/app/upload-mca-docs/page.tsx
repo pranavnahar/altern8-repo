@@ -6,6 +6,7 @@ import { useDropzone } from "react-dropzone";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { useToast } from "../../utils/show-toasts";
+import { Suspense } from 'react';
 
 const Page = () => {
   const searchParams = useSearchParams(); 
@@ -81,6 +82,7 @@ const Page = () => {
   };
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <div className="flex justify-center items-center min-h-screen">
       <div className="[background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] shadow-md rounded-lg p-6 w-full max-w-lg">
         <h1 className="text-2xl font-semibold mb-4 text-center text-zinc-100">
@@ -179,6 +181,7 @@ const Page = () => {
         </form>
       </div>
     </div>
+    </Suspense>
   );
 };
 
