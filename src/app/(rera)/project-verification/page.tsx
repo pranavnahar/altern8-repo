@@ -2,6 +2,8 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../../components/ui/tabs';
+import { ReraConfirmation } from '@/components/Project-flow/Rera-confirmation';
+import { LegalFlow } from '@/components/Project-flow/Legal-Flow';
 
 export default function Page() {
   const router = useRouter();
@@ -21,16 +23,16 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen p-10 w-full shadow-lg outline-none focus:outline-none [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]">
+    <div className="min-h-screen p-10 w-full shadow-lg outline-none focus:outline-none ">
       <div className="p-1">
         <h3 className="text-3xl text-gray-200 font-semibold">Project Verification</h3>
         <p className="text-zinc-400 mt-3">Follow these steps to verify your project.</p>
       </div>
-      <div className="flex border mt-5">
-        <div className="rounded-lg">
+      <div className="flex mt-5 w-full">
+        <div className="rounded-lg w-full">
           <Tabs value={activeTab} onValueChange={handleTabChange}>
-            <div className="flex items-center justify-center w-full">
-              <TabsList className="flex gap-10 mx-auto max-w-max bg-white/10">
+            <div className="flex border border-red-200 items-center justify-center ">
+              <TabsList className="flex gap-10  bg-white/10">
                 <TabsTrigger className="rounded hover:bg-white/10 animation" value="rera-confirmation">
                   Rera Confirmation
                 </TabsTrigger>
@@ -57,8 +59,12 @@ export default function Page() {
                 </TabsTrigger>
               </TabsList>
             </div>
-            <TabsContent value="rera-confirmation">"Content for Rera Confirmation"</TabsContent>
-            <TabsContent value="legal-flow">"Content for Legal Flow"</TabsContent>
+            <TabsContent value="rera-confirmation">
+              <ReraConfirmation />
+            </TabsContent>
+            <TabsContent value="legal-flow">
+              <LegalFlow />
+            </TabsContent>
             <TabsContent value="budget">"Content for Budget"</TabsContent>
             <TabsContent value="timeline">"Content for Timeline"</TabsContent>
             <TabsContent value="funding-source">"Content for Funding Source"</TabsContent>
