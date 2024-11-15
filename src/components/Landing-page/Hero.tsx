@@ -145,9 +145,9 @@ const HeroSection: React.FC = () => {
               whileHover={{ scale: 0.9, opacity: 0.9 }}
               className="flex-1 relative text-xl mt-[150px] tracking-[-0.5px] font-medium text-background-black-font"
             >
-              Discover a new era in lending with Altern8 Club, your ultimate alternate platform and
+              Discover a new era in lending with Altern8, your ultimate alternate platform and
               marketplace connecting borrowers with patrons. As a trailblazer in the industry,
-              Altern8 Club serves as the end-to-end originator and distributor of real estate assets
+              Altern8 serves as the end-to-end originator and distributor of real estate assets
               and loans, leveraging cutting-edge data science, Artificial Intelligence, and Machine
               Learning techniques. We specialize in demystifying complex industries with opaque
               data, starting with our fully automated data aggregation stack that delivers results

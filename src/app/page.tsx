@@ -26,7 +26,7 @@ const Page = () => {
       <AdvisorsSection />
       <OurOfferingsSection />
       <ShortTermDebt
-        header=" Bill Discounting Transactions"
+        header="Bill Discounting Transactions"
         data={transactions}
         buttonText={"Load All Transcations"}
       />
