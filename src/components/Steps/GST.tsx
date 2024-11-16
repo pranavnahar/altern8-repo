@@ -38,7 +38,7 @@ const GST = ({ demo }: Props) => {
   const { showToast } = useToast();
 
   // Handle token
-  let accessToken = parseCookies().altern8_useraccessForRegister;
+  let accessToken = parseCookies().altern8_useraccess;
 
   // handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -449,13 +449,13 @@ const GST = ({ demo }: Props) => {
         <div className="container flex flex-col ">
           <div className="flex justify-around mt-4 mb-8">
             {/* back button  */}
-            <button
+            {/* <button
               onClick={() => handleClick()}
               className="bg-white text-slate-600 uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer border-2 border-slate-300 hover:bg-slate-700 hover:text-white transition duration-200 ease-in-out ${
                             "
             >
               Back
-            </button>
+            </button> */}
 
             {/* next button  */}
             {!otpSent && (

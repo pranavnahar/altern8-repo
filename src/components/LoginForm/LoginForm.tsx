@@ -115,6 +115,7 @@ const login = () => {
       if (response.ok) {
         let data = await response.json();
         setAccessTokenCookie(data.access);
+        localStorage.setItem('altern8_useraccess',data.access)
         setRefreshTokenCookie(data.refresh);
         accessToken = data.access;
         await getUserState();

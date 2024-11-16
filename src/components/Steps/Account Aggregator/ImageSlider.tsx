@@ -10,11 +10,12 @@ const ImageSlider = () => {
   const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
     cssEase: "linear",
+    arrow:false,
     responsive: [
       {
         breakpoint: 1024,

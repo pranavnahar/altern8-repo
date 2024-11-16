@@ -432,22 +432,21 @@ const POC = ({ demo }: Props) => {
               </thead>
               <tbody>
                 {pocDetails.map((poc, index) => (
-                  <tr key={index} className="">
-                    <td className="p-3 text-sm text-gray-300 font-medium">{poc.name}</td>
-                    <td className="p-3 text-sm text-gray-300 font-medium text-center">
-                      {poc.email}
-                    </td>
-
-                    <td className="p-3 text-sm text-gray-300 font-medium text-end">
-                      {poc.phoneNumber}
-                    </td>
-                    <td className="p-3 text-sm text-gray-300 font-medium text-end">
+                  <tr key={index} className={``}>
+                  <td className={`p-3 text-sm font-medium ${index === 0 ? 'text-blue-400' : 'text-gray-300'}`}>{poc.name}</td>
+                  <td className={`p-3 text-sm font-medium text-center ${index === 0 ? 'text-blue-400' : 'text-gray-300'}`}>
+                    {poc.email}
+                  </td>
+                  <td className={`p-3 text-sm font-medium text-end ${index === 0 ? 'text-blue-400' : 'text-gray-300'}`}>
+                     {poc.phoneNumber}
+                  </td>
+                 <td className={`p-3 text-sm font-medium text-end ${index === 0 ? 'text-blue-400' : 'text-gray-300'}`}>
                       {poc.designation}
-                    </td>
+                  </td>
                     <td className="py-3 text-sm text-gray-300 font-medium text-end">
                       <button
                         onClick={() => handleEditButtonClick(poc.id)}
-                        className="bg-slate-700 hover:bg-slate-600  text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer   hover:text-white transition duration-200 ease-in-out"
+                        className="bg-slate-700 hover:bg-blue-600  text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer   hover:text-white transition duration-200 ease-in-out"
                       >
                         Edit
                       </button>
@@ -463,7 +462,7 @@ const POC = ({ demo }: Props) => {
                 onClick={handleAddButtonClick}
                 size="sm"
               >
-                Add poc
+                Add Another poc
               </Button>
             </div>
           )}

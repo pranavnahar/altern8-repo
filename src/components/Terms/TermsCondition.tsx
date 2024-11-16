@@ -14,7 +14,7 @@ const TermsCondition = () => {
         <h1 className="text-3xl font-bold text-gray-200 mb-8 mt-10">Altern8 Terms of Use</h1>
 
         {/* Text Area for Terms and Conditions */}
-        <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-lg px-6">
+        <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-md px-6">
           <p>
             This document is an electronic record in terms of Information Technology Act, 2000 and
             rules there under as applicable and the amended provisions pertaining to electronic

@@ -52,6 +52,12 @@ const AuthorizationCompliance = ({ demo }: Props) => {
       [name]: type === 'checkbox' ? checked : value,
     });
   };
+  const [checkbox, setCheckbox] = useState(true);
+
+  const handleCheckboxChange = () => {
+    setCheckbox(!checkbox);
+  };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -234,7 +240,7 @@ const AuthorizationCompliance = ({ demo }: Props) => {
             onChange={handleChange}
             value={userData.companyRegNumber}
             name="companyRegNumber"
-            placeholder="Company Registration Number"
+            placeholder="Company Registration Number or CIN number"
             className="py-1 px-2 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
             type="text"
           />
@@ -297,7 +303,7 @@ const AuthorizationCompliance = ({ demo }: Props) => {
               officers, or employees to transact as representatives on behalf of the company:
             </span>
           </label>
-          <input
+          {/* <input
             onChange={handleChange}
             value={userData.authorizedPersons}
             name="authorizedPersons"
@@ -312,7 +318,7 @@ const AuthorizationCompliance = ({ demo }: Props) => {
             placeholder="Position(s)"
             className="py-1 px-2 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
             type="text"
-          />
+          /> */}
           <label className="flex items-center space-x-2">
             <input
               type="checkbox"
@@ -359,6 +365,22 @@ const AuthorizationCompliance = ({ demo }: Props) => {
             </span>
           </label>
         </div>
+        <div className="w-full mx-2 flex-1">
+        <div className="mt-1 py-1 flex text-gray-200">
+          <label className="inline-flex items-start">
+            <input
+              type="checkbox"
+              className="form-checkbox h-5 w-5 text-indigo-500"
+              checked={checkbox}
+              onChange={handleCheckboxChange}
+            />
+            <span className="ml-2 text-gray-300">
+              I agree that the platform can contact my partners to offer Altern8 lending
+              services in return for a discount on my project Yield/Discount Rate.
+            </span>
+          </label>
+        </div>
+      </div>
       </div>
 
       <div className="font-semibold h-6 my-3 text-gray-300 text-sm leading-8 uppercase">
