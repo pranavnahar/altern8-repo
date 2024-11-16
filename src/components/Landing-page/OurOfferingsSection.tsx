@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 
+import { Link } from 'react-scroll';
+
 const offeringsCards = [
   {
     headingFront: 'Advance Loans',
@@ -26,8 +28,8 @@ const offeringsCards = [
     icon: '/images/altern8logo.png',
   },
   {
-    headingFront: 'Real Estate Investment Trusts',
-    headingBack: 'Real Estate Investment Trusts',
+    headingFront: 'Real Estate Investment Trusts(SMREIT)',
+    headingBack: 'Real Estate Investment Trusts(SMREIT)',
     description: [
       {
         heading: 'How It Works?',
@@ -125,7 +127,7 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
       className="flip-card-container w-96 h-96"
       style={{
         perspective: '1000px',
-        margin: '1rem',  // This creates gap between cards
+        margin: '1rem', // This creates gap between cards
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -160,11 +162,7 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
         >
           <h6 className="text-[1.50] font-medium text-center text-zinc-500">{headingFront}</h6>
           <div className="w-full h-3/4">
-            <img
-              src={image}
-              alt={headingFront}
-              className="w-full h-full object-cover rounded-lg"
-            />
+            <img src={image} alt={headingFront} className="w-full h-full object-cover rounded-lg" />
           </div>
         </div>
         <div
@@ -194,27 +192,31 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
               </div>
             ))}
           </div>
-          <a
+          {/* <a
             href={link}
             target="_blank"
             rel="noreferrer"
             className="mt-2 text-blue-500"
           >
           Inquire
-          </a>
+          </a> */}
+
+          <Link
+            to="contact-form"
+            className=" text-blue-500 mt-2  hover:cursor-pointer"
+            smooth={true}
+            duration={500}
+          >
+            Inquire
+          </Link>
           <div className="mt-2 w-16 h-16">
-            <img
-              src={image}
-              alt="Logo"
-              className="w-full h-full object-contain"
-            />
+            <img src={image} alt="Logo" className="w-full h-full object-contain" />
           </div>
         </div>
       </motion.div>
     </div>
   );
 };
-
 
 //Main Function
 function OurOfferingsSection() {
@@ -251,10 +253,7 @@ function OurOfferingsSection() {
             Altern8 Club today.
           </p>
 
-          <div
-            ref={ref}
-            className="flex flex-wrap justify-center my-[4%]"
-          >
+          <div ref={ref} className="flex flex-wrap justify-center my-[4%]">
             {offeringsCards.map((offerings, index) => (
               <div key={index} className="w-full sm:w-1/2 md:w-1/4 flex justify-center">
                 <FlipAnimationCard data={offerings!} />
@@ -268,9 +267,3 @@ function OurOfferingsSection() {
 }
 
 export default OurOfferingsSection;
-
-
-
-
-
-
