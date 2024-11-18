@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
 import { useSearchParams, useRouter } from 'next/navigation';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
@@ -6,6 +6,7 @@ import { useToast } from '../../utils/show-toasts';
 import { setCookie } from 'nookies';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
 import { Button } from '../ui/button';
+import AnimatedLogo from '../Header/AnimatedLogo';
 
 type Props = {
   demo: boolean;
@@ -36,9 +37,25 @@ const Register = ({ demo }: Props) => {
 
   userData.referredBy = search.get('referal_code')!;
 
+  useEffect(() => {
+    if (
+      userData.firstName.length &&
+      userData.phoneNumber.length === 10 &&
+      userData.entityType.length &&
+      userData.password.length >= 8 &&
+      userData.password2.length >= 8 &&
+      termsAccepted
+    ) {
+      handleConfirmButtonClick()
+    }
+  }, [userData, termsAccepted]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
+    // if(type){
+    //   handleSubmission()
+    // }
   };
 
   const handleNoButtonClick = () => {
@@ -214,13 +231,13 @@ const Register = ({ demo }: Props) => {
   return (
     <div className="flex flex-col">
       <div className="flex justify-center font-medium text-gray-200 text-xl">
-        <div className="flex items-center">
+        <div className="flex items-center w-[40%]">
           <div className="mx-3">
-            <img className="w-[30px]" alt="" src="/ballons.png" />
+            <img className="w-[40px] h-[40%]" alt="" src="/ballons.png" />
           </div>
-          <div className="text-xl text-white">Welcome to Altern8</div>
+          <div className="text-5xl text-white flex w-full gap-3 justify-center items-center"><span>Welcome to</span> <AnimatedLogo/></div>
           <div className="mx-3">
-            <img className="w-[30px]" alt="" src="/ballons.png" />
+            <img className="w-[40px] h-[40%]" alt="" src="/ballons.png" />
           </div>
         </div>
       </div>
@@ -423,7 +440,7 @@ const Register = ({ demo }: Props) => {
               >
                 Confirm
               </button>
-            )}
+)}
             {showConfirmationModal && (
               // next button
               <button
