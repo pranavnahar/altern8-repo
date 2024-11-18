@@ -73,10 +73,10 @@ const AdvisorsSection: React.FC = () => {
                             <h3 className="pt-2 font-semibold sm:text-base2 md:text-1xl">
                                 {advisor.first_name}
                             </h3>
-                            <h3 className="font-semibold sm:text-base2 md:text-1xl">
+                            <h3 className="font-semibold sm:text-base2 leading-[20px] md:text-1xl">
                                 {advisor.last_name || <br />}
                             </h3>
-                            <p className="px-4 pb-4 pt-3 text-[10px] font-medium text-background-black-fade-font">
+                            <p className="px-4 pb-4 pt-3 text-[10px]  font-medium text-background-black-fade-font">
                                 {advisor.role}
                             </p>
                             <p className="px-4 pt-2 pb-4 text-xs font-medium text-background-black-fade-font">

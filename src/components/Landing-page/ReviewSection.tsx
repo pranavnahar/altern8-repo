@@ -371,7 +371,7 @@ const ReviewSection = () => {
 
   return (
     <div className="w-full mx-auto pt-10 text-white font-work-sans text-center">
-      <div className="max-w-[1320px] mx-auto grid grid-cols-1 gap-4 lg:grid-cols-3 justify-center items-center">
+      <div className="max-w-[1320px] mx-auto grid grid-cols-1 gap-4 lg:grid-cols-3 ">
         {duplicatedReviews.slice(currentIndex, currentIndex + 3).map((review, index) => (
           <motion.div
             key={review.id}
