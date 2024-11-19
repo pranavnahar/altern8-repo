@@ -153,11 +153,11 @@ const Register = ({ demo }: Props) => {
       case 2:
         return <POC demo={demo} />;
       case 3:
-        return <BankDetails demo={demo} />;
+        return <BankDetails demo={demo} />
       case 4:
         return <SelectPrimaryBankAccount demo={demo} />;
       case 5:
-        return <PAN demo={demo} />;
+        return <PAN demo={demo} />; 
       case 6:
         return <ITR demo={demo} />;
       case 7:

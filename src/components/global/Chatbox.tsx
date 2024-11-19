@@ -48,44 +48,46 @@ const ChatBox: React.FC<{
     }
   };
 
-  useEffect(() => {
-    const GetMessage = async () => {
-      try {
-        if (!accessToken) {
-          await ReplaceTokenOrRedirect();
-        }
+  const GetMessage = async () => {
+    try {
+      if (!accessToken) {
+        await ReplaceTokenOrRedirect();
+      }
 
-        let response = await fetch(`${apiUrl}/chat/user/`, {
+      let response = await fetch(`${apiUrl}/chat/user/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.status === 401) {
+        await ReplaceTokenOrRedirect();
+        response = await fetch(`${apiUrl}/chat/user/`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
+      }
 
-        if (response.status === 401) {
-          await ReplaceTokenOrRedirect();
-          response = await fetch(`${apiUrl}/chat/user/`, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
+      if (response.ok) {
+        const responseData = await response.json();
+        let addMessage: Message[] = [];
+        for (let i = 0; i < responseData.length; i++) {
+          addMessage.push({
+            text: responseData[i]['content'],
+            file: responseData[i]['file'],
+            sender: responseData[i]['type_sender'] === 'User' ? 'user' : 'admin',
           });
         }
-
-        if (response.ok) {
-          const responseData = await response.json();
-          let addMessage: Message[] = [];
-          for (let i = 0; i < responseData.length; i++) {
-            addMessage.push({
-              text: responseData[i]['content'],
-              file: responseData[i]['file'],
-              sender: responseData[i]['type_sender'] === 'User' ? 'user' : 'admin',
-            });
-          }
-          setMessages(prevMessages => [...prevMessages, ...addMessage]);
-        }
-      } catch (error) {
-        console.log('error during getting chats');
+        setMessages(prevMessages => [...prevMessages, ...addMessage]);
       }
-    };
+    } catch (error) {
+      console.log('error during getting chats');
+    }
+  };
+
+  useEffect(() => {
+
 
     GetMessage();
   }, [showMessageBox]);
@@ -126,6 +128,7 @@ const ChatBox: React.FC<{
           }]);
           setNewMessage('');
           setFile(null);
+          await GetMessage()
         } else {
           showToast({
             message: "Message Failed!",
