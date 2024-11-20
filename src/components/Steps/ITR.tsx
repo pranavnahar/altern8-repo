@@ -158,7 +158,7 @@ const ITR = ({ demo }: Props) => {
                 prevExternalApiErrorCounts => prevExternalApiErrorCounts + 1,
               );
               showToast({
-                message: `Submission failed! ${server_error.message}`,
+                message: `Submission failed! ${server_error.message}, please try again`,
                 type: 'error'
               });
 
@@ -299,16 +299,16 @@ const ITR = ({ demo }: Props) => {
               Username
             </div>
             <div className=" my-2 py-1 flex">
-              <input
-                onChange={handleChange}
-                value={userData.itrUsername || ''}
-                name="itrUsername"
-                placeholder="ITR Username"
+              <h1
+                //onChange={handleChange}
+                //value={userData.itrUsername || ''}
+                //name="itrUsername"
+                //placeholder="ITR Username"
                 className="py-1   uppercase w-full text-gray-100 border-b-2 bg-transparent  outline-none appearance-none focus:outline-none focus:border-purple-600 transition-colors"
-                type="text"
-                autoComplete="new-password"
-                required
-              />
+                //type="text"
+                //autoComplete="new-password"
+                //required
+              >{userData.itrUsername}</h1>
             </div>
           </div>
           <div className="w-full mx-2 flex-1">

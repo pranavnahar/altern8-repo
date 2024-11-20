@@ -149,7 +149,7 @@ const ConnectSDK: React.FC<{ integration: any; category: any; onEventChange: any
         <button onClick={handleSubmit}>
           <div className={`h-14 w-14 overflow-hidden rounded-full relative ${isLoading ? 'bg-black' : 'bg-white'}`}>
             {!isLoading ? (
-              <Image src={logoUrl} alt="Open RootFi SDK" objectFit="contain" className="rounded-full" width={200} height={200} />
+              <Image src={logoUrl} alt="Open RootFi SDK" objectFit="contain" className="rounded-full" width={100} height={500} />
             ) : (
               <Box display="flex" justifyContent="center" alignItems="center">
                 <CircularProgress />

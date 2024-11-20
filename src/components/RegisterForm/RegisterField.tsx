@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
 import { useSearchParams, useRouter } from 'next/navigation';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
@@ -6,6 +6,7 @@ import { useToast } from '../../utils/show-toasts';
 import { setCookie } from 'nookies';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
 import { Button } from '../ui/button';
+import AnimatedLogo from '../Header/AnimatedLogo';
 
 type Props = {
   demo: boolean;
@@ -36,9 +37,25 @@ const Register = ({ demo }: Props) => {
 
   userData.referredBy = search.get('referal_code')!;
 
+  useEffect(() => {
+    if (
+      userData.firstName.length &&
+      userData.phoneNumber.length === 10 &&
+      userData.entityType.length &&
+      userData.password.length >= 8 &&
+      userData.password2.length >= 8 &&
+      termsAccepted
+    ) {
+      handleConfirmButtonClick()
+    }
+  }, [userData, termsAccepted]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
+    // if(type){
+    //   handleSubmission()
+    // }
   };
 
   const handleNoButtonClick = () => {
@@ -214,13 +231,13 @@ const Register = ({ demo }: Props) => {
   return (
     <div className="flex flex-col">
       <div className="flex justify-center font-medium text-gray-200 text-xl">
-        <div className="flex items-center">
+        <div className="flex items-center w-[40%]">
           <div className="mx-3">
-            <img className="w-[30px]" alt="" src="/ballons.png" />
+            <img className="w-[40px] h-[40%]" alt="" src="/ballons.png" />
           </div>
-          <div className="text-xl text-white">Welcome to Altern8</div>
+          <div className="text-5xl text-white flex w-full gap-3 justify-center items-center"><span>Welcome to</span> <AnimatedLogo/></div>
           <div className="mx-3">
-            <img className="w-[30px]" alt="" src="/ballons.png" />
+            <img className="w-[40px] h-[40%]" alt="" src="/ballons.png" />
           </div>
         </div>
       </div>
@@ -303,7 +320,7 @@ const Register = ({ demo }: Props) => {
 
       <div className="w-full mx-2 flex-1">
         <div className="font-semibold h-6 mt-3 text-gray-300 text-sm leading-8 uppercase">
-          Password
+          Create Password
         </div>
         <div className="my-2 py-1 relative">
           <input
@@ -329,7 +346,10 @@ const Register = ({ demo }: Props) => {
           )}
         </div>
       </div>
-
+      <div className="text-gray-300 mb-2 mx-2 text-sm">
+        Password must be at least 8 characters long and include at least one letter, one digit, and
+        one special character. Allowed special characters are: @$!%*?&#:
+      </div>
       <div className="w-full mx-2 flex-1">
         <div className="font-semibold text-sm h-6 mt-3 text-gray-300 leading-8 uppercase">
           Re-enter Password
@@ -358,10 +378,6 @@ const Register = ({ demo }: Props) => {
           )}
         </div>
       </div>
-      <div className="text-gray-300 mb-2 mx-2 text-sm">
-        Password must be at least 8 characters long and include at least one letter, one digit, and
-        one special character. Allowed special characters are: @$!%*?&#:
-      </div>
 
       <div className="w-full mx-2 flex-1">
         <div className="mt-1 py-1 flex text-gray-200">
@@ -382,7 +398,7 @@ const Register = ({ demo }: Props) => {
               >
                 terms and conditions
               </a>{' '}
-              and{' '}
+             ,{' '}
               <a
                 href="/privacy-policy"
                 target="_blank"
@@ -390,6 +406,14 @@ const Register = ({ demo }: Props) => {
                 className="text-indigo-500"
               >
                 privacy policy
+              </a> and {' '}
+              <a
+                href="/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-indigo-500"
+              >
+                cancellation policy
               </a>
             </span>
           </label>
@@ -400,13 +424,13 @@ const Register = ({ demo }: Props) => {
         <div className="container flex flex-col ">
           <div className="flex justify-around mt-6 mb-8">
             {/* back button  */}
-            <button
+            {/* <button
               onClick={() => handleSubmission()}
               className="bg-white text-slate-600 uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer border-2 border-slate-300 hover:bg-slate-700 hover:text-white transition duration-200 ease-in-out ${
                             "
             >
               Back
-            </button>
+            </button> */}
 
             {!showConfirmationModal && (
               //  popup confirmation button
@@ -416,7 +440,7 @@ const Register = ({ demo }: Props) => {
               >
                 Confirm
               </button>
-            )}
+)}
             {showConfirmationModal && (
               // next button
               <button

@@ -201,7 +201,7 @@ const PAN = ({ demo }: Props) => {
       {showInput && (
         <div className="w-full mx-2 flex-1">
           <div className="font-semibold h-6 mt-3 text-gray-300 text-sm leading-8 uppercase">
-            Enter PAN Number
+            Enter PAN Number of the entity
           </div>
           <div className="my-2 py-1 flex">
             <input

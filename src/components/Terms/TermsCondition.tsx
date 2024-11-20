@@ -14,7 +14,7 @@ const TermsCondition = () => {
         <h1 className="text-3xl font-bold text-gray-200 mb-8 mt-10">Altern8 Terms of Use</h1>
 
         {/* Text Area for Terms and Conditions */}
-        <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-lg px-6">
+        <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-md px-6">
           <p>
             This document is an electronic record in terms of Information Technology Act, 2000 and
             rules there under as applicable and the amended provisions pertaining to electronic
@@ -665,27 +665,31 @@ const TermsCondition = () => {
           </p><br/>
           <h2 className="font-bold mt-4">• Miscellaneous </h2><br/>
           <p>
-            Notice: All notices to Altern8 shall be served by email or by general notification on
+          <strong> Notice:</strong> All notices to Altern8 shall be served by email or by general notification on
             the Platform. Any notice to be provided to Altern8 pursuant to the Terms of Use should
-            be sent to customer support (___________). Entire Agreement:These Terms of Use, together
+            be sent to customer support <strong>grievance@nahar.om</strong>. <br /><br />
+
+             <strong> Severability: </strong>Entire Agreement:These Terms of Use, together
             with the Privacy Policy constitute the entire agreement between you and Altern8 in
             relation to your use of the Platform and supersede all previous agreements in respect of
             your use of the Platform. Please note, however, that other aspects of your use of
             Services may be governed by additional agreements. If any term of this Terms of Use
             expressly conflicts with any term of any individual service agreement executed between
-            borrower, patron or the NBFC, such conflict will be resolved at our sole discretion.
-            Severability: If for any reason, a court of competent jurisdiction finds any provision
+            borrower, patron or the NBFC, such conflict will be resolved at our sole discretion. <br /><br />
+
+            <strong> Severability:</strong> If for any reason, a court of competent jurisdiction finds any provision
             of the Term of Use, or portion thereof, to be unenforceable, that provision shall be
             enforced to the maximum extent permissible so as to give effect to the intent of the
-            parties as reflected by that provision, and the remainder of the Terms of Use shall
-            continue in full force and effect. Waiver: Altern8’s failure to enforce any provision of
+            parties as reflected by that provision, and the remainder of the Terms of Use shall 
+            continue in full force and effect. <br /> <br />
+            Waiver: Altern8’s failure to enforce any provision of
             this Terms of Use shall not be deemed to be a waiver of such provision nor of the right
             to enforce such provision.
           </p>
-          Contact: If you have any queries or doubt regarding the terms of use, please reach the
-          customer support of Altern8 at (___).
+          <strong>Contact:</strong> If you have any queries or doubt regarding the terms of use, please reach the
+          customer support of Altern8 at <strong>grievance@nahar.om</strong>.
           <br />
-        </div>
+        </div>                   
       </div>
       <JoinUsSection />
       <Footer />

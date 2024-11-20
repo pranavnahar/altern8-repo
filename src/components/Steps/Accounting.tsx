@@ -23,7 +23,7 @@ const Accounting = ({ demo }: Props) => {
     setApiFailedIcon,
   } = useContext(StepperContext);
 
-  const [accountingPlatforms] = useState(['TALLY', 'ZOHO_BOOKS', 'QUICKBOOKS', 'Others']);
+  const [accountingPlatforms] = useState(['TALLY', 'ZOHO_BOOKS', 'QUICKBOOKS','CLEARBOOKS','BUSY', 'Others']);
 
   const [userData, setUserData] = useState({
     category: 'ACCOUNTING',
@@ -302,7 +302,7 @@ const Accounting = ({ demo }: Props) => {
                 ) : (
                   <>
                     <div>
-                      Please upload your accounting statements and ledgers (Only PDF and Excel Files
+                      Please upload your 3 years accounting statements and ledgers (Only PDF and Excel Files
                       Allowed).
                     </div>
                   </>
