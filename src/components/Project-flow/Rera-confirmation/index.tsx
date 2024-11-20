@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { formTemplate } from '../../../utils/static';
 import { getAccessToken } from '../../../utils/auth';
 import { useToast } from '../../../utils/show-toasts';
+import Link from 'next/link';
 
 interface formDataType {
     basicInfo: { [key: string]: string };
@@ -24,16 +25,94 @@ export function ReraConfirmation() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
     const [formData, setFormData] = useState<formDataType>({
-        basicInfo: {},
-        promoterDetails: {},
-        financialTargets: {},
-        plans: {},
-        caCertificateDetails: {},
-        architect: {},
-        engineer: {},
-        allotment: {},
-        lawyerReport: {},
-        contactDetails: {},
+        basicInfo: {
+            "details_of_encumbrances": "test details",
+            "project_name": "Rera Project Sample changes",
+            "rera_reg_no": "UPRERAPRJ11647",
+            "project_type": "Commercial",  // choice field
+            "project_registration_date": "2024-10-02",
+            "proposed_period": "2024-10-17",
+            "original_start_date": "2024-10-17",
+            "modified_start_date": "2024-10-17",
+            "declared_date_of_completion": "2024-12-26",
+            "project_location": "Delhi",
+
+        },
+        promoterDetails: {
+            "promoter_name": "Skyline Builders Ltd",
+            "promoter_applicant_type": "Corporate",
+            "promoter_mobile": "+91-9876543210",
+            "promoter_email": "contact@skylinebuilders.com",
+            "promoter_address": "123 Business Street, City Center, New Delhi, India",
+            "chairman_address": "456 Chairman's Road, Central Business District, New Delhi, India",
+            "number_of_projects_of_the_promoter": "25",
+            "total_complaints_against_the_promoter": "3",
+            "total_no_of_complaints_in_respect_to_this_project": "1"
+        },
+        financialTargets: {
+            "quarter_name": "Q1 2024",
+            "target_in_rupees": "5000000",
+            "achievements": "4500000"
+        },
+        plans: {
+            "waste_disposal_plan": "Regular waste collection every Monday and Thursday, with recycling bins placed throughout the site.",
+            "water_supply_plan": "Onsite water storage tanks with a capacity of 50,000 liters, connected to the municipal water supply.",
+            "electricity_supply_plan": "Solar panels to provide 30% of the electricity needs, supplemented by grid power for peak hours.",
+            "development_work_plan": "Completion of foundation work by March 2024, followed by framing and roofing by June 2024."
+        },
+        caCertificateDetails: {
+            "ca_name": "John Doe & Associates",
+            "ca_contact_number": "+91-9123456789",
+            "ca_email": "contact@johndoeassociates.com",
+            "ca_certificate_url": "https://example.com/certificates/johndoe_ca_cert.pdf",
+            "ca_total_cost_estimated": "2000000",
+            "amount_incurred_till_now": "750000"
+        },
+        architect: {
+            "architect_name": "Jane Smith Architecture",
+            "architects_certificate": "https://example.com/certificates/jane_smith_architecture_cert.pdf",
+            "architects_contact_number": "+91-9876543210",
+            "architects_email": "info@janesmitharchitecture.com",
+            "architects_address": "789 Design Ave, Creative City, New Delhi, India",
+            "coa_registration_number": "COA-123456",
+            "architect_task": "Design and oversee the construction of residential units in the project.",
+            "common_areas_and_facilities_amenities": "Swimming pool, gym, garden area, and children's play area.",
+            "proposed": "Modern design with eco-friendly materials and energy-efficient systems.",
+            "details": "The project aims to create sustainable living spaces with ample green areas.",
+            "percentage_of_work_done": "65"
+        },
+        engineer: {
+            "engineer_name": "Michael Brown Engineering Solutions",
+            "engineers_certificate": "https://example.com/certificates/michael_brown_engineering_cert.pdf",
+            "engineers_contact_number": "+91-9988776655",
+            "engineers_email": "contact@michaelbrownengineering.com",
+            "engineers_address": "456 Engineering Way, Tech City, Mumbai, India"
+        },
+        allotment: {
+            "villa_no": "Villa 101",
+            "saleable_area": "2500",
+            "allotment_project": "Green Valley Residential Complex",
+            "proforma_of_application_form": "https://example.com/forms/application_form_villa101.pdf",
+            "proforma_of_allotment_letter": "https://example.com/letters/allotment_letter_villa101.pdf",
+            "proforma_of_conveyance_deed": "https://example.com/deeds/conveyance_deed_villa101.pdf"
+        },
+        lawyerReport: {
+            "lawyer_name": "Sarah Johnson",
+            "lawyer_ref_no": "LAW123456",
+            "lawyer_contact_number": "+91-9876543210",
+            "lawyer_email": "sarah.johnson@lawfirm.com",
+            "lawyer_address": "789 Legal Lane, Suite 201, New Delhi, India",
+            "lawyer_certificate": "https://example.com/certificates/sarah_johnson_certificate.pdf",
+            "affidavit": "https://example.com/documents/affidavit_villa101.pdf",
+            "authentic_copy_of_approval_of_project": "https://example.com/documents/project_approval_villa101.pdf",
+            "legal_document_of_agreement_in_case_of_other_land": "https://example.com/documents/legal_agreement_villa101.pdf"
+        },
+        contactDetails: {
+            "project_coordinator_number": "+91-9876543210",
+            "state": "Maharashtra",
+            "district": "Mumbai",
+            "tehsil": "Bandra"
+        },
     });
 
     const [showFileUpload, setShowFileUpload] = useState(false);
@@ -215,15 +294,18 @@ export function ReraConfirmation() {
 
             <div className="flex justify-between items-center">
                 <form onSubmit={saveReraTemplate}>
-                    <div className="p-6 w-full grid grid-cols-3 border">
+                    <div className="p-6 w-full grid grid-cols-3 ">
                         {formTemplate.map(item => renderFormField(item))}
                     </div>
-                    <button
-                        type="submit"
-                        className="p-2 mx-auto w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] flex item-center justify-center"
-                    >
-                        Next
-                    </button>
+                    <Link href={`/project-verification/1?tab=legal-flow`}>
+
+                        <button
+                            type="submit"
+                            className="p-2 mx-auto w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] flex item-center justify-center"
+                        >
+                            Next
+                        </button>
+                    </Link>
                 </form>
             </div>
         </div>
