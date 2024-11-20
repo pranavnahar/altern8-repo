@@ -5,7 +5,6 @@ import ProgressCircle from "../../../components/ProgressCircle/ProgressCircle";
 import BasicTable from "../../../components/global/basic-table";
 import { InventoryColumns } from "./columns/inventory-columns";
 import fundingColumns from "../ProjectSettings/columns/funding-columns";
-import SummaryList from "../../../app/(dashboard)/projects/components/summary-list";
 import { Inventory, FundingSource, SummaryItem, Project, InventoryResponse, FundingSourceResponse, SummaryResponse, ProjectData, TrancheData } from "./types";
 import { fetchProjectInventory } from "../../../app/(dashboard)/project/actions/fetch-project-inventory.actions";
 import { fetchProjectFunding } from "../../../app/(dashboard)/project/actions/get-project-funding";
@@ -19,6 +18,7 @@ import { IconChevronRight } from "@tabler/icons-react";
 import StakeHolderModal from "./StakeHolderModal";
 import taskColumns from "../../../components/TimeLine/columns/task-columns";
 import { Skeleton } from "../../../components/ui/skeleton";
+import SummaryList from "@/app/(dashboard)/projects/_components/summary-list";
 
 type Props = {
   user: string;
@@ -282,7 +282,7 @@ const Overview = ({ user, openDrawForm }: Props) => {
 
       <div className="w-[45%] p-3 space-y-3">
         {inventory && <InventoryTable inventory={inventory} />}
-        {fundingSources && <Funding fundingSource={fundingSources} /> }
+        {fundingSources && <Funding fundingSource={fundingSources} />}
       </div>
 
       <div className="w-1/3 p-2 text-white">

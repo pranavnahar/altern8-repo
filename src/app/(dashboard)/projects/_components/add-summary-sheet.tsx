@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { ChevronRight } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useToast } from "../../../../utils/show-toasts";
-import { addProjectSummary } from "../../../../app/(dashboard)/project/actions/add-project-summary.actions";
+import { addProjectSummary } from "../_actions/add-project-summary.actions";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../../../../components/ui/sheet";
 import { Button } from "../../../../components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../../../components/ui/form";
@@ -84,7 +84,7 @@ const AddSummarySheet = () => {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="expandIcon" size="xs" Icon={ChevronRight} iconPlacement="right" className="text-sm">Add Summary</Button>
+        <Button variant="expandIcon" size="xs" Icon={ChevronRight} iconPlacement="right" className="text-sm ">Add Summary</Button>
       </SheetTrigger>
       <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto background border-none">
         <SheetHeader>

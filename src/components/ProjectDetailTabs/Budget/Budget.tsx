@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { adjustmentData } from "./data/adjustments-data";
 import { budgetData } from "./data/budget-data";
+import Link from "next/link";
 
 const headers: BaseHeaderProps[] = [
   { title: "Name", classname: "text-center", key: "name" },
@@ -71,19 +72,17 @@ export const Budget = () => {
 
           <Button
             variant={"outline"}
-            className={`${classname} ${
-              renderComponent === "current budget" && "bg-themeBlue border-0"
-            }`}
+            className={`${classname} ${renderComponent === "current budget" && "bg-themeBlue border-0"
+              }`}
             onClick={() => setRenderComponent("current budget")}
           >
             Current Budget
           </Button>
           <Button
             variant={"outline"}
-            className={`${classname} ${
-              renderComponent === "adjustment over time" &&
+            className={`${classname} ${renderComponent === "adjustment over time" &&
               "bg-themeBlue border-0"
-            }`}
+              }`}
             onClick={() => setRenderComponent("adjustment over time")}
           >
             Adjustment Over Time
@@ -115,6 +114,16 @@ export const Budget = () => {
       )}
       {/* as per sugeestion by pranav, i made this component in unused for now  */}
       {renderComponent === "requested over time" && <RequestedOverTime />}
+      <Link href={`/project-verification/1?tab=timeline`}>
+
+        <button
+          type="submit"
+          className="mt-5 p-2 mx-auto w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] flex item-center justify-center"
+        >
+          Next
+        </button>
+      </Link>
     </div>
+
   );
 };

@@ -38,12 +38,8 @@ const SummaryList = ({ data, className, isLoading = false }: Props) => {
 
   return (
     <div className={className}>
-      <div className="flex items-center justify-between w-full border-b mb-2 border-b-gray-500">
-        <h1 className="font-semibold text-white text-2xl">Summary</h1>
-      </div>
-      <p className="text-zinc-400 text-base mt-2">1460 Comal Project</p>
-      <Card className="mt-5 py-7 border-none text-white [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]">
-        <div className="flex items-center justify-between w-[90%] mx-auto mb-5">
+      <Card className=" py-7 border-none text-white [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1">
             <MessageSquareText size={20} />
             <strong className="text-sm text-gray-400">Summary</strong>
@@ -51,7 +47,7 @@ const SummaryList = ({ data, className, isLoading = false }: Props) => {
           <AddSummarySheet />
         </div>
 
-        <div className="flex flex-col w-[90%] p-1 gap-3 mx-auto border-b-[#bbb] text-sm">
+        <div className="flex flex-col max-h-[70vh] overflow-auto p-1 gap-3 mx-auto border-b-[#bbb] text-sm">
           {summaryFields.map((field) => (
             <div key={field.key} className="flex justify-between">
               <p>{field.label}:</p>

@@ -21,8 +21,47 @@ export interface SummaryItem {
   facilities: string;
   project: number;
 }
+export type Product = {
+  id?: string;
+  name: string;
+  purpose: string;
+  interest_rate_fixed: string;
+  interest_rate_variable: string;
+  tenure_in_days: string;
+  ltv_ratio: string;
+  interest_deduction_type: string;
+  principal_payout_type: string;
+  penalty_grace_period: string;
+  post_dated_cheques: boolean;
+  enach: boolean;
+  prepayment: string;
+  minimum_days_prepayment: string;
+  canopy_interest: string;
+  royalty: string;
+  application_processing_fees: string;
+  platform_fees: string;
+  administration_fees: string;
+  verification_charges: string;
+  documentation_charges: string;
+  annual_maintenance_charges: string;
+  insurance_charges: string;
+  wallet_fees: string;
+  legal_fees: string;
+  prepayment_penalty: string;
+  printed_statement_charges: string;
+  cancellation_charges: string;
+  payment_return_charges: string;
+  late_penalty: string;
+  tds_deducted: string;
+  waterfall_structure: string;
+  payment_frequency: string;
+  compound_frequency: string;
+  payment_type: string;
+  interest_only_period_in_days: string;
+  balloon_payment_after_in_days: string;
+}
 
-// Define the type for the entire response
+
 export interface SummaryResponse {
   count: number;
   next: string | null;
@@ -62,14 +101,28 @@ export type ProjectResponse = {
   results: Project[];
 };
 
-
-export type EsignStatus = {
-  projectId: number;
-  status: string;
+export type Inventory = {
+  id: number;
+  project: number;
+  tranche: number;
+  lots_count: number;
+  lots_amount: string;
+  foundation_starts_count: number;
+  foundation_starts_amount: string;
+  models_count: number;
+  models_amount: string;
+  started_completed_count: number;
+  started_completed_amount: string;
+  units_count: number;
+  units_amount: string;
+  contingent_sales_count: number;
+  contingent_sales_amount: string;
+  approved_by_admin: boolean;
 }
 
-export type EsignResponse = {
-  success: boolean;
-  data: EsignStatus[];
-  error?: string;
-}
+export type InventoryResponse = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Inventory[];
+};

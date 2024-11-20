@@ -13,7 +13,6 @@ interface DashboardGridsProps {
 }
 
 const DashboardGrids: React.FC<DashboardGridsProps> = ({ data, user }) => {
-  console.log("lol", data)
   const calc = data["%Complete (Net)"] ? String(data["%Complete (Net)"]).replace("%", "") : ''
   const router = useRouter();
   const handleRoute = () => {
@@ -41,7 +40,7 @@ const DashboardGrids: React.FC<DashboardGridsProps> = ({ data, user }) => {
               }
               layout="fill"
               alt="card-img"
-              className=" rounded-s-md"
+              className="rounded-s-md"
             />
           </div>
           <div className="p-2 w-[50%]">

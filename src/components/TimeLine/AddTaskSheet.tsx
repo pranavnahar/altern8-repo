@@ -104,17 +104,18 @@ const AddTaskSheet = () => {
       </SheetTrigger>
       <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto background border-none">
         <SheetHeader>
-          <SheetTitle>Update Project Status</SheetTitle>
-          <SheetDescription>Update the status and details of the project.</SheetDescription>
+          <SheetTitle className="text-white">Update Project Status</SheetTitle>
+          <SheetDescription className="text-white">Update the status and details of the project.</SheetDescription>
         </SheetHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
             <FormField
+
               control={form.control}
               name="owner"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Owner</FormLabel>
+                  <FormLabel className="text-white">Owner</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -138,7 +139,7 @@ const AddTaskSheet = () => {
               name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Status</FormLabel>
+                  <FormLabel className="text-white">Status</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -162,8 +163,9 @@ const AddTaskSheet = () => {
               name="original_start_date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Original Start Date</FormLabel>
+                  <FormLabel className="text-white">Original Start Date</FormLabel>
                   <Calendar
+                    className="text-white"
                     mode="single"
                     selected={field.value ? new Date(field.value) : undefined}
                     onSelect={(date) => field.onChange(date ? date.toISOString() : '')}
@@ -181,8 +183,9 @@ const AddTaskSheet = () => {
               name="original_completion_date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Original Completion Date</FormLabel>
+                  <FormLabel className="text-white">Original Completion Date</FormLabel>
                   <Calendar
+                    className="text-white"
                     mode="single"
                     selected={field.value ? new Date(field.value) : undefined}
                     onSelect={(date) => field.onChange(date ? date.toISOString() : '')}
@@ -200,7 +203,7 @@ const AddTaskSheet = () => {
               name="completion_date_variance"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Completion Date Variance (in days)</FormLabel>
+                  <FormLabel className="text-white">Completion Date Variance (in days)</FormLabel>
                   <FormControl>
                     <Input {...field} type="number" />
                   </FormControl>

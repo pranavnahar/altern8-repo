@@ -31,7 +31,7 @@ import { format } from "date-fns";
 import { createProject, fetchBorrowersUids } from "../actions";
 import { useToast } from "../../../../utils/show-toasts";
 import { ChevronRight } from "lucide-react";
-import FileUpload from "../../../../components/global/file-upload";
+import FileUpload from "@/components/FileUpload/FileUpload";
 
 type Borrower = {
   uid: string;
@@ -132,22 +132,21 @@ const AddProjectSheet = () => {
   };
 
 
-  // useEffect(() => {
-  //   const loadUsers = async () => {
-  //     try {
-  //       const data: BorrowersList = await fetchBorrowersUids();
-  //       setUsers(data);
-  //     } catch (error) {
-  //       console.log(error)
-  //       showToast({
-  //         message: "Failed to fetch users. Please try again.",
-  //         type: "error",
-  //       });
-  //     }
-  //   };
+  useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        const data: BorrowersList = await fetchBorrowersUids();
+        setUsers(data);
+      } catch (error) {
+        showToast({
+          message: "Failed to fetch users. Please try again.",
+          type: "error",
+        });
+      }
+    };
 
-  //   loadUsers();
-  // }, []);
+    loadUsers();
+  }, []);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -294,7 +293,6 @@ const AddProjectSheet = () => {
                     disabled={(date) =>
                       date > new Date() || date < new Date("1900-01-01")
                     }
-                    initialFocus
                   />
                   <FormMessage />
                 </FormItem>

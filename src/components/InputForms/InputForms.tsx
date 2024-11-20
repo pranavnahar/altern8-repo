@@ -23,7 +23,7 @@ interface InputFormsTypes {
   onProjectCreated?: (newProject: any) => void;
 }
 
-type FormData = {
+export type FormData = {
   [key: string]: string | number | Date | undefined | File[];
 };
 
@@ -185,7 +185,7 @@ export const InputForms = ({
   if (type === 'tranches') {
     // this api is of no use as of now
     URL = `${apiUrl}/rablet-api/projects/${id}/tranches/2/documents/`; //should be dynamic tranche id
-  } else{
+  } else {
     // route which will be trggered when user clicks on submit button in mattrum flow
     URL = `${apiUrl}/rablet-api/projects/`;
   }
@@ -265,7 +265,7 @@ export const InputForms = ({
           description: 'Success',
         });
 
-        if (onProjectCreated){
+        if (onProjectCreated) {
           onProjectCreated(data);
           toast('Project created!', {
             description: 'Success',

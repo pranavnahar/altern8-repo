@@ -8,6 +8,12 @@ export const formatDate = (dateString: string) => {
   return new Intl.DateTimeFormat('en-GB', options).format(date).replace(/(\d+)(st|nd|rd|th)/, '$1<sup>$2</sup>');
 };
 
+export const toTitleCase = (str: string) => {
+  return str.split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 export const formatINR = (value: string | number) => {
   if (typeof value === 'string') {
     value = parseFloat(value);
