@@ -1,25 +1,20 @@
 'use server'
 
 import ky from 'ky';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { ProjectResponse } from './types';
-import { EsignResponse, EsignStatus } from './types';
 
 async function getAuthToken() {
   const cookieStore = cookies();
-  const authCookie = cookieStore.get('altern8_useraccess');
-  if (!authCookie) {
-    redirect('/login')
-  }
-  return authCookie.value;
+  const authCookie = cookieStore.get('altern8_adminaccess');
+  return authCookie?.value;
 }
 
 export async function fetchProjectData(timeoutMs: number = 60000): Promise<ProjectResponse> {
   try {
     const token = await getAuthToken();
-
     const response = await ky.get(`${process.env.SERVER_URL}/rablet-api/projects/`, {
       timeout: timeoutMs,
       retry: 3,
@@ -31,8 +26,9 @@ export async function fetchProjectData(timeoutMs: number = 60000): Promise<Proje
     if (response.status === 401) {
       throw new Error('Unauthorized');
     }
-    const jsonResponse = await response.json();
-    return jsonResponse as ProjectResponse;
+
+
+    return await response.json() as ProjectResponse;
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === 'Unauthorized') {
@@ -52,7 +48,7 @@ export async function fetchProjectData(timeoutMs: number = 60000): Promise<Proje
 export async function fetchBorrowersUids(timeoutMs = 60000) {
   try {
     const token = await getAuthToken();
-    console.log(token)
+
     const response = await fetch(`${process.env.SERVER_URL}/admin-api/borrowers-uids/`, {
       method: 'GET',
       headers: {
@@ -67,7 +63,6 @@ export async function fetchBorrowersUids(timeoutMs = 60000) {
       throw new Error(`Failed to fetch borrowers UIDs: ${response.statusText}`);
     }
 
-    // console.log("hello 1 yeah response: ", await response.json());
     return await response.json();
   } catch (error) {
     console.error('Error fetching borrowers UIDs:', error);
@@ -89,6 +84,7 @@ export async function createProject(formData: FormData) {
     const responseData = await response.json();
 
     if (!response.ok) {
+      // console.log("The response was not OK");
       throw new Error(responseData.error || `HTTP error! status: ${response.status}`);
     }
 
@@ -103,12 +99,14 @@ export async function createProject(formData: FormData) {
 
 type AdminApplyProductBody = {
   approval_status: boolean,
-  product_id: number
+  product_id: number,
+  agreement: number | null;
 }
 
 export async function adminApplyProduct(projectId: string, body: AdminApplyProductBody) {
+  // console.log("applied the product and called the api");
+  console.log("the project id that is received is this: ", projectId);
   const token = await getAuthToken();
-  console.log('Request body:', body);
 
   try {
     const response = await fetch(`${process.env.SERVER_URL}/rablet-api/projects/${projectId}/admin-apply-product/`, {
@@ -125,7 +123,8 @@ export async function adminApplyProduct(projectId: string, body: AdminApplyProdu
     }
 
     const data = await response.json()
-    revalidatePath(`/projects`)
+    revalidatePath(`/projects`);
+
     return { success: true, data }
   } catch (error) {
     console.error('Error in adminApplyProduct:', error)
@@ -133,48 +132,57 @@ export async function adminApplyProduct(projectId: string, body: AdminApplyProdu
   }
 }
 
+type TemplateIdsType = {
+  [key: number]: number; 
+};
 
+const templateIds: TemplateIdsType = {
+  1: 16658,
+  2: 16656,
+  3: 16657,
+}
 
-export async function checkEsignStatus(projectIds: number[]): Promise<EsignResponse> {
+export async function initiateEmudraFlow(projectId: string,templateId: number, productList: any[]){
   const token = await getAuthToken();
 
   try {
-    console.log("The call was made to this API with these project IDs:", projectIds);
-
+    console.log("the call was made to this api and got this as the values: \n ", templateId, productList);
+    console.log(" the project id that was used to init the bakend is: ", projectId);
+    //processing and what data to send yet to be done over here
+    const id = templateIds[templateId];
+    const pid = projectId;
+    console.log("template id: ", id)
     const body = {
-      projectId: projectIds
-    };
+      id, //workflow to be created based on it
+      productList,
+      pid
+    }
 
-    const response = await fetch(`${process.env.SERVER_URL}/emudhra-api/checkEsignStatus/`, {
+    const response = await fetch(`${process.env.SERVER_URL}/emudhra-api/initEsigning/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`, 
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(body), 
     });
 
     if (!response.ok) {
       throw new Error(`API request failed with status ${response.status}`);
     }
 
-    const data: Record<string, string | null> = await response.json();
+    const data = await response.json();
 
-    console.log("The server returned this data:", data);
+    console.log("the server returned this: ", data);
 
-    const parsedData: EsignStatus[] = Object.entries(data).map(([projectId, status]) => ({
-      projectId: parseInt(projectId),
-      status: status === null || status === 'incomplete' ? 'not started' : status
-    }));
-
-    console.log("Parsed project statuses:", parsedData);
-
-    return { success: true, data: parsedData };
+    return { success: true, data }
+  
   } catch (error) {
-    console.error('Error in check esign status:', error);
-    return { success: false, data: [], error: (error as Error).message };
+    console.error('Error in initiateEmudraFlow:', error)
+    return { success: false, error: (error as Error).message }
   }
 }
+
 
 export async function checkAuthentication() {
   try {

@@ -1,11 +1,11 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import Input from '../../components/Input/input';
+import Input from '../../../components/Input/input';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
-import { formTemplate } from '../../utils/static';
-import { getAccessToken } from '../../utils/auth';
-import { useToast } from '../../utils/show-toasts';
+import { formTemplate } from '../../../utils/static';
+import { getAccessToken } from '../../../utils/auth';
+import { useToast } from '../../../utils/show-toasts';
 
 interface formDataType {
   basicInfo: { [key: string]: string };
@@ -223,8 +223,8 @@ export default function page() {
       <div className="">
         <h3 className="text-3xl ml-10 text-gray-200 font-semibold">Add Template</h3>
         <p className="text-zinc-400 ml-10 mt-5">
-        If you already have a template available, you can upload it here. If not, you can download
-         a sample, fill it out, and then click on the submit button below. Alternatively, if you prefer to fill in all the details manually, you can complete the form below and then submit.
+          If you already have a template available, you can upload it here. If not, you can download
+          a sample, fill it out, and then click on the submit button below. Alternatively, if you prefer to fill in all the details manually, you can complete the form below and then submit.
         </p>
       </div>
       <div className="flex justify-between items-center">

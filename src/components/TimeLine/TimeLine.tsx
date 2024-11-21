@@ -11,6 +11,7 @@ import { fetchProjectTask } from "../../app/(dashboard)/project/actions/fetch-pr
 import AddTaskSheet from "./AddTaskSheet";
 import taskColumns from "./columns/task-columns";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 export interface TaskData {
   Task: string;
@@ -241,6 +242,15 @@ export const TimelineTab = () => {
         </div>
         <BasicTable data={taskList} columns={taskColumns} filters={[]} needFilters={false} />
       </div>
+      <Link href={`/project-verification/1?tab=funding-source`}>
+
+        <button
+          type="submit"
+          className="mt-5 p-2 mx-auto w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] flex item-center justify-center"
+        >
+          Next
+        </button>
+      </Link>
     </section>
   );
 };

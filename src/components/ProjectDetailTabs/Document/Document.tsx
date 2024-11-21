@@ -1,3 +1,5 @@
+"use client"
+
 import BasicTable from "../../../components/global/basic-table";
 import React, { useEffect, useState } from "react";
 import { fetchProjectDocument } from "../../../app/(dashboard)/project/actions/fetch-project-document.actions";

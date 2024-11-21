@@ -1,41 +1,21 @@
 import React from 'react';
 import { ColumnDef } from "@tanstack/react-table";
 import Link from 'next/link';
-import ApplyProduct from './components/apply-product';
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { CheckCircle, X } from 'lucide-react';
+import ApplyProduct from './_components/apply-product';
+import RoutingButton from './_components/navigate-page-button';
+import FundingSources from './_components/funding-sources';
+import BudgetSummary from './_components/budget-summary';
+import { formatDate, formatINR, formatPercentage, toTitleCase } from '@/utils/formatter';
+import { Button } from '@/components/ui/button';
 
-const toTitleCase = (str: string) => {
-  return str.split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
-
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  const options: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  };
-  return new Intl.DateTimeFormat('en-GB', options).format(date).replace(/(\d+)(st|nd|rd|th)/, '$1<sup>$2</sup>');
-};
-
-const formatINR = (value: string | number) => {
-  if (typeof value === 'string') {
-    value = parseFloat(value);
-  }
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-  }).format(value);
-};
-
-const formatPercentage = (value: string | number) => {
-  if (typeof value === 'string') {
-    value = parseFloat(value);
-  }
-  return `${value}%`;
-};
+// {
+//   request_for_approval_date: null,
+//   legal_flow_user_choice: null,
+//   legal_flow_state: null,
+//   legal_flow_report_file: null,
+//   legal_flow_documents: []
+// }
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -52,19 +32,6 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    header: 'Borrower ID',
-    accessorKey: 'user',
-    cell: ({ getValue, row }) => {
-      const userId = row.original.user;
-      const userValue = getValue() as string;
-      return (
-        <Link href={`/borrowers/${userId}`}>
-          <h1 className='underline underline-offset-2'>{userValue}</h1>
-        </Link>
-      );
-    },
-  },
-  {
     header: 'Project Name',
     accessorKey: 'project_name',
     cell: ({ getValue }) => {
@@ -73,9 +40,12 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    header: 'Project Status',
-    accessorKey: 'current_project_status',
-    cell: ({ getValue }) => getValue() ?? "-",
+    header: 'Project State',
+    accessorKey: 'project_state',
+    cell: ({ getValue }) => {
+      const value = getValue();
+      return typeof value === 'string' ? toTitleCase(value) : "-";
+    },
   },
   {
     header: 'Project Type',
@@ -88,13 +58,8 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ getValue }) => getValue() ?? "-",
   },
   {
-    header: 'Pin Code',
-    accessorKey: 'pin_code',
-    cell: ({ getValue }) => getValue() ?? "-",
-  },
-  {
     header: 'RERA Registration Number',
-    accessorKey: 'rera_regd_no',
+    accessorKey: 'rera_reg_no',
     cell: ({ getValue }) => getValue() ?? "-",
   },
   {
@@ -104,16 +69,6 @@ export const columns: ColumnDef<any>[] = [
       const date = getValue();
       return date && typeof date === "string" ? formatDate(date) : "-";
     },
-  },
-  {
-    header: 'Current Tranche Name',
-    accessorKey: 'current_tranche_name',
-    cell: ({ getValue }) => getValue() ?? "-",
-  },
-  {
-    header: 'Current Tranche Status',
-    accessorKey: 'current_tranche_status',
-    cell: ({ getValue }) => getValue() ?? "-",
   },
   {
     header: 'Line of Credit',
@@ -140,30 +95,6 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    header: 'Equity Commitment',
-    accessorKey: 'equity_commitment',
-    cell: ({ getValue }) => {
-      const total = getValue();
-      return total && typeof total === "string" ? formatINR(total) : "-";
-    },
-  },
-  {
-    header: 'Debt Commitment',
-    accessorKey: 'debt_commitment',
-    cell: ({ getValue }) => {
-      const total = getValue();
-      return total && typeof total === "string" ? formatINR(total) : "-";
-    },
-  },
-  {
-    header: 'Other Commitment',
-    accessorKey: 'other_commitment',
-    cell: ({ getValue }) => {
-      const total = getValue();
-      return total && typeof total === "string" ? formatINR(total) : "-";
-    },
-  },
-  {
     header: 'Project Total',
     accessorKey: 'project_total',
     cell: ({ getValue }) => {
@@ -180,8 +111,16 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    header: 'Application Date',
-    accessorKey: 'application_date',
+    header: 'Project Completion Date',
+    accessorKey: 'project_completion_date',
+    cell: ({ getValue }) => {
+      const date = getValue();
+      return date && typeof date === "string" ? formatDate(date) : "-";
+    },
+  },
+  {
+    header: 'Request for Approval Date',
+    accessorKey: 'request_for_approval_date',
     cell: ({ getValue }) => {
       const date = getValue();
       return date && typeof date === "string" ? formatDate(date) : "-";
@@ -196,45 +135,123 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    header: 'Last Tranche Date',
-    accessorKey: 'last_tranche_date',
+    header: 'Request Approval Date',
+    accessorKey: 'request_for_approval_date',
     cell: ({ getValue }) => {
       const date = getValue();
       return date && typeof date === "string" ? formatDate(date) : "-";
     },
   },
   {
-    header: 'Approved Status',
-    accessorKey: 'approved_by_admin',
+    header: 'Inventory',
+    accessorKey: 'inventory',
+    cell: ({ row }) => {
+      const projectId = row.original.id;
+      return (
+        <RoutingButton name={'View'} path={`/${projectId}/inventory`} />
+      )
+    },
+  },
+  {
+    header: 'Funding Sources',
+    accessorKey: 'funding_sources',
+    cell: ({ row }) => {
+      const projectId = row.original.id;
+      return (
+        <FundingSources projectId={projectId} />
+      )
+    },
+  },
+  {
+    header: 'Summary',
+    accessorKey: 'summary',
+    cell: ({ row }) => {
+      const projectId = row.original.id;
+      return (
+        <BudgetSummary projectId={projectId} />
+      )
+    },
+  },
+  {
+    header: 'Budget',
+    accessorKey: 'budget',
+    cell: ({ row }) => {
+      const projectId = row.original.id;
+      return (
+        <RoutingButton name={'View'} path={`/${projectId}/budget`} />
+      )
+    },
+  },
+  {
+    header: 'Documents',
+    accessorKey: 'documents',
+    cell: ({ row }) => {
+      const projectId = row.original.id;
+      return (
+        <RoutingButton name={'View'} path={`/${projectId}/documents`} />
+      )
+    },
+  },
+  {
+    header: 'Timeline',
+    accessorKey: 'timeline',
+    cell: ({ row }) => {
+      const projectId = row.original.id;
+      return (
+        <RoutingButton name={'View'} path={`/${projectId}/timeline`} />
+      )
+    },
+  },
+  {
+    header: 'Vendor',
+    accessorKey: 'vendor',
+    cell: ({ row }) => {
+      const projectId = row.original.id;
+      return (
+        <RoutingButton name={'View'} path={`/${projectId}/vendor`} />
+      )
+    },
+  },
+  {
+    header: 'Tranches',
+    accessorKey: 'tranches',
+    cell: ({ row }) => {
+      const projectId = row.original.id;
+      return (
+        <Link href={`/projects/${projectId}/tranches`}>View Tranches</Link>
+      )
+    },
+  },
+
+  {
+    header: 'Approval status',
+    accessorKey: 'is_verified_by_user',
     cell: ({ getValue }) => {
       const isApproved = getValue();
       return isApproved ? (
-        <IconCheck size={20} />
+        <X size={20} />
+        // <CheckCircle size={20} />
       ) : (
-        <IconX size={20} />
+        <X size={20} />
       );
     },
   },
   {
-    header: 'Agreement Signing status',
-    accessorKey: 'esign_status',
+    header: 'Actions',
+    accessorKey: 'actions',
     cell: ({ row }) => {
-      const esignStatus = row.original.esign_status;
-      
-      return esignStatus && esignStatus !== 'not started' ? (
-        <Link 
-          href={esignStatus}
-          target="_blank"
-          rel="noopener noreferrer" 
-          className="text-blue-500 underline"
-        >
-          Sign Document
+      const projectId = row.original.id;
+      const productId = row.original.product_id;
+      return (
+        <Link href={`/project-verification/${projectId}/`}>
+          <Button size="sm" className="text-sm">
+            Proceed to verify
+          </Button>
         </Link>
-      ) : (
-        <span>No Actions Needed</span>
-      );
+      )
     },
-  }
+  },
+
 ];
 
 export default columns;
