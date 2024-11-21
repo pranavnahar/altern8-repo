@@ -5,7 +5,7 @@ import ProjectPiechart from './piechart-project';
 
 const ChartCalender: FC<{ sanctionedLimit: number }> = ({ sanctionedLimit }) => {
   return (
-    <div className="col-span-2 w-full ml-2 xl:ml-5 justify-self-end">
+    <div className="col-span-2 w-[95%] ml-2 xl:ml-10 justify-self-end">
       <div className="mb-10 w-full rounded-lg [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] items-start justify-start relative [&.animate]:animate-[1s_ease_0s_1_normal_forwards_shake-horizontal] opacity-[1]">
         <div className="pt-5 text-center text-gray-300 text-xl font-medium">Limit Sanctioned</div>
         <div className="text-center text-purple-600 text-5xl font-medium">
