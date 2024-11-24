@@ -41,7 +41,7 @@ export const getAccessToken = async () => {
   return false;
 };
 
-async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<any> {
+async function fetchWithAuth(url: string, options: RequestInit = {},file : boolean = false): Promise<any> {
   const token = await getAuthToken()
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`, {
     ...options,
@@ -64,7 +64,7 @@ async function fetchWithAuth(url: string, options: RequestInit = {}): Promise<an
     throw new Error('Failed to fetch')
   }
 
-  return response.json()
+  return file ? response : response.json()
 }
 
 export async function getLedgerDetails(): Promise<{ accounts: Account[]
@@ -123,3 +123,41 @@ export async function getTransactions(id: string): Promise<{
     };
   }
 }
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+export const uploadBulkTransactions = async (
+  formData: FormData,
+  setUploadProgress?: (arg: number) => void
+) => {
+  try {
+    const token = await getAuthToken()
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `${API_URL}/admin-api/ledger/upload-bulk-transactions/`, true);
+    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && setUploadProgress) {
+        const progress = Math.round((event.loaded / event.total) * 100);
+        setUploadProgress(progress);
+      }
+    };
+
+    return new Promise((resolve, reject) => {
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+
+          reject(new Error(`HTTP error! status: ${xhr.status}`));
+        }
+      };
+      xhr.onerror = () => reject(new Error('Network error'));
+      xhr.send(formData);
+    });
+  } catch (error) {
+    console.log(error)
+  }
+};
+
+
