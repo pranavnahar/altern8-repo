@@ -11,7 +11,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex mt-8">
-      <div className="flex-[3] mx-16">
+      <div className="min-w-[40%] max-w-[60%] mx-16">
         <ActionItems
           showActionItems={true}
           latePayments={[
