@@ -11,36 +11,30 @@ export default async function DashboardPage() {
   
   return (
     <div className="flex mt-8">
-      <div className="w-[calc(100%-385px)] transition-all duration-300 px-2 pl-5">
-        <div className="space-y-6">
-          <ActionItems
-            showActionItems={true}
-            latePayments={[
-              { id: '1', amount: '$1000', dueDate: '2024-10-15', daysOverdue: 5 },
-              { id: '2', amount: '$2000', dueDate: '2024-10-10', daysOverdue: 10 },
-            ]}
-            upcomingPayments={[
-              { id: '3', amount: '$1500', dueDate: '2024-11-01', daysUntilDue: 7 },
-              { id: '4', amount: '$23455', dueDate: '2024-11-05', daysUntilDue: 11 },
-            ]}
-            showActionItemsPath="/dashboard/show-action-items"
+      <div className="min-w-[40%] max-w-[60%] mx-16">
+        <ActionItems
+          showActionItems={true}
+          latePayments={[
+            { id: '1', amount: '$1000', dueDate: '2024-10-15', daysOverdue: 5 },
+            { id: '2', amount: '$2000', dueDate: '2024-10-10', daysOverdue: 10 }
+          ]}
+          upcomingPayments={[
+            { id: '3', amount: '$1500', dueDate: '2024-11-01', daysUntilDue: 7 },
+            { id: '4', amount: '$23455', dueDate: '2024-11-05', daysUntilDue: 11 }
+          ]}
+          showActionItemsPath="/dashboard/show-action-items"
+        />
+        <div className=" px-10">
+          <div className="text-center text-2xl font-medium text-white mt-8">List of Upcoming Projects</div>
+          <BasicTable
+            data={projectList.results || []}
+            columns={columns}
+            filters={filters}
+            needFilters={false}
           />
-          
-          <div>
-            <div className="text-center text-2xl font-medium text-white mb-6">
-              List of Upcoming Projects
-            </div>
-            <BasicTable
-              data={projectList.results || []}
-              columns={columns}
-              filters={filters}
-              needFilters={false}
-            />
-          </div>
         </div>
       </div>
-      
-      <div className="flex-shrink-0">
+      <div className="flex-1">
         <ChartCalender sanctionedLimit={sanctionedLimit} />
       </div>
     </div>
