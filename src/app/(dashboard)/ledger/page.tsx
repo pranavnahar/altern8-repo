@@ -5,6 +5,8 @@ import { accountsColumns } from "./columns"
 
 const Page = async () => {
   const { accounts, otherAccounts, trancheIDs } = await getLedgerDetails()
+  console.log("ledeger detials are as follows: ", accounts)
+
   const allAccounts = [...accounts, ...otherAccounts]
 
   return (

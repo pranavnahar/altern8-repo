@@ -30,6 +30,16 @@ const TransactionSheet: React.FC<Props> = ({ accounts, trancheIds, mode }) => {
   const isEditMode = mode === 'edit'
   const { showToast } = useToast()
 
+  // Check if both selected accounts are virtual
+  const isVirtualTransaction = React.useMemo(() => {
+    //@ts-ignore
+    const fromAccount = accounts.find(account => account.id.toString() === transactionData.from_account)
+    //@ts-ignore
+    const toAccount = accounts.find(account => account.id.toString() === transactionData.to_account)
+    
+    return fromAccount?.is_virtual && toAccount?.is_virtual
+  }, [accounts, transactionData.from_account, transactionData.to_account])
+
   const handleFieldChange = (name: string, value: string | boolean | File | Date | null): void => {
     setTransactionData(prevData => ({
       ...prevData,
@@ -73,7 +83,7 @@ const TransactionSheet: React.FC<Props> = ({ accounts, trancheIds, mode }) => {
         amount: transactionData.amount as string || '0.00',
         description: transactionData.description as string || '',
         status: transactionData.status as string || 'Pending for Approval',
-        receipt: transactionData.receipt || null,
+        receipt: !isVirtualTransaction ? transactionData.receipt : null, // Don't include receipt for virtual transactions
         timestamp: timestamp,
         tranche: String(trancheValue) || '',
         from_account: (transactionData.from_account as string) || '',
@@ -91,6 +101,8 @@ const TransactionSheet: React.FC<Props> = ({ accounts, trancheIds, mode }) => {
       });
 
       const result = await createTransaction(formData);
+
+      console.log("the result of the create transaction is givin this vale: ", result)
 
       if (result.success) {
         showToast({
@@ -124,8 +136,8 @@ const TransactionSheet: React.FC<Props> = ({ accounts, trancheIds, mode }) => {
           return account.id != null;
         })
         .map(account => ({
-          value: account.id,
-          label: account.name || account.id,
+          value: account.id.toString(),
+          label: `${account.name || account.id}${account.is_virtual ? ' (Virtual)' : ''}`,
         }))
     }
 
@@ -166,9 +178,7 @@ const TransactionSheet: React.FC<Props> = ({ accounts, trancheIds, mode }) => {
         )
 
       case 'switch':
-        return (
-          null
-        )
+        return null
 
       case 'select':
         return (
@@ -190,13 +200,17 @@ const TransactionSheet: React.FC<Props> = ({ accounts, trancheIds, mode }) => {
         )
 
       case 'file':
+        // Don't render the file upload field if both accounts are virtual
+        if (fieldName === 'receipt' && isVirtualTransaction) {
+          return null
+        }
         return (
           <FileField
             {...commonProps}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const file = e.target.files?.[0]
+              const file = e.target.files?.[0];
               if (file) {
-                handleFieldChange(fieldName, file)
+                handleFieldChange(fieldName, file);
               }
             }}
           />

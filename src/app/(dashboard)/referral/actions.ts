@@ -40,6 +40,8 @@ export async function sendInvite(prevState: ActionState, formData: FormData): Pr
   const userId = await getUserId()
   const referralLink = `${frontendUrl}/register?referal_code=${userId}`
 
+  console.log("sending this as the data: ", userId, referralLink)
+
   try {
     const response = await fetch(`${apiUrl}/user-dashboard-api/referral-email/`, {
       method: 'POST',
@@ -49,6 +51,8 @@ export async function sendInvite(prevState: ActionState, formData: FormData): Pr
       },
       body: JSON.stringify({ email: email.trim(), link: referralLink }),
     })
+
+    console.log("teh reponse for sending thr invite is this: ", response)
 
     if (!response.ok) {
       throw new Error('Failed to send invitation')
@@ -85,6 +89,8 @@ export async function uploadBulkInvites(prevState: ActionState, formData: FormDa
     if (!response.ok) {
       throw new Error('Failed to send bulk emails')
     }
+
+    console.log("the email invitation was sent successfully")
 
     return { status: 'success', message: 'Bulk emails sent successfully!' }
   } catch (error) {

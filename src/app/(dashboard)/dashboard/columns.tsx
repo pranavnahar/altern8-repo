@@ -52,16 +52,17 @@ export const columns: ColumnDef<any>[] = [
   },
   {
     header: 'Approved Status',
-    accessorKey: 'approved_by_admin',
-    cell: ({ getValue }) => {
-      const isApproved = getValue();
+
+    accessorKey: 'approved_by_admin_', //maybe things can cahnge here as the same accessorKey renders same nae for both ststaus columsn
+    cell: ({ row }) => {
+      const isApproved = row.original.approved_by_admin; 
       return isApproved ? (
         <IconCheck size={20} />
       ) : (
         <IconX size={20} />
       );
     },
-  }
+  },
 ];
 
 export default columns;

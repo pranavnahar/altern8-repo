@@ -6,6 +6,7 @@ import ChartCalender from './components/chart-and-calender';
 export default async function DashboardPage() {
   const sanctionedLimit = await getSanctionedLimit();
   const projectList = await fetchProjectData();
+  console.log("the project results are in this format: ", projectList)
   const filters = Object.keys(statusColors);
   
   return (

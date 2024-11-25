@@ -32,7 +32,7 @@ const PocForm = () => {
   const [loadingSpinner, setLoadingSpinner] = useState(true);
   const [currentPrimaryPoc, setCurrentPrimaryPoc] = useState('');
   const router = useRouter();
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
   // Handle token
   let accessToken = parseCookies().altern8_useraccess;
@@ -149,7 +149,7 @@ const PocForm = () => {
     if (!validateName(formData.name)) {
       showToast({
         message: `Valid Name is required`,
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -157,7 +157,7 @@ const PocForm = () => {
     if (!validateEmail(formData.email)) {
       showToast({
         message: `Invalid email address`,
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -165,7 +165,7 @@ const PocForm = () => {
     if (!validatePhoneNumber(formData.phoneNumber)) {
       showToast({
         message: `Phone number must be a 10-digit number`,
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -173,7 +173,7 @@ const PocForm = () => {
     if (formData.designation.length < 3) {
       showToast({
         message: `Please add valid designation`,
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -227,14 +227,14 @@ const PocForm = () => {
 
         console.error('Failed to send otp', server_error);
         showToast({
-          message :`${server_error.message}`,
-          type: 'info'
+          message: `${server_error.message}`,
+          type: 'info',
         });
       }
     } catch (error) {
       showToast({
         message: `Failed to send otp, system error`,
-        type: 'info'
+        type: 'info',
       });
     } finally {
       setLoadingSpinner(false);
@@ -249,7 +249,7 @@ const PocForm = () => {
     if (formData.otp.length < 3) {
       showToast({
         message: `Please enter a valid otp`,
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -288,21 +288,21 @@ const PocForm = () => {
       if (response.ok) {
         showToast({
           message: `POC details submitted successfully`,
-          type: 'info'
+          type: 'info',
         });
         GetPoc();
         setOtpSent(false);
         setFormData({ name: '', email: '', phoneNumber: '', designation: '', otp: '' });
       } else {
         showToast({
-            message: `POC details submission failed, server error`,
-            type: 'info'
+          message: `POC details submission failed, server error`,
+          type: 'info',
         });
       }
     } catch (error) {
       showToast({
         message: `POC details submission failed, system error`,
-        type: 'info'
+        type: 'info',
       });
     } finally {
       setLoadingSpinner(false);
@@ -333,7 +333,7 @@ const PocForm = () => {
     if (currentPrimaryPoc === '') {
       showToast({
         message: `Please select a valid poc`,
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -374,7 +374,7 @@ const PocForm = () => {
         await GetPoc();
         showToast({
           message: `Primary POC updated successfully.`,
-          type: 'info'
+          type: 'info',
         });
       } else {
         let server_error = await response.json();
@@ -383,13 +383,13 @@ const PocForm = () => {
 
         showToast({
           message: `${server_error.message} `,
-          type: 'info'
+          type: 'info',
         });
       }
     } catch (error) {
       showToast({
         message: `Server Connection Error updating primary POC`,
-        type: 'info'
+        type: 'info',
       });
     } finally {
       setLoadingSpinner(false);
@@ -432,12 +432,15 @@ const PocForm = () => {
             {pocDetails.map((poc, index) => (
               <tr key={index} className="">
                 <td className="p-3 text-sm font-medium text-gray-300">{poc.name}</td>
-                <td className="p-3 text-sm font-medium text-gray-300 ">{poc.email}</td>
-
+                <td className="p-3 text-sm font-medium text-gray-300">{poc.email}</td>
                 <td className="p-3 text-sm font-medium text-gray-300">{poc.phone_number}</td>
-                <td className="p-3 text-sm font-medium text-gray-300">{poc.designation}</td>
-                <td className="p-3 text-sm font-medium text-center text-gray-300">
-                  {poc.is_primary ? <span>&#10004;</span> : <span>&#10008;</span>}
+                <td className="p-3 text-sm font-medium text-gray-300 flex items-center space-x-5">
+                  <span>{poc.designation}</span>
+                  {poc.is_primary ? (
+                    <span className="text-green-500">&#10004;</span>
+                  ) : (
+                    <span className="text-red-500">&#10008;</span>
+                  )}
                 </td>
               </tr>
             ))}
@@ -480,11 +483,7 @@ const PocForm = () => {
             </select>
           </div>
           <div className="flex justify-center pt-5">
-            <Button
-              onClick={handleChangePrimaryPOC}
-              size="sm"
-              type="submit"
-            >
+            <Button onClick={handleChangePrimaryPOC} size="sm" type="submit">
               Proceed
             </Button>
           </div>
@@ -573,7 +572,7 @@ const PocForm = () => {
               type="submit"
               variant="expandIcon"
               Icon={IconPlus}
-              iconPlacement='right'
+              iconPlacement="right"
             >
               Add
             </Button>
@@ -619,7 +618,7 @@ const PocForm = () => {
               onClick={handleSubmitOtp}
               type="submit"
               variant="expandIcon"
-              iconPlacement='right'
+              iconPlacement="right"
               Icon={IconChevronRight}
             >
               Add
