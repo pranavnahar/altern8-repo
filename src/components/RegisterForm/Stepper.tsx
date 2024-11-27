@@ -138,6 +138,8 @@ const Stepper = () => {
   }, [newStep]);
 
   const displaySteps = finalStep.map((step, index) => {
+    console.log(step);
+    
     return (
       <div
         key={index}
