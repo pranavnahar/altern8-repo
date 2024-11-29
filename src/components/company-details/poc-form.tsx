@@ -228,7 +228,7 @@ const PocForm = () => {
         console.error('Failed to send otp', server_error);
         showToast({
           message: `${server_error.message}`,
-          type: 'info',
+          type: 'info'
         });
       }
     } catch (error) {
@@ -295,8 +295,8 @@ const PocForm = () => {
         setFormData({ name: '', email: '', phoneNumber: '', designation: '', otp: '' });
       } else {
         showToast({
-          message: `POC details submission failed, server error`,
-          type: 'info',
+            message: `POC details submission failed, server error`,
+            type: 'info'
         });
       }
     } catch (error) {
@@ -333,7 +333,7 @@ const PocForm = () => {
     if (currentPrimaryPoc === '') {
       showToast({
         message: `Please select a valid poc`,
-        type: 'info',
+        type: 'info'
       });
       return;
     }
@@ -374,7 +374,7 @@ const PocForm = () => {
         await GetPoc();
         showToast({
           message: `Primary POC updated successfully.`,
-          type: 'info',
+          type: 'info'
         });
       } else {
         let server_error = await response.json();
@@ -383,13 +383,13 @@ const PocForm = () => {
 
         showToast({
           message: `${server_error.message} `,
-          type: 'info',
+          type: 'info'
         });
       }
     } catch (error) {
       showToast({
         message: `Server Connection Error updating primary POC`,
-        type: 'info',
+        type: 'info'
       });
     } finally {
       setLoadingSpinner(false);
@@ -483,7 +483,11 @@ const PocForm = () => {
             </select>
           </div>
           <div className="flex justify-center pt-5">
-            <Button onClick={handleChangePrimaryPOC} size="sm" type="submit">
+            <Button
+              onClick={handleChangePrimaryPOC}
+              size="sm"
+              type="submit"
+            >
               Proceed
             </Button>
           </div>
