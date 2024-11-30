@@ -9,7 +9,7 @@ const Footer = () => {
         <div className=" mx-7 ">
           <div className="grid grid-cols-1 md:grid-cols-2 justify-between  gap-2 text-center sm:text-left">
             {/* contact us section  */}
-            <div className="mb-5 ">
+            <div className="mb-5 leading-[25px]">
               <div className="text-5xl  font-medium font-roboto text-gray-300 my-5">Contact Us</div>
               {/* <a className=" text-base2  text-gray-400  " href="tel:+123400123">
                 Call : +123 400 123
@@ -33,7 +33,7 @@ const Footer = () => {
             </div>
 
             {/* terms and policy  */}
-            <div className="mb-5">
+            <div className="mb-5 leading-[25px]">
               <div className="text-5xl font-medium font-roboto text-gray-300 my-5">
                 Terms and Policy
               </div>
