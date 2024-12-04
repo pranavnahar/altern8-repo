@@ -1,10 +1,11 @@
 "use server"
 
-import { getAuthToken } from "@/utils/auth-actions";
+
 import { TaksResponse } from "../types";
 import ky from "ky";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { getAuthToken } from "@/utils/server-auth";
 
 export async function fetchTrancheTasks(projectID: number, trancheID: number, timeoutMs: number = 60000): Promise<TaksResponse> {
   async function makeRequest(token: string) {

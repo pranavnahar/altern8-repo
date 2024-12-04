@@ -2,16 +2,7 @@
 
 import { cookies } from 'next/headers'
 import { Project, ProjectsResponse } from './types'
-import { redirect } from 'next/navigation';
-
-async function getAuthToken() {
-  const cookieStore = cookies();
-  const accessToken = cookieStore.get('altern8_useraccess');
-  if (!accessToken) {
-    redirect('/login')
-  }
-  return accessToken.value;
-}
+import { getAuthToken } from '@/utils/auth-actions'
 
 const fetchProjects = async (altern8_useraccess: string): Promise<ProjectsResponse> => {
   try {

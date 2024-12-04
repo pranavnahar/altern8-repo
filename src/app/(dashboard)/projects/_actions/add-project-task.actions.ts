@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache';
-import { getAuthToken } from '@/utils/auth-actions';
+import { getAuthToken } from '@/utils/server-auth';
 
 type ProjectStatus = {
   owner: string;

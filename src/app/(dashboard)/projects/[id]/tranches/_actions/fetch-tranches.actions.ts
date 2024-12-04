@@ -3,7 +3,7 @@
 import ky from "ky";
 import { notFound, redirect } from "next/navigation";
 import { TrancheResponse } from "../types";
-import { getAuthToken } from "@/utils/auth-actions";
+import { getAuthToken } from "@/utils/server-auth";
 
 export async function fetchTranches(
   projectID: string,
