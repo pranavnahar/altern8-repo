@@ -13,7 +13,7 @@ import BasicTable from '@/components/global/basic-table';
 import { fetchTrancheRules } from '../_actions/tranche-rules.actions';
 import { Rule } from '../types';
 import { rulesColumns } from '../_columns/rule-columns';
-import TableSkeleton from '@/components/ledger/_components/table-skeleton';
+import BasicTableSkeleton from '@/components/global/basic-table-skeleton';
 
 type Props = {
   projectId: number;
@@ -56,7 +56,7 @@ const TrancheRules = ({ projectId, trancheId }: Props) => {
 
         {isLoading ? (
           <div className="flex justify-center items-center h-full">
-            <TableSkeleton />
+            <BasicTableSkeleton />
           </div>
         ) : error ? (
           <div className="text-red-500 text-center">{error}</div>

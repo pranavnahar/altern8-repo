@@ -1,6 +1,6 @@
 "use server";
 
-import { getAuthToken } from "@/utils/auth-actions";
+import { getAuthToken } from "@/utils/server-auth";
 import ky from "ky";
 import { notFound } from "next/navigation";
 import { Budget, BudgetResponse } from "../types";

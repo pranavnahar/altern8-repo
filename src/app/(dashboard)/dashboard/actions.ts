@@ -1,13 +1,13 @@
 "use server"
 
-import { getAccessToken, getAuthToken } from "@/utils/server-auth"
 import ky from "ky"
 import { notFound, redirect } from "next/navigation"
 import { ProjectResponse } from "../projects/types"
+import { getAuthToken } from "@/utils/auth-actions"
 
 export async function getSanctionedLimit(): Promise<number> {
   try {
-    let accessToken = await getAuthToken()
+    let token = await getAuthToken()
 
     const fetchLimit = async (token: string) => {
       const response = await fetch(`${process.env.SERVER_URL}/user-dashboard-api/check-limit/`, {
@@ -26,19 +26,7 @@ export async function getSanctionedLimit(): Promise<number> {
       }
     }
 
-    let limit = await fetchLimit(accessToken)
-
-    if (limit === null) {
-      const newToken = await getAccessToken()
-      if (newToken === false) {
-        redirect('/login')
-      }
-      limit = await fetchLimit(newToken)
-      if (limit === null) {
-        redirect('/login')
-      }
-    }
-
+    let limit = await fetchLimit(token)
     return limit
   } catch (error) {
     redirect('/login')

@@ -1,21 +1,10 @@
 'use server'
 
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { Account, Transaction } from './types'
 import { parseCookies } from 'nookies'
 import { setAccessTokenCookie } from '@/utils/auth'
-
-async function getAuthToken() {
-  const cookieStore = cookies()
-  const accessToken = cookieStore.get('altern8_useraccess')
-  if (!accessToken) {
-    redirect('/login')
-  }
-  return accessToken.value
-}
-
+import { getAuthToken } from '@/utils/auth-actions'
 
 export const getAccessToken = async () => {
   const cookies = parseCookies();

@@ -1,10 +1,11 @@
 "use server";
 
-import { getAuthToken } from "@/utils/auth-actions";
+
 import ky from "ky";
 import { notFound } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { RulesResponse } from "../types";
+import { getAuthToken } from "@/utils/server-auth";
 
 export async function fetchTrancheRules(
   projectID: number,

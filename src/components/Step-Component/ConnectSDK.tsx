@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import Script from 'next/script';
 import { RootFiClient, RootFiEnvironment } from 'rootfi-api';
 import Image from 'next/image';
-import { Box, CircularProgress } from '@mui/material';
 import { parseCookies } from 'nookies';
 import { useToast } from '../../utils/show-toasts';
+import { Loader2 } from 'lucide-react';
 
 interface InviteLinkData {
   data: {
@@ -151,9 +151,7 @@ const ConnectSDK: React.FC<{ integration: any; category: any; onEventChange: any
             {!isLoading ? (
               <Image src={logoUrl} alt="Open RootFi SDK" objectFit="contain" className="rounded-full" width={100} height={500} />
             ) : (
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <CircularProgress />
-              </Box>
+              <Loader2 className='size-6 animate-spin my-auto'/>
             )}
           </div>
         </button>
