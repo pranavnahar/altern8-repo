@@ -2,12 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { parseCookies } from 'nookies';
-import LinearBuffer from '../../../components/LinearBuffer';
-import AnimatedLogo from '../../../components/Header/AnimatedLogo';
-import { useToast } from '../../../utils/show-toasts';
-import { setAccessTokenCookie, setRefreshTokenCookie } from '../../../utils/auth';
-let accessToken = parseCookies().altern8_useraccess;
+import LinearBuffer from '@/components/LinearBuffer';
+import AnimatedLogo from '@/components/Header/AnimatedLogo';
+import { useToast } from '@/utils/show-toasts';
+import { setAccessTokenCookie, setRefreshTokenCookie } from '@/utils/auth';
+import { getAuthToken } from '@/utils/auth-actions';
 
 const page = () => {
   const [otpForm, setOtpForm] = useState({
@@ -82,7 +81,6 @@ const page = () => {
       try {
         setLoading(true);
         let body = newRecord;
-        console.log(body);
         const response = await fetch(`${apiUrl}/user-api/verify-otp/`, {
           method: 'POST',
           headers: {
@@ -98,11 +96,6 @@ const page = () => {
           // Set the access token in a cookie
           setAccessTokenCookie(data.access);
           setRefreshTokenCookie(data.refresh);
-
-          // update accessToken variable
-          accessToken = data.access;
-
-          console.log('otp verified successfully', accessToken);
           setShowResetPasswordPage(true);
         } else {
           let server_error = await response.json();
@@ -149,12 +142,12 @@ const page = () => {
     try {
       setLoading(true);
       let body = newRecord;
-      console.log(body);
+      const token = await getAuthToken()
       const response = await fetch(`${apiUrl}/user-api/change-password/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(body),
       });

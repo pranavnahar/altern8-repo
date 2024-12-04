@@ -186,7 +186,7 @@ export const InventoryTable = (inventoryData: any) => {
           needFilters={false}
         />
       </Card>
-      <InputForms
+      {/* <InputForms
         title="Create Budget"
         open={open}
         onOpenChange={OpenChange}
@@ -194,7 +194,7 @@ export const InventoryTable = (inventoryData: any) => {
         submitAction={(data: FormData, setData: (data: FormData) => void) => handleSubmit(data, setData)}
         edit={edit}
         getPath={edit ? `/rablet-api/inventories/${editId}/` : undefined}
-      />
+      /> */}
     </>
   );
 };

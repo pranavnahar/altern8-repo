@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from '@/utils/show-toasts';
 import { Budget } from '../types';
+import { createTrancheBudget } from '../_actions/tranche-budget.actions';
 
 interface Props {
   projectId: number;
@@ -45,7 +46,7 @@ const BudgetSheet = ({ projectId, trancheId, onSuccess }: Props) => {
     };
 
     try {
-      const result = await createBudget(payload);
+      const result = await createTrancheBudget(payload);
       showToast({
         message: 'Budget created',
         type: "success"

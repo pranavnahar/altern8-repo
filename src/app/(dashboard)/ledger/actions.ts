@@ -40,19 +40,6 @@ async function fetchWithAuth(url: string, options: RequestInit = {},file : boole
     },
   })
 
-  if (response.status === 401) {
-    const newToken = await getAccessToken()
-    if (newToken) {
-      return fetchWithAuth(url, options)
-    } else {
-      throw new Error('Unable to refresh token')
-    }
-  }
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch')
-  }
-
   return file ? response : response.json()
 }
 

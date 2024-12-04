@@ -228,15 +228,15 @@ export const Vendor = () => {
           needFilters={false}
         />
 
-        <InputForms
+        {/* <InputForms
           title="New Vendor"
           open={inputOpen}
           onOpenChange={OpenChange}
           data={vendorFields}
           submitAction={(data: FormData, setData: (data: FormData) => void) => handleSubmit(data, setData)}
-        />
+        /> */}
 
-        <InputForms
+        {/* <InputForms
           title="Upload Vendor List"
           open={uploadOpen}
           onOpenChange={() => setUploadOpen(false)}
@@ -245,7 +245,7 @@ export const Vendor = () => {
           usage="upload"
           edit={edit}
         //   getPath="" add the path here where we can  get the individual vendor detail
-        />
+        /> */}
       </div>
     </section>
   );

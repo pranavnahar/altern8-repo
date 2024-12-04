@@ -233,7 +233,3 @@ const GSTList = () => {
 };
 
 export default GSTList;
-function showToast(arg0: { message: string; type: string; }) {
-  throw new Error('Function not implemented.');
-}
-
