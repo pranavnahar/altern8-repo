@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { ColumnDef } from "@tanstack/react-table";
-import Link from 'next/link';
 import { CheckCircle, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import TrancheRules from './_components/tranche-rules';

@@ -1,6 +1,6 @@
 'use client'
+
 import { useState } from "react";
-// import { uploadBulkTransactions } from "../../../utils/ledger/transactions/transactions-service";
 import { Upload } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog,
@@ -11,14 +11,12 @@ import { Dialog,
   DialogTrigger, } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/utils/show-toasts";
-import { uploadBulkTransactions } from "../actions";
-import { getAuthToken } from "@/utils/server-auth";
+import { getAuthToken } from "@/utils/auth-actions";
 
 const TransactionUpload: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File>();
   const [uploadProgress, setUploadProgress] = useState(0);
-  console.log(uploadProgress);
   const { showToast } = useToast();
 
 
@@ -45,14 +43,14 @@ const TransactionUpload: React.FC = () => {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', `${process.env.NEXT_PUBLIC_API_URL}/admin-api/ledger/upload-bulk-transactions/`, true);
       xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-  
+
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable && setUploadProgress) {
           const progress = Math.round((event.loaded / event.total) * 100);
           setUploadProgress(progress);
         }
       };
-  
+
       return new Promise((resolve, reject) => {
         xhr.onload = () => {
           if (xhr.status >= 200 && xhr.status < 300) {

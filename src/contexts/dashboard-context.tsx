@@ -1,6 +1,7 @@
 'use client';
+
+import { getAuthToken } from '@/utils/auth-actions';
 import { jwtDecode } from 'jwt-decode';
-import { parseCookies } from 'nookies';
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface DashboardContextType {
@@ -43,9 +44,8 @@ export const DashboardProvider = ({ children }: DashboardProviderProps) => {
   useEffect(() => {
     const fetchTokenAndSetUserId = async () => {
       try {
-        // Retrieve the JWT token from cookies
-        const accessToken = parseCookies().altern8_useraccess;
-        const token = accessToken;
+
+        const token = await getAuthToken();
 
         if (token) {
           // Decode the token to extract information

@@ -1,7 +1,7 @@
 'use server'
 
-import { revalidatePath } from 'next/cache';
 import { getAuthToken } from '@/utils/auth-actions';
+import { revalidatePath } from 'next/cache';
 
 type ProjectStatus = {
   owner: string;
@@ -24,15 +24,10 @@ export async function addProjectTask(projectId: number, data: ProjectStatus) {
       body: JSON.stringify(data)
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to update project status');
-    }
-
     const result = await response.json();
     revalidatePath(`/project/${projectId}`);
     return { success: true, data: result };
   } catch (error) {
-    console.error('Error updating project status:', error);
     return { success: false, error: error instanceof Error ? error.message : 'An unknown error occurred' };
   }
 }

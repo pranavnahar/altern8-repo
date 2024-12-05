@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
 import { advisors } from "../../../data/advisors";
@@ -56,11 +58,11 @@ const AdvisorsSection: React.FC = () => {
                     {advisors.map((advisor: Advisor, index: number) => (
                         <motion.div
                             key={index}
-                            initial={{ scale: 1 }} 
-                            animate={{ scale: hoveredIndex === index ? 0.885 : 1 }} 
-                            transition={{ duration: 0.6 }} 
-                            onHoverStart={() => setHoveredIndex(index)} 
-                            onHoverEnd={() => setHoveredIndex(null)} 
+                            initial={{ scale: 1 }}
+                            animate={{ scale: hoveredIndex === index ? 0.885 : 1 }}
+                            transition={{ duration: 0.6 }}
+                            onHoverStart={() => setHoveredIndex(index)}
+                            onHoverEnd={() => setHoveredIndex(null)}
                             onClick={() => handleDivClick(advisor?.url)}
                             style={{ cursor: "pointer" }}
                             className="text-center max-h-full w-[45vw] sm:w-[40vw] md:w-[25vw] lg:w-[15vw] xl:w-[10vw] text-5xl text-white rounded-xl p-2 backdrop-brightness-90 bg-white/5 border border-white/15 shadow-lg"

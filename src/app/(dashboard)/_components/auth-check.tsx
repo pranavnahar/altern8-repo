@@ -1,8 +1,8 @@
 'use client'
 
 import React, { ReactNode, useEffect } from 'react'
-import { useAuth } from './auth-context'
 import { useRouter } from 'next/navigation'
+import { useAuth } from './auth-provider'
 
 type Props = {
   children: ReactNode
@@ -14,7 +14,7 @@ const AuthCheck = ({ children }: Props) => {
 
   useEffect(() => {
     if (!checkAuth()) {
-      router.push('/login')
+      router.push('/')
     }
   }, [checkAuth, router])
 

@@ -1,9 +1,8 @@
-// Join us section for landing page
+"use client"
 
 import { useEffect, useRef } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
 import Link from "next/link";
-import { parseCookies } from "nookies";
 
 // main return function
 const JoinUsSection = () => {
@@ -18,12 +17,6 @@ const JoinUsSection = () => {
             mainControls.start({ x: [900, 0] });
         }
     }, [isInView]);
-
-    const cookies = parseCookies();
-    const accessToken = cookies.altern8_useraccess;
-
-    // dynamiaclly create a redirection url based on whether user is logged in already or not
-    const redirectUrl = accessToken && accessToken.length > 5 ? '/dashboard' : '/register';
 
     return (
         <div
@@ -57,8 +50,8 @@ const JoinUsSection = () => {
 
                 {/* Get Credit button */}
                 <div className="my-0 mx-[!important] absolute top-[50%] left-[23%] sm:top-[50%] sm:left-[30%]    lg:w-[22.77%] lg:top-[266px] lg:right-[22.86%] lg:left-[54.37%] ">
-                    <a
-                        href={redirectUrl}
+                    <Link
+                        href="/login"
                         className="relative inline-flex items-center justify-center p-4 px-6 py-3 h-14 w-[200px] overflow-hidden font-medium text-white-font transition duration-300 ease-out border-0 border-[#1565c0] rounded-full  group"
                     >
                         <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white-font duration-300 -translate-x-full bg-[#1565c0] group-hover:translate-x-0 ease">
@@ -81,7 +74,7 @@ const JoinUsSection = () => {
                             Get Credit
                         </span>
                         <span className="relative invisible">Get Credit</span>
-                    </a>
+                    </Link>
                 </div>
             </motion.div>
         </div>

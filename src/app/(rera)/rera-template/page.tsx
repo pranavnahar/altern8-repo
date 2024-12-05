@@ -1,11 +1,10 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import Input from '../../../components/Input/input';
-import { parseCookies } from 'nookies';
+import Input from '@/components/Input/input';
 import { useRouter } from 'next/navigation';
-import { formTemplate } from '../../../utils/static';
-import { getAccessToken } from '../../../utils/auth';
-import { useToast } from '../../../utils/show-toasts';
+import { formTemplate } from '@/utils/static';
+import { useToast } from '@/utils/show-toasts';
+import { getAuthToken } from '@/utils/auth-actions';
 
 interface formDataType {
   basicInfo: { [key: string]: string };
@@ -59,17 +58,6 @@ export default function page() {
     document.getElementById('download-link')!.click();
   };
 
-  let accessToken = parseCookies().altern8_useraccess;
-
-  const ReplaceTokenOrRedirect = async () => {
-    const token = await getAccessToken();
-    if (!token) {
-      router.push('/login');
-    } else {
-      accessToken = token;
-    }
-  };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFile(e.target.files?.[0] || null);
   };
@@ -79,12 +67,8 @@ export default function page() {
     console.log('submitting the form');
 
     try {
-      if (!accessToken) {
-        await ReplaceTokenOrRedirect();
-      }
-
+      const token = await getAuthToken()
       const formDataToSend = new FormData();
-      console.log('the form data that is being sent is: ', formData);
 
       if (file) {
         formDataToSend.append('file', file);
@@ -113,10 +97,10 @@ export default function page() {
       }
 
       const formDataHeaders = {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       };
       const defaultHeaders = {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       };
 

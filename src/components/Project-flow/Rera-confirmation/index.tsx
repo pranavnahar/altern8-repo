@@ -1,12 +1,11 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Input from '../../../components/Input/input';
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { formTemplate } from '../../../utils/static';
-import { getAccessToken } from '../../../utils/auth';
 import { useToast } from '../../../utils/show-toasts';
 import Link from 'next/link';
+import { getAuthToken } from '@/utils/auth-actions';
 
 interface formDataType {
     basicInfo: { [key: string]: string };
@@ -134,32 +133,17 @@ export function ReraConfirmation() {
         }
     };
 
-    let accessToken = parseCookies().altern8_useraccess;
-
-    const ReplaceTokenOrRedirect = async () => {
-        const token = await getAccessToken();
-        if (!token) {
-            router.push('/login');
-        } else {
-            accessToken = token;
-        }
-    };
-
     const saveReraTemplate = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('submitting the form');
 
         try {
-            if (!accessToken) {
-                await ReplaceTokenOrRedirect();
-            }
+            const token = await getAuthToken()
 
             const formDataToSend = new FormData();
-            console.log('the form data that is being sent is: ', formData);
 
             if (file) {
                 formDataToSend.append('file', file);
-                console.log('file was uploaded by the user', file);
             } else {
                 const requiredFields = [
                     { field: 'user_id', label: 'User ID' },
@@ -184,10 +168,10 @@ export function ReraConfirmation() {
             }
 
             const formDataHeaders = {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${token}`,
             };
             const defaultHeaders = {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             };
 

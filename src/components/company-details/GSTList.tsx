@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import { MultiSelect } from '../../components/ui/multi-select';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from '../../components/ui/table';
 import { useGetGstList } from './use-gst-gstlist';
 import { Button } from '../../components/ui/button';
-import { apiUrl, getAccessToken } from '../../utils/auth';
-import { parseCookies } from 'nookies';
 import { useToast } from '../../utils/show-toasts';
 import { useRouter } from 'next/navigation';
+import { getAuthToken } from '@/utils/auth-actions';
 
 const GSTList = () => {
   const [loadingSpinner,setLoadingSpinner] = useState(false);
@@ -37,20 +35,6 @@ const GSTList = () => {
     });
   };
 
-  let accessToken = parseCookies().accessToken;
-
-  const ReplaceTokenOrRedirect = async () => {
-    // get new access token with help of Refresh token
-    const token = await getAccessToken();
-    // if not able to get the token then redirect to login
-    if (!token) {
-      router.push('/login');
-    } else {
-      accessToken = token;
-    }
-  };
-
-
   const handleSubmitGstin = async () => {   if (formData.gstin.length < 10) {
     showToast({
       message: 'Please type a correct GSTIN number',
@@ -63,32 +47,17 @@ const GSTList = () => {
   try {
     // Set loading to true when starting the fetch
     setLoadingSpinner(true);
-
+    const token = await getAuthToken()
     let body = formData
-    // console.log(body);
-    let response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-account/`, {
+    let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user-dashboard-api/change-primary-account/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
 
       body: JSON.stringify(body),
     });
-
-    if (response.status === 401) {
-      await ReplaceTokenOrRedirect();
-      // Again try to fetch the data
-      response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-account/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-
-        body: JSON.stringify(body),
-      });
-    }
 
     if (response.ok) {
       await response.json();
@@ -126,12 +95,6 @@ const GSTList = () => {
 
   return (
     <div className="max-w-2xl mx-auto mt-8">
-      {loadingSpinner && (
-        <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-gray-600 bg-opacity-50">
-          <LoadingSpinner />
-        </div>
-      )}
-
       <div className="mb-5 rounded-lg">
         <h1 className="mb-3 text-lg font-medium tracking-tight text-center text-gray-200">
           GST Number List
@@ -233,7 +196,3 @@ const GSTList = () => {
 };
 
 export default GSTList;
-function showToast(arg0: { message: string; type: string; }) {
-  throw new Error('Function not implemented.');
-}
-

@@ -2,9 +2,9 @@ import { useContext, useState, useCallback } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
 import { useRouter } from 'next/navigation';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
-import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import { useToast } from '../../utils/show-toasts';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -19,10 +19,8 @@ const UploadContract = ({ demo }: Props) => {
   const [contractFiles, setContractFiles] = useState<File[]>([]);
   const [pdcFiles, setPdcFiles] = useState<File[]>([]);
   const [checkbox, setCheckbox] = useState(true);
-  const accessToken = parseCookies().altern8_useraccess;
   const router = useRouter();
 
- 
   const handleNextClick = async () => {
     try {
       if (demo) {
@@ -62,21 +60,17 @@ const UploadContract = ({ demo }: Props) => {
         return;
       }
     }
-    console.log(formData);
+
     try {
       setLoading(true);
+      const token = await getAuthToken()
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
-
-      // if unauthorized then push to login page
-      if (response.status === 401) {
-        router.push('/login');
-      }
 
       if (response.ok) {
         showToast({
@@ -105,19 +99,15 @@ const UploadContract = ({ demo }: Props) => {
     };
     try {
       setLoading(true);
+      const token = await getAuthToken()
       const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(bodyData),
       });
-
-      // if unauthorized then push to login page
-      if (response.status === 401) {
-        router.push('/login');
-      }
 
       if (response.ok) {
         console.log('checkbox submitted successfully');
@@ -255,7 +245,7 @@ const UploadContract = ({ demo }: Props) => {
         </div>
       </div>
 
-    
+
 
       {currentStep !== steps.length && (
         <div className="mt-4 container flex flex-col">

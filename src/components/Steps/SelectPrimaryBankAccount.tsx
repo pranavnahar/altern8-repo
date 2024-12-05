@@ -2,9 +2,9 @@
 
 import { useContext, useState, useEffect } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -19,28 +19,16 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
   const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } =
     useContext(StepperContext);
   const router = useRouter();
-  // Handle token
-  let accessToken = parseCookies().altern8_useraccessForRegister || localStorage.getItem('token');
-
-  // handle input change
-  // const handleChange = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   const { value } = e.target;
-  //   setCurrentBankAccount(value);
-  // };
 
   const GetBankAccountList = async () => {
+    const token = await getAuthToken()
     setLoading(true);
     try {
       let response = await fetch(`${apiUrl}/user-api/select-primary-bank/`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      // if unauthorized then push to login page
-      if (response.status === 401) {
-        router.push('/login');
-      }
 
       if (response.ok) {
         const responseData = await response.json();
@@ -99,8 +87,7 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
         accountNumber: '',
       };
       newRecord.accountNumber = currentBankAccount;
-
-      console.log(newRecord);
+      const token = await getAuthToken()
       try {
         if (newRecord) {
           const body = newRecord;
@@ -109,15 +96,10 @@ const SelectPrimaryBankAccount = ({ demo }: Props) => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(body),
           });
-
-          // if unauthorized then push to login page
-          if (response.status === 401) {
-            router.push('/login');
-          }
 
           if (response.ok) {
             let server_message = await response.json();

@@ -242,10 +242,11 @@
 // };
 
 // export default ReviewSection;
+"use client"
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, useInView, useAnimation } from 'framer-motion';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 const ReviewSection = () => {
   // Storing the reviews
@@ -377,13 +378,13 @@ const ReviewSection = () => {
           onClick={prevReview}
           className="flex items-center justify-center hover:bg-[#762559] rounded-full h-10 w-10 text-gray-500 hover:text-white"
         >
-          <FaChevronLeft />
+          <IconChevronLeft />
         </button>
         <button
           onClick={nextReview}
           className="flex items-center justify-center hover:bg-[#762559] rounded-full h-10 w-10 text-gray-500 hover:text-white"
         >
-          <FaChevronRight />
+          <IconChevronRight />
         </button>
       </div>
     </div>
