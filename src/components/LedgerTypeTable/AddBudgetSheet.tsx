@@ -4,10 +4,8 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useParams } from 'next/navigation';
-import { getAccessToken } from '../../utils/auth';
-import { parseCookies } from 'nookies';
-import { apiUrl } from '../../utils/auth';
 import { useToast } from '../../utils/show-toasts';
+import { getAuthToken } from '@/utils/auth-actions';
 
 const AddBudgetSheet = () => {
   const params = useParams();
@@ -33,44 +31,18 @@ const AddBudgetSheet = () => {
     }));
   };
 
-  let altern8_useraccess = parseCookies().altern8_useraccess;
-
-  const ReplaceTokenOrRedirect = async (): Promise<void> => {
-    const token = await getAccessToken();
-    if (!token) {
-      window.location.replace('/login');
-    } else {
-      altern8_useraccess = token;
-    }
-  };
-
   const handleSubmit = async () => {
-    console.log(formData);
+    const token = await getAuthToken()
     try {
-      if (!altern8_useraccess) {
-        await ReplaceTokenOrRedirect();
-      }
-
-      let response = await fetch(`${apiUrl}/rablet-api/budgets/tranches/${templateId}/`, {
+      let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rablet-api/budgets/tranches/${templateId}/`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${altern8_useraccess}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
 
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/rablet-api/budgets/tranches/${templateId}/`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${altern8_useraccess}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-      }
       if (response.ok) {
         const responseData = await response.json();
         showToast({

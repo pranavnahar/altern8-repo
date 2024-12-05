@@ -9,9 +9,8 @@ import { FormInput } from '../LedgerTypeTable/Filter';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import DatePicker from '../DatePicker/DatePicker';
 import FileUpload from '../FileUpload/FileUpload';
-import { apiUrl, getAccessToken } from '../../utils/auth';
-import { parseCookies } from 'nookies';
 import { useParams, useRouter } from 'next/navigation';
+import { getAuthToken } from '@/utils/auth-actions';
 
 interface InputFormsTypes {
   open: boolean;
@@ -164,30 +163,21 @@ export const InputForms = ({
   onProjectCreated,
   submitAction = () => console.log('Function not passed'),
 }: InputFormsTypes) => {
-  const ReplaceTokenOrRedirect = async (): Promise<void> => {
-    const token = await getAccessToken();
-    if (!token) {
-      window.location.replace('/login');
-    } else {
-      altern8_useraccess = token;
-    }
-  };
-  // Form Input Sections as object
+
   const [formData, setFormData] = useState<FormData>({});
-  let altern8_useraccess = parseCookies().altern8_useraccess;
   const [id, setId] = useState<string | null>(null);
   const params = useParams();
   let URL = '';
   if (type === 'documents') {
     // no use of this
-    URL = `${apiUrl}/rablet-api/projects/${id}/documents/`;
+    URL = `${process.env.NEXT_PUBLIC_API_URL}/rablet-api/projects/${id}/documents/`;
   }
   if (type === 'tranches') {
     // this api is of no use as of now
-    URL = `${apiUrl}/rablet-api/projects/${id}/tranches/2/documents/`; //should be dynamic tranche id
+    URL = `${process.env.NEXT_PUBLIC_API_URL}/rablet-api/projects/${id}/tranches/2/documents/`; //should be dynamic tranche id
   } else {
     // route which will be trggered when user clicks on submit button in mattrum flow
-    URL = `${apiUrl}/rablet-api/projects/`;
+    URL = `${process.env.NEXT_PUBLIC_API_URL}/rablet-api/projects/`;
   }
   useEffect(() => {
     const fetchTemplateId = async () => {
@@ -215,15 +205,8 @@ export const InputForms = ({
 
 
     try {
-      let altern8_useraccess = parseCookies().altern8_useraccess; // Access token from cookies
-      // console.log("Token used for authorization: ", altern8_useraccess);
-
-      if (!altern8_useraccess) {
-        console.log("User access token is missing");
-        await ReplaceTokenOrRedirect();
-      }
-
-      const base64Url = altern8_useraccess.split('.')[1];
+      const token = await getAuthToken()
+      const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const decodedToken = JSON.parse(atob(base64));
       const userId = decodedToken.uid;
@@ -244,16 +227,10 @@ export const InputForms = ({
 
       formDataToSend.append('user', userId);
 
-      // for (const pair of formDataToSend.entries()) {
-      //   console.log(`${pair[0]}: ${pair[1]}`);
-      // }
-
-      // console.log('form data that will be sent is: ', formDataToSend);
-
       const response = await fetch(URL, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${altern8_useraccess}`,
+          Authorization: `Bearer ${token}`,
         },
         body: formDataToSend,
       });

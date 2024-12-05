@@ -242,7 +242,7 @@
 // };
 
 // export default ReviewSection;
-
+"use client"
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, useInView, useAnimation } from 'framer-motion';

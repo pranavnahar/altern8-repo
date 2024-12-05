@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { parseCookies, destroyCookie } from 'nookies';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import confetti from 'canvas-confetti';
 
@@ -11,25 +10,6 @@ type Props = {
 };
 
 const Pending = ({ demo }: Props) => {
-  useEffect(() => {
-    const removeTokenFromCookies = () => {
-      const cookies = parseCookies();
-      const accessTokenForRegister = cookies.accessTokenForRegister;
-
-      // Check if there is a token in cookies
-      if (accessTokenForRegister) {
-        // Delete the token from cookies
-        destroyCookie(null, 'accessTokenForRegister');
-        console.log('Token removed from cookies.');
-      }
-    };
-
-    // Call the function
-    if (!demo) {
-      removeTokenFromCookies();
-    }
-  }, [demo]);
-
   useEffect(() => {
     const duration = 3000; // 3 seconds
     const interval = 500; // Interval between confetti bursts

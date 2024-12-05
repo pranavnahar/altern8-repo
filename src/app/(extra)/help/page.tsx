@@ -9,7 +9,7 @@ import ChatBox from '../../../components/global/Chatbox';
 import { DashboardContext } from '../../../contexts/dashboard-context';
 import { fetchWithAuth } from '../../../utils/fetch-with-auth';
 import Accordion from '../../../components/ui/accordion2';
-import { accessToken, apiUrl } from '@/utils/auth';
+import { getAuthToken } from '@/utils/auth-actions';
 
 const dummyFaqs = [
   {
@@ -40,9 +40,13 @@ const Help = () => {
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [faqs, setFaqs] = useState(dummyFaqs);
   const [loadingSpinner, setLoadingSpinner] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
 
-  const isAuth = () => {
-    return accessToken;
+  const isAuth = async () => {
+    const token = await getAuthToken();
+    if (token) {
+      setIsAuthenticated(true)
+    }
   };
 
   const { chatCount, setChatCount } = useContext(DashboardContext);
@@ -50,7 +54,7 @@ const Help = () => {
   useEffect(() => {
     const GetFaq = async () => {
       try {
-        const response = await fetch(`${apiUrl}/user-dashboard-api/faq/`);
+        const response = await fetch(`${process.env.SERVER_URL}/user-dashboard-api/faq/`);
 
         if (response) {
           const responseData = await response.json();
@@ -137,7 +141,7 @@ const Help = () => {
               }))}
             />
           </div>
-          {isAuth()?.length && (
+          {isAuthenticated && (
             <div className="mt-10 text-center">
               <Button
                 variant="expandIcon"
