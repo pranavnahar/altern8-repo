@@ -115,8 +115,8 @@ const Checkout : React.FC<{amount:string}> = ({amount}) => {
                 onClick={() => handlePayment()}
                 className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer  hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
               >
-                {loading ? 'Processing...' : 'Pay with Razorpay'}
-              </button>
+                {loading ? 'Processing...' : 'Pay with UPI, Card, Net Banking, Wallet, Pay later'}
+      </button>
       {error && <div style={{ color: 'red' }}>{error}</div>}
   </div>
   );
