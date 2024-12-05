@@ -1,7 +1,7 @@
 'use client';
-import { apiUrl } from '../utils/auth';
+
+import { getAuthToken } from '@/utils/auth-actions';
 import { useRouter } from 'next/navigation';
-import { parseCookies } from 'nookies';
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface StepperContextType {
@@ -55,7 +55,7 @@ export const StepperProvider = ({ children }: StepperProviderProps) => {
 
   const setRegistrationState = async (stateName?: string, currentPage?: string) => {
     console.log("Function starts");
-    
+
     if (stateName === 'selectedPages') {
       const selectedPages = JSON.parse(localStorage.getItem('selectedPages')!);
       if (selectedPages && currentPage) {
@@ -70,17 +70,15 @@ export const StepperProvider = ({ children }: StepperProviderProps) => {
       }
     }
 
-    let accessToken = parseCookies().altern8_useraccess;
-    if (!accessToken || accessToken.length < 5) {
+    let token = await getAuthToken()
+    if (!token || token.length < 5) {
       setCurrentStep(1);
     } else {
       try {
-        console.log("request starts");
-        
         setLoading(true);
-        const response = await fetch(`${apiUrl}/user-api/states/`, {
+        const response = await fetch(`${process.env.NEXT}/user-api/states/`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 

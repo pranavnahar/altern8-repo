@@ -1,16 +1,11 @@
 'use server'
 
 import ky from 'ky';
-import { notFound } from 'next/navigation';
-import { cookies } from 'next/headers';
+import { notFound, redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { ProjectResponse } from './types';
+import { getAuthToken } from '@/utils/auth-actions';
 
-async function getAuthToken() {
-  const cookieStore = cookies();
-  const authCookie = cookieStore.get('altern8_adminaccess');
-  return authCookie?.value;
-}
 
 export async function fetchProjectData(timeoutMs: number = 60000): Promise<ProjectResponse> {
   try {
@@ -23,19 +18,14 @@ export async function fetchProjectData(timeoutMs: number = 60000): Promise<Proje
       }
     });
 
-    if (response.status === 401) {
-      throw new Error('Unauthorized');
-    }
-
-
     return await response.json() as ProjectResponse;
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === 'Unauthorized') {
-        throw new Error('You are not authorized to access this resource. Please log in again.');
+        redirect('/login')
       }
       if (error.name === 'TimeoutError') {
-        throw new Error('Request timed out');
+        redirect('/login')
       }
       if (error.name === 'HTTPError' && error.message.includes('404')) {
         notFound();
@@ -48,7 +38,6 @@ export async function fetchProjectData(timeoutMs: number = 60000): Promise<Proje
 export async function fetchBorrowersUids(timeoutMs = 60000) {
   try {
     const token = await getAuthToken();
-
     const response = await fetch(`${process.env.SERVER_URL}/admin-api/borrowers-uids/`, {
       method: 'GET',
       headers: {
@@ -56,16 +45,8 @@ export async function fetchBorrowersUids(timeoutMs = 60000) {
       },
     });
 
-    if (!response.ok) {
-      if (response.status === 404) {
-        notFound();
-      }
-      throw new Error(`Failed to fetch borrowers UIDs: ${response.statusText}`);
-    }
-
     return await response.json();
   } catch (error) {
-    console.error('Error fetching borrowers UIDs:', error);
     throw error;
   }
 }
@@ -73,7 +54,6 @@ export async function fetchBorrowersUids(timeoutMs = 60000) {
 export async function createProject(formData: FormData) {
   try {
     const token = await getAuthToken();
-
     const response = await fetch(`${process.env.SERVER_URL}/rablet-api/projects/`, {
       method: 'POST',
       headers: {
@@ -82,11 +62,6 @@ export async function createProject(formData: FormData) {
       body: formData
     });
     const responseData = await response.json();
-
-    if (!response.ok) {
-      // console.log("The response was not OK");
-      throw new Error(responseData.error || `HTTP error! status: ${response.status}`);
-    }
 
     revalidatePath('/projects');
     return { success: true, data: responseData };
@@ -104,8 +79,6 @@ type AdminApplyProductBody = {
 }
 
 export async function adminApplyProduct(projectId: string, body: AdminApplyProductBody) {
-  // console.log("applied the product and called the api");
-  console.log("the project id that is received is this: ", projectId);
   const token = await getAuthToken();
 
   try {
@@ -117,11 +90,6 @@ export async function adminApplyProduct(projectId: string, body: AdminApplyProdu
       },
       body: JSON.stringify(body),
     })
-
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`)
-    }
-
     const data = await response.json()
     revalidatePath(`/projects`);
 
@@ -133,7 +101,7 @@ export async function adminApplyProduct(projectId: string, body: AdminApplyProdu
 }
 
 type TemplateIdsType = {
-  [key: number]: number; 
+  [key: number]: number;
 };
 
 const templateIds: TemplateIdsType = {
@@ -143,17 +111,12 @@ const templateIds: TemplateIdsType = {
 }
 
 export async function initiateEmudraFlow(projectId: string,templateId: number, productList: any[]){
-  const token = await getAuthToken();
-
   try {
-    console.log("the call was made to this api and got this as the values: \n ", templateId, productList);
-    console.log(" the project id that was used to init the bakend is: ", projectId);
-    //processing and what data to send yet to be done over here
+    const token = await getAuthToken();
     const id = templateIds[templateId];
     const pid = projectId;
-    console.log("template id: ", id)
     const body = {
-      id, //workflow to be created based on it
+      id,
       productList,
       pid
     }
@@ -162,23 +125,14 @@ export async function initiateEmudraFlow(projectId: string,templateId: number, p
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`, 
+        'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify(body), 
+      body: JSON.stringify(body),
     });
-
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
-
     const data = await response.json();
-
-    console.log("the server returned this: ", data);
-
     return { success: true, data }
-  
+
   } catch (error) {
-    console.error('Error in initiateEmudraFlow:', error)
     return { success: false, error: (error as Error).message }
   }
 }

@@ -1,10 +1,10 @@
 import { useContext, useState, useCallback, useEffect } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
 import { useToast } from '../../utils/show-toasts';
+import { getAuthToken } from '@/utils/auth-actions';
 
 interface UserData {
   companyName: string;
@@ -42,7 +42,6 @@ const AuthorizationCompliance = ({ demo }: Props) => {
     additionalDocsConfirmed: true,
   });
   const [files, setFiles] = useState<File[]>([]);
-  let accessToken = parseCookies().altern8_useraccess;
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,10 +61,11 @@ const AuthorizationCompliance = ({ demo }: Props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const token = await getAuthToken()
         const response = await fetch(`${apiUrl}/user-api/authorization-compliance/`, {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -161,7 +161,7 @@ const AuthorizationCompliance = ({ demo }: Props) => {
       try {
         setLoading(true);
         const formData = new FormData();
-
+        const token = await getAuthToken()
         formData.append('company_name', companyName);
         formData.append('company_reg_number', companyRegNumber);
         formData.append('rep_name', repName);
@@ -179,7 +179,7 @@ const AuthorizationCompliance = ({ demo }: Props) => {
         const response = await fetch(`${apiUrl}/user-api/authorization-compliance/`, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
           body: formData,
         });

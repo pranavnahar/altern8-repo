@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect, Suspense } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
 import Stepper from '../../components/RegisterForm/Stepper';
@@ -8,7 +9,6 @@ import ITR from '../../components/Steps/ITR';
 import PAN from '../../components/Steps/Pan';
 import GST from '../../components/Steps/GST';
 import { motion } from 'framer-motion'; // for animation
-import { parseCookies } from 'nookies';
 import LinearBuffer from '../../components/LinearBuffer'; //for progress animation
 import POC from '../Steps/POC';
 import BureauReport from '../Steps/BereauReport';
@@ -21,19 +21,19 @@ import RERA from '../Steps/RERA';
 import Udyam from '../Steps/Udyam';
 import Pending from '../Steps/Pending';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
 };
 
 const Register = ({ demo }: Props) => {
-  const [currentStep, setCurrentStep] = useState(1); // to handle multiple registration steps
+  const [currentStep, setCurrentStep] = useState(1);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [apiFailedIcon, setApiFailedIcon] = useState(false); //to display cross instead of tick in stepper , where any api failed and manually upload require
-  const [showHelpPage, setShowHelpPage] = useState(false); // display help page
-  const [loading, setLoading] = useState(false); //for loading animation;
+  const [apiFailedIcon, setApiFailedIcon] = useState(false);
+  const [showHelpPage, setShowHelpPage] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
-  //console.log(pageLoading);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -52,13 +52,12 @@ const Register = ({ demo }: Props) => {
     'Upload Contract',
     'Authorization Compliance',
     'Pending',
-  ]; //registration steps
+  ];
 
-  // set current page state if stepName is provided
   const setRegistrationState = async (stateName: string, currentPage?: string) => {
     const registrationStepIndex = steps.indexOf(stateName);
     console.log(stateName,registrationStepIndex);
-    
+
     if (registrationStepIndex !== -1) {
       setCurrentStep(registrationStepIndex + 1);
     } else {
@@ -71,15 +70,11 @@ const Register = ({ demo }: Props) => {
     }
   };
 
-  // get seller registration state from backend
   const getRegistrationState = async (stateName?: string, currentPage?: string) => {
-    let accessToken = parseCookies().altern8_useraccess;
-    // if the cookies don't have access token for register
-    if (!accessToken || accessToken.length < 5) {
+    const token = await getAuthToken()
+    if (!token || token.length < 5) {
       setCurrentStep(1);
     } else {
-      // get the registration state from backend
-
       if (stateName) {
         setRegistrationState(stateName, currentPage);
       } else {
@@ -87,23 +82,18 @@ const Register = ({ demo }: Props) => {
           setLoading(true);
           const response = await fetch(`${apiUrl}/user-api/states/`, {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${token}`,
             },
           });
-
-          // if unauthorized then push to login page
           if (!demo && response.status === 401) {
             return router.push('/login');
           }
-
-          console.log(response);
-          
 
           if (response.ok) {
             let server_message = await response.json();
             const registration_step = server_message.user_state;
             console.log(server_message,registration_step);
-            
+
             if (registration_step === 'Approved') return router.push('/dashboard');
             console.log(`Seller step fetched successfully! ${registration_step}`, server_message);
             setRegistrationState(registration_step);
@@ -157,7 +147,7 @@ const Register = ({ demo }: Props) => {
       case 4:
         return <SelectPrimaryBankAccount demo={demo} />;
       case 5:
-        return <PAN demo={demo} />; 
+        return <PAN demo={demo} />;
       case 6:
         return <ITR demo={demo} />;
       case 7:
@@ -177,7 +167,6 @@ const Register = ({ demo }: Props) => {
       case 14:
         return <Pending demo={demo} />;
       default:
-        // when there is no step or undefined step
         setCurrentStep(1);
         return <RegisterField demo={demo} />;
     }
@@ -187,12 +176,9 @@ const Register = ({ demo }: Props) => {
     setShowHelpPage(true);
   };
 
-  // main return
   return (
     <div>
-      {/* {!showHelpPage && ( */}
       <div className="min-h-screen flex justify-center items-center [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)]">
-        {/* motion is the library for animation  */}
         <motion.div
           variants={{
             hidden: { opacity: 0, y: 75 },
@@ -200,14 +186,10 @@ const Register = ({ demo }: Props) => {
           }}
           initial="hidden"
           animate="visible"
-          // animate={mainControls}
           transition={{ duration: 0.7, delay: 0.3 }}
-          // whileHover={{ scale: 1.01, opacity: 1, duration: 0.5 }}
           className="m-5 w-11/12 lg:w-[90%] mx-auto shadow-xl rounded-2xl pb-2  [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212]"
         >
           <div className=" rounded-lg">
-            {/* progress animation   */}
-            {/* Show LinearProgress when loading is true */}
             {loading && <LinearBuffer />}
           </div>
           <StepperContext.Provider
@@ -227,24 +209,16 @@ const Register = ({ demo }: Props) => {
           >
             <div className=" horizontal w-full  pt-10">
               <Stepper />
-
-              {/* Display Components  */}
               <div className="my-8 p-8">
-                {/* this is the particular registration step  */}
                 {displayStep(currentStep)}
               </div>
             </div>
-            {/*
-            <ToastContainer /> */}
           </StepperContext.Provider>
         </motion.div>
       </div>
-      {/* )} */}
 
       {showHelpPage && (
         <HelpPage
-        // showHelpPage={showHelpPage}
-        // setShowHelpPage={setShowHelpPage}
         />
       )}
     </div>

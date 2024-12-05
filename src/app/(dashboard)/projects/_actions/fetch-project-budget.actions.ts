@@ -1,8 +1,8 @@
 "use server"
 
+import { getAuthToken } from '@/utils/auth-actions';
 import ky from 'ky';
-import { notFound } from 'next/navigation';
-import { getAuthToken } from '@/utils/server-auth';
+import { notFound, redirect } from 'next/navigation';
 
 export async function fetchProjectBudget(projectID: number, timeoutMs: number = 60000) {
   try {
@@ -15,18 +15,16 @@ export async function fetchProjectBudget(projectID: number, timeoutMs: number = 
       }
     });
 
-    if (response.status === 401) {
-      throw new Error('Unauthorized');
-    }
+
 
     return await response.json();
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === 'Unauthorized') {
-        throw new Error('You are not authorized to access this resource. Please log in again.');
+        redirect('/login')
       }
       if (error.name === 'TimeoutError') {
-        throw new Error('Request timed out');
+        redirect('/login')
       }
       if (error.name === 'HTTPError' && error.message.includes('404')) {
         notFound();
@@ -47,9 +45,7 @@ export async function fetchProjectBudgetFile(projectID: number, timeoutMs: numbe
       }
     });
 
-    if (response.status === 401) {
-      throw new Error('Unauthorized');
-    }
+
 
     const buffer = await response.arrayBuffer();
     const base64Data = Buffer.from(buffer).toString('base64');
@@ -58,10 +54,10 @@ export async function fetchProjectBudgetFile(projectID: number, timeoutMs: numbe
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === 'Unauthorized') {
-        throw new Error('You are not authorized to access this resource. Please log in again.');
+        redirect('/login')
       }
       if (error.name === 'TimeoutError') {
-        throw new Error('Request timed out');
+        redirect('/login')
       }
       if (error.name === 'HTTPError' && error.message.includes('404')) {
         notFound();

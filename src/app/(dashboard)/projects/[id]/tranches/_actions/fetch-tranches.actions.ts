@@ -3,7 +3,7 @@
 import ky from "ky";
 import { notFound, redirect } from "next/navigation";
 import { TrancheResponse } from "../types";
-import { getAuthToken } from "@/utils/server-auth";
+import { getAuthToken } from "@/utils/auth-actions";
 
 export async function fetchTranches(
   projectID: string,
@@ -39,12 +39,10 @@ export async function fetchTranches(
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === "Unauthorized") {
-        throw new Error(
-          "You are not authorized to access this resource. Please log in again."
-        );
+        redirect('/login')
       }
       if (error.name === "TimeoutError") {
-        throw new Error("Request timed out");
+        redirect('/login')
       }
       if (error.name === "HTTPError" && error.message.includes("404")) {
         notFound();

@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+"use client"
+
+import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const FloatingButton = () => {
@@ -18,7 +20,7 @@ const FloatingButton = () => {
           name: 'Instagram',
           bg: 'bg-gradient-to-r from-purple-400 via-pink-500 to-red-500',
           icon: '/icons/instagram.png',
-         
+
         },
 
     ];

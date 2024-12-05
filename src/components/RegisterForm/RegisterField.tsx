@@ -3,7 +3,6 @@ import { StepperContext } from '../../contexts/stepper-context';
 import { useSearchParams, useRouter } from 'next/navigation';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { useToast } from '../../utils/show-toasts';
-import { setCookie } from 'nookies';
 import { IconEye, IconEyeOff } from '@tabler/icons-react';
 import { Button } from '../ui/button';
 import AnimatedLogo from '../Header/AnimatedLogo';
@@ -164,11 +163,11 @@ const Register = ({ demo }: Props) => {
 
             let data = serverMessage;
 
-            setCookie(null, 'altern8_useraccess', data.access, {
-              maxAge: 60 * 60,
-              path: '/',
-            });
- 
+            // setCookie(null, 'altern8_useraccess', data.access, {
+            //   maxAge: 60 * 60,
+            //   path: '/',
+            // });
+
             getRegistrationState();
           } else {
             let server_error = await response.json();

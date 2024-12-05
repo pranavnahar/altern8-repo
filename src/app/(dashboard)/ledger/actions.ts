@@ -2,33 +2,8 @@
 
 import { revalidatePath } from 'next/cache'
 import { Account, Transaction } from './types'
-import { parseCookies } from 'nookies'
-import { setAccessTokenCookie } from '@/utils/auth'
 import { getAuthToken } from '@/utils/auth-actions'
 
-export const getAccessToken = async () => {
-  const cookies = parseCookies();
-  const refreshToken = cookies.altern8_userrefresh;
-
-  let accessToken = "";
-  const body = { refresh: refreshToken };
-
-  const response = await fetch(`${process.env.SERVER_URL}/token/refresh/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-
-  const responseData = await response.json();
-  accessToken = responseData.access;
-  if (accessToken) {
-    setAccessTokenCookie(accessToken);
-    return accessToken;
-  }
-  return false;
-};
 
 async function fetchWithAuth(url: string, options: RequestInit = {},file : boolean = false): Promise<any> {
   const token = await getAuthToken()
@@ -39,19 +14,6 @@ async function fetchWithAuth(url: string, options: RequestInit = {},file : boole
       Authorization: `Bearer ${token}`,
     },
   })
-
-  if (response.status === 401) {
-    const newToken = await getAccessToken()
-    if (newToken) {
-      return fetchWithAuth(url, options)
-    } else {
-      throw new Error('Unable to refresh token')
-    }
-  }
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch')
-  }
 
   return file ? response : response.json()
 }

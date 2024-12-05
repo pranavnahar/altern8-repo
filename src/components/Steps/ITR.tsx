@@ -2,11 +2,11 @@
 
 import React, { useContext, useState, useCallback, useEffect } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
-import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -23,9 +23,6 @@ const ITR = ({ demo }: Props) => {
   });
   const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState, setApiFailedIcon } =
     useContext(StepperContext);
-
-  // if the system fails to get ITR via api
-  // then user will manually uploads the data
   const [needManualUpload, setNeedManualUpload] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [filePasswords, setFilePasswords] = useState<{ [key: string]: string }>({
@@ -33,9 +30,6 @@ const ITR = ({ demo }: Props) => {
   });
   const [externalApiErrorCounts, setExternalApiErrorCounts] = useState(0);
   const { showToast } = useToast();
-
-  // Handle token
-  let accessToken = parseCookies().altern8_useraccess;
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -49,16 +43,12 @@ const ITR = ({ demo }: Props) => {
   const GetItrUsername = async () => {
     try {
       setLoading(true);
+      const token = await getAuthToken()
       let response = await fetch(`${apiUrl}/user-api/get-itr-username/`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      // if unauthorized then push to login page
-      if (response.status === 401) {
-        router.push('/login');
-      }
 
       if (response.ok) {
         const responseData = await response.json();
@@ -125,7 +115,7 @@ const ITR = ({ demo }: Props) => {
 
         try {
           if (newRecord) {
-            console.log(newRecord);
+            const token = await getAuthToken()
             const body = newRecord;
             setLoading(true);
             const response = await fetch(
@@ -134,7 +124,7 @@ const ITR = ({ demo }: Props) => {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: `Bearer ${accessToken}`,
+                  Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(body),
               },
@@ -229,22 +219,28 @@ const ITR = ({ demo }: Props) => {
 
             console.log(formData, file, password);
           } else {
-            alert('File size exceeds 5MB limit. Please choose a smaller file.');
-            return; // Stop processing files if size limit exceeded
+            showToast({
+              message: "File size exceeds 5MB limit. Please choose a smaller file",
+              type: "error"
+            })
+            return;
           }
         } else {
-          alert('Please choose PDF or Excel files only.');
-          return; // Stop processing files if file type is not supported
+          showToast({
+            message: "Please choose PDF or Excel files only.",
+            type: "error"
+          })
+          return;
         }
       }
 
       try {
         setLoading(true);
-
+        const token = await getAuthToken()
         let response = await fetch(`${apiUrl}/user-api/itr-document/`, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
           body: formData,
         });

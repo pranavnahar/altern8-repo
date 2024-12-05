@@ -1,10 +1,10 @@
 import { useContext, useState, useEffect } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
 import { useToast } from '../../utils/show-toasts';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -25,13 +25,9 @@ const BureauReport = ({ demo }: Props) => {
   const [otpSent, setOtpSent] = useState(true);
   const [manualBureauReportNeeded, setManualBureauReportNeeded] = useState(false);
   const [entityType, setEntityType] = useState('');
-  console.log(entityType);
   const [otpTimer, setOtpTimer] = useState(60);
   const [documentFiles, setDocumentFiles] = useState<DocumentFiles>({});
   const { showToast } = useToast();
-
-  // Handle token
-  let accessToken = parseCookies().altern8_useraccess || localStorage.getItem('altern8_useraccess');
   const router = useRouter();
 
   // handle form input for phone number and otp
@@ -44,22 +40,16 @@ const BureauReport = ({ demo }: Props) => {
   const GetBureauResponseId = async () => {
     try {
       setLoading(true);
-      //console.log(accessToken); 
+      const token = await getAuthToken()
       let response = await fetch(`${apiUrl}/user-api/bureau-report/`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      // if unauthorized then push to login page
-      if (response.status === 401) {
-        router.push('/login');
-      }
-
       if (response.ok) {
         const responseData = await response.json();
-        console.log(responseData);
         if (responseData.is_manual_bureau_report_needed) {
           setManualBureauReportNeeded(true);
           if (responseData.entity_type) {
@@ -126,12 +116,13 @@ const BureauReport = ({ demo }: Props) => {
         try {
           if (newRecord) {
             const body = newRecord;
+            const token = await getAuthToken()
             setLoading(true);
             const response = await fetch(`${apiUrl}/scoreme-api/bda/external/validateotp/`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify(body),
             });
@@ -177,10 +168,11 @@ const BureauReport = ({ demo }: Props) => {
 
         try {
           setLoading(true);
+          const token = await getAuthToken()
           const response = await fetch(`${apiUrl}/user-api/upload-bureau-docs/`, {
             method: 'POST',
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${token}`,
             },
             body: formData,
           });

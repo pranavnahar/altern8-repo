@@ -23,11 +23,6 @@ export async function addProjectTask(projectId: number, data: ProjectStatus) {
       },
       body: JSON.stringify(data)
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to update project status');
-    }
-
     const result = await response.json();
     revalidatePath(`/project/${projectId}`);
     return { success: true, data: result };

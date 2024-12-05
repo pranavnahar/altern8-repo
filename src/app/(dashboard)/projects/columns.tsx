@@ -158,7 +158,7 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       const projectId = row.original.id;
       return (
-        <FundingSources projectId={projectId} />
+        <FundingSources projectId={projectId} type={'MODAL'} />
       )
     },
   },

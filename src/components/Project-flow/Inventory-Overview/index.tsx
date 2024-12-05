@@ -8,7 +8,7 @@ export const InventoryOverview = () => {
       <div className="flex items-center justify-between text-sm">
         <h2 className="text-nowrap py-2 text-2xl tracking-tight">Inventory</h2>
       </div>
-      <BasicTable data={inventory.inventory || []} columns={InventoryColumns} filters={[]} needFilters={false} />
+      {/* <BasicTable data={inventory.inventory || []} columns={InventoryColumns} filters={[]} needFilters={false} /> */}
     </>
   )
 }

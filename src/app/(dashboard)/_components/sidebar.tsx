@@ -23,7 +23,7 @@ import {
 } from '@tabler/icons-react';
 import AnimatedLogo from '../../../components/Header/AnimatedLogo';
 import { jwtDecode } from 'jwt-decode';
-import { parseCookies } from 'nookies';
+import { getAuthToken } from '@/utils/auth-actions';
 
 const Sidebar = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -78,8 +78,7 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchTokenAndSetUserId = async () => {
       try {
-        const accessToken = parseCookies().altern8_useraccess;
-        const token = accessToken;
+        const token = await getAuthToken()
 
         if (token) {
           const decodedToken: { uid: string } = jwtDecode(token);
