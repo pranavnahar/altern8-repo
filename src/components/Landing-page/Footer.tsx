@@ -7,13 +7,11 @@ const Footer = () => {
     <footer>
       <div className="container  max-w-[1320px] py-10 mx-auto text-gray-600">
         <div className=" mx-7 ">
-          <div className="grid grid-cols-1 md:grid-cols-2 justify-between  gap-2 text-center sm:text-left">
+          <div className="grid grid-cols-1 md:grid-cols-3 justify-between  gap-2 text-center sm:text-left">
             {/* contact us section  */}
             <div className="mb-5 leading-[25px]">
               <div className="text-5xl  font-medium font-roboto text-gray-300 my-5">Contact Us</div>
-              {/* <a className=" text-base2  text-gray-400  " href="tel:+123400123">
-                Call : +123 400 123
-              </a> */}
+              
               <div className="text-base2 text-gray-400 my-1 mx-10 sm:mx-0 lg:w-1/2">
               46 College Road, Nungambakkam, Chennai
               </div>
@@ -30,6 +28,8 @@ const Footer = () => {
               >
                 Nodal Officer: grievance@nahar.om
               </a>
+
+              
             </div>
 
             {/* terms and policy  */}
@@ -56,6 +56,25 @@ const Footer = () => {
                 Refund and Cancellations
               </Link>
             </div>
+
+
+
+             {/* terms and policy  */}
+             <div className="mb-5 leading-[25px]">
+              <div className="text-5xl font-medium font-roboto text-gray-300 my-5">
+               About Us
+              </div>
+              <Link
+                className="text-base2 text-gray-400 block mb-2 hover:underline"
+                href="/about-us"
+              >
+               About Us
+              </Link>
+            </div>
+
+           
+
+
           </div>
         </div>
         {/* Copyright section  */}
