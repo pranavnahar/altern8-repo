@@ -228,47 +228,71 @@ const AuthorizationCompliance = ({ demo }: Props) => {
           General Information
         </div>
         <div className="space-y-2 px-5">
-          <input
-            onChange={handleChange}
-            value={userData.companyName}
-            name="companyName"
-            placeholder="Company Name"
-            className="py-1 px-2 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
-            type="text"
-          />
-          <input
-            onChange={handleChange}
-            value={userData.companyRegNumber}
-            name="companyRegNumber"
-            placeholder="Company Registration Number or CIN number"
-            className="py-1 px-2 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
-            type="text"
-          />
-          <input
-            onChange={handleChange}
-            value={userData.repName}
-            name="repName"
-            placeholder="Authorized Representative Name"
-            className="py-1 px-2 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
-            type="text"
-          />
-          <input
-            onChange={handleChange}
-            value={userData.position}
-            name="position"
-            placeholder="Position"
-            className="py-1 px-2 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
-            type="text"
-          />
-          <input
-            onChange={handleChange}
-            value={userData.email}
-            name="email"
-            placeholder="Email"
-            className="py-1 px-2 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
-            type="email"
-          />
-        </div>
+        <div className="">
+    <label className="block text-gray-100 ">
+     Company name
+    </label>
+    <input
+      onChange={handleChange}
+      value={userData.companyName}
+      name="companyName"
+      placeholder="Company Name"
+      className="py-1 px-2  w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
+      type="text"
+    />
+  </div>
+  <div>
+    <label className="block text-gray-100 mt-3 ">
+      Company registration number
+    </label>
+    <input
+      onChange={handleChange}
+      value={userData.companyRegNumber}
+      name="companyRegNumber"
+      placeholder="Company Registration Number"
+      className="py-1 px-2 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
+      type="text"
+    />
+  </div>
+  <div>
+    <label className="block text-gray-100 mt-3 ">
+     Authorized representative name    </label>
+    <input
+      onChange={handleChange}
+      value={userData.repName}
+      name="repName"
+      placeholder="Authorized Representative Name"
+      className="py-1 px-2 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
+      type="text"
+    />
+  </div>
+  <div>
+    <label className="block text-gray-100 mt-3 ">
+    Position
+    </label>
+    <input
+      onChange={handleChange}
+      value={userData.position}
+      name="position"
+      placeholder="Position"
+      className="py-1 px-2 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
+      type="text"
+    />
+  </div>
+  <div>
+    <label className="block text-gray-100 mt-3 ">
+     Email
+    </label>
+    <input
+      onChange={handleChange}
+      value={userData.email}
+      name="email"
+      placeholder="Email"
+      className="py-1 px-2 w-full text-gray-100 border-b-2 bg-transparent outline-none focus:outline-none focus:border-purple-600 transition-colors"
+      type="email"
+    />
+  </div>
+</div>
       </div>
 
       <div className="w-full">
