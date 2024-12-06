@@ -32,7 +32,7 @@ const JoinUsSection = () => {
                 animate={mainControls}
                 transition={{ duration: 2, delay: 0.2 }}
                 whileHover={{ scale: 0.97, opacity: 0.9 }}
-                className="rounded-lg mx-7 px-2 my-20 h-[200px] sm:h-[240px] lg:h-[450px]     bg-dark-purple  flex flex-col items-start justify-between relative "
+                className="rounded-lg mx-7 px-2 my-20 h-[200px] sm:h-[240px] lg:h-[450px]      flex flex-col items-start justify-between relative "
             >
                 <div className="absolute my-0 mx-[!important] lg:w-[68.45%] top-[20px] sm:top-[30px] lg:top-[66px] lg:left-[31.55%] sm:left-[9.55%] tracking-[-0.5px] font-medium flex items-center justify-center z-[0]">
                     Join us and never worry about your finances
@@ -42,9 +42,10 @@ const JoinUsSection = () => {
                 </div>
 
                 <img
-                    className="hidden lg:inline absolute my-0 mx-[!important] w-[30.98%] top-[60px] right-[68.42%] left-[0.6%] max-w-full overflow-hidden h-[334px] shrink-0 object-cover z-[2]"
+                    className="hidden lg:inline absolute my-0 mx-[!important] w-[30.98%] top-[60px] right-[68.42%] left-[0.6%] max-w-full overflow-hidden h-[270px] shrink-0 object-cover rounded-md z-[2]"
                     alt=""
-                    src="/image-427@2x.png"
+                    // src="/image-427@2x.png"
+                    src="/image-card-8.jpg"
                 />
 
                 {/* Get Credit button */}
