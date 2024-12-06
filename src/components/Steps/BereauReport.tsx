@@ -33,14 +33,46 @@ const BureauReport = ({ demo }: Props) => {
   // Handle token
   let accessToken = parseCookies().altern8_useraccess || localStorage.getItem('altern8_useraccess');
   const router = useRouter();
-
+  const openInNewTab = (url: string) => {
+    console.log(url, 'url');
+    
+    Object.assign(document.createElement('a'), {
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      href: url,
+    }).click();
+  };
   // handle form input for phone number and otp
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
     setOtpForm({ ...otpForm, [name]: value });
   };
-
+  const getBureauAgreementUrl = async () => {
+    try {
+      if(demo){
+       return alert('You are in demo mode')
+      }
+      let accessToken = parseCookies().altern8_useraccess;
+      const response = await fetch(`${apiUrl}/user-api/get-signing-url/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.status === 401) {
+        router.push('/login');
+      }
+      if (response.ok) {
+        const data = await response.json();
+        openInNewTab(data?.agreement_url);
+      }
+    } catch (err) {
+      showToast({message:'Cannot get Bureau Agreement Url, please try again later!', type:'error'});
+      console.log(err);
+    } finally {
+      // setSpinner(false);
+    }
+  };
   const GetBureauResponseId = async () => {
     try {
       setLoading(true);
@@ -348,6 +380,31 @@ const BureauReport = ({ demo }: Props) => {
   return (
     <>
       <div className="p-4">
+      {manualBureauReportNeeded && (
+        <div className="">
+          <div className="flex flex-col">
+            <div className="mb-3 mt-2 flex flex-col justify-center">
+              <div className="text-center font-medium text-xl text-gray-300">
+                Document Signature
+              </div>
+              <div className="text-center font-medium text-base text-gray-300">
+                Please sign the below document for fetching Bureau report
+              </div>
+              <div className="text-center font-medium text-base text-gray-300 py-3">
+                <button className="text-[#1565c0]" onClick={getBureauAgreementUrl}>
+                  Click Here
+                </button>
+              </div>
+            </div>
+
+            {/* drag and drop  */}
+            {entityType === 'Partnership' && renderDropzones()}
+            {(entityType === 'Company' ||
+              (entityType !== 'Sole Proprietorship' && entityType !== 'Partnership')) &&
+              renderDropzones()}
+          </div>
+        </div>
+      )}
         <div className="">
           <div className="grid grid-cols-1 gap-6">
             {manualBureauReportNeeded ? (
@@ -387,7 +444,6 @@ const BureauReport = ({ demo }: Props) => {
                 )}
               </div>
             )}
-
             <div className="flex justify-center items-center">
               <button
                 onClick={() => handleClick('next')}
