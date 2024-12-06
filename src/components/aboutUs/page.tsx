@@ -155,7 +155,7 @@ const AboutUsPage: React.FC = () => {
             <div className="md:w-full text-center md:text-left">
               <h2 className="text-4xl  text-center font-semibold mb-8">Our Mission is to infuse <span className="text-gradient">consciousness in  every transaction.</span></h2>
               <p className="text-lg    mb-4">
-               Ethyx Solo seeks to empower the new generation of solo-preneurs by creating a thriving ecosystem where creativity meets conscious capital, fostering growth and independence for influencers, creators, and freelancers worldwide. Our mission is to connect investors with high-yield opportunities for investors—ensuring secure, IP-backed returns from solo-preneurs. 
+              Ethyx Estate envisions transforming the opaque small real estate industry, into creditable, transparent, accessible investment opportunities. By harnessing cutting-edge AI and data science, we aim to create a seamless, secure marketplace that empowers investors with high-yield returns and fosters trust through transparency and underbanked small real estate developers with finance with ease " Through fractional investments, liquidity facilitation, and robust risk engines, Ethyx Estate makes complex investments and financing simple and accessible for all." 
               </p>
             </div>
           </div>
