@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, ChangeEvent } from 'react'
+//@ts-ignore
 import { useFormState } from 'react-dom'
 import { motion } from 'framer-motion'
 import { useToast } from '@/utils/show-toasts'

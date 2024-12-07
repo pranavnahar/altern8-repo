@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+//@ts-ignore
 import { useFormState } from 'react-dom'
 import FormInput from './form-input'
 import { handleOtpLogin } from '../actions'

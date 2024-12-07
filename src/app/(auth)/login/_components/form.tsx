@@ -1,34 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useFormState } from 'react-dom'
-import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { loginWithOtp, loginWithPassword } from '../actions'
 import OtpLoginForm from './otp-form'
 import AnimatedLogo from '@/components/Header/AnimatedLogo'
 import PasswordLoginForm from './password-form'
-import { useToast } from '@/utils/show-toasts'
 
 const Login = () => {
   const [pageState, setPageState] = useState('login')
-  const router = useRouter();
-  const { showToast } = useToast()
-
-  const [state, formAction] = useFormState(pageState === 'login' ? loginWithPassword : loginWithOtp, null)
-
-  if (state?.success) {
-    showToast({
-      message: state.message,
-      type: "success"
-    })
-    router.push('/dashboard')
-  } else {
-    showToast({
-      message: state?.message || "Some system error occured",
-      type: "success"
-    })
-  }
 
   return (
     <div className="w-96 rounded-xl font-roboto text-gray-300 m-5 bg-gradient-to-br from-[#021457] via-[#19112f] to-[#6e3050]">
@@ -39,7 +19,7 @@ const Login = () => {
 
         {pageState === 'login' ? (
           <PasswordLoginForm
-            formAction={formAction}
+            action={pageState === 'login' ? loginWithPassword : loginWithOtp}
             onSwitchToOtp={() => setPageState('otpLogin')}
           />
         ) : (
@@ -60,3 +40,4 @@ const Login = () => {
 }
 
 export default Login
+
