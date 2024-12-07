@@ -1,6 +1,8 @@
 'use server'
 
+import { getAuthToken } from '@/utils/auth-actions'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 export async function loginWithPassword(prevState: any, formData: FormData) {
   const phoneNumber = formData.get('phoneNumber') as string
@@ -25,16 +27,20 @@ export async function loginWithPassword(prevState: any, formData: FormData) {
 
     if (response.ok) {
       const data = await response.json()
-      cookies().set('altern8_useraccess', data.access, { httpOnly: true, secure: true })
-      cookies().set('altern8_userrefresh', data.refresh, { httpOnly: true, secure: true })
+      const cookieStore = cookies()
+      await cookieStore.set('altern8_useraccess', data.access, { httpOnly: true, secure: true })
+      await cookieStore.set('altern8_userrefresh', data.refresh, { httpOnly: true, secure: true })
       return { success: true, message: "You are logged in" }
     } else {
       return { success: false, message: 'Invalid credentials' }
     }
   } catch (error) {
+    console.error('Login error:', error)
     return { success: false, message: 'Login failed, system error' }
   }
 }
+
+
 
 export async function loginWithOtp(prevState: any, formData: FormData) {
   const phoneNumber = formData.get('phoneNumber') as string
@@ -55,8 +61,9 @@ export async function loginWithOtp(prevState: any, formData: FormData) {
 
     if (response.ok) {
       const data = await response.json()
-      cookies().set('altern8_useraccess', data.access, { httpOnly: true, secure: true })
-      cookies().set('altern8_userrefresh', data.refresh, { httpOnly: true, secure: true })
+      const cookieStore = await cookies()
+      cookieStore.set('altern8_useraccess', data.access, { httpOnly: true, secure: true })
+      cookieStore.set('altern8_userrefresh', data.refresh, { httpOnly: true, secure: true })
       return { success: true, message: "You are logged in" }
     } else {
       const serverError = await response.json()
@@ -140,6 +147,39 @@ export async function handleOtpLogin(prevState: any, formData: FormData) {
       }
     } catch (error) {
       return { error: 'Failed to send OTP, system error' }
+    }
+  }
+}
+
+export async function getBorrowerState(): Promise<{ success: boolean; sellerState: string | null }> {
+  try {
+    const token = await getAuthToken()
+    const response = await fetch(`${process.env.SERVER_URL}/user-api/states/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    if (!response.ok) {
+      return {
+        success: false,
+        sellerState: null
+      }
+    }
+
+    const data = await response.json()
+    const registrationStep = data.seller_state;
+    const cookieStore = cookies();
+    cookieStore.delete('altern8_userrefresh')
+
+    return {
+      success: true,
+      sellerState: registrationStep
+    }
+  } catch (error) {
+    return {
+      success: false,
+      sellerState: null
     }
   }
 }

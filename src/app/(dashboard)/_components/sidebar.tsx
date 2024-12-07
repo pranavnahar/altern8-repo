@@ -82,7 +82,6 @@ const Sidebar = () => {
 
         if (token) {
           const decodedToken: { uid: string } = jwtDecode(token);
-          // console.log(decodedToken.uid);
           const userId = decodedToken.uid;
           await new Promise(resolve => setTimeout(resolve, 1000));
           setUId(userId);

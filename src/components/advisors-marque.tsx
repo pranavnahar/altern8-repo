@@ -141,13 +141,13 @@ export function MarqueeDemo() {
   return (
     <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-lg  bg-background ">
       <Marquee pauseOnHover className="[--duration:20s]">
-        {firstRow.map((category) => (
-          <CategoryCard {...category} />
+        {firstRow.map((category, index) => (
+          <CategoryCard key={index} {...category} />
         ))}
       </Marquee>
       <Marquee reverse pauseOnHover className="[--duration:20s]">
-        {secondRow.map((category) => (
-          <CategoryCard {...category} />
+        {secondRow.map((category, index) => (
+          <CategoryCard key={index} {...category} />
         ))}
       </Marquee>
       <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background dark:from-background"></div>

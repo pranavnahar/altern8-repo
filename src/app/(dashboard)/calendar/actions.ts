@@ -1,6 +1,5 @@
 'use server'
 
-import { cookies } from 'next/headers'
 import { Project, ProjectsResponse } from './types'
 import { getAuthToken } from '@/utils/auth-actions'
 import { redirect } from 'next/navigation'
@@ -38,15 +37,9 @@ const fetchProjects = async (altern8_useraccess: string): Promise<ProjectsRespon
 }
 
 export async function getCalendarEvents(): Promise<{ projects: Project[], error?: string }> {
-  const cookieStore = cookies()
-  const altern8_useraccess = cookieStore.get('altern8_useraccess')
-
-  if (!altern8_useraccess) {
-    return { projects: [], error: "Access token is missing" }
-  }
-
   try {
-    const response: ProjectsResponse = await fetchProjects(altern8_useraccess.value)
+    const token = await getAuthToken()
+    const response: ProjectsResponse = await fetchProjects(token)
     return { projects: response.project_data }
   } catch (error) {
     return { projects: [], error: "Error fetching calendar projects" }

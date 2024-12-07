@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+//@ts-ignore
 import { useFormState } from 'react-dom'
 import { motion } from 'framer-motion'
 import { changePassword } from '../actions'
