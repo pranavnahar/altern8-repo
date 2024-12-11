@@ -7,8 +7,10 @@ import { revalidatePath } from 'next/cache';
 import { ProjectResponse } from './types';
 
 async function getAuthToken() {
+  console.log("fetching the auth token: ")
   const cookieStore = cookies();
   const authCookie = cookieStore.get('altern8_adminaccess');
+  console.log("auth cookie: ", authCookie)
   return authCookie?.value;
 }
 

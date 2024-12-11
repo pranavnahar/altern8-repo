@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Sidebar as SidebarLayout, SidebarBody, SidebarLink } from '../../../components/ui/sidebar';
 import Link from 'next/link';
@@ -24,11 +25,28 @@ import {
 import AnimatedLogo from '../../../components/Header/AnimatedLogo';
 import { jwtDecode } from 'jwt-decode';
 import { parseCookies } from 'nookies';
+import { getAccessToken } from '@/utils/auth';
 
 const Sidebar = () => {
   const [open, setOpen] = useState<boolean>(false);
   const pathname = usePathname();
   const [uId, setUId] = useState<string>('Loading..');
+  const [username, setUsername] = useState<string>('Loading..');
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const router = useRouter();
+
+  let accessToken = parseCookies().altern8_useraccess;
+
+  // Replace or refresh token logic
+  const ReplaceTokenOrRedirect = async () => {
+    const token = await getAccessToken();
+    if (!token) {
+      router.push("/login"); 
+    } else {
+      accessToken = token;
+    }
+  };
 
   const links = [
     {
@@ -76,24 +94,58 @@ const Sidebar = () => {
   ];
 
   useEffect(() => {
-    const fetchTokenAndSetUserId = async () => {
+    // const fetchTokenAndSetUserId = async () => {
+    //   try {
+    //     const accessToken = parseCookies().altern8_useraccess;
+    //     const token = accessToken;
+
+    //     if (token) {
+    //       const decodedToken: { uid: string } = jwtDecode(token);
+    //       // console.log(decodedToken, "-------------------");
+    //       const userId = decodedToken.uid;
+    //       await new Promise(resolve => setTimeout(resolve, 1000));
+    //       setUId(userId);
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
+
+    const fetchUsernameAndUid = async () => {
       try {
-        const accessToken = parseCookies().altern8_useraccess;
-        const token = accessToken;
-
-        if (token) {
-          const decodedToken: { uid: string } = jwtDecode(token);
-          // console.log(decodedToken.uid);
-          const userId = decodedToken.uid;
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          setUId(userId);
+        if (!accessToken) {
+          await ReplaceTokenOrRedirect();
         }
-      } catch (error) {
-        console.log(error);
+  
+        let response = await fetch(`${apiUrl}/user-dashboard-api/get-uid/`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+  
+        if (response.status === 401) {
+          // Handle token expiry
+          await ReplaceTokenOrRedirect();
+          response = await fetch(`${apiUrl}/user-dashboard-api/get-uid/`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+        }
+  
+        if (response.ok) {
+          const data = await response.json();
+          setUsername(data.user_data.name);
+          setUId(data.user_data.uid)
+        } else {
+          throw new Error(`Failed to fetch data: ${response.statusText}`);
+        }
+      } catch (err: any) {
+        console.error("Error fetching username data:", err);
       }
-    };
+    }
 
-    fetchTokenAndSetUserId();
+    fetchUsernameAndUid();
   }, []);
 
   return (
@@ -119,7 +171,7 @@ const Sidebar = () => {
         <div>
           <SidebarLink
             link={{
-              label: `Chikorita\n${uId}`,
+              label: `${username}\n${uId}`,
               href: '/profile',
               icon: (
                 <IconUserCircle className="flex-shrink-0 size-6 text-zinc-200" strokeWidth={1.5} />

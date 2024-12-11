@@ -253,78 +253,57 @@ const ReviewSection = () => {
     const reviews = [
     {
       id: 1,
-
+      name: "Lalit Jaiswal",
+      post_name: "Landcraft",
+      heading: "Affordable Housing - Non-Convertible Debentures (NCDs)",
       review:
-        'Ethyx made the invoice discounting process straightforward, allowing us to quickly access funds that were otherwise tied up in our receivables. This has significantly improved our cash flow, helping us keep up with growing demand without financial strain.',
+        "Altern8's NCD facility helped us raise capital swiftly for our affordable housing project. They understood our project's potential and provided the much needed boost to expand in underserved markets. The team's professionalism and quick response made a real difference.They made us realise our infrastructure status and facilitated international investors as well",
     },
     {
       id: 2,
-      // heading:
-      //   '“Exceptional funding website! User-friendly interface, robust features, prompt customer support review-2',
+      heading:'Retirement Communities - Compulsory Convertible Debentures (CCDs)',
       review:
-        'Bill discounting through Ethyx has been a good for us. It’s allowed us to leverage our outstanding invoices and gain immediate cash flow, enabling us to meet operational needs smoothly and on time.',
-      name: 'Raghav Sharma',
-      post_name: 'Managing Director, logitech',
+        'With a growing demand for retirement communities in smaller cities, we approached Altern8 for CCD financing. Their structured approach provided us with a flexible repayment model, perfectly matching our cash flow needs. Thanks to Altern8, our retirement community project is now thriving.&quot;',
+      name: 'Rakesh Garg',
+      post_name: 'Carol',
       // img: '/logitechseeklogocom2-1.svg',
     },
     {
       id: 3,
-      // heading:
-      //   '“Exceptional funding website! User-friendly interface, robust features, prompt customer support review-3',
+      heading: 'Residential Townships - Commercial Paper',
       review:
-        'Ethyx’s recurring revenue financing has been essential in scaling our SaaS company without taking on traditional debt. With their support, we could bring in cash against predictable revenue, which fueled our product development and team growth effortlessly.',
-      name: 'Raghav Sharma',
-      post_name: 'Managing Director, logitech',
+        'Altern8\'s commercial paper financing enabled us to develop a large residential township efficiently. The entire team was responsive, and the process was simple yet thorough. This form of financing was just what we needed to kickstart construction and stay ahead of timelines.',
+      name: 'Vaibhav Jain',
+      post_name: 'Rise Developers',
       // img: '/logitechseeklogocom2-1.svg',
     },
     {
       id: 4,
-
-      review:
-        'As an ecommerce trader with consistent revenue but minimal profit, traditional loans were challenging to secure. Ethyx’s revenue-based financing bridged this gap and allowed us to access funds based on our revenue potential, which was just what we needed to drive growth.',
-      name: 'Raghav Sharma',
-      post_name: 'Managing Director, logitech',
+      heading: "Commercial Properties - Non-Convertible Debentures (NCDs)",
+      review: "For our commercial property project, Altern8's NCD funding offered flexibility and solid terms that helped us stay on track financially. Their expertise in handling the financing needs of smaller developers like us has been a game-changer.",
+      name: 'Harmandeep Singh,',
+      post_name: 'Harmony',
       // img: '/logitechseeklogocom2-1.svg',
     },
     {
       id: 5,
-
-      review:
-        'Thanks to Ethyx’s purchase order financing, we could confidently accept large orders without worrying about the working capital required upfront. This financing option was critical in supporting our growth, and Ethyx’s team made the process seamless.',
-      name: 'Raghav Sharma',
-      post_name: 'Managing Director, logitech',
+      heading: "Agricultural Land Developments - Debentures",
+      review: "Altern8's debenture issuance made financing our agricultural development possible. The team's attention to detail and understanding of our unique project needs set them apart. This financing has allowed us to expand and offer sustainable land options to our community.",
+      name: 'Yash Garg',
+      post_name: '-',
       // img: '/logitechseeklogocom2-1.svg',
     },
     {
       id: 6,
-
+      heading: "Apartments - Secured Notes",
       review:
-        'Ethyx’s inventory financing solution enabled us to scale our stock levels ahead of the peak season. It also improved our metrics with Equity Investors with much lesser inventory on our books. With quick access to funds, we could meet high customer demand without overextending our cash reserves, ensuring smooth operations and growth.',
-      name: 'Raghav Sharma',
-      post_name: 'Managing Director, logitech',
+        "Secured notes via Altern8 provided the perfect funding solution for our mid-sized apartment project in Ghaziabadn. The simplicity and transparency of the process were refreshing, and we could access the funds without any delays.",
+      name: 'Sajal Garg',
+      post_name: 'Insprosper Promoters',
       // img: '/logitechseeklogocom2-1.svg',
     },
 
-    {
-      id: 7,
-
-      review:
-        'Supply chain financing with Ethyx helped us keep our production line running smoothly by providing necessary funds to pay our suppliers on time. Ethyx truly understood our supply chain needs and offered tailored solutions that made a difference in our daily operations.',
-      name: 'Raghav Sharma',
-      post_name: 'Managing Director, logitech',
-      // img: '/logitechseeklogocom2-1.svg',
-    },
-    {
-      id: 8,
-      heading:
-        // '“Exceptional funding website! User-friendly interface, robust features, prompt customer support',
-        '“Working Capital Finance Testimonial',
-      review:
-        'Ethyx’s working capital finance was exactly what we needed to fuel our daily operations without worrying about cash flow disruptions. Their flexible terms and supportive team have made our journey toward stability and growth much easier.',
-      name: 'Raghav Sharma',
-      post_name: 'Managing Director, logitech',
-      // img: '/logitechseeklogocom2-1.svg',
-    },
+    
   ];
 
   // Duplicate the reviews for continuous scrolling
@@ -371,7 +350,7 @@ const ReviewSection = () => {
 
   return (
     <div className="w-full mx-auto pt-10 text-white font-work-sans text-center">
-      <div className="max-w-[1320px] mx-auto grid grid-cols-1 gap-4 lg:grid-cols-3 ">
+      <div className="max-w-[1320px] mx-auto grid grid-cols-1 gap-6 lg:grid-cols-3">
         {duplicatedReviews.slice(currentIndex, currentIndex + 3).map((review, index) => (
           <motion.div
             key={review.id}
@@ -380,19 +359,30 @@ const ReviewSection = () => {
             exit={{ x: -100, opacity: 0 }} // Slide out to the left
             transition={{ duration: 0.5 }} // Animation duration
             whileHover={{ scale: 0.95, opacity: 0.9 }}
+            className="flex flex-col items-center justify-between backdrop-brightness-90 bg-white/5 bg-gray- p-6 rounded-lg shadow-lg min-h-[360px]" 
           >
-            <div className="mb-4 text-sm font-light">{review.review}</div>
-            <div className="mt-4 font-semibold text-xl">{review.name || 'Anonymous'}</div>
-            <div className="text-sm text-gray-600">{review.post_name || 'Position'}</div>
+            <div className="mb-0.5 mt-3 text-sm font-bold text-gray-200">{review.heading}</div>
+            {/* Review Text */}
+            <div className="mb-2 text-sm font-light text-gray-400">{review.review}</div>
+  
+            {/* Name and Designation */}
+            <div className="flex flex-col items-center gap-2 mt-2">
+              <div className="font-semibold text-xl min-h-[24px] text-gray-300/80">
+                {review.name || "Anonymous"}
+              </div>
+              <div className="text-sm text-gray-400 min-h-[20px] ">
+                {review.post_name || "Loading.."}
+              </div>
+            </div>
           </motion.div>
         ))}
       </div>
-
+  
       {/* Navigation Arrows */}
-      <div className="flex justify-between w-[85%] m-auto">
+      <div className="flex justify-between w-[85%] m-auto mt-5 mb-10">
         <button
           onClick={prevReview}
-          className="flex items-center justify-center hover:bg-[#762559] rounded-full h-10 w-10 text-gray-500 hover:text-white"
+          className="flex items-center justify-center bg-[#5f202f] hover:bg-[#762559] rounded-full h-10 w-10 text-gray-500 hover:text-white"
         >
           <FaChevronLeft />
         </button>

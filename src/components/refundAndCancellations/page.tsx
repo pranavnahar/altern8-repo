@@ -1,18 +1,45 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import Header from '../Landing-page/Header';
+import Footer from '../Landing-page/Footer';
+import JoinUsSection from '../Landing-page/JoinUsSection';
+import { ArrowLeftCircle } from 'lucide-react';
+import Link from 'next/link';
 
 const RefundAndCancellations: FC = () => {
   const headingClassName = 'mb-4 font-bold mt-4 ';
   const contentClassName = 'mb-6 ';
 
+  const [domainName, setDomainName] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setDomainName(window.location.hostname);
+    }
+  }, []);
+
   return (
-    <div className="max-w-[95%] sm:max-w-[90%] lg:max-w-[1320px] mx-auto text-background-black-font rounded-lg p-8">
-      <h1 className="text-3xl  mt-10 font-bold mb-4 text-white">Refund and Cancellations - Altern8</h1>
+    <div className="relative overflow-x-hidden [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] w-full min-h-screen">
+      <Header/>
+
+      <div className="flex items-center justify-start ml-14 mt-10 space-x-2">
+          <Link href="/">
+            <button className="flex items-center text-gray-400 text-[13.5px] font-medium hover:underline hover:text-purple-400">
+              <ArrowLeftCircle className="w-4 h-4" /> {/* Adjusted icon size */}
+              <span>&nbsp;back to home</span>
+            </button>
+          </Link>
+        </div>
+        
+      <div className="flex flex-col items-center justify-center py-16">
+      <h1 className="text-3xl font-bold text-gray-200 mb-8 mt-10">Refund and Cancellations - Altern8</h1>
+      
+      <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-md px-6">
       <p className={contentClassName}>
         The Terms and Conditions contained herein shall apply to any person (“User”) using the
         services of Ekarth Ventures Private Limited (“Altern8 Club”) and its Affiliates for making
         payments through an online payment gateway service offered by various payment service
         providers (“Payment Service Provider(s)”), through the Altern8 Club portal hosted at{' '}
-        <strong> http://Ethyx.in/ </strong>.(“Website”). Each User is therefore deemed to have read
+        <strong> {domainName} </strong>.(“Website”). Each User is therefore deemed to have read
         and accepted these Terms and Conditions. Any notice, intimation or communication to be made
         to Altern8 Club under this policy shall be made to <strong> blend@nahar.om </strong>.
       </p>
@@ -53,7 +80,7 @@ const RefundAndCancellations: FC = () => {
           <p className={contentClassName}>
             2.3 Subject to the above, Altern8 Club will make reasonable efforts to process refunds
             within 5-7 business days from the date on which the refund request was initiated. Once
-            the User’s refund request is raised, Altern8 Club will send an email to notify the User of
+            the User's refund request is raised, Altern8 Club will send an email to notify the User of
             the approval or rejection of the refund request. If the request is approved, then the
             User's refund will be processed within 5-7 business days from the date on which the
             request for refund was approved by us.
@@ -111,7 +138,7 @@ const RefundAndCancellations: FC = () => {
         <div className="my-10">
           <h2 className={headingClassName}>4. Cancellation:</h2>
           <p className={contentClassName}>
-            4.1 Please contact Altern8 Club via<strong> http://Altern8.in/ </strong>, or call us using
+            4.1 Please contact Altern8 Club via<strong> {domainName} </strong>, or call us using
             the information provided on the Website.
           </p>
           <p className={contentClassName}>
@@ -159,9 +186,14 @@ const RefundAndCancellations: FC = () => {
             </li>
           </ol>
           <br />
+          </div>
         </div>
       </div>
-    </div>
+      </div>
+      <JoinUsSection/>
+      <Footer/>
+      </div>
+
   );
 }
 

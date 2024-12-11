@@ -58,8 +58,8 @@ const TypingAnimation: React.FC = () => {
   useEffect(() => {
     animate(count, 60, {
       type: 'tween',
-      delay: 0.5,
-      duration: 3.0,
+      delay: 0.3,
+      duration: 1.28,
       ease: 'easeIn',
       repeat: Infinity,
       repeatType: 'reverse',
