@@ -1,5 +1,5 @@
-// import React, { useState, useEffect } from "react";
-// import { motion, AnimatePresence } from "framer-motion";
+"use client"
+
 
 // function ShortTermDebt({ header, data }) {
 //   const [cards, setCards] = useState([]);

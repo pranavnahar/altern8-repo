@@ -1,4 +1,4 @@
-export const teams = [
+const teams = [
   {
     image:
       'https://static.wixstatic.com/media/72f1e4_b73148cb8d774b3fbe6f94aab2a726d9~mv2.jpg/v1/fill/w_206,h_200,fp_0.46_0.31,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/pranav2.jpg',
@@ -71,3 +71,6 @@ export const teams = [
     name: 'Daksh',
   },
 ];
+
+
+export default teams;

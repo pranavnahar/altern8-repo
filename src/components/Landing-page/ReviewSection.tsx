@@ -42,7 +42,7 @@
 //     const reviews = [
 //         {
 //           id: 1,
-    
+
 //           review:
 //             'Altern8 made the invoice discounting process straightforward, allowing us to quickly access funds that were otherwise tied up in our receivables. This has significantly improved our cash flow, helping us keep up with growing demand without financial strain.',
 //         },
@@ -68,7 +68,7 @@
 //         },
 //         {
 //           id: 4,
-    
+
 //           review:
 //             'As an ecommerce trader with consistent revenue but minimal profit, traditional loans were challenging to secure. Altern8’s revenue-based financing bridged this gap and allowed us to access funds based on our revenue potential, which was just what we needed to drive growth.',
 //           // name: 'Raghav Sharma',
@@ -77,7 +77,7 @@
 //         },
 //         {
 //           id: 5,
-    
+
 //           review:
 //             'Thanks to Altern8’s purchase order financing, we could confidently accept large orders without worrying about the working capital required upfront. This financing option was critical in supporting our growth, and Altern8’s team made the process seamless.',
 //           // name: 'Raghav Sharma',
@@ -86,17 +86,17 @@
 //         },
 //         {
 //           id: 6,
-    
+
 //           review:
 //             'Altern8’s inventory financing solution enabled us to scale our stock levels ahead of the peak season. It also improved our metrics with Equity Investors with much lesser inventory on our books. With quick access to funds, we could meet high customer demand without overextending our cash reserves, ensuring smooth operations and growth.',
 //           // name: 'Raghav Sharma',
 //           // post_name: 'Managing Director, logitech',
 //           // img: '/logitechseeklogocom2-1.svg',
 //         },
-    
+
 //         {
 //           id: 7,
-    
+
 //           review:
 //             'Supply chain financing with Altern8 helped us keep our production line running smoothly by providing necessary funds to pay our suppliers on time. Altern8 truly understood our supply chain needs and offered tailored solutions that made a difference in our daily operations.',
 //           // name: 'Raghav Sharma',
@@ -173,7 +173,7 @@
 //                 {/* <div className="max-w-[1320px] mx-auto grid grid-cols-1 gap-4 lg:grid-cols-6 "> */}
 //                 <div className="max-w-[1320px] mx-auto grid grid-cols-1 gap-4 lg:grid-cols-3 text-center justify-center items-center ">
 //                     {/* <div ref={ref} className="lg:col-span-2">
-//                         {/* animation  
+//                         {/* animation
 //                         <motion.div
 //                             // initial={{ x: -1000 }}
 //                             // animate={{ x: [-900, 0] }}
@@ -181,12 +181,12 @@
 //                             transition={{ duration: 2, delay: 0.2 }}
 //                             whileHover={{ scale: 0.95, opacity: 0.9 }}
 //                         >
-//                             {/*review company logo image  
+//                             {/*review company logo image
 //                             {/* <img
 //                                 className="w-[250px] h-[150px] px-10  sm:w-[350 px] sm:h-[130px]  lg:w-[404px] lg:h-[265px] overflow-hidden "
 //                                 alt=""
 //                                 src={reviews[currentIndex].img}
-//                             /> 
+//                             />
 //                         </motion.div>
 //                     </div> */}
 
@@ -242,15 +242,15 @@
 // };
 
 // export default ReviewSection;
-
+"use client"
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, useInView, useAnimation } from 'framer-motion';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 const ReviewSection = () => {
   // Storing the reviews
-    const reviews = [
+  const reviews = [
     {
       id: 1,
       name: "Lalit Jaiswal",
@@ -263,7 +263,7 @@ const ReviewSection = () => {
       id: 2,
       heading:'Retirement Communities - Compulsory Convertible Debentures (CCDs)',
       review:
-        'With a growing demand for retirement communities in smaller cities, we approached Altern8 for CCD financing. Their structured approach provided us with a flexible repayment model, perfectly matching our cash flow needs. Thanks to Altern8, our retirement community project is now thriving.&quot;',
+        'With a growing demand for retirement communities in smaller cities, we approached Altern8 for CCD financing. Their structured approach provided us with a flexible repayment model, perfectly matching our cash flow needs. Thanks to Altern8, our retirement community project is now thriving.',
       name: 'Rakesh Garg',
       post_name: 'Carol',
       // img: '/logitechseeklogocom2-1.svg',
@@ -354,10 +354,10 @@ const ReviewSection = () => {
         {duplicatedReviews.slice(currentIndex, currentIndex + 3).map((review, index) => (
           <motion.div
             key={review.id}
-            initial={{ x: 100, opacity: 0 }} // Start off-screen to the right
-            animate={{ x: 0, opacity: 1 }} // Slide in to the center
-            exit={{ x: -100, opacity: 0 }} // Slide out to the left
-            transition={{ duration: 0.5 }} // Animation duration
+            initial={{ x: 100, opacity: 0 }} 
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -100, opacity: 0 }} 
+            transition={{ duration: 0.5 }} 
             whileHover={{ scale: 0.95, opacity: 0.9 }}
             className="flex flex-col items-center justify-between backdrop-brightness-90 bg-white/5 bg-gray- p-6 rounded-lg shadow-lg min-h-[360px]" 
           >
@@ -384,13 +384,13 @@ const ReviewSection = () => {
           onClick={prevReview}
           className="flex items-center justify-center bg-[#5f202f] hover:bg-[#762559] rounded-full h-10 w-10 text-gray-500 hover:text-white"
         >
-          <FaChevronLeft />
+          <IconChevronLeft />
         </button>
         <button
           onClick={nextReview}
           className="flex items-center justify-center hover:bg-[#762559] rounded-full h-10 w-10 text-gray-500 hover:text-white"
         >
-          <FaChevronRight />
+          <IconChevronRight />
         </button>
       </div>
     </div>
@@ -398,4 +398,3 @@ const ReviewSection = () => {
 };
 
 export default ReviewSection;
-

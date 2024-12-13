@@ -9,23 +9,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../../../components/ui/dialog";
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../../components/ui/select";
-import { Switch } from "../../../../components/ui/switch";
-import { Button } from "../../../../components/ui/button";
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 import { adminApplyProduct } from "../actions";
-import { parseCookies } from "nookies";
 import { Product } from "../types";
-
 import { useToast } from "@/utils/show-toasts";
 import { initiateEmudraFlow } from "../actions";
-import { getAuthToken } from "@/utils/helpers";
+import { getAuthToken } from "@/utils/auth-actions";
+
 type AdminApplyProductModalProps = {
   projectId: string;
   productId: number;
@@ -49,52 +48,31 @@ const ApplyProduct = ({
 
   const router = useRouter();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL as string;
-  let altern8_adminaccess = parseCookies().altern8_adminaccess;
-
-  const ReplaceTokenOrRedirect = async () => {
-    const token = await getAuthToken();
-    if (!token) {
-      router.push("/login");
-    } else {
-      altern8_adminaccess = token;
-    }
-  };
-
 
   const getRequiredEmudraFlowDetails = async () => {
-    try {
-      if (!altern8_adminaccess) {
-        await ReplaceTokenOrRedirect();
-      }
-    } catch (error) {
 
-    }
   }
 
   const getProductDetails = async () => {
     try {
-      if (!altern8_adminaccess) {
-        await ReplaceTokenOrRedirect();
-      }
+      const token = await getAuthToken()
 
       let response = await fetch(`${apiUrl}/admin-api/products/`, {
         headers: {
-          Authorization: `Bearer ${altern8_adminaccess}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
         response = await fetch(`${apiUrl}/admin-api/products/`, {
           headers: {
-            Authorization: `Bearer ${altern8_adminaccess}`,
+            Authorization: `Bearer ${token}`,
           },
         });
       }
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log("the productlist that will be set is: ", responseData);
         setProductList(responseData);
       } else {
         console.error("Failed to fetch products:", response.status);
@@ -145,7 +123,6 @@ const ApplyProduct = ({
         message: "Successfully approved the user",
         type: "success",
       });
-      console.log("now initiating the emudra flow");
 
       const emudra_init_result = await initiateEmudraFlow(projectId,
         selectedAgreement,
@@ -158,10 +135,6 @@ const ApplyProduct = ({
           type: "success",
         });
       } else {
-        console.error(
-          "Failed to send the documents to the user: ",
-          emudra_init_result.error
-        );
         showToast({
           message: "An error occured while sending the document to user.",
           type: "error",

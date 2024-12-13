@@ -1,10 +1,10 @@
 "use server";
 
-import { getAuthToken } from "@/utils/auth-actions";
 import ky from "ky";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Budget, BudgetResponse } from "../types";
 import { revalidatePath } from "next/cache";
+import { getAuthToken } from "@/utils/auth-actions";
 
 export async function fetchTrancheBudget(
   projectID: number,
@@ -24,20 +24,14 @@ export async function fetchTrancheBudget(
       }
     );
 
-    if (response.status === 401) {
-      throw new Error("Unauthorized");
-    }
-
     return await response.json() as BudgetResponse;
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === "Unauthorized") {
-        throw new Error(
-          "You are not authorized to access this resource. Please log in again."
-        );
+        redirect('/login')
       }
       if (error.name === "TimeoutError") {
-        throw new Error("Request timed out");
+        redirect('/login')
       }
       if (error.name === "HTTPError" && error.message.includes("404")) {
         notFound();
@@ -47,10 +41,10 @@ export async function fetchTrancheBudget(
   }
 }
 
-export async function createTrancheRule(data: Budget) {
+export async function createTrancheBudget(data: Budget) {
   try {
     const token = await getAuthToken();
-    const url = `${process.env.SERVER_URL}/rablet-api/budgets/tranches/${data.tranche}/rules/`;
+    const url = `${process.env.SERVER_URL}/rablet-api/budgets/tranches/${data.tranche}/budgets/`;
 
     const response = await fetch(url, {
       method: 'POST',
@@ -73,7 +67,7 @@ export async function createTrancheRule(data: Budget) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to create tranche rule');
+      redirect('/login')
     }
 
     const result = await response.json();
@@ -81,7 +75,6 @@ export async function createTrancheRule(data: Budget) {
 
     return result;
   } catch (error) {
-    console.error('Error creating tranche rule:', error);
     throw error;
   }
 }

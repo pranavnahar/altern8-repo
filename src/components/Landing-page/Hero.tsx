@@ -1,7 +1,9 @@
+"use client"
+
 import React, { useState, useEffect } from 'react';
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { parseCookies } from 'nookies';
+import { getAuthToken } from '@/utils/auth-actions';
 
 //For Cursor Animation
 const CursorBlinker: React.FC = () => {
@@ -59,7 +61,7 @@ const TypingAnimation: React.FC = () => {
     animate(count, 60, {
       type: 'tween',
       delay: 0.3,
-      duration: 1.28,
+      duration: 2.28,
       ease: 'easeIn',
       repeat: Infinity,
       repeatType: 'reverse',
@@ -84,11 +86,17 @@ const TypingAnimation: React.FC = () => {
 
 // main return function
 const HeroSection: React.FC = () => {
-  const cookies = parseCookies();
-  const accessToken = cookies.altern8_useraccess;
+  const [redirectUrl, setRedirectUrl] = useState<string>('/register')
+  const handleFetchState = async () => {
+    const token = await getAuthToken();
+    const url = token && token.length > 5 ? '/dashboard' : '/register';
+    setRedirectUrl(url);
+  }
 
-  // dynamiaclly create a redirection url based on whether user is logged in already or not
-  const redirectUrl = accessToken && accessToken.length > 5 ? '/dashboard' : '/register';
+  useEffect(() => {
+    handleFetchState()
+  }, [])
+
   return (
     <div>
       <div className="max-w-[1320px] h-[300px] mx-auto px-5 sm:px-0 xl:px-0">
@@ -107,7 +115,7 @@ const HeroSection: React.FC = () => {
             {/* Get Credit button link */}
             <Link
               href={redirectUrl}
-              className="relative inline-flex items-center h-[40px] w-[130px] 
+              className="relative inline-flex items-center h-[40px] w-[130px]
                 sm:h-[50px] sm:w-[200px] mt-[300px] sm:mt-[260px] justify-center p-4 px-6 py-3 overflow-hidden
                 font-medium font-roboto text-white-font transition duration-300 ease-out
                 rounded-full group"

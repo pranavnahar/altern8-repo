@@ -1,4 +1,4 @@
-'use client';
+"use client"
 import React, { FC } from 'react';
 import Header from '../Landing-page/Header';
 import Footer from '../Landing-page/Footer';
@@ -8,7 +8,7 @@ import FoundersSection from '../ui/our-founder';
 import { MarqueeDemo } from '../ui/marqueeDemo';
 import Link from 'next/link';
 import { ArrowLeftCircle } from 'lucide-react';
-import { teams } from './constant';
+import teams from './constant';
 
 const AboutUs: FC = () => {
   const advisors = [

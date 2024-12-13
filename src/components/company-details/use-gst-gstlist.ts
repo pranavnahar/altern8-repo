@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies"; // Fetch cookies
-import { getAccessToken } from "../../utils/auth"; // Your token refresh logic
+import { getAuthToken } from "@/utils/auth-actions";
+
 
 export const useGetGstList = () => {
   const router = useRouter();
@@ -20,7 +21,7 @@ export const useGetGstList = () => {
 
   // Replace or refresh token logic
   const ReplaceTokenOrRedirect = async () => {
-    const token = await getAccessToken();
+    const token = await getAuthToken();
     if (!token) {
       router.push("/login"); 
     } else {

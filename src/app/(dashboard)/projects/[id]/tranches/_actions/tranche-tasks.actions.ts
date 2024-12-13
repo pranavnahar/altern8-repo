@@ -1,10 +1,11 @@
 "use server"
 
-import { getAuthToken } from "@/utils/auth-actions";
+
 import { TaksResponse } from "../types";
 import ky from "ky";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { getAuthToken } from "@/utils/auth-actions";
 
 export async function fetchTrancheTasks(projectID: number, trancheID: number, timeoutMs: number = 60000): Promise<TaksResponse> {
   async function makeRequest(token: string) {
@@ -37,12 +38,10 @@ export async function fetchTrancheTasks(projectID: number, trancheID: number, ti
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === "Unauthorized") {
-        throw new Error(
-          "You are not authorized to access this resource. Please log in again."
-        );
+        redirect('/login')
       }
       if (error.name === "TimeoutError") {
-        throw new Error("Request timed out");
+        redirect('/login')
       }
       if (error.name === "HTTPError" && error.message.includes("404")) {
         redirect('/404')
@@ -85,7 +84,6 @@ export async function createTrancheTask(data: TrancheTaskData) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to create tranche task');
     }
 
     const result = await response.json();
@@ -100,9 +98,6 @@ export async function createTrancheTask(data: TrancheTaskData) {
 }
 
 export async function updateTrancheTask(data: TrancheTaskData) {
-  if (!data.id) {
-    throw new Error('Task ID is required for updates');
-  }
 
   try {
     const url = `${process.env.SERVER_URL}/rablet-api/projects/${data.project}/tranches/${data.tranche}/tasks/${data.id}/`;
@@ -125,7 +120,6 @@ export async function updateTrancheTask(data: TrancheTaskData) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to update tranche task');
     }
 
     const result = await response.json();

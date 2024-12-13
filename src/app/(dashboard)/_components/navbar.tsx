@@ -10,12 +10,11 @@ import ChatBox from '../../../components/global/Chatbox';
 import { fetchWithAuth } from '../../../utils/fetch-with-auth';
 import { DashboardContext } from '../../../contexts/dashboard-context';
 import { useRouter } from 'next/compat/router';
-import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../../utils/auth';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '../../../components/ui/dialog';
 import { useToast } from '@/utils/show-toasts';
 import { Switch } from '@/components/ui/switch';
+import { getAuthToken } from '@/utils/auth-actions';
 
 export const Navbar: FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -150,43 +149,16 @@ export const Navbar: FC = () => {
   const [loadingSpinner, setLoadingSpinner] = useState(true); // for loading animation
   const router = useRouter();
 
-  // Handle token
-  let accessToken = parseCookies().altern8_useraccess; //access token from cookies
 
-  // if not accessToken then ask for refresh token
-  const ReplaceTokenOrRedirect = async () => {
-    // get new access token with help of Refresh token
-    const token = await getAccessToken();
-    // if not able to get the token then redirect to login
-    if (!token) {
-      router!.push('/login');
-    } else {
-      accessToken = token;
-    }
-  };
-
-  // get the past credit request detail from backend
   const GetOldCredit = async () => {
     try {
-      if (!accessToken) {
-        await ReplaceTokenOrRedirect();
-      }
+      let token = await getAuthToken()
 
       let response = await fetch(`${apiUrl}/user-dashboard-api/get-more-credit/`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        // Again try to fetch the data
-        response = await fetch(`${apiUrl}/user-dashboard-api/get-more-credit/`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-      }
 
       // if (response.ok) {
       if (true) {
@@ -323,25 +295,14 @@ export const Navbar: FC = () => {
 
       console.log("the get more credit formdata resulted in this: ", formData)
 
+      const token = await getAuthToken()
       let response = await fetch(`${apiUrl}/user-dashboard-api/get-more-credit/`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        // Again try to fetch the data
-        response = await fetch(`${apiUrl}/user-dashboard-api/get-more-credit/`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: formData,
-        });
-      }
 
       if (response.ok) {
         await response.json();
@@ -419,17 +380,18 @@ export const Navbar: FC = () => {
           </div>
           <div className="flex gap-5 items-center">
             {/* increase credit */}
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <Button
-                variant="expandIcon"
-                Icon={IconSend2}
-                size={'sm'}
-                iconPlacement="right"
-                className="text-sm text-white bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
-                onClick={handleGetMoreCreditOpen}
-              >
-                <DialogTrigger> Increase Credit</DialogTrigger>
-              </Button>
+            <Dialog  open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+
+                <Button
+                  variant="expandIcon"
+                  Icon={IconSend2}
+                  size={'sm'}
+                  iconPlacement="right"
+                  className="text-sm text-white bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
+                  onClick={handleGetMoreCreditOpen}
+                >
+                   <DialogTrigger> Increase Credit</DialogTrigger>
+                </Button>
               {/* Increase Credit modal box */}
               <DialogContent className="border-none p-0 h-full w-4/5 max-h-screen">
                 {showGetMoreCreditBox && (

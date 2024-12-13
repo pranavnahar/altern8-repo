@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { FC } from "react";
 import AnimatedLogo from "../Header/AnimatedLogo";
-import { parseCookies } from "nookies";
+import { getAuthToken } from "@/utils/auth-actions";
 
-const Header: FC = () => {
-    const cookies = parseCookies();
-    const accessToken = cookies.altern8_useraccess;
+const Header: FC = async () => {
+    const token = await getAuthToken()
 
     // dynamiaclly create a redirection url based on whether hes logged in already or not
-    const redirectUrl = accessToken && accessToken.length > 5 ? '/dashboard' : '/register';
+    const redirectUrl = token && token.length > 5 ? '/dashboard' : '/register';
     return (
         <header className="max-w-[1320px] flex flex-row items-center mx-auto px-5 2xl:px-0 pt-8 justify-between text-left text-5xl sm:text-21xl lg:text-29xl text-white-font">
             {/* logo or website name */}

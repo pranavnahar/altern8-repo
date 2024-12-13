@@ -1,6 +1,6 @@
 "use server"
 
-import { getAuthToken } from '@/utils/helpers';
+import { getAuthToken } from '@/utils/auth-actions';
 import ky from 'ky';
 import { notFound, redirect } from 'next/navigation';
 
@@ -15,9 +15,7 @@ export async function fetchProjectInventory(projectID: number, timeoutMs: number
       }
     });
 
-    if (response.status === 401) {
-      throw new Error('Unauthorized');
-    }
+
 
     return await response.json();
   } catch (error) {
@@ -26,7 +24,7 @@ export async function fetchProjectInventory(projectID: number, timeoutMs: number
         redirect('/login')
       }
       if (error.name === 'TimeoutError') {
-        throw new Error('Request timed out');
+        redirect('/login')
       }
       if (error.name === 'HTTPError' && error.message.includes('404')) {
         notFound();
@@ -49,10 +47,6 @@ export async function addProjectInventory(projectId: number, data: any) {
       body: JSON.stringify(data)
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to update project status');
-    }
-
     const result = await response.json();
     return { success: true, data: result };
   } catch (error) {
@@ -70,11 +64,6 @@ export async function get(path: string) {
         'Authorization': `Bearer ${token}`
       },
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to get inventory');
-    }
-
     const result = await response.json();
     return { success: true, data: result };
   } catch (error) {
@@ -94,11 +83,6 @@ export async function editProjectInventory(id: number, data: any) {
       },
       body: JSON.stringify(data)
     });
-
-    if (!response.ok) {
-      throw new Error('Failed to update project status');
-    }
-
     const result = await response.json();
     return { success: true, data: result };
   } catch (error) {

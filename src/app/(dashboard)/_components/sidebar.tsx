@@ -24,8 +24,8 @@ import {
 } from '@tabler/icons-react';
 import AnimatedLogo from '../../../components/Header/AnimatedLogo';
 import { jwtDecode } from 'jwt-decode';
-import { parseCookies } from 'nookies';
-import { getAccessToken } from '@/utils/auth';
+import { getAuthToken } from '@/utils/auth-actions';
+import { parseCookies } from "nookies";
 
 const Sidebar = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -40,7 +40,7 @@ const Sidebar = () => {
 
   // Replace or refresh token logic
   const ReplaceTokenOrRedirect = async () => {
-    const token = await getAccessToken();
+    const token = await getAuthToken();
     if (!token) {
       router.push("/login"); 
     } else {
@@ -113,8 +113,13 @@ const Sidebar = () => {
 
     const fetchUsernameAndUid = async () => {
       try {
-        if (!accessToken) {
-          await ReplaceTokenOrRedirect();
+        const token = await getAuthToken()
+
+        if (token) {
+          const decodedToken: { uid: string } = jwtDecode(token);
+          const userId = decodedToken.uid;
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          setUId(userId);
         }
   
         let response = await fetch(`${apiUrl}/user-dashboard-api/get-uid/`, {

@@ -1,10 +1,11 @@
 "use server";
 
-import { getAuthToken } from "@/utils/auth-actions";
+
 import ky from "ky";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { RulesResponse } from "../types";
+import { getAuthToken } from "@/utils/auth-actions";
 
 export async function fetchTrancheRules(
   projectID: number,
@@ -24,20 +25,14 @@ export async function fetchTrancheRules(
       }
     );
 
-    if (response.status === 401) {
-      throw new Error("Unauthorized");
-    }
-
     return await response.json() as RulesResponse;
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === "Unauthorized") {
-        throw new Error(
-          "You are not authorized to access this resource. Please log in again."
-        );
+        redirect('/login')
       }
       if (error.name === "TimeoutError") {
-        throw new Error("Request timed out");
+        redirect('/login')
       }
       if (error.name === "HTTPError" && error.message.includes("404")) {
         notFound();
@@ -82,12 +77,6 @@ export async function createTrancheRule(data: TrancheRuleData) {
         }
       })
     });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to create tranche rule');
-    }
-
     const result = await response.json();
 
     revalidatePath(`/projects/${data.project}/tranches`);
@@ -100,9 +89,6 @@ export async function createTrancheRule(data: TrancheRuleData) {
 }
 
 export async function updateTrancheRule(data: TrancheRuleData) {
-  if (!data.id) {
-    throw new Error('Rule ID is required for updates');
-  }
 
   try {
     const url = `${process.env.SERVER_URL}/rablet-api/projects/${data.project}/tranches/${data.tranche}/rules/${data.id}/`;
@@ -125,17 +111,11 @@ export async function updateTrancheRule(data: TrancheRuleData) {
       })
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to update tranche rule');
-    }
-
     const result = await response.json();
     revalidatePath(`/projects/${data.project}/tranches`);
 
     return result;
   } catch (error) {
-    console.error('Error updating tranche rule:', error);
     throw error;
   }
 }
@@ -151,10 +131,6 @@ export async function deleteTrancheRule(projectId: number, trancheId: number, ru
       },
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to delete tranche rule');
-    }
     revalidatePath(`/projects/${projectId}/tranches/${trancheId}`);
 
     return true;

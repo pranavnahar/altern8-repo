@@ -1,6 +1,6 @@
 'use server'
 
-import { getAuthToken } from '@/utils/helpers';
+import { getAuthToken } from '@/utils/auth-actions';
 import { revalidatePath } from 'next/cache';
 export async function addProjectSummary(projectID: number, data: any) {
   try {

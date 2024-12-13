@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -19,7 +19,6 @@ const RERA = ({ demo }: Props) => {
     Rera_username: '',
     Rera_password: '',
   });
-  let accessToken = parseCookies().altern8_useraccess;
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,22 +54,16 @@ const RERA = ({ demo }: Props) => {
           username: Rera_username,
           password: Rera_password,
         };
-
+        const token = await getAuthToken();
         setLoading(true);
         const response = await fetch(`${apiUrl}/user-api/rera-details/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken || localStorage.getItem('token')}`,
+            Authorization: `Bearer ${token || localStorage.getItem('token')}`,
           },
           body: JSON.stringify(newRecord),
         });
-
-        // if unauthorized then push to login page
-        if (response.status === 401) {
-          router.push('/login');
-        }
-
         if (response.ok) {
           let server_message = await response.json();
           showToast({

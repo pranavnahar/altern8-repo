@@ -11,9 +11,9 @@ export const LegalFlow = () => {
 
     return (
         <div className="flex mt-5 flex-col gap-10  p-5">
-            {fileOptions.map(label => (
+            {/* {fileOptions.map(label => (
                 <FileUpload key={label} onDrop={files => onDrop(files, label)} label={label} />
-            ))}
+            ))} */}
             <Link href={`/project-verification/1?tab=budget`}>
 
                 <button

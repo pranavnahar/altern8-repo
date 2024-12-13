@@ -237,15 +237,16 @@
 // }
 
 import React, { useState } from 'react';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import { MultiSelect } from '../../components/ui/multi-select';
 import { Table, TableHeader, TableRow, TableCell, TableBody } from '../../components/ui/table';
 import { useGetGstList } from './use-gst-gstlist';
 import { Button } from '../../components/ui/button';
-import { apiUrl, getAccessToken } from '../../utils/auth';
-import { parseCookies } from 'nookies';
 import { useToast } from '../../utils/show-toasts';
 import { useRouter } from 'next/navigation';
+import { getAuthToken } from '@/utils/auth-actions';
+import { parseCookies } from 'nookies';
+import LoadingSpinner from '../LoadingSpinner';
+
 
 const GSTList: React.FC = () => {
   const [selectedGstin, setSelectedGstin] = useState<string[]>([]);
@@ -259,6 +260,8 @@ const GSTList: React.FC = () => {
 
   const { processedGstList, unprocessedGstList, message, error, isLoading, sendOtp, verifyOtp } =
     useGetGstList();
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const { showToast } = useToast();
   const accessToken = parseCookies().accessToken;
@@ -279,7 +282,7 @@ const GSTList: React.FC = () => {
   };
 
   const ReplaceTokenOrRedirect = async () => {
-    const token = await getAccessToken();
+    const token = await getAuthToken();
     if (!token) {
       router.push('/login');
     }

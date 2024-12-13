@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../utils/auth';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import { useToast } from '../../utils/show-toasts';
 import { Button } from '../ui/button';
 import { IconChevronRight, IconPlus } from '@tabler/icons-react';
+import { getAuthToken } from '@/utils/auth-actions';
 
 // main return page
 const PocForm = () => {
@@ -34,17 +32,6 @@ const PocForm = () => {
   const router = useRouter();
   const { showToast } = useToast();
 
-  // Handle token
-  let accessToken = parseCookies().altern8_useraccess;
-
-  const ReplaceTokenOrRedirect = async () => {
-    const token = await getAccessToken();
-    if (!token) {
-      router.push('/login');
-    } else {
-      accessToken = token;
-    }
-  };
 
   // handle form input for phone number and otp
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,25 +48,13 @@ const PocForm = () => {
   // get the POC detail from backend
   const GetPoc = async () => {
     try {
-      if (!accessToken) {
-        await ReplaceTokenOrRedirect();
-      }
+      const token = await getAuthToken()
 
       let response = await fetch(`${apiUrl}/user-api/poc/`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-api/poc/`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-      }
-
       if (response.ok) {
         const responseData = await response.json();
         // console.log(responseData);
@@ -187,28 +162,16 @@ const PocForm = () => {
       setLoadingSpinner(true);
 
       let body = newRecord;
-      console.log(body);
+      const token = await getAuthToken()
       let response = await fetch(`${apiUrl}/user-dashboard-api/generate-otp-poc/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
 
         body: JSON.stringify(body),
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-dashboard-api/generate-otp-poc/`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        });
-      }
 
       if (response.ok) {
         await response.json();
@@ -218,11 +181,6 @@ const PocForm = () => {
         formData.otp = '';
       } else {
         let server_error = await response.json();
-
-        // temp
-        // setOtpSent(true);
-
-        // empty previous otp in login form field
         formData.otp = '';
 
         console.error('Failed to send otp', server_error);
@@ -263,27 +221,15 @@ const PocForm = () => {
         phone_number: formData['phoneNumber'].trim(),
         designation: formData['designation'].trim(),
       };
-      console.log(bodyData);
+      const token = await getAuthToken()
       let response = await fetch(`${apiUrl}/user-dashboard-api/submit-poc/`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(bodyData),
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-dashboard-api/submit-poc/`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(bodyData),
-        });
-      }
 
       if (response.ok) {
         showToast({
@@ -398,14 +344,6 @@ const PocForm = () => {
 
   return (
     <div className="max-w-2xl mx-auto mt-8">
-      {loadingSpinner && (
-        <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-gray-600 bg-opacity-50 ">
-          <div className="relative">
-            <LoadingSpinner />
-          </div>
-        </div>
-      )}
-
       {/* list poc details  */}
       <div className="mb-5 rounded-lg ">
         <div className="mb-3 font-medium text-center text-gray-200 text-base2">

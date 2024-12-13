@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
 import Link from "next/link";
-import { parseCookies } from "nookies";
 
 // main return function
 const JoinUsSection = () => {
@@ -18,12 +17,6 @@ const JoinUsSection = () => {
             mainControls.start({ x: [900, 0] });
         }
     }, [isInView]);
-
-    const cookies = parseCookies();
-    const accessToken = cookies.altern8_useraccess;
-
-    // dynamiaclly create a redirection url based on whether user is logged in already or not
-    const redirectUrl = accessToken && accessToken.length > 5 ? '/dashboard' : '/register';
 
     return (
         <div

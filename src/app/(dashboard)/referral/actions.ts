@@ -3,6 +3,7 @@
 import { cookies } from 'next/headers'
 import { jwtDecode } from 'jwt-decode'
 import { redirect } from 'next/navigation'
+import { getAuthToken } from '@/utils/auth-actions'
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL
@@ -12,13 +13,8 @@ export type ActionState =
   | { status: 'error'; message: string }
   | null
 
-export async function getAccessToken() {
-  const cookieStore = cookies()
-  return cookieStore.get('altern8_useraccess')?.value
-}
-
 export async function getUserId() {
-  const token = await getAccessToken()
+  const token = await getAuthToken()
   if (!token) {
     redirect('/login')
   }
@@ -43,20 +39,15 @@ export async function sendInvite(prevState: ActionState, formData: FormData): Pr
   console.log("sending this as the data: ", userId, referralLink)
 
   try {
+    const token = await getAuthToken()
     const response = await fetch(`${apiUrl}/user-dashboard-api/referral-email/`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${await getAccessToken()}`,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email: email.trim(), link: referralLink }),
     })
-
-    console.log("teh reponse for sending thr invite is this: ", response)
-
-    if (!response.ok) {
-      throw new Error('Failed to send invitation')
-    }
 
     return { status: 'success', message: 'Invitation email sent!' }
   } catch (error) {
@@ -78,19 +69,14 @@ export async function uploadBulkInvites(prevState: ActionState, formData: FormDa
   uploadFormData.append('link', referralLink)
 
   try {
+    const token = await getAuthToken()
     const response = await fetch(`${apiUrl}/user-dashboard-api/referral-email-bulk/`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${await getAccessToken()}`,
+        'Authorization': `Bearer ${token}`,
       },
       body: uploadFormData,
     })
-
-    if (!response.ok) {
-      throw new Error('Failed to send bulk emails')
-    }
-
-    console.log("the email invitation was sent successfully")
 
     return { status: 'success', message: 'Bulk emails sent successfully!' }
   } catch (error) {

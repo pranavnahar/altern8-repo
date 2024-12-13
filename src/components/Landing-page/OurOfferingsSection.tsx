@@ -1,7 +1,8 @@
+"use client"
+
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
-
-import { Link } from 'react-scroll';
+import Link from 'next/link';
 
 const offeringsCards = [
   {
@@ -202,10 +203,8 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
           </a> */}
 
           <Link
-            to="contact-form"
-            className=" text-blue-500 mt-2  hover:cursor-pointer"
-            smooth={true}
-            duration={500}
+            href="#contact-form"
+            className=" text-blue-500 mt-2 hover:cursor-pointer"
           >
             Inquire
           </Link>

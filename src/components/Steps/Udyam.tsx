@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';
 import { StepperContext } from '../../contexts/stepper-context';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -19,7 +19,6 @@ const Udyam = ({ demo }: Props) => {
     udyam_number: '',
     uam_number: '',
   });
-  let accessToken = parseCookies().altern8_useraccess;
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,24 +54,18 @@ const Udyam = ({ demo }: Props) => {
           udyam_number,
           uam_number,
         };
-
+        const token = await getAuthToken()
         setLoading(true);
         const response = await fetch(`${apiUrl}/user-api/udyam/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(newRecord),
         });
 
-        // if unauthorized then push to login page
-        if (response.status === 401) {
-          router.push('/login');
-        }
-
         if (response.ok) {
-          let server_message = await response.json();
           showToast({
             message: 'Submission Successful',
             type: 'success'

@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import Script from 'next/script';
 import { RootFiClient, RootFiEnvironment } from 'rootfi-api';
 import Image from 'next/image';
-import { Box, CircularProgress } from '@mui/material';
-import { parseCookies } from 'nookies';
 import { useToast } from '../../utils/show-toasts';
+import { Loader2 } from 'lucide-react';
+import { getAuthToken } from '@/utils/auth-actions';
 
 interface InviteLinkData {
   data: {
@@ -24,7 +24,6 @@ declare global {
 const ConnectSDK: React.FC<{ integration: any; category: any; onEventChange: any }> = ({ integration, category, onEventChange }) => {
   const { showToast } = useToast();
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  let accessToken = parseCookies().altern8_useraccess;
 
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   const [rootFiID, setRootFiID] = useState<string | null>(null);
@@ -40,12 +39,13 @@ const ConnectSDK: React.FC<{ integration: any; category: any; onEventChange: any
     };
 
     try {
+      const token = await getAuthToken()
       setLoadingSpinner(true);
       let response = await fetch(`${apiUrl}/user-dashboard-api/submit-rootfi-company-id/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newRecord),
       });
@@ -151,9 +151,7 @@ const ConnectSDK: React.FC<{ integration: any; category: any; onEventChange: any
             {!isLoading ? (
               <Image src={logoUrl} alt="Open RootFi SDK" objectFit="contain" className="rounded-full" width={100} height={500} />
             ) : (
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <CircularProgress />
-              </Box>
+              <Loader2 className='size-6 animate-spin my-auto'/>
             )}
           </div>
         </button>
