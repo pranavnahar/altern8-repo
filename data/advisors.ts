@@ -51,7 +51,7 @@ export const advisors = [
     {
       image: "/advisors/alain-min.png",
       first_name: "Alain S.",
-      role: "CFO, Burger King",
+      role: "CFO, Burger King Europe",
       country: "Zug, Switzerland",
       url: "https://www.linkedin.com/in/alain-s-6029b/",
     },

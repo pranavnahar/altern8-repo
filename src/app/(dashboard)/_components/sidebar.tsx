@@ -2,41 +2,35 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Sidebar as SidebarLayout, SidebarBody, SidebarLink } from '../../../components/ui/sidebar';
 import Link from 'next/link';
 import {
-  IconApiApp,
   IconBuildingBank,
   IconCalendar,
   IconCloudUpload,
   IconHelp,
   IconLayoutDashboard,
-  IconLogs,
-  IconMoneybag,
   IconReceipt,
-  IconReport,
   IconScreenShare,
   IconSettings,
   IconUserCircle,
-  IconUsers,
   IconWallet,
 } from '@tabler/icons-react';
 import AnimatedLogo from '../../../components/Header/AnimatedLogo';
 import { jwtDecode } from 'jwt-decode';
 import { getAuthToken } from '@/utils/auth-actions';
-import { parseCookies } from "nookies";
 
 const Sidebar = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const pathname = usePathname();
   const [uId, setUId] = useState<string>('Loading..');
   const [username, setUsername] = useState<string>('Loading..');
-
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  
+  const pathname = usePathname();
   const router = useRouter();
 
-  let accessToken = parseCookies().altern8_useraccess;
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   // Replace or refresh token logic
   const ReplaceTokenOrRedirect = async () => {
@@ -44,7 +38,7 @@ const Sidebar = () => {
     if (!token) {
       router.push("/login"); 
     } else {
-      accessToken = token;
+      setAccessToken(token);
     }
   };
 
@@ -52,9 +46,7 @@ const Sidebar = () => {
     {
       label: 'Dashboard',
       href: '/dashboard',
-      icon: (
-        <IconLayoutDashboard className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />
-      ),
+      icon: <IconLayoutDashboard className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />,
     },
     {
       label: 'Company Details',
@@ -94,64 +86,45 @@ const Sidebar = () => {
   ];
 
   useEffect(() => {
-    // const fetchTokenAndSetUserId = async () => {
-    //   try {
-    //     const accessToken = parseCookies().altern8_useraccess;
-    //     const token = accessToken;
-
-    //     if (token) {
-    //       const decodedToken: { uid: string } = jwtDecode(token);
-    //       // console.log(decodedToken, "-------------------");
-    //       const userId = decodedToken.uid;
-    //       await new Promise(resolve => setTimeout(resolve, 1000));
-    //       setUId(userId);
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
-
     const fetchUsernameAndUid = async () => {
       try {
-        const token = await getAuthToken()
+        const token = await getAuthToken();
 
         if (token) {
           const decodedToken: { uid: string } = jwtDecode(token);
           const userId = decodedToken.uid;
-          await new Promise(resolve => setTimeout(resolve, 1000));
           setUId(userId);
-        }
-  
-        let response = await fetch(`${apiUrl}/user-dashboard-api/get-uid/`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-  
-        if (response.status === 401) {
-          // Handle token expiry
-          await ReplaceTokenOrRedirect();
-          response = await fetch(`${apiUrl}/user-dashboard-api/get-uid/`, {
+
+          let response = await fetch(`${apiUrl}/user-dashboard-api/get-uid/`, {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${token}`,
             },
           });
-        }
-  
-        if (response.ok) {
-          const data = await response.json();
-          setUsername(data.user_data.name);
-          setUId(data.user_data.uid)
-        } else {
-          throw new Error(`Failed to fetch data: ${response.statusText}`);
+
+          if (response.status === 401) {
+            // Handle token expiry
+            await ReplaceTokenOrRedirect();
+            response = await fetch(`${apiUrl}/user-dashboard-api/get-uid/`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+          }
+
+          if (response.ok) {
+            const data = await response.json();
+            setUsername(data.user_data.name);
+          } else {
+            throw new Error(`Failed to fetch data: ${response.statusText}`);
+          }
         }
       } catch (err: any) {
         console.error("Error fetching username data:", err);
       }
-    }
+    };
 
     fetchUsernameAndUid();
-  }, []);
+  }, [accessToken]);
 
   return (
     <SidebarLayout open={open} setOpen={setOpen}>
