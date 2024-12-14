@@ -1,15 +1,15 @@
 const teams = [
-  {
-    image:
-      'https://static.wixstatic.com/media/72f1e4_b73148cb8d774b3fbe6f94aab2a726d9~mv2.jpg/v1/fill/w_206,h_200,fp_0.46_0.31,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/pranav2.jpg',
-    name: 'Pranav',
-  },
-  {
-    image:
-      'https://static.wixstatic.com/media/72f1e4_98dadaee629c49828fdef1ccc1aebe81~mv2.jpg/v1/fill/w_206,h_200,fp_0.53_0.40,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/poonam1.jpg',
-    name: 'Poonam',
-  },
-  { image: '/images/ketan.png', name: 'Ketan' },
+  // {
+  //   image:
+  //     'https://static.wixstatic.com/media/72f1e4_b73148cb8d774b3fbe6f94aab2a726d9~mv2.jpg/v1/fill/w_206,h_200,fp_0.46_0.31,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/pranav2.jpg',
+  //   name: 'Pranav',
+  // },
+  // {
+  //   image:
+  //     'https://static.wixstatic.com/media/72f1e4_98dadaee629c49828fdef1ccc1aebe81~mv2.jpg/v1/fill/w_206,h_200,fp_0.53_0.40,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/poonam1.jpg',
+  //   name: 'Poonam',
+  // },
+  // { image: '/images/ketan.png', name: 'Ketan' },
   {
     image:
       'https://static.wixstatic.com/media/72f1e4_39b0b240d24b4ffd91197ab14d69bf35~mv2.jpeg/v1/fill/w_206,h_200,fp_0.47_0.42,lg_1,q_80,enc_avif,quality_auto/vivek.jpeg',

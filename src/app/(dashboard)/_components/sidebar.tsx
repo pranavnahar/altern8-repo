@@ -25,22 +25,11 @@ const Sidebar = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [uId, setUId] = useState<string>('Loading..');
   const [username, setUsername] = useState<string>('Loading..');
-  const [accessToken, setAccessToken] = useState<string | null>(null);
   
   const pathname = usePathname();
   const router = useRouter();
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-  // Replace or refresh token logic
-  const ReplaceTokenOrRedirect = async () => {
-    const token = await getAuthToken();
-    if (!token) {
-      router.push("/login"); 
-    } else {
-      setAccessToken(token);
-    }
-  };
 
   const links = [
     {
@@ -101,16 +90,6 @@ const Sidebar = () => {
             },
           });
 
-          if (response.status === 401) {
-            // Handle token expiry
-            await ReplaceTokenOrRedirect();
-            response = await fetch(`${apiUrl}/user-dashboard-api/get-uid/`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-          }
-
           if (response.ok) {
             const data = await response.json();
             setUsername(data.user_data.name);
@@ -124,7 +103,7 @@ const Sidebar = () => {
     };
 
     fetchUsernameAndUid();
-  }, [accessToken]);
+  }, []);
 
   return (
     <SidebarLayout open={open} setOpen={setOpen}>

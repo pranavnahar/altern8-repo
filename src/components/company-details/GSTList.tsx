@@ -244,7 +244,6 @@ import { Button } from '../../components/ui/button';
 import { useToast } from '../../utils/show-toasts';
 import { useRouter } from 'next/navigation';
 import { getAuthToken } from '@/utils/auth-actions';
-import { parseCookies } from 'nookies';
 import LoadingSpinner from '../LoadingSpinner';
 
 
@@ -264,7 +263,7 @@ const GSTList: React.FC = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const { showToast } = useToast();
-  const accessToken = parseCookies().accessToken;
+  const accessToken = getAuthToken();
 
   const handleGstinChange = (selectedValues: string[]) => {
     setSelectedGstin(selectedValues);
@@ -281,14 +280,6 @@ const GSTList: React.FC = () => {
     });
   };
 
-  const ReplaceTokenOrRedirect = async () => {
-    const token = await getAuthToken();
-    if (!token) {
-      router.push('/login');
-    }
-    return token;
-  };
-
   const handleProceed = () => {
     if (!currentGstin) return;
     setStep(1);
@@ -301,32 +292,35 @@ const GSTList: React.FC = () => {
   };
 
   const handleSendOtp = async () => {
-    try {
-      await sendOtp(currentGstin, username);
+    const success = await sendOtp(currentGstin, username);
+  
+    if (success) {
       setOtpSent(true);
       setStep(1);
       showToast({
-        message: 'OTP sent successfully. Please check your phone.',
-        type: 'success',
+        message: "OTP sent successfully. Please check your phone.",
+        type: "success",
       });
-    } catch (error) {
+    } else {
       showToast({
-        message: 'Failed to send OTP. Please try again.',
-        type: 'error',
+        message: "Failed to send OTP. Please try again.",
+        type: "error",
       });
     }
   };
 
   const handleSendOtpForNewGstin = async () => {
-    try {
-      await sendOtp(currentGstin, username);
+
+    const success = await sendOtp(currentGstin, username);
+  
+    if (success) {
       setOtpSent(true);
       setAddNewStep(1);
       showToast({
         message: 'OTP sent successfully. Please check your phone.',
         type: 'success',
       });
-    } catch (error) {
+    } else {
       showToast({
         message: 'Failed to send OTP. Please try again.',
         type: 'error',
@@ -335,51 +329,53 @@ const GSTList: React.FC = () => {
   };
 
   const handleVerifyOtp = async () => {
-    try {
-      await verifyOtp(currentGstin, otp);
+    const success = await verifyOtp(currentGstin, otp);
+  
+    if (success) {
       showToast({
-        message: 'OTP verified successfully!',
-        type: 'success',
+        message: "OTP verified successfully!",
+        type: "success",
       });
-
-      // Here you can add the logic to submit the GSTIN
+  
+      // Proceed to handle GSTIN submission
       await handleSubmitGstin();
-
+  
       // Reset states
       setStep(0);
-      setUsername('');
-      setOtp('');
-      setCurrentGstin('');
-      setFormData({ gstin: '' });
-    } catch (error) {
+      setUsername("");
+      setOtp("");
+      setCurrentGstin("");
+      setFormData({ gstin: "" });
+    } else {
       showToast({
-        message: 'Failed to verify OTP. Please try again.',
-        type: 'error',
+        message: "Failed to verify OTP. Please try again.",
+        type: "error",
       });
     }
   };
 
   const handleVerifyOtpForNewGstin = async () => {
-    try {
-      await verifyOtp(currentGstin, otp);
+    const success = await verifyOtp(currentGstin, otp);
+  
+    if (success) {
       showToast({
-        message: 'OTP verified successfully!',
-        type: 'success',
+        message: "OTP verified successfully!",
+        type: "success",
       });
-
-      // Here you can add the logic to submit the new GSTIN
+  
+      // Proceed to handle new GSTIN submission
       await handleSubmitGstin();
-
+  
       // Reset states
       setAddNewStep(0);
-      setUsername('');
-      setOtp('');
-      setCurrentGstin('');
-      setFormData({ gstin: '' });
-    } catch (error) {
+      setUsername("");
+      setOtp("");
+      setCurrentGstin("");
+      setFormData({ gstin: "" });
+    } else {
       showToast({
-        message: 'Failed to verify OTP. Please try again.',
-        type: 'error',
+        message: "Failed to verify OTP. Please try again.",
+        type: "error",
       });
     }
   };
@@ -403,18 +399,6 @@ const GSTList: React.FC = () => {
         },
         body: JSON.stringify(body),
       });
-
-      if (response.status === 401) {
-        const newToken = await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-account/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${newToken}`,
-          },
-          body: JSON.stringify(body),
-        });
-      }
 
       if (response.ok) {
         await response.json();

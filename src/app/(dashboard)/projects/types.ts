@@ -75,6 +75,7 @@ export type Project = {
   user: string;
   project_name: string;
   project_type: string | null;
+  project_state: string | null,
   location: string;
   pin_code: string | null;
   rera_regd_no: string | null;

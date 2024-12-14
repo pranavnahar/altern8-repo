@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { parseCookies } from "nookies"; // Fetch cookies
 import { getAuthToken } from "@/utils/auth-actions";
-
 
 export const useGetGstList = () => {
   const router = useRouter();
@@ -16,40 +14,25 @@ export const useGetGstList = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Access token from cookies
-  let accessToken = parseCookies().altern8_useraccess;
-
-  // Replace or refresh token logic
-  const ReplaceTokenOrRedirect = async () => {
-    const token = await getAuthToken();
-    if (!token) {
-      router.push("/login"); 
-    } else {
-      accessToken = token;
-    }
-  };
 
   const fetchData = async () => {
     try {
-      if (!accessToken) {
-        await ReplaceTokenOrRedirect();
-      }
+      const token = await getAuthToken();
 
       let response = await fetch(`${apiUrl}/user-api/processed-unprocessed-gstins/`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      if (response.status === 401) {
-        // Handle token expiry
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-api/processed-unprocessed-gstins/`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-      }
+      // if (response.status === 401) {
+      //   // Handle token expiry
+      //   response = await fetch(`${apiUrl}/user-api/processed-unprocessed-gstins/`, {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   });
+      // }
 
       if (response.ok) {
         const data = await response.json();
@@ -69,10 +52,6 @@ export const useGetGstList = () => {
 
   // const getSigningUrl = async () => {
   //   try {
-  //     if (!accessToken) {
-  //       await ReplaceTokenOrRedirect();
-  //     }
-
   //     const response = await fetch(`${apiUrl}/user-api/get-signing-url/`, {
   //       headers: {
   //         Authorization: `Bearer ${accessToken}`,
@@ -95,47 +74,67 @@ export const useGetGstList = () => {
   useEffect(() => {
     // getSigningUrl();
     fetchData();
-  });
+  }, []);
 
-  const sendOtp = async (gstin: any, username: string) => {
+  const sendOtp = async (gstin: any, username: string): Promise<boolean> => {
     try {
+      const token = await getAuthToken();
       const response = await fetch(`${apiUrl}/scoreme-api/gst/external/gstgenerateotp/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ gstin, username }),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Failed to send OTP");
+        console.error("Failed to send OTP. HTTP status:", response.status);
+        return false; 
       }
+  
+      const data = await response.json();
+  
+      if (data.message === "GST API is disabled") {
+        console.log("GST API is disabled. Response:", data);
+        return false;
+      }
+  
+      // If everything is fine, return true
       return true;
     } catch (error) {
       console.error("Error sending OTP:", error);
-      throw error;
+      return false;
     }
   };
 
-  const verifyOtp = async (gstin: any, otp: any) => {
+  const verifyOtp = async (gstin: any, otp: any): Promise<boolean> => {
     try {
+      const token = await getAuthToken();
       const response = await fetch(`${apiUrl}/scoreme-api/gst/external/gstauthentication/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ gstin, otp }),
       });
-
+  
       if (!response.ok) {
-        throw new Error("Failed to verify OTP");
+        console.error("Failed to verify OTP. HTTP status:", response.status);
+        return false; // Return false for non-200 responses
       }
-      return true;
+  
+      const data = await response.json();
+  
+      if (data.message) {
+        console.log("Server message:", data.message);
+      }
+  
+      return true; 
     } catch (error) {
       console.error("Error verifying OTP:", error);
-      throw error;
+      return false; 
     }
   };
 

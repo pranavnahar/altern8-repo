@@ -290,30 +290,17 @@ const PocForm = () => {
 
     try {
       setLoadingSpinner(true);
-
+      const token = await getAuthToken()
       let body = newRecord;
       let response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-poc/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
 
         body: JSON.stringify(body),
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-poc/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-
-          body: JSON.stringify(body),
-        });
-      }
 
       if (response.ok) {
         await response.json();

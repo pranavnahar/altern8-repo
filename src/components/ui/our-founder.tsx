@@ -14,8 +14,6 @@ import {
 import { DirectionAwareHover } from './direction-aware-hover';
 
 
-
-
 export function FoundersSection() {
   const cards = [
     {

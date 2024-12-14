@@ -1,3 +1,4 @@
+"use client"
 import React, { FC, useEffect, useState } from 'react';
 import Header from '../Landing-page/Header';
 import Footer from '../Landing-page/Footer';

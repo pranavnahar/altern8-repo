@@ -16,7 +16,7 @@ const CursorBlinker: React.FC = () => {
         repeat: Infinity,
         repeatDelay: 0,
         ease: 'linear',
-        times: [0, 0.5, 0.5, 1],
+        times: [0, 0.5, 0.5],
       },
     },
   };
@@ -60,8 +60,8 @@ const TypingAnimation: React.FC = () => {
   useEffect(() => {
     animate(count, 60, {
       type: 'tween',
-      delay: 0.3,
-      duration: 2.28,
+      delay: 0.1,
+      duration: 1.28,
       ease: 'easeIn',
       repeat: Infinity,
       repeatType: 'reverse',
@@ -79,7 +79,7 @@ const TypingAnimation: React.FC = () => {
         }
       },
     });
-  }, [count, textIndex, taglines, updatedThisRound]);
+  }, []);
 
   return <motion.div className="inline">{displayText}</motion.div>;
 };

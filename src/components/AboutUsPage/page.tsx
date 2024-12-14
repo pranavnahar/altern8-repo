@@ -129,7 +129,7 @@ const AboutUs: FC = () => {
             <div className="text-center md:text-left">
               <h2 className="mt-32 text-4xl font-semibold mb-6">Our Vision</h2>
               <p className="text-sm text-gray-400 mb-6">
-                At Ethyx, our vision is to democratize access to short-term credit and high-yield
+                At Altern8, our vision is to democratize access to short-term credit and high-yield
                 investment opportunities. We want to infuse consciousness in every transaction.{' '}
                 <br />
                 <br />
