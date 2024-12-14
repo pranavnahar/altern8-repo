@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
-import { useFormState } from 'react-dom';
+import React, { useRef, useState } from 'react';
+import { useForm, FieldValues } from 'react-hook-form';
 import { Button } from '../../../components/ui/button';
 import { IconChevronRight, IconDownload, IconUpload } from '@tabler/icons-react';
 import { Snippet } from '@nextui-org/snippet';
@@ -10,55 +10,42 @@ import { useToast } from '../../../utils/show-toasts';
 import { Input } from '../../../components/ui/input';
 
 const Page = () => {
-  const [inviteState, inviteAction] = useFormState<ActionState, FormData>(sendInvite, null);
-  const [uploadState, uploadAction] = useFormState<ActionState, FormData>(uploadBulkInvites, null);
-  const [referralLinkState, getReferralLinkAction] = useFormState(getReferralLink, {
-    referralLink: '',
-  });
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm();
   const { showToast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadInitiated, setUploadInitiated] = useState(false);
+  const [referralLink, setReferralLink] = useState('');
 
-  useEffect(() => {
-    getReferralLinkAction();
-  }, []);
+  const onSendInvite = async (data: FieldValues) => {
+    try {
+      const formData = new FormData();
+      formData.append('email', data.email);
 
-  useEffect(() => {
-    if (inviteState?.status === 'success') {
+      const result = await sendInvite(null, formData);
+      if (result?.status === 'success') {
+        showToast({
+          message: result.message,
+          type: 'success',
+        });
+        reset(); 
+      } else {
+        showToast({
+          message: result?.message || 'An error occurred',
+          type: 'error',
+        });
+      }
+    } catch (error) {
       showToast({
-        message: inviteState.message,
-        type: 'success',
-      });
-    } else if (inviteState?.status === 'error') {
-      showToast({
-        message: inviteState.message,
+        message: 'An error occurred',
         type: 'error',
       });
     }
-  }, [inviteState, showToast]);
-
-  useEffect(() => {
-    if (uploadInitiated) {
-      if (uploadState?.status === 'success') {
-        showToast({
-          message: uploadState.message,
-          type: 'success',
-        });
-        setSelectedFile(null);
-        setUploadInitiated(false);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ''; // Clear the file input
-        }
-      } else if (uploadState?.status === 'error') {
-        showToast({
-          message: uploadState.message,
-          type: 'error',
-        });
-        setUploadInitiated(false);
-      }
-    }
-  }, [uploadState, showToast, uploadInitiated]);
+  };
 
   const handleFileSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
@@ -96,19 +83,51 @@ const Page = () => {
     const formData = new FormData();
     formData.append('file', selectedFile);
 
-    setUploadInitiated(true);
-    await uploadAction(formData);
+    try {
+      const result = await uploadBulkInvites(null, formData);
+      if (result?.status === 'success') {
+        showToast({
+          message: result.message,
+          type: 'success',
+        });
+        setSelectedFile(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''; // Clear the file input
+        }
+      } else {
+        showToast({
+          message: result?.message || 'An error occurred during upload',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      showToast({
+        message: 'An error occurred during upload',
+        type: 'error',
+      });
+    }
   };
+
+  // Fetch referral link on component mount
+  React.useEffect(() => {
+    const fetchReferralLink = async () => {
+      try {
+        const result = await getReferralLink();
+        setReferralLink(result.referralLink);
+      } catch (error) {
+        console.error('Failed to fetch referral link');
+      }
+    };
+    fetchReferralLink();
+  }, []);
 
   return (
     <div className="min-h-screen mt-10 text-xl font-semibold text-center">
       <div className="w-4/5 mx-auto">
-        {/* Page Heading */}
         <h1 className="py-5 text-3xl text-white font-medium tracking-tight text-center">
           Invite other borrowers
         </h1>
 
-        {/* Referral Link Section */}
         <div className="flex-1 w-3/5 mx-auto pt-12">
           <p className="text-sm text-gray-300/65 mb-4 text-left font-normal">
             Share this referral code to invite people to Altern8.
@@ -119,28 +138,36 @@ const Page = () => {
             color="primary"
             className="bg-white/10 text-white w-full rounded-lg text-sm px-5"
           >
-            {referralLinkState.referralLink}
+            {referralLink}
           </Snippet>
 
-          {/* Divider with Gradient and "Or" */}
           <div className="flex items-center justify-center my-10">
             <div className="flex-1 h-px bg-gradient-to-r from-gray-400/0 via-gray-400/50 to-gray-400/0"></div>
             <span className="px-4 text-gray-300 font-medium text-sm">OR</span>
             <div className="flex-1 h-px bg-gradient-to-r from-gray-400/0 via-gray-400/50 to-gray-400/0"></div>
           </div>
 
-          {/* Send Invite via Email Section */}
           <p className="text-sm text-gray-300/65 mb-4 text-left font-normal">
             Enter the email address of the person you want to invite.
           </p>
-          <form action={inviteAction} className="flex gap-5">
-            <input
-              name="email"
-              placeholder="Email"
-              className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b text-sm placeholder:font-normal duration-300 ease-in-out outline-none focus:border-purple-600"
-              type="email"
-              required
-            />
+          <form onSubmit={handleSubmit(onSendInvite)} className="flex items-center gap-2">
+            <div className="flex-1">
+              <input
+                {...register('email', {
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
+                    message: 'Invalid email address',
+                  },
+                })}
+                placeholder="Email"
+                className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b text-sm placeholder:font-normal duration-300 ease-in-out outline-none focus:border-purple-600"
+                type="email"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email.message as string}</p>
+              )}
+            </div>
             <Button
               variant="expandIcon"
               size="sm"
@@ -154,7 +181,6 @@ const Page = () => {
           </form>
         </div>
 
-        {/* Bulk Invite Section */}
         <div className="w-3/5 mx-auto pt-12">
           <p className="text-sm text-gray-300/65 mb-4 text-left font-normal">
             To send bulk invites, download the template below, fill in the emails, and then upload
