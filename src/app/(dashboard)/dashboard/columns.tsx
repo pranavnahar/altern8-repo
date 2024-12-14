@@ -1,10 +1,12 @@
-"use client"
+'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import { Button } from '@/components/ui/button';
 
 const toTitleCase = (str: string) => {
-  return str.split('_')
+  return str
+    .split('_')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 };
@@ -15,7 +17,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'id',
     cell: ({ getValue }) => {
       const value = getValue();
-      return typeof value === 'string' ? toTitleCase(value) : "-";
+      return typeof value === 'number' ? value : '-';
     },
   },
   {
@@ -23,7 +25,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'project_name',
     cell: ({ getValue }) => {
       const value = getValue();
-      return typeof value === 'string' ? toTitleCase(value) : "-";
+      return typeof value === 'string' ? toTitleCase(value) : '-';
     },
   },
   {
@@ -31,7 +33,15 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'location',
     cell: ({ getValue }) => {
       const value = getValue();
-      return typeof value === 'string' ? toTitleCase(value) : "-";
+      return typeof value === 'string' ? toTitleCase(value) : '-';
+    },
+  },
+  {
+    header: 'Project State',
+    accessorKey: 'project_state',
+    cell: ({ getValue }) => {
+      const value = getValue();
+      return typeof value === 'string' ? toTitleCase(value) : '-';
     },
   },
   {
@@ -39,29 +49,48 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'project_total',
     cell: ({ getValue }) => {
       const value = getValue();
-      return typeof value === 'string' ? toTitleCase(value) : "-";
+      return typeof value === 'string' ? toTitleCase(value) : '-';
     },
   },
   {
-    header: 'Status',
-    accessorKey: 'approved_by_admin',
-    cell: ({ getValue }) => {
-      const value = getValue();
-      return typeof value === 'string' ? toTitleCase(value) : "-";
+    header: 'Approval Status',
+
+    accessorKey: 'approved_by_admin', //maybe things can cahnge here as the same accessorKey renders same nae for both ststaus columsn
+    cell: ({ row }) => {
+      const isApproved = row.original.approved_by_admin;
+      return isApproved ? <p>Approved</p> : <p>Pending</p>;
     },
   },
   {
-    header: 'Approved Status',
-    accessorKey: 'approved_by_admin',
-    cell: ({ getValue }) => {
-      const isApproved = getValue();
-      return isApproved ? (
-        <IconCheck size={20} />
-      ) : (
-        <IconX size={20} />
+    header: 'Accept',
+    accessorKey: 'emudhra_esign_url', //maybe things can cahnge here as the same accessorKey renders same nae for both ststaus columsn
+    cell: ({ row }) => {
+      const status = row.original.project_state;
+      const canBeAccepted = status === 'Approved' || status === 'Under Discussion' ? true : false;
+
+      return (
+        <div>
+          {canBeAccepted ? (
+            <Button
+              className="cursor-pointer" //hit this and generate the esign url from the backend
+              // onClick={() => handleAcceptButtonClick(info.row.original.id)}
+            >
+              Accept
+            </Button>
+          ) : (
+            '-'
+          )}
+        </div>
       );
     },
-  }
+  },
+  {
+    header: 'Agreement Sign Status',
+    accessorKey: 'emudhra_esign_status', //TODO add status of document signed call api in the backedn to get status for current project
+    cell: ({ row }) => {
+      return 'Not available';
+    },
+  },
 ];
 
 export default columns;

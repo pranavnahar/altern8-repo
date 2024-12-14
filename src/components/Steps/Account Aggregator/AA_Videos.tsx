@@ -6,7 +6,7 @@ export const AA_videos = () => {
     <div className="flex justify-center space-x-4 my-2">
       <div className="max-w-xs w-full">
         <ReactPlayer
-          url="https://youtu.be/YDjKI0VMtiM?si=g32b9rydr5W9D0x4&t=4"
+          url="https://youtu.be/B4CEzFvGEds?si=gQqQBRdYLIbsnB4L&t=4"
           controls={true}
           className="rounded-lg overflow-hidden"
           width="100%"
@@ -15,7 +15,7 @@ export const AA_videos = () => {
       </div>
       <div className=" max-w-xs w-full">
         <ReactPlayer
-          url="https://youtu.be/Cf_rAhtn0H8?si=i6dJ2dgevYODcK-f"
+          url="https://youtu.be/iht8DZLB-1E?si=qnu_0zuNWRUJBQnP"
           controls={true}
           className="rounded-lg overflow-hidden"
           width="100%"

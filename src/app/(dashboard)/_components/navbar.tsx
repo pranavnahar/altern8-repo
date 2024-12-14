@@ -13,12 +13,28 @@ import { useRouter } from 'next/compat/router';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '../../../components/ui/dialog';
 import { useToast } from '@/utils/show-toasts';
+import { Switch } from '@/components/ui/switch';
 import { getAuthToken } from '@/utils/auth-actions';
 
 export const Navbar: FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [toggleStates, setToggleStates] = useState({
+    filed_itr: false,
+    filed_gst: false,
+    additional_bank_accounts: false,
+    changes_in_capital_structure: false,
+    other_changes: false,
+  });
+
+  const toggleKeys: (keyof typeof toggleStates)[] = [
+    'filed_itr',
+    'filed_gst',
+    'additional_bank_accounts',
+    'changes_in_capital_structure',
+    'other_changes',
+  ];
 
   const { chatCount, setChatCount } = useContext(DashboardContext);
 
@@ -40,6 +56,49 @@ export const Navbar: FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handleQuestionToggle = (key: keyof typeof toggleStates, checked: boolean) => {
+    setToggleStates(prevState => ({
+      ...prevState,
+      [key]: checked,
+    }));
+
+    if (checked) {
+      let message = '';
+      switch (key) {
+        case 'filed_itr':
+          message = '';
+          break;
+        case 'filed_gst':
+            message = '';
+            break;
+        case 'additional_bank_accounts':
+            message = '';
+            break;
+        case 'changes_in_capital_structure':
+            message = 'Please provide more details about name of round and amount raised in comments section.';
+            showToast({
+              message: message,
+              type: 'info',
+              duration: 11000
+            });
+            break;
+        case 'other_changes':
+            message = 'Could you describe these changes, especially those that may require enhancement of the Line of Credit in comments section?';
+            showToast({
+              message: message,
+              type: 'info',
+              duration: 11000
+            });
+            break;
+        default:
+          // message = '';
+      }
+
+      
+      
+    }
+  };
 
   // chatbot utils
   const handleChatClick = () => {
@@ -86,7 +145,7 @@ export const Navbar: FC = () => {
   const [files, setFiles] = useState<File[]>([]);
   const [showFiles, setShowFiles] = useState(true);
 
-  const { showToast } = useToast()
+  const { showToast } = useToast();
   const [loadingSpinner, setLoadingSpinner] = useState(true); // for loading animation
   const router = useRouter();
 
@@ -180,7 +239,7 @@ export const Navbar: FC = () => {
     if (amount.length <= 2) {
       showToast({
         message: 'Please enter a valid amount',
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -189,6 +248,12 @@ export const Navbar: FC = () => {
       const formData = new FormData();
       formData.append('amount', amount);
       formData.append('comments', userData['comments']?.trim() || '');
+
+      for (const [key, value] of Object.entries(toggleStates)) {
+        if (value) {
+          formData.append(key, String(value)); 
+        }
+      }
 
       if (files && files.length > 0) {
         for (let i = 0; i < files.length; i++) {
@@ -203,14 +268,14 @@ export const Navbar: FC = () => {
             } else {
               showToast({
                 message: 'File size exceeds 5MB limit. Please choose a smaller file.',
-                type: 'info'
+                type: 'info',
               });
               return; // Stop processing files if size limit exceeded
             }
           } else {
             showToast({
               message: 'Please choose PDF or Excel files only.',
-              type: 'info'
+              type: 'info',
             });
             return; // Stop processing files if file type is not supported
           }
@@ -218,13 +283,18 @@ export const Navbar: FC = () => {
       } else {
         showToast({
           message: 'Please drag and drop files to upload.',
-          type: 'info'
+          type: 'info',
         });
         return;
       }
 
+    
+
       // Send the form data to the server
       setLoadingSpinner(true);
+
+      console.log("the get more credit formdata resulted in this: ", formData)
+
       const token = await getAuthToken()
       let response = await fetch(`${apiUrl}/user-dashboard-api/get-more-credit/`, {
         method: 'POST',
@@ -238,9 +308,18 @@ export const Navbar: FC = () => {
         await response.json();
         showToast({
           message: 'Request submitted successfully',
-          type: 'info'
+          type: 'info',
         });
+
         setUserData({ amount: '', comments: '' });
+      setToggleStates({
+        filed_itr: false,
+        filed_gst: false,
+        additional_bank_accounts: false,
+        changes_in_capital_structure: false,
+        other_changes: false,
+      });
+
         setFiles([]);
         GetOldCredit();
         setShowGetMoreCreditBox(false);
@@ -249,13 +328,14 @@ export const Navbar: FC = () => {
         const serverError = await response.json();
         showToast({
           message: 'Request submission failed, server error',
-          type: 'info'
+          type: 'info',
         });
       }
     } catch (error) {
+      console.log("teh errrorr ocuured: ", error)
       showToast({
         message: 'Request submission failed, system error',
-        type: 'info'
+        type: 'info',
       });
     } finally {
       setLoadingSpinner(false);
@@ -277,15 +357,14 @@ export const Navbar: FC = () => {
   const onDrop = useCallback(async (acceptedFiles: any) => {
     showToast({
       message: 'Files uploaded successfully',
-      type: "success"
+      type: 'success',
     });
     setFiles(acceptedFiles);
     setShowFiles(acceptedFiles.length > 0);
     showToast({
       message: 'File uploaded successfully!',
-      type: 'info'
+      type: 'info',
     });
-
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -314,10 +393,10 @@ export const Navbar: FC = () => {
                    <DialogTrigger> Increase Credit</DialogTrigger>
                 </Button>
               {/* Increase Credit modal box */}
-              <DialogContent className="border-none none p-0 h-5/5 w-4/5">
+              <DialogContent className="border-none p-0 h-full w-4/5 max-h-screen">
                 {showGetMoreCreditBox && (
-                  <div className="flex w-full h-full items-center justify-center ">
-                    <div className=" flex w-full h-full flex-col  rounded-lg shadow-lg outline-none focus:outline-none [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)]">
+                  <div className="flex w-full h-full items-center justify-center overflow-y-auto">
+                    <div className="flex w-full max-h-[100vh] flex-col overflow-y-scroll rounded-lg shadow-lg outline-none focus:outline-none [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)]">
                       {/* Header */}
                       <div className="flex items-start justify-between p-5 rounded-t">
                         <h3 className="text-2xl font-semibold text-white">Get More Credit</h3>
@@ -353,6 +432,35 @@ export const Navbar: FC = () => {
                               required
                             />
                           </div>
+                        </div>
+
+                        <div className="flex flex-col mt-5">
+                          <div className="text-gray-400 uppercase text-xs font-bold mb-2">
+                            Additional Details
+                          </div>
+                          {toggleKeys.map((key, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center justify-between py-2 mr-10"
+                            >
+                              <label className="text-gray-300 text-sm ml-3">
+                                -{' '}
+                                {
+                                  [
+                                    'Have you filed a fresh ITR since your last credit request?',
+                                    'Have you filed fresh quarterly GST returns since last credit request that you want us to analyze?',
+                                    "Are there additional bank accounts or 3 months' statements that you want us to analyze?",
+                                    'Are there changes in capital structure or new rounds of equity funding you have received?',
+                                    'Any other changes that, in your consideration, require enhancement of Line of Credit?',
+                                  ][index]
+                                }
+                              </label>
+                              <Switch
+                                id={`toggle-question-${index}`}
+                                onCheckedChange={checked => handleQuestionToggle(key, checked)}
+                              />
+                            </div>
+                          ))}
                         </div>
 
                         {/* email field  */}
@@ -391,8 +499,8 @@ export const Navbar: FC = () => {
                               )}
                             </div>
 
-                             {/* Uploaded files */}
-                             {files.length > 0 && showFiles && (
+                            {/* Uploaded files */}
+                            {files.length > 0 && showFiles && (
                               <div className="flex items-center mt-3 text-left">
                                 <p className="text-gray-200 text-md inline-block mr-0.5">
                                   Your uploaded files:
@@ -414,7 +522,6 @@ export const Navbar: FC = () => {
                                 </ul>
                               </div>
                             )}
-
                           </div>
                         </div>
 
@@ -456,7 +563,7 @@ export const Navbar: FC = () => {
 
                                     <td className="p-3 text-sm font-medium text-gray-400 whitespace-nowrap hover:text-gray-300">
                                       {oldCreditRequests?.status === 'Pending for Maker' ||
-                                        oldCreditRequests?.status === 'Pending for Checker'
+                                      oldCreditRequests?.status === 'Pending for Checker'
                                         ? 'Pending for Approval'
                                         : oldCreditRequests?.status}
                                     </td>
@@ -542,9 +649,9 @@ export const Navbar: FC = () => {
                           <Button
                             size="sm"
                             className="text-xs text-white w-full"
-                          //variant="expandIcon"
-                          //Icon={IconLogout}
-                          //iconPlacement="right"
+                            //variant="expandIcon"
+                            //Icon={IconLogout}
+                            //iconPlacement="right"
                           >
                             Sign Out
                           </Button>

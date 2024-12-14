@@ -225,10 +225,12 @@ const ChatBox: React.FC<{
                       }`}
                     >
                       <div className="">{message.text}</div>
-                      {message.file && (
+                      {message.file
+                      
+                      && (
                         <div className="text-gray-400 text-sm mt-1">
                           <a
-                            href={message.file}
+                            href={apiUrl+message.file}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:underline text-blue-400"

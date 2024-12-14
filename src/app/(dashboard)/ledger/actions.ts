@@ -25,6 +25,7 @@ export async function getLedgerDetails(): Promise<{ accounts: Account[]
 }> {
   try {
     const data = await fetchWithAuth('/user-dashboard-api/transactions/')
+    console.log("the data value for user dasdhboard api is this repsonse: ", data)
     return {
       accounts: data.accounts,
       otherAccounts: data.other_accounts,
@@ -37,11 +38,14 @@ export async function getLedgerDetails(): Promise<{ accounts: Account[]
 
 export async function createTransaction(formData: FormData): Promise<{ success: boolean, error?: string }> {
   try {
+
+    console.log("calling the api transactions create")
     const data = await fetchWithAuth('/user-dashboard-api/transactions/', {
       method: 'POST',
       body: formData,
     });
     revalidatePath('/ledger');
+    console.log("the creation of the trnasaction resuteled in this : ", data)
     return { success: true, error: "" };
 
   } catch (error) {

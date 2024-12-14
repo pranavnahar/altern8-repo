@@ -106,6 +106,9 @@ interface MultiSelectProps
    * Optional, can be used to add custom styles.
    */
   className?: string;
+
+  popoverClassName?: string;
+  commandItemClassName?: string;
 }
 
 export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
@@ -121,6 +124,8 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
       modalPopover = false,
       asChild = false,
       className,
+      popoverClassName,
+      commandItemClassName,
       ...props
     },
     ref,
@@ -253,7 +258,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-auto p-0"
+          className={cn("w-auto p-0", popoverClassName)} 
           align="start"
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
         >
@@ -262,7 +267,7 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
-                <CommandItem key="all" onSelect={toggleAll} className="cursor-pointer">
+                <CommandItem key="all" onSelect={toggleAll} className={cn("cursor-pointer", commandItemClassName)}>
                   <div
                     className={cn(
                       'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
@@ -281,7 +286,9 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                     <CommandItem
                       key={option.value}
                       onSelect={() => toggleOption(option.value)}
-                      className="cursor-pointer"
+                      className={cn("cursor-pointer", commandItemClassName, 
+                        isSelected ? "bg-primary text-primary-foreground" : ""
+                      )}
                     >
                       <div
                         className={cn(

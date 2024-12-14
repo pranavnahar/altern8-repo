@@ -87,6 +87,25 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
+    header: 'Agreement Signing status',
+    accessorKey: 'esign_status',
+    cell: ({ row }) => {
+      const esignStatus = row.original.esign_status;
+      
+      return esignStatus && esignStatus !== 'not started' ? (
+        <Link 
+          href={esignStatus}
+          target="_blank"
+          rel="noopener noreferrer" 
+          className="text-blue-500 underline"
+        >
+          Sign Document
+        </Link>
+      ) : (
+        <span>No Actions Needed</span>
+      );
+    }},
+  {
     header: 'Line of Credit Available',
     accessorKey: 'line_of_credit_available',
     cell: ({ getValue }) => {
@@ -222,7 +241,6 @@ export const columns: ColumnDef<any>[] = [
       )
     },
   },
-
   {
     header: 'Approval status',
     accessorKey: 'is_verified_by_user',
@@ -250,8 +268,7 @@ export const columns: ColumnDef<any>[] = [
         </Link>
       )
     },
-  },
-
+  }
 ];
 
 export default columns;
