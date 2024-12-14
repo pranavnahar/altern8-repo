@@ -138,22 +138,6 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    header: 'Request for Approval Date',
-    accessorKey: 'request_for_approval_date',
-    cell: ({ getValue }) => {
-      const date = getValue();
-      return date && typeof date === "string" ? formatDate(date) : "-";
-    },
-  },
-  {
-    header: 'Project Completion Date',
-    accessorKey: 'project_completion_date',
-    cell: ({ getValue }) => {
-      const date = getValue();
-      return date && typeof date === "string" ? formatDate(date) : "-";
-    },
-  },
-  {
     header: 'Request Approval Date',
     accessorKey: 'request_for_approval_date',
     cell: ({ getValue }) => {

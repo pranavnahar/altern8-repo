@@ -71,6 +71,7 @@ const Filters = ({ projects }: DashboardTableFilterClientProps) => {
               columns={columns}
               filters={[]}
               needFilters={false}
+              tableName="project_view_table"
             />
           ) : (
             <div className="flex gap-2 items-center justify-center flex-wrap p-2">

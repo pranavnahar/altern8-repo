@@ -64,7 +64,8 @@ export const accountsColumns = [
                     data={transactions}
                     columns={transactionColumns}
                     filters={[]}
-                    needFilters={false}                />
+                    needFilters={false}
+                    tableName='ledger-table'                />
                 ) : (
                   <h1 className="text-2xl font-semibold text-center text-white py-10">
                     No Transactions available for this account
