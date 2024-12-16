@@ -80,8 +80,8 @@ export const transactionColumns: ColumnDef<any>[] = [
     accessorKey: 'id',
   },
   {
-    header: 'Invoice Product',
-    accessorKey: 'invoice_product',
+    header: 'Tranche ID',
+    accessorKey: 'tranche',
   },
   {
     header: 'Transaction ID',
