@@ -1,15 +1,14 @@
-import { Input } from "@/components/ui/input";
-import React from "react";
+import { Input } from '@/components/ui/input';
+import React from 'react';
 
 const FileField: React.FC<{
   label: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onRemove?: () => void;
 }> = ({ label, onChange }) => {
   return (
     <div className="flex-1 w-full mt-4">
-      <div className="h-6 mt-3 text-xs font-medium leading-8 text-gray-400 uppercase">
-        {label}
-      </div>
+      <div className="h-6 mt-3 text-xs font-medium leading-8 text-gray-400 uppercase">{label}</div>
       <div className="flex py-1 my-2">
         <Input
           onChange={onChange}

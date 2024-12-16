@@ -7,6 +7,7 @@ import BasicTable from '@/components/global/basic-table';
 import useLedgerDetails from './hooks/use-ledger-details';
 import { ColumnDef } from '@tanstack/react-table';
 import { formatDate, formatINR } from '@/utils/formatter';
+import Link from 'next/link';
 
 export const accountsColumns = [
   {
@@ -26,7 +27,7 @@ export const accountsColumns = [
     accessorKey: 'account_number',
   },
   {
-    header: 'Link',
+    header: 'Transactions',
     accessorKey: 'actions',
     //@ts-expect-error row types
     cell: ({ row }) => {
@@ -36,6 +37,7 @@ export const accountsColumns = [
 
       const openDialog = () => {
         handleFetchTransactions(id);
+        console.log('transactions', transactions);
         setIsOpen(true);
       };
 
@@ -81,8 +83,8 @@ export const transactionColumns: ColumnDef<any>[] = [
     accessorKey: 'id',
   },
   {
-    header: 'Invoice Product',
-    accessorKey: 'invoice_product',
+    header: 'Tranche ID',
+    accessorKey: 'tranche',
   },
   {
     header: 'Transaction ID',
@@ -131,10 +133,18 @@ export const transactionColumns: ColumnDef<any>[] = [
   },
   {
     header: 'Balance',
-    accessorKey: 'balance',
+    accessorKey: 'from_account_balance_after',
     cell: ({ getValue }) => {
       const value = getValue() as string;
       return formatINR(value);
+    },
+  },
+  {
+    header: 'Receipt',
+    accessorKey: 'receipt',
+    cell: ({ getValue }) => {
+      const receipt = getValue();
+      return receipt ? <Link href={receipt}> Open Receipt</Link> : '-';
     },
   },
 ];
