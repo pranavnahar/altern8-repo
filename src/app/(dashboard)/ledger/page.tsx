@@ -31,6 +31,7 @@ const Page = async () => {
         columns={accountsColumns}
         filters={[]}
         needFilters={false}
+        tableName="ledger-accounts-view-table"
       />
     </div>
   )

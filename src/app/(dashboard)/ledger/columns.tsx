@@ -1,12 +1,7 @@
-"use client"
+'use client';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import useLedgerTransactions from './hooks/use-ledger-ransactions';
 import BasicTable from '@/components/global/basic-table';
 import useLedgerDetails from './hooks/use-ledger-details';
@@ -58,14 +53,15 @@ export const accountsColumns = [
               <DialogHeader>
                 <DialogTitle className="text-2xl text-white">Transactions</DialogTitle>
               </DialogHeader>
-              <div className='overflow-hidden'>
+              <div className="overflow-hidden">
                 {transactions && transactions.length > 0 ? (
                   <BasicTable
                     data={transactions}
                     columns={transactionColumns}
                     filters={[]}
                     needFilters={false}
-                    tableName='ledger-table'                />
+                    tableName="ledger-table-main"
+                  />
                 ) : (
                   <h1 className="text-2xl font-semibold text-center text-white py-10">
                     No Transactions available for this account
@@ -77,8 +73,8 @@ export const accountsColumns = [
         </>
       );
     },
-  }
-]
+  },
+];
 export const transactionColumns: ColumnDef<any>[] = [
   {
     header: 'ID',
@@ -110,8 +106,8 @@ export const transactionColumns: ColumnDef<any>[] = [
     accessorKey: 'timestamp',
     cell: ({ getValue }) => {
       const date = getValue();
-      return date && typeof date === "string" ? formatDate(date) : "-";
-      },
+      return date && typeof date === 'string' ? formatDate(date) : '-';
+    },
   },
   {
     header: 'From Account',

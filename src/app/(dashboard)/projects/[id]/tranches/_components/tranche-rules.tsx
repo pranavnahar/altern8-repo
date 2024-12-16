@@ -67,6 +67,7 @@ const TrancheRules = ({ projectId, trancheId }: Props) => {
               columns={rulesColumns}
               filters={[]}
               needFilters={false}
+              tableName='tranche_rules_table'
             />
           </div>
         )}
