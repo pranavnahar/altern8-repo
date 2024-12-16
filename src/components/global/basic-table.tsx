@@ -400,6 +400,43 @@ const BasicTable = <T extends object>({
   
         const tables = await tableResponse.json();
         console.log("Fetched tables: ", tables);
+
+        // const testConfiguration = [
+
+        //   {
+        //     column_name: "id",
+        //     is_visible: true,           
+        //     sort_order: "Descending",     
+        //     // column_order: 2
+        //   },
+        //   {
+        //     column_name: "project_total",
+        //     is_visible: true,           
+        //     sort_order: "Ascending",     
+        //     column_order: 10             
+        //   }, 
+        //   {
+        //     column_name: "location",
+        //     is_visible: true,           
+        //     sort_order: "Ascending",     
+        //     // column_order: 5            
+        //   }, 
+        //   {
+        //     column_name: "emudhra_esign_url",
+        //     is_visible: true,           
+        //     sort_order: "Ascending",     
+        //     // column_order: 6
+        //   },
+        //   {
+        //     column_name: "approved_by_admin",
+        //     is_visible: true,           
+        //     sort_order: "Ascending",     
+        //     // column_order: 8
+        //   },
+
+        // ];
+        
+        // applyTableConfiguration(testConfiguration);
   
         // Step 2: Find the table with the matching name
         const matchingTable = tables.find((table: Table) => table.name === tableName);
@@ -425,6 +462,7 @@ const BasicTable = <T extends object>({
           console.log("Fetched table configuration: ", configuration);
   
           // Step 4: Apply the configuration
+
           applyTableConfiguration(configuration);
   
           // Update table configuration state
@@ -447,48 +485,74 @@ const BasicTable = <T extends object>({
   
     // New function to apply table configuration
     const applyTableConfiguration = (configuration: any[]) => {
-      // Process column visibility
+      // Create a map of all original columns
+      const allColumnNames = columns.map(
+        col => col.id?.toString() || col.accessorKey?.toString() || col.header?.toString() || ''
+      );
+    
+      // Create a new column states object based on all columns
       const newColumnStates: Record<string, boolean> = {};
       const newToggledOnColumns: string[] = [];
       const newToggledOffColumns: string[] = [];
       const newSortedColumns: { id: string; desc: boolean }[] = [];
-
-      configuration.forEach(columnConfig => {
-        const columnName = columnConfig.column_name;
-        
-        // Set column visibility
-        newColumnStates[columnName] = columnConfig.is_visible;
-        
+    
+      // Create a map of configuration for quick lookup
+      const configMap = new Map(
+        configuration.map(config => [config.column_name, config])
+      );
+    
+      // Process each column
+      allColumnNames.forEach(columnName => {
+        // Check if this column has a specific configuration
+        const columnConfig = configMap.get(columnName);
+    
+        // Determine visibility
+        const isVisible = columnConfig 
+          ? columnConfig.is_visible 
+          : true; // Default to true if no specific config
+    
+        // Update column states
+        newColumnStates[columnName] = isVisible;
+    
         // Track toggled columns
-        if (columnConfig.is_visible) {
+        if (isVisible) {
           newToggledOnColumns.push(columnName);
         } else {
           newToggledOffColumns.push(columnName);
         }
-        
-        // Track sorting
-        if (columnConfig.sort_order) {
+    
+        // Check for sorting
+        if (columnConfig && columnConfig.sort_order && columnConfig.sort_order !== 'None') {
           newSortedColumns.push({
             id: columnName,
             desc: columnConfig.sort_order === 'Descending'
           });
         }
       });
-
+    
       // Update states
       setColumnStates(newColumnStates);
       setToggledOnColumns(newToggledOnColumns);
       setToggledOffColumns(newToggledOffColumns);
       setSortedColumns(newSortedColumns);
-
-      // Update column order if specified
-      const sortedColumns = configuration
-        .sort((a, b) => a.column_order - b.column_order)
-        .map(col => col.column_name);
-      
-      if (sortedColumns.length > 0) {
-        setColumnOrder(sortedColumns);
-      }
+    
+      // Determine column order
+      const orderedColumns = configuration.length > 0
+        ? configuration
+            .sort((a, b) => (a.column_order || Infinity) - (b.column_order || Infinity))
+            .map(col => col.column_name)
+            .filter(name => allColumnNames.includes(name))
+        : allColumnNames;
+    
+      // Ensure all columns are included in the order
+      const finalColumnOrder = [
+        ...new Set([
+          ...orderedColumns,
+          ...allColumnNames.filter(name => !orderedColumns.includes(name))
+        ])
+      ];
+    
+      setColumnOrder(finalColumnOrder);
     };
   
     fetchTableConfiguration();
