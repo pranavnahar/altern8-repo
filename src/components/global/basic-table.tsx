@@ -64,6 +64,10 @@ type BasicTableProps<T extends object> = {
   tableName: string;
 };
 
+interface Table {
+  name: string;
+}
+
 const snakeToTitleCase = (str: string): string => {
   if (!str) return '';
   return str
@@ -313,10 +317,12 @@ const BasicTable = <T extends object>({
     // Generate the `columns` array
     const columns = allColumns.map((column, index) => {
       const isVisible = !debouncedToggledOffColumns.includes(column);
-      const sortOrder = sortedColumns.find((col) => col.id === column)
-        ? sortedColumns.find((col) => col.id === column).desc
-          ? "Descending"
-          : "Ascending"
+  
+      const sortColumn = sortedColumns.find((col) => col.id === column);
+      const sortOrder = sortColumn 
+        ? sortColumn.desc 
+          ? "Descending" 
+          : "Ascending" 
         : "None";
   
       return {
@@ -396,7 +402,7 @@ const BasicTable = <T extends object>({
         console.log("Fetched tables: ", tables);
   
         // Step 2: Find the table with the matching name
-        const matchingTable = tables.find((table) => table.name === tableName);
+        const matchingTable = tables.find((table: Table) => table.name === tableName);
   
         if (matchingTable) {
           console.log("Matching table found: ", matchingTable);

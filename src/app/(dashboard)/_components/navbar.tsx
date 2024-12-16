@@ -9,17 +9,18 @@ import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/global/Chatbox';
 import { fetchWithAuth } from '../../../utils/fetch-with-auth';
 import { DashboardContext } from '../../../contexts/dashboard-context';
-import { useRouter } from 'next/compat/router';
+import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '../../../components/ui/dialog';
 import { useToast } from '@/utils/show-toasts';
 import { Switch } from '@/components/ui/switch';
-import { getAuthToken } from '@/utils/auth-actions';
+import { getAuthToken, removeAuthCookies } from '@/utils/auth-actions';
 
 export const Navbar: FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const router = useRouter();
   const [toggleStates, setToggleStates] = useState({
     filed_itr: false,
     filed_gst: false,
@@ -70,33 +71,32 @@ export const Navbar: FC = () => {
           message = '';
           break;
         case 'filed_gst':
-            message = '';
-            break;
+          message = '';
+          break;
         case 'additional_bank_accounts':
-            message = '';
-            break;
+          message = '';
+          break;
         case 'changes_in_capital_structure':
-            message = 'Please provide more details about name of round and amount raised in comments section.';
-            showToast({
-              message: message,
-              type: 'info',
-              duration: 11000
-            });
-            break;
+          message =
+            'Please provide more details about name of round and amount raised in comments section.';
+          showToast({
+            message: message,
+            type: 'info',
+            duration: 11000,
+          });
+          break;
         case 'other_changes':
-            message = 'Could you describe these changes, especially those that may require enhancement of the Line of Credit in comments section?';
-            showToast({
-              message: message,
-              type: 'info',
-              duration: 11000
-            });
-            break;
+          message =
+            'Could you describe these changes, especially those that may require enhancement of the Line of Credit in comments section?';
+          showToast({
+            message: message,
+            type: 'info',
+            duration: 11000,
+          });
+          break;
         default:
-          // message = '';
+        // message = '';
       }
-
-      
-      
     }
   };
 
@@ -147,12 +147,10 @@ export const Navbar: FC = () => {
 
   const { showToast } = useToast();
   const [loadingSpinner, setLoadingSpinner] = useState(true); // for loading animation
-  const router = useRouter();
-
 
   const GetOldCredit = async () => {
     try {
-      let token = await getAuthToken()
+      let token = await getAuthToken();
 
       let response = await fetch(`${apiUrl}/user-dashboard-api/get-more-credit/`, {
         headers: {
@@ -251,7 +249,7 @@ export const Navbar: FC = () => {
 
       for (const [key, value] of Object.entries(toggleStates)) {
         if (value) {
-          formData.append(key, String(value)); 
+          formData.append(key, String(value));
         }
       }
 
@@ -288,14 +286,12 @@ export const Navbar: FC = () => {
         return;
       }
 
-    
-
       // Send the form data to the server
       setLoadingSpinner(true);
 
-      console.log("the get more credit formdata resulted in this: ", formData)
+      console.log('the get more credit formdata resulted in this: ', formData);
 
-      const token = await getAuthToken()
+      const token = await getAuthToken();
       let response = await fetch(`${apiUrl}/user-dashboard-api/get-more-credit/`, {
         method: 'POST',
         headers: {
@@ -312,13 +308,13 @@ export const Navbar: FC = () => {
         });
 
         setUserData({ amount: '', comments: '' });
-      setToggleStates({
-        filed_itr: false,
-        filed_gst: false,
-        additional_bank_accounts: false,
-        changes_in_capital_structure: false,
-        other_changes: false,
-      });
+        setToggleStates({
+          filed_itr: false,
+          filed_gst: false,
+          additional_bank_accounts: false,
+          changes_in_capital_structure: false,
+          other_changes: false,
+        });
 
         setFiles([]);
         GetOldCredit();
@@ -332,7 +328,7 @@ export const Navbar: FC = () => {
         });
       }
     } catch (error) {
-      console.log("teh errrorr ocuured: ", error)
+      console.log('teh errrorr ocuured: ', error);
       showToast({
         message: 'Request submission failed, system error',
         type: 'info',
@@ -369,6 +365,11 @@ export const Navbar: FC = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+  const handleLogout = async () => {
+    await removeAuthCookies(); 
+    router.push('/login'); 
+  };
+
   return (
     <nav className="shadow-lg bg-white/10 z-20 backdrop-blur-md">
       <div className="px-4 mx-auto">
@@ -380,18 +381,17 @@ export const Navbar: FC = () => {
           </div>
           <div className="flex gap-5 items-center">
             {/* increase credit */}
-            <Dialog  open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-
-                <Button
-                  variant="expandIcon"
-                  Icon={IconSend2}
-                  size={'sm'}
-                  iconPlacement="right"
-                  className="text-sm text-white bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
-                  onClick={handleGetMoreCreditOpen}
-                >
-                   <DialogTrigger> Increase Credit</DialogTrigger>
-                </Button>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <Button
+                variant="expandIcon"
+                Icon={IconSend2}
+                size={'sm'}
+                iconPlacement="right"
+                className="text-sm text-white bg-gradient-to-br from-blue-400 via-blue-500 to-blue-700"
+                onClick={handleGetMoreCreditOpen}
+              >
+                <DialogTrigger> Increase Credit</DialogTrigger>
+              </Button>
               {/* Increase Credit modal box */}
               <DialogContent className="border-none p-0 h-full w-4/5 max-h-screen">
                 {showGetMoreCreditBox && (
@@ -652,6 +652,7 @@ export const Navbar: FC = () => {
                             //variant="expandIcon"
                             //Icon={IconLogout}
                             //iconPlacement="right"
+                            onClick={handleLogout}
                           >
                             Sign Out
                           </Button>
