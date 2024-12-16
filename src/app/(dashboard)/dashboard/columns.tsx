@@ -119,3 +119,4 @@ export const statusColors: Record<string, string> = {
   Approved: '#16BDCA',
   Rejected: '#2D87BB',
 };
+

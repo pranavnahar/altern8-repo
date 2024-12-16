@@ -68,6 +68,7 @@ const TrancheTasks = ({ projectId, trancheId }: Props) => {
               columns={tasksColumns}
               filters={[]}
               needFilters={false}
+              tableName='tranche-task-table'
             />
           </div>
         )}

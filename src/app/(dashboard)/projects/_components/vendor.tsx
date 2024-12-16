@@ -226,6 +226,7 @@ export const Vendor = () => {
           columns={vendorColumns(handleEdit)}
           filters={[]}
           needFilters={false}
+          tableName="vendor-project-table"
         />
 
         {/* <InputForms

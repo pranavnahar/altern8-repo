@@ -62,6 +62,7 @@ export const accountsColumns = [
                     columns={transactionColumns}
                     filters={[]}
                     needFilters={false}
+                    tableName="ledger-table-main"
                   />
                 ) : (
                   <h1 className="text-2xl font-semibold text-center text-white py-10">

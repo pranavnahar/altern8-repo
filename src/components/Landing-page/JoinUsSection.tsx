@@ -1,11 +1,14 @@
 // Join us section for landing page
 "use client"
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
 import Link from "next/link";
+import { getDynamicRedirectUrl } from "@/utils/auth-actions";
 
 // main return function
 const JoinUsSection = () => {
+    const [redirectUrl, setRedirectUrl] = useState<string>("/register"); // Default to /register
+
     // framer motion , animation on scroll
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
@@ -17,6 +20,16 @@ const JoinUsSection = () => {
             mainControls.start({ x: [900, 0] });
         }
     }, [isInView]);
+
+
+    useEffect(() => {
+      const fetchRedirectUrl = async () => {
+        const url = await getDynamicRedirectUrl();
+        setRedirectUrl(url);
+      };
+  
+      fetchRedirectUrl();
+    }, []);
 
     return (
         <div
@@ -51,7 +64,7 @@ const JoinUsSection = () => {
             {/* Get Credit button */}
             <div className="my-0 mx-[!important] absolute top-[30%] left-[23%] sm:top-[50%] sm:left-[30%] lg:w-[22.77%] lg:top-[226px] lg:right-[22.86%] lg:left-[54.37%] ">
               <Link
-                href="/register"
+                href={redirectUrl}
                 className="relative inline-flex items-center justify-center p-4 px-6 py-3 h-14 w-[200px] overflow-hidden font-medium text-white-font transition duration-300 ease-out border-0 border-[#1565c0] rounded-full  group"
               >
                 <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white-font duration-300 -translate-x-full bg-[#1565c0] group-hover:translate-x-0 ease">

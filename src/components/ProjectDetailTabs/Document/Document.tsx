@@ -27,12 +27,13 @@ const Document = () => {
       <Button className="self-end my-2 " onClick={() => setOpen(true)}>
         Add Documents
       </Button>
-      <BasicTable data={budgetData} columns={columns} filters={[]} needFilters={false} />
+      <BasicTable data={budgetData} columns={columns} filters={[]} needFilters={false} tableName="project_details_tab_view"/>
       <InputForms
         open={open}
         onOpenChange={() => setOpen(false)}
         title={"Add New Documents"}
         data={[]}
+        
       />
     </div>
   );

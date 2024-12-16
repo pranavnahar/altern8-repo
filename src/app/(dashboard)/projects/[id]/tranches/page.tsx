@@ -16,7 +16,7 @@ const Page = async ({ params }: Props) => {
   return (
     <div>
       <h1 className='text-4xl text-white tracking-tight text-center'>Tranches</h1>
-      <BasicTable data={data.results} columns={trancheColumns} filters={[]} needFilters={false} />
+      <BasicTable data={data.results} columns={trancheColumns} filters={[]} needFilters={false} tableName='project_detial_view'/>
     </div>
   )
 }

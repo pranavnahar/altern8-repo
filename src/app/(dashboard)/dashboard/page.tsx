@@ -35,6 +35,7 @@ export default async function DashboardPage() {
               columns={columns}
               filters={filters}
               needFilters={false}
+              tableName='dashboard-table-user'
             />
           </div>
         </div>

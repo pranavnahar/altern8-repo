@@ -530,6 +530,7 @@ const DashboardTableFilter: React.FC = () => {
                     columns={columns}
                     filters={[]}
                     needFilters={false}
+                    tableName='dashboard-table-filter'
                   />
                 </>
               ) : (

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { getAuthToken } from '@/utils/auth-actions';
+import { getAuthToken, getDynamicRedirectUrl } from '@/utils/auth-actions';
 
 //For Cursor Animation
 const CursorBlinker: React.FC = () => {
@@ -86,16 +86,16 @@ const TypingAnimation: React.FC = () => {
 
 // main return function
 const HeroSection: React.FC = () => {
-  const [redirectUrl, setRedirectUrl] = useState<string>('/register')
-  const handleFetchState = async () => {
-    const token = await getAuthToken();
-    const url = token && token.length > 5 ? '/dashboard' : '/register';
-    setRedirectUrl(url);
-  }
+  const [redirectUrl, setRedirectUrl] = useState<string>("/register"); // Default to /register
 
   useEffect(() => {
-    handleFetchState()
-  }, [])
+    const fetchRedirectUrl = async () => {
+      const url = await getDynamicRedirectUrl();
+      setRedirectUrl(url);
+    };
+
+    fetchRedirectUrl();
+  }, []);
 
   return (
     <div>
