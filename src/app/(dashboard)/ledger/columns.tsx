@@ -7,6 +7,7 @@ import BasicTable from '@/components/global/basic-table';
 import useLedgerDetails from './hooks/use-ledger-details';
 import { ColumnDef } from '@tanstack/react-table';
 import { formatDate, formatINR } from '@/utils/formatter';
+import Link from 'next/link';
 
 export const accountsColumns = [
   {
@@ -36,6 +37,7 @@ export const accountsColumns = [
 
       const openDialog = () => {
         handleFetchTransactions(id);
+        console.log('transactions', transactions);
         setIsOpen(true);
       };
 
@@ -134,6 +136,14 @@ export const transactionColumns: ColumnDef<any>[] = [
     cell: ({ getValue }) => {
       const value = getValue() as string;
       return formatINR(value);
+    },
+  },
+  {
+    header: 'Receipt',
+    accessorKey: 'receipt',
+    cell: ({ getValue }) => {
+      const receipt = getValue();
+      return receipt ? <Link href={receipt}> Open Receipt</Link> : '-';
     },
   },
 ];
