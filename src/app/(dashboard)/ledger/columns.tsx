@@ -1,17 +1,13 @@
-"use client"
+'use client';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import useLedgerTransactions from './hooks/use-ledger-ransactions';
 import BasicTable from '@/components/global/basic-table';
 import useLedgerDetails from './hooks/use-ledger-details';
 import { ColumnDef } from '@tanstack/react-table';
 import { formatDate, formatINR } from '@/utils/formatter';
+import Link from 'next/link';
 
 export const accountsColumns = [
   {
@@ -31,7 +27,7 @@ export const accountsColumns = [
     accessorKey: 'account_number',
   },
   {
-    header: 'Link',
+    header: 'Transactions',
     accessorKey: 'actions',
     //@ts-expect-error row types
     cell: ({ row }) => {
@@ -41,6 +37,7 @@ export const accountsColumns = [
 
       const openDialog = () => {
         handleFetchTransactions(id);
+        console.log('transactions', transactions);
         setIsOpen(true);
       };
 
@@ -58,13 +55,14 @@ export const accountsColumns = [
               <DialogHeader>
                 <DialogTitle className="text-2xl text-white">Transactions</DialogTitle>
               </DialogHeader>
-              <div className='overflow-hidden'>
+              <div className="overflow-hidden">
                 {transactions && transactions.length > 0 ? (
                   <BasicTable
                     data={transactions}
                     columns={transactionColumns}
                     filters={[]}
-                    needFilters={false}                />
+                    needFilters={false}
+                  />
                 ) : (
                   <h1 className="text-2xl font-semibold text-center text-white py-10">
                     No Transactions available for this account
@@ -76,16 +74,16 @@ export const accountsColumns = [
         </>
       );
     },
-  }
-]
+  },
+];
 export const transactionColumns: ColumnDef<any>[] = [
   {
     header: 'ID',
     accessorKey: 'id',
   },
   {
-    header: 'Invoice Product',
-    accessorKey: 'invoice_product',
+    header: 'Tranche ID',
+    accessorKey: 'tranche',
   },
   {
     header: 'Transaction ID',
@@ -109,8 +107,8 @@ export const transactionColumns: ColumnDef<any>[] = [
     accessorKey: 'timestamp',
     cell: ({ getValue }) => {
       const date = getValue();
-      return date && typeof date === "string" ? formatDate(date) : "-";
-      },
+      return date && typeof date === 'string' ? formatDate(date) : '-';
+    },
   },
   {
     header: 'From Account',
@@ -134,10 +132,18 @@ export const transactionColumns: ColumnDef<any>[] = [
   },
   {
     header: 'Balance',
-    accessorKey: 'balance',
+    accessorKey: 'from_account_balance_after',
     cell: ({ getValue }) => {
       const value = getValue() as string;
       return formatINR(value);
+    },
+  },
+  {
+    header: 'Receipt',
+    accessorKey: 'receipt',
+    cell: ({ getValue }) => {
+      const receipt = getValue();
+      return receipt ? <Link href={receipt}> Open Receipt</Link> : '-';
     },
   },
 ];
