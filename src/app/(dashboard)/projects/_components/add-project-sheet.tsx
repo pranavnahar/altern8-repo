@@ -156,7 +156,7 @@ const AddProjectSheet = () => {
           size="sm"
           Icon={ChevronRight}
           iconPlacement="right"
-          className="text-sm"
+          className="text-sm text-white"
         >
           Add Project
         </Button>
@@ -164,48 +164,22 @@ const AddProjectSheet = () => {
       <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto background border-none">
         <SheetHeader>
           <SheetTitle className="text-gray-300">Add New Project</SheetTitle>
-          <SheetDescription>
+          <SheetDescription className="text-gray-300">
             Fill in the details to create a new project.
           </SheetDescription>
         </SheetHeader>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 mt-4"
+            className="space-y-4 mt-4 text-gray-300"
           >
-            <FormField
-              control={form.control}
-              name="user"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>User</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a user" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {users.map((user) => (
-                        <SelectItem key={user.uid} value={user.uid}>
-                          {user.uid}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            
             <FormField
               control={form.control}
               name="project_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project Name</FormLabel>
+                  <FormLabel className="text-gray-300">Project Name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
