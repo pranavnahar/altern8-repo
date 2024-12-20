@@ -1,14 +1,46 @@
-import { fetchProjectData, getSanctionedLimit } from './actions';
+'use client';
+import { fetchProjectData, getSanctionedLimit, postForFunding } from './actions';
+import { ColumnDef } from '@tanstack/react-table';
 import BasicTable from '@/components/global/basic-table';
 import ActionItems from './components/action-items';
 import columns, { statusColors } from './columns';
 import ChartCalender from './components/chart-and-calender';
-export default async function DashboardPage() {
-  const sanctionedLimit = await getSanctionedLimit();
-  const projectList = await fetchProjectData();
-  console.log("the project results are in this format: ", projectList)
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { Project } from '../projects/types';
+
+export default function DashboardPage() {
+  const [projectIdsToFund, setProjectIdsToFund] = useState<string[]>([]);
+  const [sanctionedLimit, setSanctionedLimit] = useState(0);
+  const [projectList, setProjectList] = useState<Project[]>([]);
+  const allColumns = columns(projectIdsToFund, setProjectIdsToFund);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const limit = await getSanctionedLimit();
+        const list = await fetchProjectData();
+        console.log(list);
+        setSanctionedLimit(limit);
+        setProjectList(list.results);
+      } catch (error) {
+        setSanctionedLimit(0);
+        setProjectList([]);
+      }
+    };
+    getData();
+  }, []);
+  //not sure which API's to use yet
+  const handleFunding = async () => {
+    try {
+      const response = await postForFunding(projectIdsToFund);
+    } catch (error) {}
+  };
+  // const sanctionedLimit = await getSanctionedLimit();
+  // const projectList = await fetchProjectData();
+  console.log('the project results are in this format: ', projectList);
   const filters = Object.keys(statusColors);
-  
+  // const allColumns: ColumnDef<any>[] = columns();
   return (
     <div className="flex mt-8">
       <div className="w-[calc(100%-385px)] transition-all duration-300 px-2 pl-5">
@@ -25,22 +57,25 @@ export default async function DashboardPage() {
             ]}
             showActionItemsPath="/dashboard/show-action-items"
           />
-          
+
           <div>
             <div className="text-center text-2xl font-medium text-white mb-6">
               List of Upcoming Projects
             </div>
+            <div className="w-full flex justify-end">
+              {projectIdsToFund.length > 0 && <Button onClick={handleFunding}>Get Funded</Button>}
+            </div>
             <BasicTable
-              data={projectList.results || []}
-              columns={columns}
+              data={projectList || []}
+              columns={allColumns}
               filters={filters}
               needFilters={false}
-              tableName='dashboard-table-user'
+              tableName="dashboard-table-user"
             />
           </div>
         </div>
       </div>
-      
+
       <div className="flex-shrink-0 w-[385px]">
         <ChartCalender sanctionedLimit={sanctionedLimit} />
       </div>
