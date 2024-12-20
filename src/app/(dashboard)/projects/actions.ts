@@ -5,7 +5,7 @@ import { notFound, redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { ProjectResponse } from './types';
 import { getAuthToken } from '@/utils/auth-actions';
-
+import { EsignResponse, EsignStatus } from './types';
 
 export async function fetchProjectData(timeoutMs: number = 60000): Promise<ProjectResponse> {
   try {
@@ -134,6 +134,48 @@ export async function initiateEmudraFlow(projectId: string,templateId: number, p
 
   } catch (error) {
     return { success: false, error: (error as Error).message }
+  }
+}
+
+
+export async function checkEsignStatus(projectIds: number[]): Promise<EsignResponse> {
+  const token = await getAuthToken();
+
+  try {
+    console.log("The call was made to this API with these project IDs:", projectIds);
+
+    const body = {
+      projectId: projectIds
+    };
+
+    const response = await fetch(`${process.env.SERVER_URL}/emudhra-api/checkEsignStatus/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`, 
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    const data: Record<string, { workflow_status: string | null; url: string | null }> = await response.json();
+
+    const parsedData: EsignStatus[] = Object.entries(data).map(([projectId, { workflow_status, url }]) => ({
+      projectId: parseInt(projectId, 10),
+      workflow_status, // Include if required by your type
+      status: workflow_status === null || workflow_status === "incomplete" ? "not started" : workflow_status,
+      url: url || null,
+    }));
+
+    console.log("Parsed project statuses:", parsedData);
+
+    return { success: true, data: parsedData };
+  } catch (error) {
+    console.error('Error in check esign status:', error);
+    return { success: false, data: [], error: (error as Error).message };
   }
 }
 
