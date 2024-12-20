@@ -87,24 +87,37 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    header: 'Agreement Signing status',
+    header: 'Agreement Signing Status',
     accessorKey: 'esign_status',
     cell: ({ row }) => {
       const esignStatus = row.original.esign_status;
-      
-      return esignStatus && esignStatus !== 'not started' ? (
-        <Link 
-          href={esignStatus}
-          target="_blank"
-          rel="noopener noreferrer" 
-          className="text-blue-500 underline"
-        >
-          Sign Document
-        </Link>
-      ) : (
-        <span>No Actions Needed</span>
-      );
-    }},
+      const url = row.original.esign_url; // Assuming this comes from the API response.
+
+      console.log("the status value is this: ", esignStatus, url)
+
+      // Display "Completed" if status is "completed."
+      if (esignStatus === "completed") {
+        return <span className="text-green-600 font-bold">Completed</span>;
+      }
+
+      // Display link if the status is "not started" or "incomplete" and URL is present.
+      if ((esignStatus === "not started" || esignStatus === "incomplete") && url) {
+        return (
+          <Link
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 underline"
+          >
+            Sign Document
+          </Link>
+        );
+      }
+
+      // Default fallback.
+      return <span>No Actions Needed</span>;
+    },
+  },
   {
     header: 'Line of Credit Available',
     accessorKey: 'line_of_credit_available',
