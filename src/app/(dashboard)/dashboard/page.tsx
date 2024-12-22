@@ -9,8 +9,10 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { Project } from '../projects/types';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [projectIdsToFund, setProjectIdsToFund] = useState<string[]>([]);
   const [sanctionedLimit, setSanctionedLimit] = useState(0);
   const [projectList, setProjectList] = useState<Project[]>([]);
@@ -35,6 +37,9 @@ export default function DashboardPage() {
     try {
       const response = await postForFunding(projectIdsToFund);
     } catch (error) {}
+  };
+  const handleAddProject = () => {
+    router.push(`projects?open=${true}`);
   };
   // const sanctionedLimit = await getSanctionedLimit();
   // const projectList = await fetchProjectData();
@@ -65,13 +70,20 @@ export default function DashboardPage() {
             <div className="w-full flex justify-end">
               {projectIdsToFund.length > 0 && <Button onClick={handleFunding}>Get Funded</Button>}
             </div>
-            <BasicTable
-              data={projectList || []}
-              columns={allColumns}
-              filters={filters}
-              needFilters={false}
-              tableName="dashboard-table-user"
-            />
+            <div className="w-full flex justify-between px-2">
+              <BasicTable
+                data={projectList || []}
+                columns={allColumns}
+                filters={filters}
+                needFilters={false}
+                tableName="dashboard-table-user"
+              />
+              {projectList.length > 0 && (
+                <Button type="button" onClick={handleAddProject}>
+                  Add Projects
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>
