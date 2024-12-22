@@ -186,3 +186,23 @@ export async function getDynamicRedirectUrl() {
   return token ? "/dashboard" : "/register";
 }
 
+
+
+//Registration step separate auth token logic as getAuthToekn was redirecting...
+//even new users who visit register page for first time to login page
+export async function getRegistrationAuthToken() {
+  const cookieStore = cookies();
+  let authCookie = cookieStore.get('altern8_useraccess');
+
+  if (!authCookie) {
+    const refreshToken = cookieStore.get('altern8_userrefresh');
+    if (refreshToken) {
+      const newToken = await refreshAccessToken(refreshToken.value);
+      if (newToken) {
+        authCookie = { name: 'altern8_useraccess', value: newToken };
+      }
+    }
+  }
+
+  return authCookie?.value || null;
+}

@@ -3,9 +3,48 @@ import Header from '../Landing-page/Header';
 import JoinUsSection from '../Landing-page/JoinUsSection';
 import Footer from '../Landing-page/Footer';
 import FloatingButton from '../Landing-page/FloatingButton';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeftCircle } from 'lucide-react';
+import { motion } from "framer-motion";
+
+interface ClothUnrollEffectProps {
+  children: ReactNode
+}
+
+
+const ClothUnrollEffect = ({ children }: ClothUnrollEffectProps) => {
+  return (
+    <motion.div
+      initial={{ height: 0, opacity: 0 }}
+      animate={{
+        height: "100%",
+        opacity: 1,
+        transition: {
+          duration: 2.5,
+          ease: [0.45, 1, 0.59, 1], // Custom easing for smooth unroll
+        },
+      }}
+      style={{
+        overflow: "hidden", // Prevents content from being visible until unrolled
+        transformOrigin: "top center",
+      }}
+    >
+      <motion.div
+        initial={{ y: -20 }}
+        animate={{
+          y: 0,
+          transition: {
+            duration: 0.7,
+            ease: "easeOut",
+          },
+        }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const TermsCondition = () => {
 
@@ -17,9 +56,11 @@ const TermsCondition = () => {
     }
   }, []);
 
+
   return (
     <div className="relative overflow-x-hidden [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] w-full min-h-screen">
       <Header />
+      <ClothUnrollEffect>
 
       <div className="flex items-center justify-start ml-14 mt-10 space-x-2">
           <Link href="/">
@@ -31,11 +72,15 @@ const TermsCondition = () => {
         </div>
         
       {/* Centered Title */}
+
       <div className="flex flex-col items-center justify-center py-16">
+      <ClothUnrollEffect>
         <h1 className="text-3xl font-bold text-gray-200 mb-8 mt-10">Altern8 Terms of Use</h1>
+        </ClothUnrollEffect>
 
         {/* Text Area for Terms and Conditions */}
-        <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-md px-6">
+
+        <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-md px-6 text-justify">
           <p>
             This document is an electronic record in terms of Information Technology Act, 2000 and
             rules there under as applicable and the amended provisions pertaining to electronic
@@ -703,18 +748,22 @@ const TermsCondition = () => {
             enforced to the maximum extent permissible so as to give effect to the intent of the
             parties as reflected by that provision, and the remainder of the Terms of Use shall 
             continue in full force and effect. <br /> <br />
-            Waiver: Altern8’s failure to enforce any provision of
+            Waiver: Altern8's failure to enforce any provision of
             this Terms of Use shall not be deemed to be a waiver of such provision nor of the right
             to enforce such provision.
           </p>
           <strong>Contact:</strong> If you have any queries or doubt regarding the terms of use, please reach the
           customer support of Altern8 at <strong>grievance@nahar.om</strong>.
           <br />
-        </div>                   
-      </div>
+        </div>  
+
+        </div>  
+                     
+      
       <JoinUsSection />
       <Footer />
       <FloatingButton />
+      </ClothUnrollEffect>  
     </div>
   );
 };

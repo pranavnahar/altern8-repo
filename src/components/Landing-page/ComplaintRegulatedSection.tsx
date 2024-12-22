@@ -13,23 +13,25 @@ function ComplaintRegulated() {
         {
             name: "sahamati",
             image: "/sahamati-min.png",
-        },
-        {
-            name: "make in india",
-            image: "/make in india-min.png",
+            
         },
         {
             name: "RBI",
             image: "/RBI-min.png",
         },
+        {
+            name: "make in india",
+            image: "/make in india-min.png",
+        },
+       
         // {
         //     name: "ocen",
         //     image: "/ocen-min.png",
         // },
-        // {
-        //     name: "ondc",
-        //     image: "/ondc-min.png",
-        // },
+        {
+            name: "ondc",
+            image: "/ondc-min.png",
+        },
     ];
 
     useEffect(() => {
@@ -59,7 +61,7 @@ function ComplaintRegulated() {
                     Our investment decisions are guided by the RBI's regulations, aligning strategically with
                     permissible sectors to support economic development responsibly.
                 </p>
-                <div className="flex items-center justify-between gap-4 mx-auto">
+                <div className="flex items-center justify-center gap-4 mx-auto">
                     {imageInfos.map((data, index) => (
                         <div key={index} className="relative w-full h-full">
                             <img
