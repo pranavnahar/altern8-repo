@@ -1,10 +1,11 @@
 import React from 'react';
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 import { Button } from '../../../components/ui/button';
 
 const toTitleCase = (str: string) => {
-  return str.split('_')
+  return str
+    .split('_')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 };
@@ -16,7 +17,9 @@ const formatDate = (dateString: string) => {
     month: 'long',
     year: 'numeric',
   };
-  return new Intl.DateTimeFormat('en-GB', options).format(date).replace(/(\d+)(st|nd|rd|th)/, '$1<sup>$2</sup>');
+  return new Intl.DateTimeFormat('en-GB', options)
+    .format(date)
+    .replace(/(\d+)(st|nd|rd|th)/, '$1<sup>$2</sup>');
 };
 
 const formatINR = (value: string | number) => {
@@ -40,19 +43,19 @@ export const columns: ColumnDef<any>[] = [
   {
     header: 'Document ID',
     accessorKey: 'id',
-    cell: ({ getValue }) => getValue() ?? "-",
+    cell: ({ getValue }) => getValue() ?? '-',
   },
   {
     header: 'Project Id',
     accessorKey: 'project',
-    cell: ({ getValue }) => getValue() ?? "-",
+    cell: ({ getValue }) => getValue() ?? '-',
   },
   {
     header: 'File',
     accessorKey: 'file',
     cell: ({ getValue, row }) => {
       const value = getValue();
-      const fileName = typeof value === 'string' ? toTitleCase(value) : "-";
+      const fileName = typeof value === 'string' ? toTitleCase(value) : '-';
       const fileUrl = row.original.file;
 
       const handleDownload = () => {
@@ -72,11 +75,7 @@ export const columns: ColumnDef<any>[] = [
       return (
         <div className="flex items-center space-x-2">
           {fileUrl && (
-            <Button
-              onClick={handleDownload}
-              size="xs"
-              className='text-xs'
-            >
+            <Button onClick={handleDownload} size="xs" className="text-xs">
               Download
             </Button>
           )}
@@ -87,34 +86,34 @@ export const columns: ColumnDef<any>[] = [
   {
     header: 'Tranch',
     accessorKey: 'tranch',
-    cell: ({ getValue }) => getValue() ?? "-",
+    cell: ({ getValue }) => getValue() ?? '-',
   },
   {
     header: 'Pin Code',
     accessorKey: 'pin_code',
-    cell: ({ getValue }) => getValue() ?? "-",
+    cell: ({ getValue }) => getValue() ?? '-',
   },
   {
     header: 'Uploaded At',
     accessorKey: 'uploaded_at',
     cell: ({ getValue }) => {
       const date = getValue();
-      return date && typeof date === "string" ? formatDate(date) : "-";
+      return date && typeof date === 'string' ? formatDate(date) : '-';
     },
   },
-  {
-    header: 'Uploaded BY',
-    accessorKey: 'uploaded_by',
-    cell: ({ getValue, row }) => {
-      const userId = row.original.uploaded_by;
-      const userValue = getValue() as string;
-      return (
-        <Link href={`/borrowers/${userId}`}>
-          <h1 className='underline underline-offset-2'>{userValue}</h1>
-        </Link>
-      );
-    },
-  },
+  // {
+  //   header: 'Uploaded BY',
+  //   accessorKey: 'uploaded_by',
+  //   cell: ({ getValue, row }) => {
+  //     const userId = row.original.uploaded_by;
+  //     const userValue = getValue() as string;
+  //     return (
+  //       <Link href={`/borrowers/${userId}`}>
+  //         <h1 className='underline underline-offset-2'>{userValue}</h1>
+  //       </Link>
+  //     );
+  //   },
+  // },
 ];
 
 export default columns;
