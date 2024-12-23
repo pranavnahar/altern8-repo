@@ -33,8 +33,8 @@ import { useToast } from '../../../../utils/show-toasts';
 import { ChevronRight } from 'lucide-react';
 import FileUpload from '@/components/FileUpload/FileUpload';
 import { useSearchParams } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-
 
 type Borrower = {
   uid: string;
@@ -103,7 +103,6 @@ const AddProjectSheet = () => {
       property_tax_receipt: null,
     },
   });
-
 
   useEffect(() => {
     const sheetIsOpen = searchParams.get('open') || 'false';
@@ -179,7 +178,6 @@ const AddProjectSheet = () => {
     }
   };
 
-
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
@@ -200,7 +198,6 @@ const AddProjectSheet = () => {
           <SheetDescription className="text-white">
             Fill in the details to create a new project.
           </SheetDescription>
-
         </SheetHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
@@ -209,7 +206,6 @@ const AddProjectSheet = () => {
               name="user"
               render={({ field }) => (
                 <FormItem>
-
                   <FormLabel className="text-white">User</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -253,7 +249,6 @@ const AddProjectSheet = () => {
               name="project_type"
               render={({ field }) => (
                 <FormItem>
-
                   <FormLabel className="text-white">Project Type</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -348,7 +343,6 @@ const AddProjectSheet = () => {
               name="current_tranche_status"
               render={({ field }) => (
                 <FormItem>
-
                   <FormLabel className="text-white">Current Tranche Status</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
@@ -373,7 +367,6 @@ const AddProjectSheet = () => {
               name="current_project_status"
               render={({ field }) => (
                 <FormItem>
-
                   <FormLabel className="text-white">Current Project Status</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
