@@ -87,10 +87,11 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    header: 'Agreement Signing status',
+    header: 'Agreement Signing Status',
     accessorKey: 'esign_status',
     cell: ({ row }) => {
       const esignStatus = row.original.esign_status;
+
 
       return esignStatus && esignStatus !== 'not started' ? (
         <Link
@@ -115,13 +116,21 @@ export const columns: ColumnDef<any>[] = [
     },
   },
   {
-    header: 'Project Total',
-    accessorKey: 'project_total',
+    header: 'Line of Credit Available',
+    accessorKey: 'line_of_credit_available',
     cell: ({ getValue }) => {
       const total = getValue();
       return total && typeof total === 'string' ? formatINR(total) : '-';
     },
   },
+  // {
+  //   header: 'Project Total',
+  //   accessorKey: 'project_total',
+  //   cell: ({ getValue }) => {
+  //     const total = getValue();
+  //     return total && typeof total === 'string' ? formatINR(total) : '-';
+  //   },
+  // },
   {
     header: 'Percentage Complete Net',
     accessorKey: 'percentage_complete_net',
@@ -136,8 +145,10 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ getValue }) => {
       const date = getValue();
       return date && typeof date === 'string' ? formatDate(date) : '-';
+
     },
   },
+
   // {
   //   header: 'Request Approval Date',
   //   accessorKey: 'request_for_approval_date',
@@ -210,6 +221,7 @@ export const columns: ColumnDef<any>[] = [
       return <Link href={`/projects/${projectId}/tranches`}>View Tranches</Link>;
     },
   },
+
   // {
   //   header: 'Approval status',
   //   accessorKey: 'is_verified_by_user',
@@ -238,6 +250,7 @@ export const columns: ColumnDef<any>[] = [
   //     );
   //   },
   // },
+
 ];
 
 export default columns;

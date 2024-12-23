@@ -6,6 +6,45 @@ import FloatingButton from '../Landing-page/FloatingButton';
 import React, {useState, useEffect} from 'react';
 import { ArrowLeftCircle } from 'lucide-react';
 import Link from 'next/link';
+import { ReactNode } from 'react';
+import { motion } from 'framer-motion';
+
+interface ClothUnrollEffectProps {
+  children: ReactNode;
+}
+
+const ClothUnrollEffect = ({ children }: ClothUnrollEffectProps) => {
+  return (
+    <motion.div
+      initial={{ height: 0, opacity: 0 }}
+      animate={{
+        height: '100%',
+        opacity: 1,
+        transition: {
+          duration: 2.5,
+          ease: [0.45, 1, 0.59, 1], // Custom easing for smooth unroll
+        },
+      }}
+      style={{
+        overflow: 'hidden', // Prevents content from being visible until unrolled
+        transformOrigin: 'top center',
+      }}
+    >
+      <motion.div
+        initial={{ y: -20 }}
+        animate={{
+          y: 0,
+          transition: {
+            duration: 0.7,
+            ease: 'easeOut',
+          },
+        }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const PrivacyPolicy = () => {
   const [domainName, setDomainName] = useState('');
@@ -19,6 +58,7 @@ const PrivacyPolicy = () => {
   return (
     <div className="relative overflow-x-hidden [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] w-full min-h-screen">
       <Header />
+      <ClothUnrollEffect>
 
       <div className="flex items-center justify-start ml-14 mt-10 space-x-2">
           <Link href="/">
@@ -30,7 +70,9 @@ const PrivacyPolicy = () => {
         </div>
 
       <div className="flex flex-col items-center justify-center py-16">
+      <ClothUnrollEffect>
         <h1 className="text-3xl font-bold text-gray-200 mb-8 mt-10">Altern8 Privacy Policy</h1>
+        </ClothUnrollEffect>
 
         {/* Text Area for Terms and Conditions */}
         <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-md px-6">
@@ -331,6 +373,7 @@ const PrivacyPolicy = () => {
       <JoinUsSection />
       <Footer />
       <FloatingButton />
+      </ClothUnrollEffect>
     </div>
   );
 };

@@ -21,7 +21,7 @@ import RERA from '../Steps/RERA';
 import Udyam from '../Steps/Udyam';
 import Pending from '../Steps/Pending';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getAuthToken } from '@/utils/auth-actions';
+import { getAuthToken, getRegistrationAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -70,11 +70,62 @@ const Register = ({ demo }: Props) => {
     }
   };
 
+  // const getRegistrationState = async (stateName?: string, currentPage?: string) => {
+  //   const token = await getAuthToken()
+  //   if (!token || token.length < 5) {
+  //     setCurrentStep(1);
+  //   } else {
+  //     if (stateName) {
+  //       setRegistrationState(stateName, currentPage);
+  //     } else {
+  //       try {
+  //         setLoading(true);
+  //         const response = await fetch(`${apiUrl}/user-api/states/`, {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         });
+  //         if (!demo && response.status === 401) {
+  //           return router.push('/login');
+  //         }
+
+  //         if (response.ok) {
+  //           let server_message = await response.json();
+  //           const registration_step = server_message.user_state;
+  //           console.log(server_message,registration_step);
+
+  //           if (registration_step === 'Approved') return router.push('/dashboard');
+  //           console.log(`Seller step fetched successfully! ${registration_step}`, server_message);
+  //           setRegistrationState(registration_step);
+  //         } else {
+  //           let server_error = await response.json();
+  //           console.error(`Failed to fetch seller state from backend`, server_error);
+  //         }
+  //       } catch (error) {
+  //         console.error(`Failed to fetch seller state from backend`, error);
+  //       } finally {
+  //         setLoading(false);
+  //         setPageLoading(false);
+  //       }
+  //     }
+  //   }
+  // };
   const getRegistrationState = async (stateName?: string, currentPage?: string) => {
-    const token = await getAuthToken()
-    if (!token || token.length < 5) {
-      setCurrentStep(1);
-    } else {
+    try {
+      // Use the new registration-specific auth token function
+      const token = await getRegistrationAuthToken();
+      
+      // for the first step, allow access without token
+      if (!token && currentStep === 1) {
+        setPageLoading(false);
+        return;
+      }
+  
+      // for later steps, redirect if no token
+      if (!token && currentStep > 1) {
+        return router.push('/login');
+      }
+  
       if (stateName) {
         setRegistrationState(stateName, currentPage);
       } else {
@@ -85,10 +136,15 @@ const Register = ({ demo }: Props) => {
               Authorization: `Bearer ${token}`,
             },
           });
+          
           if (!demo && response.status === 401) {
-            return router.push('/login');
+            if (currentStep === 1) {
+              setCurrentStep(1);
+            } else {
+              return router.push('/login');
+            }
           }
-
+  
           if (response.ok) {
             let server_message = await response.json();
             const registration_step = server_message.user_state;
@@ -101,13 +157,17 @@ const Register = ({ demo }: Props) => {
             let server_error = await response.json();
             console.error(`Failed to fetch seller state from backend`, server_error);
           }
+  
         } catch (error) {
           console.error(`Failed to fetch seller state from backend`, error);
-        } finally {
-          setLoading(false);
-          setPageLoading(false);
+          if (currentStep === 1) {
+            setCurrentStep(1);
+          }
         }
       }
+    } finally {
+      setLoading(false);
+      setPageLoading(false);
     }
   };
 
