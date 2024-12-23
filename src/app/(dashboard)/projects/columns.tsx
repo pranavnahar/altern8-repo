@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 import { CheckCircle, X } from 'lucide-react';
 import ApplyProduct from './_components/apply-product';
@@ -26,7 +26,7 @@ export const columns: ColumnDef<any>[] = [
       const userValue = getValue() as string;
       return (
         <Link href={`/project/${userId}?current_tab=Overview`}>
-          <h1 className='underline underline-offset-2'>{userValue}</h1>
+          <h1 className="underline underline-offset-2">{userValue}</h1>
         </Link>
       );
     },
@@ -36,7 +36,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'project_name',
     cell: ({ getValue }) => {
       const value = getValue();
-      return typeof value === 'string' ? toTitleCase(value) : "-";
+      return typeof value === 'string' ? toTitleCase(value) : '-';
     },
   },
   {
@@ -44,30 +44,30 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'project_state',
     cell: ({ getValue }) => {
       const value = getValue();
-      return typeof value === 'string' ? toTitleCase(value) : "-";
+      return typeof value === 'string' ? toTitleCase(value) : '-';
     },
   },
   {
     header: 'Project Type',
     accessorKey: 'project_type',
-    cell: ({ getValue }) => getValue() ?? "-",
+    cell: ({ getValue }) => getValue() ?? '-',
   },
   {
     header: 'Location',
     accessorKey: 'location',
-    cell: ({ getValue }) => getValue() ?? "-",
+    cell: ({ getValue }) => getValue() ?? '-',
   },
   {
     header: 'RERA Registration Number',
     accessorKey: 'rera_reg_no',
-    cell: ({ getValue }) => getValue() ?? "-",
+    cell: ({ getValue }) => getValue() ?? '-',
   },
   {
     header: 'Start Date',
     accessorKey: 'start_date',
     cell: ({ getValue }) => {
       const date = getValue();
-      return date && typeof date === "string" ? formatDate(date) : "-";
+      return date && typeof date === 'string' ? formatDate(date) : '-';
     },
   },
   {
@@ -75,7 +75,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'line_of_credit',
     cell: ({ getValue }) => {
       const total = getValue();
-      return total && typeof total === "string" ? formatINR(total) : "-";
+      return total && typeof total === 'string' ? formatINR(total) : '-';
     },
   },
   {
@@ -83,50 +83,63 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'line_of_credit_used',
     cell: ({ getValue }) => {
       const total = getValue();
-      return total && typeof total === "string" ? formatINR(total) : "-";
+      return total && typeof total === 'string' ? formatINR(total) : '-';
     },
   },
   {
-    header: 'Agreement Signing status',
+    header: 'Agreement Signing Status',
     accessorKey: 'esign_status',
     cell: ({ row }) => {
       const esignStatus = row.original.esign_status;
-      
-      return esignStatus && esignStatus !== 'not started' ? (
-        <Link 
-          href={esignStatus}
-          target="_blank"
-          rel="noopener noreferrer" 
-          className="text-blue-500 underline"
-        >
-          Sign Document
-        </Link>
-      ) : (
-        <span>No Actions Needed</span>
-      );
-    }},
+      const url = row.original.esign_url; // Assuming this comes from the API response.
+
+      console.log('the status value is this: ', esignStatus, url);
+
+      // Display "Completed" if status is "completed."
+      if (esignStatus === 'completed') {
+        return <span className="text-green-600 font-bold">Completed</span>;
+      }
+
+      // Display link if the status is "not started" or "incomplete" and URL is present.
+      if ((esignStatus === 'not started' || esignStatus === 'incomplete') && url) {
+        return (
+          <Link
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 underline"
+          >
+            Sign Document
+          </Link>
+        );
+      }
+
+      // Default fallback.
+      return <span>No Actions Needed</span>;
+    },
+  },
   {
     header: 'Line of Credit Available',
     accessorKey: 'line_of_credit_available',
     cell: ({ getValue }) => {
       const total = getValue();
-      return total && typeof total === "string" ? formatINR(total) : "-";
+      return total && typeof total === 'string' ? formatINR(total) : '-';
     },
   },
-  {
-    header: 'Project Total',
-    accessorKey: 'project_total',
-    cell: ({ getValue }) => {
-      const total = getValue();
-      return total && typeof total === "string" ? formatINR(total) : "-";
-    },
-  },
+  // {
+  //   header: 'Project Total',
+  //   accessorKey: 'project_total',
+  //   cell: ({ getValue }) => {
+  //     const total = getValue();
+  //     return total && typeof total === 'string' ? formatINR(total) : '-';
+  //   },
+  // },
   {
     header: 'Percentage Complete Net',
     accessorKey: 'percentage_complete_net',
     cell: ({ getValue }) => {
       const percentage = getValue();
-      return percentage && typeof percentage === "string" ? formatPercentage(percentage) : "-";
+      return percentage && typeof percentage === 'string' ? formatPercentage(percentage) : '-';
     },
   },
   {
@@ -134,7 +147,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'project_completion_date',
     cell: ({ getValue }) => {
       const date = getValue();
-      return date && typeof date === "string" ? formatDate(date) : "-";
+      return date && typeof date === 'string' ? formatDate(date) : '-';
     },
   },
   {
@@ -142,7 +155,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'request_for_approval_date',
     cell: ({ getValue }) => {
       const date = getValue();
-      return date && typeof date === "string" ? formatDate(date) : "-";
+      return date && typeof date === 'string' ? formatDate(date) : '-';
     },
   },
   {
@@ -150,9 +163,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'inventory',
     cell: ({ row }) => {
       const projectId = row.original.id;
-      return (
-        <RoutingButton name={'View'} path={`/${projectId}/inventory`} />
-      )
+      return <RoutingButton name={'View'} path={`/${projectId}/inventory`} />;
     },
   },
   {
@@ -160,9 +171,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'funding_sources',
     cell: ({ row }) => {
       const projectId = row.original.id;
-      return (
-        <FundingSources projectId={projectId} type={'MODAL'} />
-      )
+      return <FundingSources projectId={projectId} type={'MODAL'} />;
     },
   },
   {
@@ -170,9 +179,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'summary',
     cell: ({ row }) => {
       const projectId = row.original.id;
-      return (
-        <BudgetSummary projectId={projectId} />
-      )
+      return <BudgetSummary projectId={projectId} />;
     },
   },
   {
@@ -180,9 +187,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'budget',
     cell: ({ row }) => {
       const projectId = row.original.id;
-      return (
-        <RoutingButton name={'View'} path={`/${projectId}/budget`} />
-      )
+      return <RoutingButton name={'View'} path={`/${projectId}/budget`} />;
     },
   },
   {
@@ -190,9 +195,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'documents',
     cell: ({ row }) => {
       const projectId = row.original.id;
-      return (
-        <RoutingButton name={'View'} path={`/${projectId}/documents`} />
-      )
+      return <RoutingButton name={'View'} path={`/${projectId}/documents`} />;
     },
   },
   {
@@ -200,9 +203,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'timeline',
     cell: ({ row }) => {
       const projectId = row.original.id;
-      return (
-        <RoutingButton name={'View'} path={`/${projectId}/timeline`} />
-      )
+      return <RoutingButton name={'View'} path={`/${projectId}/timeline`} />;
     },
   },
   {
@@ -210,9 +211,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'vendor',
     cell: ({ row }) => {
       const projectId = row.original.id;
-      return (
-        <RoutingButton name={'View'} path={`/${projectId}/vendor`} />
-      )
+      return <RoutingButton name={'View'} path={`/${projectId}/vendor`} />;
     },
   },
   {
@@ -220,9 +219,7 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'tranches',
     cell: ({ row }) => {
       const projectId = row.original.id;
-      return (
-        <Link href={`/projects/${projectId}/tranches`}>View Tranches</Link>
-      )
+      return <Link href={`/projects/${projectId}/tranches`}>View Tranches</Link>;
     },
   },
   {
@@ -232,8 +229,8 @@ export const columns: ColumnDef<any>[] = [
       const isApproved = getValue();
       return isApproved ? (
         <X size={20} />
-        // <CheckCircle size={20} />
       ) : (
+        // <CheckCircle size={20} />
         <X size={20} />
       );
     },
@@ -250,9 +247,9 @@ export const columns: ColumnDef<any>[] = [
             Proceed to verify
           </Button>
         </Link>
-      )
+      );
     },
-  }
+  },
 ];
 
 export default columns;

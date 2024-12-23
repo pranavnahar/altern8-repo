@@ -9,6 +9,45 @@ import { MarqueeDemo } from '../ui/marqueeDemo';
 import Link from 'next/link';
 import { ArrowLeftCircle } from 'lucide-react';
 import teams from './constant';
+import { ReactNode } from 'react';
+
+
+interface ClothUnrollEffectProps {
+  children: ReactNode;
+}
+
+const ClothUnrollEffect = ({ children }: ClothUnrollEffectProps) => {
+  return (
+    <motion.div
+      initial={{ height: 0, opacity: 0 }}
+      animate={{
+        height: '100%',
+        opacity: 1,
+        transition: {
+          duration: 2.5,
+          ease: [0.45, 1, 0.59, 1], // Custom easing for smooth unroll
+        },
+      }}
+      style={{
+        overflow: 'hidden', // Prevents content from being visible until unrolled
+        transformOrigin: 'top center',
+      }}
+    >
+      <motion.div
+        initial={{ y: -20 }}
+        animate={{
+          y: 0,
+          transition: {
+            duration: 0.7,
+            ease: 'easeOut',
+          },
+        }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const AboutUs: FC = () => {
   const advisors = [
@@ -95,6 +134,8 @@ const AboutUs: FC = () => {
                 <button className="text-white text-[40px]">&#8592;</button>
               </Link>
             </div> */}
+
+        <ClothUnrollEffect>
 
         <div className="flex items-center justify-start ml-14 mt-10 space-x-2">
           <Link href="/">
@@ -237,6 +278,7 @@ const AboutUs: FC = () => {
         </section>
         <JoinUsSection />
         <Footer />
+        </ClothUnrollEffect>
       </div>
     </>
   );
