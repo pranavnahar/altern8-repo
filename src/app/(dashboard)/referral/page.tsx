@@ -4,10 +4,10 @@ import React, { useRef, useState } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { Button } from '../../../components/ui/button';
 import { IconChevronRight, IconDownload, IconUpload } from '@tabler/icons-react';
-import { Snippet } from '@nextui-org/snippet';
 import { sendInvite, uploadBulkInvites, getReferralLink, type ActionState } from './actions';
 import { useToast } from '../../../utils/show-toasts';
 import { Input } from '../../../components/ui/input';
+import CustomSnippet from './_components/custom-snippet';
 
 const Page = () => {
   const {
@@ -32,7 +32,7 @@ const Page = () => {
           message: result.message,
           type: 'success',
         });
-        reset(); 
+        reset();
       } else {
         showToast({
           message: result?.message || 'An error occurred',
@@ -132,15 +132,7 @@ const Page = () => {
           <p className="text-sm text-gray-300/65 mb-4 text-left font-normal">
             Share this referral code to invite people to Altern8.
           </p>
-          <Snippet
-            symbol={false}
-            variant="solid"
-            color="primary"
-            className="bg-white/10 text-white w-full rounded-lg text-sm px-5"
-          >
-            {referralLink}
-          </Snippet>
-
+          <CustomSnippet>{referralLink}</CustomSnippet>
           <div className="flex items-center justify-center my-10">
             <div className="flex-1 h-px bg-gradient-to-r from-gray-400/0 via-gray-400/50 to-gray-400/0"></div>
             <span className="px-4 text-gray-300 font-medium text-sm">OR</span>
