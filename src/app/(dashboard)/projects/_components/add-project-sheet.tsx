@@ -77,7 +77,13 @@ const AddProjectSheet = () => {
       property_tax_receipt: null,
     },
   });
-  const sheetIsOpen = searchParams.get('open') || 'false';
+  //it is added because of a bug (Infinite rerendering)
+  useEffect(() => {
+    const sheetIsOpen = searchParams.get('open') || 'false';
+    if (sheetIsOpen === 'true') {
+      setIsOpen(true);
+    }
+  }, []);
   const onSubmit = async (data: Record<string, any>) => {
     const formData = new FormData();
 
@@ -150,7 +156,7 @@ const AddProjectSheet = () => {
   }, []);
 
   return (
-    <Sheet open={isOpen || sheetIsOpen == 'true'} onOpenChange={setIsOpen}>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
         <Button
           variant="expandIcon"
