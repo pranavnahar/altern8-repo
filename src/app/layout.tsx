@@ -4,6 +4,7 @@ import { Figtree } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'sonner'; 
 import { RecoilRoot } from 'recoil';
+import FloatingButton from '@/components/Landing-page/FloatingButton';
 
 const figtree = Figtree({ subsets: ['latin'] });
 
@@ -23,6 +24,7 @@ children,
         <body className={`${figtree.className}`}>
           {children}
           <Toaster position="bottom-center" />
+          <FloatingButton />
         </body>
       </RecoilRoot>
     </html>
