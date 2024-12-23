@@ -92,7 +92,6 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       const esignStatus = row.original.esign_status;
 
-
       return esignStatus && esignStatus !== 'not started' ? (
         <Link
           href={esignStatus}
@@ -145,7 +144,6 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ getValue }) => {
       const date = getValue();
       return date && typeof date === 'string' ? formatDate(date) : '-';
-
     },
   },
 
@@ -250,7 +248,6 @@ export const columns: ColumnDef<any>[] = [
   //     );
   //   },
   // },
-
 ];
 
 export default columns;
