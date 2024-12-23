@@ -210,34 +210,34 @@ export const columns: ColumnDef<any>[] = [
       return <Link href={`/projects/${projectId}/tranches`}>View Tranches</Link>;
     },
   },
-  {
-    header: 'Approval status',
-    accessorKey: 'is_verified_by_user',
-    cell: ({ getValue }) => {
-      const isApproved = getValue();
-      return isApproved ? (
-        <X size={20} />
-      ) : (
-        // <CheckCircle size={20} />
-        <X size={20} />
-      );
-    },
-  },
-  {
-    header: 'Actions',
-    accessorKey: 'actions',
-    cell: ({ row }) => {
-      const projectId = row.original.id;
-      const productId = row.original.product_id;
-      return (
-        <Link href={`/project-verification/${projectId}/`}>
-          <Button size="sm" className="text-sm">
-            Proceed to verify
-          </Button>
-        </Link>
-      );
-    },
-  },
+  // {
+  //   header: 'Approval status',
+  //   accessorKey: 'is_verified_by_user',
+  //   cell: ({ getValue }) => {
+  //     const isApproved = getValue();
+  //     return isApproved ? (
+  //       <X size={20} />
+  //     ) : (
+  //       // <CheckCircle size={20} />
+  //       <X size={20} />
+  //     );
+  //   },
+  // },
+  // {
+  //   header: 'Actions',
+  //   accessorKey: 'actions',
+  //   cell: ({ row }) => {
+  //     const projectId = row.original.id;
+  //     const productId = row.original.product_id;
+  //     return (
+  //       <Link href={`/project-verification/${projectId}/`}>
+  //         <Button size="sm" className="text-sm">
+  //           Proceed to verify
+  //         </Button>
+  //       </Link>
+  //     );
+  //   },
+  // },
 ];
 
 export default columns;
