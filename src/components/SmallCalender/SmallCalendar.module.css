@@ -4,7 +4,7 @@
 }
 
 .eventIndicator {
-  background-color: #1565c0; /* Yellow indicator */
+  background-color: #1565c0; 
   border-radius: 50%;
   width: 8px;
   height: 8px;
@@ -12,7 +12,7 @@
 }
 
 .react_calendar {
-  background-color: transparent !important; /* Dark background */
+  background-color: transparent !important; 
   color: #cfe2fa; /*  text color */
   border-color: #ffffff34 !important;
   border-width: 2px !important;

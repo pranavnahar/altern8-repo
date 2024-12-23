@@ -151,13 +151,7 @@ const POC = ({ demo }: Props) => {
     }
   }, []);
 
-  // const handleClick = async (direction?: string) => {
-  //   let newStep = currentStep;
-  //   if (direction !== "next") {
-  //     newStep--;
-  //     setCurrentStep(newStep);
-  //   }
-  // };
+
 
   const handleEditButtonClick = (id: string) => {
     // show edit poc details fields
