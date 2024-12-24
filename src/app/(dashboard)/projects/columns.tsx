@@ -91,31 +91,27 @@ export const columns: ColumnDef<any>[] = [
     accessorKey: 'esign_status',
     cell: ({ row }) => {
       const esignStatus = row.original.esign_status;
-      const url = row.original.esign_url; // Assuming this comes from the API response.
 
-      console.log('the status value is this: ', esignStatus, url);
-
-      // Display "Completed" if status is "completed."
-      if (esignStatus === 'completed') {
-        return <span className="text-green-600 font-bold">Completed</span>;
-      }
-
-      // Display link if the status is "not started" or "incomplete" and URL is present.
-      if ((esignStatus === 'not started' || esignStatus === 'incomplete') && url) {
-        return (
-          <Link
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 underline"
-          >
-            Sign Document
-          </Link>
-        );
-      }
-
-      // Default fallback.
-      return <span>No Actions Needed</span>;
+      return esignStatus && esignStatus !== 'not started' ? (
+        <Link
+          href={esignStatus}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 underline"
+        >
+          Sign Document
+        </Link>
+      ) : (
+        <span>No Actions Needed</span>
+      );
+    },
+  },
+  {
+    header: 'Line of Credit Available',
+    accessorKey: 'line_of_credit_available',
+    cell: ({ getValue }) => {
+      const total = getValue();
+      return total && typeof total === 'string' ? formatINR(total) : '-';
     },
   },
   {
@@ -150,14 +146,15 @@ export const columns: ColumnDef<any>[] = [
       return date && typeof date === 'string' ? formatDate(date) : '-';
     },
   },
-  {
-    header: 'Request Approval Date',
-    accessorKey: 'request_for_approval_date',
-    cell: ({ getValue }) => {
-      const date = getValue();
-      return date && typeof date === 'string' ? formatDate(date) : '-';
-    },
-  },
+
+  // {
+  //   header: 'Request Approval Date',
+  //   accessorKey: 'request_for_approval_date',
+  //   cell: ({ getValue }) => {
+  //     const date = getValue();
+  //     return date && typeof date === "string" ? formatDate(date) : "-";
+  //   },
+  // },
   {
     header: 'Inventory',
     accessorKey: 'inventory',
@@ -222,34 +219,35 @@ export const columns: ColumnDef<any>[] = [
       return <Link href={`/projects/${projectId}/tranches`}>View Tranches</Link>;
     },
   },
-  {
-    header: 'Approval status',
-    accessorKey: 'is_verified_by_user',
-    cell: ({ getValue }) => {
-      const isApproved = getValue();
-      return isApproved ? (
-        <X size={20} />
-      ) : (
-        // <CheckCircle size={20} />
-        <X size={20} />
-      );
-    },
-  },
-  {
-    header: 'Actions',
-    accessorKey: 'actions',
-    cell: ({ row }) => {
-      const projectId = row.original.id;
-      const productId = row.original.product_id;
-      return (
-        <Link href={`/project-verification/${projectId}/`}>
-          <Button size="sm" className="text-sm">
-            Proceed to verify
-          </Button>
-        </Link>
-      );
-    },
-  },
+
+  // {
+  //   header: 'Approval status',
+  //   accessorKey: 'is_verified_by_user',
+  //   cell: ({ getValue }) => {
+  //     const isApproved = getValue();
+  //     return isApproved ? (
+  //       <X size={20} />
+  //     ) : (
+  //       // <CheckCircle size={20} />
+  //       <X size={20} />
+  //     );
+  //   },
+  // },
+  // {
+  //   header: 'Actions',
+  //   accessorKey: 'actions',
+  //   cell: ({ row }) => {
+  //     const projectId = row.original.id;
+  //     const productId = row.original.product_id;
+  //     return (
+  //       <Link href={`/project-verification/${projectId}/`}>
+  //         <Button size="sm" className="text-sm">
+  //           Proceed to verify
+  //         </Button>
+  //       </Link>
+  //     );
+  //   },
+  // },
 ];
 
 export default columns;
