@@ -32,8 +32,9 @@ import { createProject, fetchBorrowersUids } from '../actions';
 import { useToast } from '../../../../utils/show-toasts';
 import { ChevronRight } from 'lucide-react';
 import FileUpload from '@/components/FileUpload/FileUpload';
-import z from 'zod';
+import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
+import z from 'zod';
 
 type Borrower = {
   uid: string;
@@ -67,6 +68,7 @@ const projectTypes = ['Residential', 'Commercial', 'Industrial', 'Mixed-use'];
 const projectStatuses = ['Not Started', 'In Progress', 'Completed', 'On Hold'];
 
 const AddProjectSheet = () => {
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { showToast } = useToast();
   const [users, setUsers] = useState<BorrowersList>([]);
@@ -103,6 +105,10 @@ const AddProjectSheet = () => {
   });
 
   useEffect(() => {
+    const sheetIsOpen = searchParams.get('open') || 'false';
+    if (sheetIsOpen === 'true') {
+      setIsOpen(true);
+    }
     const loadUsers = async () => {
       try {
         const data: BorrowersList = await fetchBorrowersUids();
@@ -117,7 +123,6 @@ const AddProjectSheet = () => {
 
     loadUsers();
   }, []);
-
   const onSubmit = async (data: Record<string, any>) => {
     const formData = new FormData();
     console.log('This is from the formdata');
@@ -189,6 +194,7 @@ const AddProjectSheet = () => {
       <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto background border-none">
         <SheetHeader>
           <SheetTitle className="text-gray-300">Add New Project</SheetTitle>
+
           <SheetDescription className="text-white">
             Fill in the details to create a new project.
           </SheetDescription>
@@ -207,6 +213,7 @@ const AddProjectSheet = () => {
                         <SelectValue placeholder="Select a user" />
                       </SelectTrigger>
                     </FormControl>
+
                     <SelectContent className="bg-gray-300 rounded-lg">
                       {users.length > 0 &&
                         users.map(user => (
@@ -249,6 +256,7 @@ const AddProjectSheet = () => {
                         <SelectValue placeholder="Select project type" />
                       </SelectTrigger>
                     </FormControl>
+
                     <SelectContent className="bg-gray-300 rounded-lg">
                       {projectTypes.map(type => (
                         <SelectItem key={type} value={type} className="cursor-pointer border ">
@@ -506,6 +514,7 @@ const AddProjectSheet = () => {
                         <FormControl>
                           <RadioGroupItem value="fetch" className="text-blue-400" />
                         </FormControl>
+
                         <FormLabel className="font-normal text-gray-100">
                           Fetch all details for me
                         </FormLabel>
