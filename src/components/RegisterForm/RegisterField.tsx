@@ -169,13 +169,14 @@ const Register = ({ demo }: Props) => {
             // });
 
             try {
-              console.log("relogging the api urls; ", body)
+              const superadmin_body =  { ...updatedRecord, is_active: true };
+              console.log("relogging the api urls; ", superadmin_body)
               const secondApiResponse = await fetch(`${process.env.NEXT_PUBLIC_SUPERADMIN_SERVER_URL}/auth-service/register/altern8/`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(body)
+                body: JSON.stringify(superadmin_body)
               });
         
               if (secondApiResponse.ok) {
