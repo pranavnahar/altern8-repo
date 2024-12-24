@@ -168,6 +168,31 @@ const Register = ({ demo }: Props) => {
             //   path: '/',
             // });
 
+            try {
+              console.log("relogging the api urls; ", body)
+              const secondApiResponse = await fetch(`${process.env.NEXT_PUBLIC_SUPERADMIN_SERVER_URL}/auth-service/register/altern8/`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body)
+              });
+        
+              if (secondApiResponse.ok) {
+                let secondApiData = await secondApiResponse.json();
+                console.log('Second super admin API response:', secondApiData);
+              } else {
+                let secondApiError = await secondApiResponse.json();
+                console.log('Error in second super admin API call:', secondApiError);
+                showToast({
+                  message: `Error in second super admin API call: ${secondApiError.message}`,
+                  type: 'error'
+                });
+              }
+            } catch (secondError) {
+              console.error('Error in second super admin API call:', secondError);
+            }
+
             getRegistrationState();
           } else {
             let server_error = await response.json();
@@ -183,6 +208,8 @@ const Register = ({ demo }: Props) => {
               });
             }
           }
+
+
         } catch (error) {
           console.error(
             `Error submitting register form data, Error in fetching api (${currentStep}) :`,
@@ -216,8 +243,10 @@ const Register = ({ demo }: Props) => {
       userData.password.length &&
       userData.password2.length
     ) {
+      console.log("the values are being set to this stuff: 1", userData)
       setShowConfirmationModal(true);
     } else {
+      console.log("the values are being set to this stuff: 11111", userData)
       await handleSubmission('next');
     }
   };
