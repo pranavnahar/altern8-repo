@@ -253,19 +253,18 @@ const ReviewSection = () => {
   const reviews = [
     {
       id: 1,
-      heading: 'Affordable Housing - Non-Convertible Debentures (NCDs)',
+      name: "Lalit Jaiswal",
+      post_name: "Landcraft",
+      heading: "Affordable Housing - Non-Convertible Debentures (NCDs)",
       review:
-        'Altern8’s NCD facility helped us raise capital swiftly for our affordable housing project. They understood our project’s potential and provided the much needed boost to expand in underserved markets. The team’s professionalism and quick response made a real difference.They made us realise our infrastructure status and facilitated international investors as well.',
-      name: 'Lalit Jaiswal',
-      post_name: 'Landcraft',
-      // img: '/logitechseeklogocom2-1.svg',
+        "Altern8's NCD facility helped us raise capital swiftly for our affordable housing project. They understood our project's potential and provided the much needed boost to expand in underserved markets. The team's professionalism and quick response made a real difference.They made us realise our infrastructure status and facilitated international investors as well",
     },
     {
       id: 2,
-      heading: 'Retirement Communities - Compulsory Convertible Debentures(CCDs)',
+      heading:'Retirement Communities - Compulsory Convertible Debentures (CCDs)',
       review:
         'With a growing demand for retirement communities in smaller cities, we approached Altern8 for CCD financing. Their structured approach provided us with a flexible repayment model, perfectly matching our cash flow needs. Thanks to Altern8, our retirement community project is now thriving.',
-      name: 'Rakesh Garg,',
+      name: 'Rakesh Garg',
       post_name: 'Carol',
       // img: '/logitechseeklogocom2-1.svg',
     },
@@ -273,38 +272,38 @@ const ReviewSection = () => {
       id: 3,
       heading: 'Residential Townships - Commercial Paper',
       review:
-        'Altern8’s commercial paper financing enabled us to develop a large residential township efficiently. The entire team was responsive, and the process was simple yet thorough. This form of financing was just what we needed to kickstart construction and stay ahead of timelines.',
-      name: 'Vaibhav Jain,',
+        'Altern8\'s commercial paper financing enabled us to develop a large residential township efficiently. The entire team was responsive, and the process was simple yet thorough. This form of financing was just what we needed to kickstart construction and stay ahead of timelines.',
+      name: 'Vaibhav Jain',
       post_name: 'Rise Developers',
       // img: '/logitechseeklogocom2-1.svg',
     },
     {
       id: 4,
-      heading: 'Commercial Properties - Non-Convertible Debentures (NCDs)',
-      review:
-        'For our commercial property project, Altern8’s NCD funding offered flexibility and solid terms that helped us stay on track financially. Their expertise in handling the financing needs of smaller developers like us has been a game changer.',
+      heading: "Commercial Properties - Non-Convertible Debentures (NCDs)",
+      review: "For our commercial property project, Altern8's NCD funding offered flexibility and solid terms that helped us stay on track financially. Their expertise in handling the financing needs of smaller developers like us has been a game-changer.",
       name: 'Harmandeep Singh,',
       post_name: 'Harmony',
       // img: '/logitechseeklogocom2-1.svg',
     },
     {
       id: 5,
-      heading: 'Agricultural Land Developments - Debentures',
-      review:
-        'Altern8’s debenture issuance made financing our agricultural development possible. The team’s attention to detail and understanding of our unique project needs set them apart. This financing has allowed us to expand and offer sustainable land options to our community.',
+      heading: "Agricultural Land Developments - Debentures",
+      review: "Altern8's debenture issuance made financing our agricultural development possible. The team's attention to detail and understanding of our unique project needs set them apart. This financing has allowed us to expand and offer sustainable land options to our community.",
       name: 'Yash Garg',
-      post_name: ' ',
+      post_name: '-',
       // img: '/logitechseeklogocom2-1.svg',
     },
     {
       id: 6,
-      heading: 'Apartments - Secured Notes',
+      heading: "Apartments - Secured Notes",
       review:
-        'Secured notes via Altern8 provided the perfect funding solution for our mid sized apartment project in Ghaziabadn. The simplicity and transparency of the process were refreshing, and we could access the funds without any delays.',
+        "Secured notes via Altern8 provided the perfect funding solution for our mid-sized apartment project in Ghaziabadn. The simplicity and transparency of the process were refreshing, and we could access the funds without any delays.",
       name: 'Sajal Garg',
       post_name: 'Insprosper Promoters',
       // img: '/logitechseeklogocom2-1.svg',
-    }
+    },
+
+    
   ];
 
   // Duplicate the reviews for continuous scrolling
@@ -351,7 +350,7 @@ const ReviewSection = () => {
 
   return (
     <div className="w-full mx-auto pt-10 text-white font-work-sans text-center">
-      <div className="max-w-[1320px] mx-auto grid grid-cols-1 gap-4 lg:grid-cols-3 ">
+      <div className="max-w-[1320px] mx-auto grid grid-cols-1 gap-6 lg:grid-cols-3">
         {duplicatedReviews.slice(currentIndex, currentIndex + 3).map((review, index) => (
           <motion.div
             key={review.id}
@@ -360,23 +359,30 @@ const ReviewSection = () => {
             exit={{ x: -100, opacity: 0 }} 
             transition={{ duration: 0.5 }} 
             whileHover={{ scale: 0.95, opacity: 0.9 }}
+            className="flex flex-col items-center justify-between backdrop-brightness-90 bg-white/5 bg-gray- p-6 rounded-lg shadow-lg min-h-[360px]" 
           >
-            <div className="mx-10 mb-6 font-light justify-center text-center items-center md:text-[15px] sm:text-21xl lg:pt-16">
-              {/* {reviews[currentIndex].heading}{' '} */}
-              {review.heading}
+            <div className="mb-0.5 mt-3 text-sm font-bold text-gray-200">{review.heading}</div>
+            {/* Review Text */}
+            <div className="mb-2 text-sm font-light text-gray-400">{review.review}</div>
+  
+            {/* Name and Designation */}
+            <div className="flex flex-col items-center gap-2 mt-2">
+              <div className="font-semibold text-xl min-h-[24px] text-gray-300/80">
+                {review.name || "Anonymous"}
+              </div>
+              <div className="text-sm text-gray-400 min-h-[20px] ">
+                {review.post_name || "Loading.."}
+              </div>
             </div>
-            <div className="mb-4 text-sm font-light">{review.review}</div>
-            <div className="mt-4 font-semibold text-xl">{review.name || 'Anonymous'}</div>
-            <div className="text-sm text-gray-600">{review.post_name || 'Position'}</div>
           </motion.div>
         ))}
       </div>
-
+  
       {/* Navigation Arrows */}
-      <div className="flex justify-between w-[85%] m-auto">
+      <div className="flex justify-between w-[85%] m-auto mt-5 mb-10">
         <button
           onClick={prevReview}
-          className="flex items-center justify-center hover:bg-[#762559] rounded-full h-10 w-10 text-gray-500 hover:text-white"
+          className="flex items-center justify-center bg-[#5f202f] hover:bg-[#762559] rounded-full h-10 w-10 text-gray-500 hover:text-white"
         >
           <IconChevronLeft />
         </button>

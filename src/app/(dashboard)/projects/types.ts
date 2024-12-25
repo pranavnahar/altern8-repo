@@ -75,6 +75,7 @@ export type Project = {
   user: string;
   project_name: string;
   project_type: string | null;
+  project_state: string | null,
   location: string;
   pin_code: string | null;
   rera_regd_no: string | null;
@@ -126,3 +127,16 @@ export type InventoryResponse = {
   previous: string | null;
   results: Inventory[];
 };
+
+export type EsignStatus = {
+  projectId: number;
+  status: string; // Derived status
+  workflow_status?: string | null; // Optional since it's derived into `status`
+  url: string | null; // Nullable if not provided
+};
+
+export type EsignResponse = {
+  success: boolean;
+  data: EsignStatus[];
+  error?: string;
+}

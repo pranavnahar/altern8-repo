@@ -1,24 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { usePathname } from 'next/navigation';
 import { Sidebar as SidebarLayout, SidebarBody, SidebarLink } from '../../../components/ui/sidebar';
 import Link from 'next/link';
 import {
-  IconApiApp,
   IconBuildingBank,
   IconCalendar,
   IconCloudUpload,
   IconHelp,
   IconLayoutDashboard,
-  IconLogs,
-  IconMoneybag,
   IconReceipt,
-  IconReport,
   IconScreenShare,
   IconSettings,
   IconUserCircle,
-  IconUsers,
   IconWallet,
 } from '@tabler/icons-react';
 import AnimatedLogo from '../../../components/Header/AnimatedLogo';
@@ -27,16 +23,19 @@ import { getAuthToken } from '@/utils/auth-actions';
 
 const Sidebar = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const pathname = usePathname();
   const [uId, setUId] = useState<string>('Loading..');
+  const [username, setUsername] = useState<string>('Loading..');
+  
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const links = [
     {
       label: 'Dashboard',
       href: '/dashboard',
-      icon: (
-        <IconLayoutDashboard className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />
-      ),
+      icon: <IconLayoutDashboard className="flex-shrink-0 size-5 text-zinc-200" strokeWidth={1.75} />,
     },
     {
       label: 'Company Details',
@@ -76,22 +75,34 @@ const Sidebar = () => {
   ];
 
   useEffect(() => {
-    const fetchTokenAndSetUserId = async () => {
+    const fetchUsernameAndUid = async () => {
       try {
-        const token = await getAuthToken()
+        const token = await getAuthToken();
 
         if (token) {
           const decodedToken: { uid: string } = jwtDecode(token);
           const userId = decodedToken.uid;
-          await new Promise(resolve => setTimeout(resolve, 1000));
           setUId(userId);
+
+          let response = await fetch(`${apiUrl}/user-dashboard-api/get-uid/`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setUsername(data.user_data.name);
+          } else {
+            throw new Error(`Failed to fetch data: ${response.statusText}`);
+          }
         }
-      } catch (error) {
-        console.log(error);
+      } catch (err: any) {
+        console.error("Error fetching username data:", err);
       }
     };
 
-    fetchTokenAndSetUserId();
+    fetchUsernameAndUid();
   }, []);
 
   return (
@@ -117,7 +128,7 @@ const Sidebar = () => {
         <div>
           <SidebarLink
             link={{
-              label: `Chikorita\n${uId}`,
+              label: `${username}\n${uId}`,
               href: '/profile',
               icon: (
                 <IconUserCircle className="flex-shrink-0 size-6 text-zinc-200" strokeWidth={1.5} />

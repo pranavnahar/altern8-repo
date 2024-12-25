@@ -36,6 +36,8 @@ export async function sendInvite(prevState: ActionState, formData: FormData): Pr
   const userId = await getUserId()
   const referralLink = `${frontendUrl}/register?referal_code=${userId}`
 
+  console.log("sending this as the data: ", userId, referralLink)
+
   try {
     const token = await getAuthToken()
     const response = await fetch(`${apiUrl}/user-dashboard-api/referral-email/`, {

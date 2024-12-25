@@ -49,7 +49,7 @@ const BureauReport = ({ demo }: Props) => {
       if(demo){
        return alert('You are in demo mode')
       }
-      let accessToken = parseCookies().altern8_useraccess;
+      let accessToken = await getAuthToken();
       const response = await fetch(`${apiUrl}/user-api/get-signing-url/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,

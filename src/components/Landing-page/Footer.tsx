@@ -11,9 +11,11 @@ const Footer = () => {
             {/* contact us section  */}
             <div className="mb-5 leading-[25px]">
               <div className="text-5xl  font-medium font-roboto text-gray-300 my-5">Contact Us</div>
-              
-              <div className="text-base2 text-gray-400 my-1 mx-10 sm:mx-0 lg:w-1/2">
-              46 College Road, Nungambakkam, Chennai
+              {/* <a className=" text-base2  text-gray-400  " href="tel:+123400123">
+                Call : +123 400 123
+              </a> */}
+              <div className="text-base2 mb-4 text-gray-400 my-1 mx-10 sm:mx-0 lg:">
+              46 College Road, Nungambakkam<br/>Chennai, Tamil Nadu, India
               </div>
               <a
                 className="text-base2 text-gray-400"
@@ -57,10 +59,7 @@ const Footer = () => {
               </Link>
             </div>
 
-
-
-             {/* terms and policy  */}
-             <div className="mb-5 leading-[25px]">
+            <div className="mb-5 ">
               <div className="text-5xl font-medium font-roboto text-gray-300 my-5">
                About Us
               </div>
@@ -68,13 +67,12 @@ const Footer = () => {
                 className="text-base2 text-gray-400 block mb-2 hover:underline"
                 href="/about-us"
               >
-               About Us
+                About Us
               </Link>
+              
             </div>
 
-           
-
-
+            
           </div>
         </div>
         {/* Copyright section  */}
@@ -83,7 +81,7 @@ const Footer = () => {
             <div>
               Copyright 2024
               <strong>
-                <span> altern8. </span>
+                <span> Altern8. </span>
               </strong>
               All Rights Reserved.
             </div>

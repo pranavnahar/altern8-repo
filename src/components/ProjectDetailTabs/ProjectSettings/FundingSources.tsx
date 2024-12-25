@@ -48,6 +48,7 @@ const FundingSources: React.FC<Props> = ({ projectId }) => {
         columns={fundingColumns}
         filters={[]}
         needFilters={false}
+        tableName='project_detailed_tabs'
       />
     </div>
   );

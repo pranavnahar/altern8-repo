@@ -34,7 +34,7 @@ const AboutUsPage: React.FC = () => {
     {
       image: "/advisors-image/image4.png",
       name: "Alain S.",
-      position: "CFO, Burger King",
+      position: "CFO, Burger King Europe",
       location: "Zug, Switzerland",
     },
     {

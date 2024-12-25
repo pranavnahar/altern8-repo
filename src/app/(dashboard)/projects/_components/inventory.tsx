@@ -184,6 +184,7 @@ export const InventoryTable = (inventoryData: any) => {
           columns={InventoryColumns(handleEdit)}
           filters={[]}
           needFilters={false}
+          tableName="inventory-table-view"
         />
       </Card>
       {/* <InputForms

@@ -155,3 +155,67 @@ export async function checkAuthServer() {
 
   return !!(accessToken && refreshToken);
 }
+
+
+//redirect for ONLY dashboard component as getAuthToken was causing isues on main landing page it was automactilly redirecting to login on page laod.
+
+export async function getAuthTokenWithoutRedirect() {
+  const cookieStore = cookies();
+  let authCookie = cookieStore.get('altern8_useraccess');
+
+  if (!authCookie) {
+    const refreshToken = cookieStore.get('altern8_userrefresh');
+    if (refreshToken) {
+      const newToken = await refreshAccessToken(refreshToken.value);
+      if (newToken) {
+        authCookie = { name: 'altern8_useraccess', value: newToken };
+      }
+    }
+  }
+
+  if (!authCookie) return null; // No redirect, return null instead.
+
+  const isValid = await validateToken(authCookie.value);
+
+  if (!isValid) {
+    const refreshToken = cookieStore.get('altern8_userrefresh');
+    if (refreshToken) {
+      const newToken = await refreshAccessToken(refreshToken.value);
+      if (newToken) {
+        const isValid = await validateToken(newToken);
+        if (isValid) {
+          return newToken; // Return new token if valid.
+        }
+      }
+    }
+    return null; // Return null if no valid token.
+  }
+
+  return authCookie.value; // Return the token if valid.
+}
+
+export async function getDynamicRedirectUrl() {
+  const token = await getAuthTokenWithoutRedirect();
+  return token ? "/dashboard" : "/register";
+}
+
+
+
+//Registration step separate auth token logic as getAuthToekn was redirecting...
+//even new users who visit register page for first time to login page
+export async function getRegistrationAuthToken() {
+  const cookieStore = cookies();
+  let authCookie = cookieStore.get('altern8_useraccess');
+
+  if (!authCookie) {
+    const refreshToken = cookieStore.get('altern8_userrefresh');
+    if (refreshToken) {
+      const newToken = await refreshAccessToken(refreshToken.value);
+      if (newToken) {
+        authCookie = { name: 'altern8_useraccess', value: newToken };
+      }
+    }
+  }
+
+  return authCookie?.value || null;
+}
