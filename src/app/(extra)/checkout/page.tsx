@@ -50,12 +50,28 @@ const Page: React.FC = () => {
       >
         <h1 className='text-center'><AnimatedLogo/></h1>
         <h1 className='text-center text-3xl mt-5'>Payment Checkout</h1>
-        <div className="p-5  flex-col justify-center items-center my-5">
+        <div className="p-5 flex-col justify-center items-center my-5">
           <h2 className="text-xl font-semibold">Price Breakdown :-</h2>
-          <p>Subtotal: ₹{priceBreakdown.subtotal.toFixed(2)}</p>
-          <p>Tax: ₹{priceBreakdown.tax.toFixed(2)}</p>
-          <p>Shipping: ₹{priceBreakdown.shipping.toFixed(2)}</p>
-          <p>Total Before Discount: ₹{totalBeforeDiscount.toFixed(2)}</p>
+          <table className="w-full mt-4">
+            <tbody>
+              <tr>
+                <th className="text-left">Subtotal:</th>
+                <td className="text-right">₹{priceBreakdown.subtotal.toFixed(2)}</td>
+              </tr>
+              <tr>
+                <th className="text-left">Tax:</th>
+                <td className="text-right">₹{priceBreakdown.tax.toFixed(2)}</td>
+              </tr>
+              <tr>
+                <th className="text-left">Shipping:</th>
+                <td className="text-right">₹{priceBreakdown.shipping.toFixed(2)}</td>
+              </tr>
+              <tr>
+                <th className="text-left">Total Before Discount:</th>
+                <td className="text-right">₹{totalBeforeDiscount.toFixed(2)}</td>
+              </tr>
+            </tbody>
+          </table>
 
           <div className="mt-4">
             <label htmlFor="voucher" className="block text-sm font-medium">Select Voucher:</label>
