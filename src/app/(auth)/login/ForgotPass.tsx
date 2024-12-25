@@ -13,7 +13,6 @@ const ForgotPass = () => {
         }}
         initial="hidden"
         animate="visible"
-        // animate={mainControls}
         transition={{ duration: 0.7, delay: 0.3 }}
         whileHover={{ scale: 1.03, opacity: 1 }}
         className="h-[85vh] w-full rounded-3xl py-10 px-8 flex flex-col justify-around max-w-sm [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] shadow-md"
@@ -45,7 +44,6 @@ const ForgotPass = () => {
           <Button
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
             size="lg"
-          //onClick={handleLogin}
           >
             Reset
           </Button>
