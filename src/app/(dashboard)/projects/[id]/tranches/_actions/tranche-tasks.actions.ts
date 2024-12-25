@@ -23,11 +23,11 @@ export async function fetchTrancheTasks(projectID: number, trancheID: number, ti
 
   try {
     let token = await getAuthToken();
-    let response = await makeRequest(token);
+    let response = await makeRequest(token!);
 
     if (response.status === 401) {
       token = await getAuthToken();
-      response = await makeRequest(token);
+      response = await makeRequest(token!);
 
       if (response.status === 401) {
         redirect('/login')
