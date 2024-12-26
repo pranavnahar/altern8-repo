@@ -1,45 +1,9 @@
 'use server'
 
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { Account, Transaction } from './types'
-import { parseCookies } from 'nookies'
-import { setAccessTokenCookie } from '@/utils/auth'
+import { getAuthToken } from '@/utils/auth-actions'
 
-async function getAuthToken() {
-  const cookieStore = cookies()
-  const accessToken = cookieStore.get('altern8_useraccess')
-  if (!accessToken) {
-    redirect('/login')
-  }
-  return accessToken.value
-}
-
-
-export const getAccessToken = async () => {
-  const cookies = parseCookies();
-  const refreshToken = cookies.altern8_userrefresh;
-
-  let accessToken = "";
-  const body = { refresh: refreshToken };
-
-  const response = await fetch(`${process.env.SERVER_URL}/token/refresh/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-
-  const responseData = await response.json();
-  accessToken = responseData.access;
-  if (accessToken) {
-    setAccessTokenCookie(accessToken);
-    return accessToken;
-  }
-  return false;
-};
 
 async function fetchWithAuth(url: string, options: RequestInit = {},file : boolean = false): Promise<any> {
   const token = await getAuthToken()
@@ -51,19 +15,6 @@ async function fetchWithAuth(url: string, options: RequestInit = {},file : boole
     },
   })
 
-  if (response.status === 401) {
-    const newToken = await getAccessToken()
-    if (newToken) {
-      return fetchWithAuth(url, options)
-    } else {
-      throw new Error('Unable to refresh token')
-    }
-  }
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch')
-  }
-
   return file ? response : response.json()
 }
 
@@ -74,6 +25,7 @@ export async function getLedgerDetails(): Promise<{ accounts: Account[]
 }> {
   try {
     const data = await fetchWithAuth('/user-dashboard-api/transactions/')
+    console.log("the data value for user dasdhboard api is this repsonse: ", data)
     return {
       accounts: data.accounts,
       otherAccounts: data.other_accounts,
@@ -86,11 +38,14 @@ export async function getLedgerDetails(): Promise<{ accounts: Account[]
 
 export async function createTransaction(formData: FormData): Promise<{ success: boolean, error?: string }> {
   try {
+
+    console.log("calling the api transactions create")
     const data = await fetchWithAuth('/user-dashboard-api/transactions/', {
       method: 'POST',
       body: formData,
     });
     revalidatePath('/ledger');
+    console.log("the creation of the trnasaction resuteled in this : ", data)
     return { success: true, error: "" };
 
   } catch (error) {

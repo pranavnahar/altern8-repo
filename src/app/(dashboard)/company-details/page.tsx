@@ -1,6 +1,6 @@
 'use client';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import Layout from '../layout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../../components/ui/tabs';
 import BankDetailsPage from '../../../components/company-details/BankDetailsPage';
@@ -78,6 +78,6 @@ const Index = () => {
 
 export default Index;
 
-Index.getLayout = function getLayout(page: string | number | bigint | boolean) {
+Index.getLayout = function getLayout(page: ReactNode) {
   return <Layout>{page}</Layout>;
 };

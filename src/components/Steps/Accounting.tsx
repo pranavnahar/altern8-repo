@@ -2,10 +2,10 @@ import { useContext, useState, useCallback } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { useRouter } from 'next/navigation';
-import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import ConnectSDK from '../Step-Component/ConnectSDK';
 import { useToast } from '../../utils/show-toasts';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -46,9 +46,6 @@ const Accounting = ({ demo }: Props) => {
   const [needManualUpload, setNeedManualUpload] = useState(false);
   const [files, setFiles] = useState<File[]>([]); // state for file upload
 
-  // Handle token
-  let accessToken = parseCookies().altern8_useraccess;
-
   function changeUserPlatform(platform: string) {
     if (platform === 'Others') {
       setNeedManualUpload(true);
@@ -87,21 +84,17 @@ const Accounting = ({ demo }: Props) => {
         try {
           if (newRecord) {
             setLoading(true);
+            const token = await getAuthToken()
             const response = await fetch(`${apiUrl}/user-api/accounting-data/`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify(newRecord),
             });
 
-            if (response.status === 401) {
-              router.push('/login');
-            }
-
             if (response.ok) {
-              const serverMessage = await response.json();
               showToast({
                 message: `Submission Successful`,
                 type: 'info'
@@ -173,10 +166,11 @@ const Accounting = ({ demo }: Props) => {
 
       try {
         setLoading(true);
+        const token = await getAuthToken()
         const response = await fetch(`${apiUrl}/user-api/accounting-document/`, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
           body: formData,
         });
@@ -215,7 +209,6 @@ const Accounting = ({ demo }: Props) => {
     }
   };
 
-  // handle remove file
   const handleRemoveFile = (fileIndex: number) => {
     const newFiles = files.filter((_, index) => index !== fileIndex);
     setFiles(newFiles);

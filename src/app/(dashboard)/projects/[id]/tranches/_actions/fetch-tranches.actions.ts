@@ -24,11 +24,11 @@ export async function fetchTranches(
 
   try {
     let token = await getAuthToken();
-    let response = await makeRequest(token);
+    let response = await makeRequest(token!);
 
     if (response.status === 401) {
       token = await getAuthToken();
-      response = await makeRequest(token);
+      response = await makeRequest(token!);
 
       if (response.status === 401) {
         redirect('/login')
@@ -39,12 +39,10 @@ export async function fetchTranches(
   } catch (error) {
     if (error instanceof Error) {
       if (error.message === "Unauthorized") {
-        throw new Error(
-          "You are not authorized to access this resource. Please log in again."
-        );
+        redirect('/login')
       }
       if (error.name === "TimeoutError") {
-        throw new Error("Request timed out");
+        redirect('/login')
       }
       if (error.name === "HTTPError" && error.message.includes("404")) {
         notFound();

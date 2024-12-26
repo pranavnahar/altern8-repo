@@ -10,7 +10,7 @@ const ImageSlider = () => {
   const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
@@ -51,13 +51,13 @@ const ImageSlider = () => {
           <div key={index} className="pl-24 imageSlide">
             <div className="imageWrapper">
               <Image
-                src={`/Bank logos/${image}`}
+                src={`/borrowerFlowLogos/${image}`}
                 alt={`Slide ${index}`}
                 layout="intrinsic"
-                width={150} // Adjust width as needed
-                height={150} // Adjust height as needed
+                width={100} // Adjust width as needed
+                height={100} // Adjust height as needed
                 objectFit="contain"
-                className="image"
+                className="image border border-white rounded-md"
               />
             </div>
           </div>

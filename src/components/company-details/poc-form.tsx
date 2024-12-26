@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../utils/auth';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import { useToast } from '../../utils/show-toasts';
 import { Button } from '../ui/button';
 import { IconChevronRight, IconPlus } from '@tabler/icons-react';
+import { getAuthToken } from '@/utils/auth-actions';
 
 // main return page
 const PocForm = () => {
@@ -32,19 +30,8 @@ const PocForm = () => {
   const [loadingSpinner, setLoadingSpinner] = useState(true);
   const [currentPrimaryPoc, setCurrentPrimaryPoc] = useState('');
   const router = useRouter();
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
-  // Handle token
-  let accessToken = parseCookies().altern8_useraccess;
-
-  const ReplaceTokenOrRedirect = async () => {
-    const token = await getAccessToken();
-    if (!token) {
-      router.push('/login');
-    } else {
-      accessToken = token;
-    }
-  };
 
   // handle form input for phone number and otp
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,25 +48,13 @@ const PocForm = () => {
   // get the POC detail from backend
   const GetPoc = async () => {
     try {
-      if (!accessToken) {
-        await ReplaceTokenOrRedirect();
-      }
+      const token = await getAuthToken()
 
       let response = await fetch(`${apiUrl}/user-api/poc/`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-api/poc/`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-      }
-
       if (response.ok) {
         const responseData = await response.json();
         // console.log(responseData);
@@ -149,7 +124,7 @@ const PocForm = () => {
     if (!validateName(formData.name)) {
       showToast({
         message: `Valid Name is required`,
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -157,7 +132,7 @@ const PocForm = () => {
     if (!validateEmail(formData.email)) {
       showToast({
         message: `Invalid email address`,
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -165,7 +140,7 @@ const PocForm = () => {
     if (!validatePhoneNumber(formData.phoneNumber)) {
       showToast({
         message: `Phone number must be a 10-digit number`,
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -173,7 +148,7 @@ const PocForm = () => {
     if (formData.designation.length < 3) {
       showToast({
         message: `Please add valid designation`,
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -187,28 +162,16 @@ const PocForm = () => {
       setLoadingSpinner(true);
 
       let body = newRecord;
-      console.log(body);
+      const token = await getAuthToken()
       let response = await fetch(`${apiUrl}/user-dashboard-api/generate-otp-poc/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
 
         body: JSON.stringify(body),
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-dashboard-api/generate-otp-poc/`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        });
-      }
 
       if (response.ok) {
         await response.json();
@@ -218,23 +181,18 @@ const PocForm = () => {
         formData.otp = '';
       } else {
         let server_error = await response.json();
-
-        // temp
-        // setOtpSent(true);
-
-        // empty previous otp in login form field
         formData.otp = '';
 
         console.error('Failed to send otp', server_error);
         showToast({
           message: `${server_error.message}`,
-          type: 'info'
+          type: 'info',
         });
       }
     } catch (error) {
       showToast({
         message: `Failed to send otp, system error`,
-        type: 'info'
+        type: 'info',
       });
     } finally {
       setLoadingSpinner(false);
@@ -249,7 +207,7 @@ const PocForm = () => {
     if (formData.otp.length < 3) {
       showToast({
         message: `Please enter a valid otp`,
-        type: 'info'
+        type: 'info',
       });
       return;
     }
@@ -263,32 +221,20 @@ const PocForm = () => {
         phone_number: formData['phoneNumber'].trim(),
         designation: formData['designation'].trim(),
       };
-      console.log(bodyData);
+      const token = await getAuthToken()
       let response = await fetch(`${apiUrl}/user-dashboard-api/submit-poc/`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(bodyData),
       });
 
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-dashboard-api/submit-poc/`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(bodyData),
-        });
-      }
-
       if (response.ok) {
         showToast({
           message: `POC details submitted successfully`,
-          type: 'info'
+          type: 'info',
         });
         GetPoc();
         setOtpSent(false);
@@ -296,13 +242,13 @@ const PocForm = () => {
       } else {
         showToast({
           message: `POC details submission failed, server error`,
-          type: 'info'
+          type: 'info',
         });
       }
     } catch (error) {
       showToast({
         message: `POC details submission failed, system error`,
-        type: 'info'
+        type: 'info',
       });
     } finally {
       setLoadingSpinner(false);
@@ -329,18 +275,62 @@ const PocForm = () => {
     return () => clearInterval(intervalId);
   }, [otpSent]);
 
+  const handleChangePrimaryPOC = async () => {
+    if (currentPrimaryPoc === '') {
+      showToast({
+        message: `Please select a valid poc`,
+        type: 'info',
+      });
+      return;
+    }
 
+    let newRecord = {
+      id: currentPrimaryPoc.trim(),
+    };
+
+    try {
+      setLoadingSpinner(true);
+      const token = await getAuthToken()
+      let body = newRecord;
+      let response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-poc/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+
+        body: JSON.stringify(body),
+      });
+
+      if (response.ok) {
+        await response.json();
+        await GetPoc();
+        showToast({
+          message: `Primary POC updated successfully.`,
+          type: 'info',
+        });
+      } else {
+        let server_error = await response.json();
+
+        console.error('Failed to updated primary poc', server_error);
+
+        showToast({
+          message: `${server_error.message} `,
+          type: 'info',
+        });
+      }
+    } catch (error) {
+      showToast({
+        message: `Server Connection Error updating primary POC`,
+        type: 'info',
+      });
+    } finally {
+      setLoadingSpinner(false);
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto mt-8">
-      {loadingSpinner && (
-        <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-gray-600 bg-opacity-50 ">
-          <div className="relative">
-            <LoadingSpinner />
-          </div>
-        </div>
-      )}
-
       {/* list poc details  */}
       <div className="mb-5 rounded-lg ">
         <div className="mb-3 font-medium text-center text-gray-200 text-base2">
@@ -367,12 +357,15 @@ const PocForm = () => {
             {pocDetails.map((poc, index) => (
               <tr key={index} className="">
                 <td className="p-3 text-sm font-medium text-gray-300">{poc.name}</td>
-                <td className="p-3 text-sm font-medium text-gray-300 ">{poc.email}</td>
-
+                <td className="p-3 text-sm font-medium text-gray-300">{poc.email}</td>
                 <td className="p-3 text-sm font-medium text-gray-300">{poc.phone_number}</td>
-                <td className="p-3 text-sm font-medium text-gray-300">{poc.designation}</td>
-                <td className="p-3 text-sm font-medium text-center text-gray-300">
-                  {poc.is_primary ? <span>&#10004;</span> : <span>&#10008;</span>}
+                <td className="p-3 text-sm font-medium text-gray-300 flex items-center space-x-5">
+                  <span>{poc.designation}</span>
+                  {poc.is_primary ? (
+                    <span className="text-green-500">&#10004;</span>
+                  ) : (
+                    <span className="text-red-500">&#10008;</span>
+                  )}
                 </td>
               </tr>
             ))}
@@ -380,6 +373,47 @@ const PocForm = () => {
         </table>
       </div>
 
+      {/* change primary poc  */}
+      {pocDetails.length !== 0 && (
+        <div>
+          <div className="mt-10 font-medium text-gray-200 text-base2 ">
+            Change primary point of contact:
+          </div>
+          <div className="flex py-1 my-2 ">
+            <select
+              onChange={handleSelectChange}
+              value={currentPrimaryPoc || ''}
+              name="primary poc"
+              className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none focus:outline-none focus:border-purple-600"
+              required
+            >
+              <option
+                className="bg-[#2c173c] text-gray-100 w-full rounded-md outline-none hover:bg-[#602b4c]"
+                value=""
+                disabled
+              >
+                Select a contact detail
+              </option>
+              {pocDetails
+                .filter(poc => !poc.is_primary) // Filter out primary accounts
+                .map((poc, index) => (
+                  <option
+                    className="bg-[#2c173c] text-gray-100 tracking-wider rounded-md outline-none hover:bg-[#602b4c]"
+                    key={index}
+                    value={poc.id}
+                  >
+                    {poc.name} - {poc.phone_number}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div className="flex justify-center pt-5">
+            <Button onClick={handleChangePrimaryPOC} size="sm" type="submit">
+              Proceed
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* add new poc details  */}
       {!otpSent && (
@@ -463,7 +497,7 @@ const PocForm = () => {
               type="submit"
               variant="expandIcon"
               Icon={IconPlus}
-              iconPlacement='right'
+              iconPlacement="right"
             >
               Add
             </Button>
@@ -509,7 +543,7 @@ const PocForm = () => {
               onClick={handleSubmitOtp}
               type="submit"
               variant="expandIcon"
-              iconPlacement='right'
+              iconPlacement="right"
               Icon={IconChevronRight}
             >
               Add

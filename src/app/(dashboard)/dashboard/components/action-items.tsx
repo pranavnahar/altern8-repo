@@ -1,12 +1,25 @@
-"use client"
+'use client';
 
-import React, { FC, useState } from 'react'
-import { EllipsisVertical } from 'lucide-react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
-import { ActionItemData, Props } from '../types'
-import { IconInfoCircle, IconMenu, IconMenu3 } from '@tabler/icons-react'
+import React, { FC, useState } from 'react';
+import { IconInfoCircle } from '@tabler/icons-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { ActionItemData, Props } from '../types';
 
 const ActionItems: FC<Props> = ({
   showActionItems,
@@ -14,10 +27,10 @@ const ActionItems: FC<Props> = ({
   upcomingPayments,
   showActionItemsPath,
 }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [selectedAction, setSelectedAction] = useState<ActionItemData | null>(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedAction, setSelectedAction] = useState<ActionItemData | null>(null);
 
-  if (!showActionItems) return null
+  if (!showActionItems) return null;
 
   const items: ActionItemData[] = [
     {
@@ -40,14 +53,14 @@ const ActionItems: FC<Props> = ({
         columns: ['Payment ID', 'Amount', 'Due Date', 'Days Until Due'],
       },
     },
-  ]
+  ];
 
   const handleItemClick = (item: ActionItemData) => {
     if (item.data.length > 0) {
-      setSelectedAction(item)
-      setIsDialogOpen(true)
+      setSelectedAction(item);
+      setIsDialogOpen(true);
     }
-  }
+  };
 
   return (
     <>
@@ -59,7 +72,7 @@ const ActionItems: FC<Props> = ({
         </div>
         <div className="mx-5 mb-8">
           {items.map((item, index) => {
-            const isClickable = item.data.length > 0
+            const isClickable = item.data.length > 0;
             return (
               <div
                 key={index}
@@ -71,7 +84,7 @@ const ActionItems: FC<Props> = ({
                 <div className="flex justify-between items-center">
                   <div className="flex">
                     <div className="pr-2">
-                      <IconInfoCircle className='text-zinc-200'/>
+                      <IconInfoCircle className="text-zinc-200" />
                     </div>
                     <div>{item.label}</div>
                   </div>
@@ -82,7 +95,7 @@ const ActionItems: FC<Props> = ({
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       </div>
@@ -102,7 +115,9 @@ const ActionItems: FC<Props> = ({
               <TableHeader>
                 <TableRow>
                   {selectedAction?.details.columns.map((column, index) => (
-                    <TableHead key={index} className="text-zinc-300">{column}</TableHead>
+                    <TableHead key={index} className="text-zinc-300">
+                      {column}
+                    </TableHead>
                   ))}
                 </TableRow>
               </TableHeader>
@@ -120,16 +135,23 @@ const ActionItems: FC<Props> = ({
               </TableBody>
             </Table>
           </div>
-          <DialogFooter>
+          {/* <DialogFooter>
             <form action={showActionItemsPath}>
               <input type="hidden" name="action" value={selectedAction?.action || ''} />
               <Button type="submit" onClick={() => setIsDialogOpen(false)}>Close</Button>
             </form>
+          </DialogFooter> */}
+          <DialogFooter>
+            <div>
+              <Button type="button" onClick={() => setIsDialogOpen(false)}>
+                Close
+              </Button>
+            </div>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
-  )
-}
+  );
+};
 
-export default ActionItems
+export default ActionItems;

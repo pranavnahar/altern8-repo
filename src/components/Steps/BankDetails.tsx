@@ -7,11 +7,11 @@ import { useContext, useState, useCallback, useEffect } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
 import { useRouter } from 'next/navigation';
-import { parseCookies } from 'nookies';
 import { useDropzone } from 'react-dropzone';
 import ImageSlider from './Account Aggregator/ImageSlider';
 import { AA_videos } from './Account Aggregator/AA_Videos';
 import { useToast } from '../../utils/show-toasts';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -29,8 +29,6 @@ const BankDetails = ({ demo }: Props) => {
   const [showKnowMore, setShowKnowMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const iframeUrl = '';
-  // Handle token
-  let accessToken = parseCookies().altern8_useraccess;
 
   const router = useRouter();
 
@@ -57,12 +55,13 @@ const BankDetails = ({ demo }: Props) => {
           }
           if (bodyData) {
             const body = bodyData;
+            const token = await getAuthToken()
             setLoading(true);
             const response = await fetch(`${apiUrl!}/user-api/account-aggregator/`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify(body),
             });
@@ -197,15 +196,11 @@ const BankDetails = ({ demo }: Props) => {
 
       try {
         setLoading(true);
-
-        //@ts-expect-error
-        for (const [key, value] of formData.entries()) {
-          console.log(`${key}: ${value}`);
-        }
+        const token = await getAuthToken()
         let response = await fetch(`${apiUrl}/user-api/bank-document/`, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
           body: formData,
         });
@@ -256,9 +251,9 @@ const BankDetails = ({ demo }: Props) => {
   //Digitap SDK PART
   const handleConnectClick = async () => {
     setIsLoading(true);
-    
+
       router.push('https://aa.peedeefinvest.in/boost-money/login');
-    
+
 
     try {
       const response = await fetch('/api/generate-url', {

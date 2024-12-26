@@ -1,4 +1,3 @@
-"use client"
 import AdvisorsSection from '../components/Landing-page/AdvisorsSection'
 import CounterSection from '../components/Landing-page/CounterSection'
 import Header from '../components/Landing-page/Header'
@@ -13,11 +12,9 @@ import ContactUsForm from '../components/Landing-page/ContactUsForm'
 import JoinUsSection from '../components/Landing-page/JoinUsSection'
 import Footer from '../components/Landing-page/Footer'
 import FloatingButton from '../components/Landing-page/FloatingButton'
-import { useRouter } from "next/navigation";
 
 
 const Page = () => {
-  const router = useRouter();
   return (
     <div className="relative overflow-x-hidden [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] w-full min-h-screen">
       <Header />
@@ -26,9 +23,9 @@ const Page = () => {
       <AdvisorsSection />
       <OurOfferingsSection />
       <ShortTermDebt
-        header="Bill Discounting Transactions"
+        header="Transactions"
         data={transactions}
-        buttonText={"Load All Transcations"}
+        // buttonText={"Load All Transcations"}
       />
       <ComplaintRegulated />
       <ReviewSection />

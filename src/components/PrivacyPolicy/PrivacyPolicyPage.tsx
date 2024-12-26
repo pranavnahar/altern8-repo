@@ -3,15 +3,76 @@ import Header from '../Landing-page/Header';
 import JoinUsSection from '../Landing-page/JoinUsSection';
 import Footer from '../Landing-page/Footer';
 import FloatingButton from '../Landing-page/FloatingButton';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import { ArrowLeftCircle } from 'lucide-react';
+import Link from 'next/link';
+import { ReactNode } from 'react';
+import { motion } from 'framer-motion';
+
+interface ClothUnrollEffectProps {
+  children: ReactNode;
+}
+
+const ClothUnrollEffect = ({ children }: ClothUnrollEffectProps) => {
+  return (
+    <motion.div
+      initial={{ height: 0, opacity: 0 }}
+      animate={{
+        height: '100%',
+        opacity: 1,
+        transition: {
+          duration: 2.5,
+          ease: [0.45, 1, 0.59, 1], // Custom easing for smooth unroll
+        },
+      }}
+      style={{
+        overflow: 'hidden', // Prevents content from being visible until unrolled
+        transformOrigin: 'top center',
+      }}
+    >
+      <motion.div
+        initial={{ y: -20 }}
+        animate={{
+          y: 0,
+          transition: {
+            duration: 0.7,
+            ease: 'easeOut',
+          },
+        }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+};
 
 const PrivacyPolicy = () => {
+  const [domainName, setDomainName] = useState('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setDomainName(window.location.hostname);
+    }
+  }, []);
+
   return (
     <div className="relative overflow-x-hidden [background:linear-gradient(269.75deg,_#011049,_#19112f_25.75%,_#251431_51.79%,_#301941_64.24%,_#6e3050)] w-full min-h-screen">
       <Header />
+      <ClothUnrollEffect>
+
+      <div className="flex items-center justify-start ml-14 mt-10 space-x-2">
+          <Link href="/">
+            <button className="flex items-center text-gray-400 text-[13.5px] font-medium hover:underline hover:text-purple-400">
+              <ArrowLeftCircle className="w-4 h-4" /> {/* Adjusted icon size */}
+              <span>&nbsp;back to home</span>
+            </button>
+          </Link>
+        </div>
 
       <div className="flex flex-col items-center justify-center py-16">
+      <ClothUnrollEffect>
         <h1 className="text-3xl font-bold text-gray-200 mb-8 mt-10">Altern8 Privacy Policy</h1>
+        </ClothUnrollEffect>
 
         {/* Text Area for Terms and Conditions */}
         <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-md px-6">
@@ -28,13 +89,13 @@ const PrivacyPolicy = () => {
             This document is published in accordance with the provisions of Rule 3 (1) of the
             Information Technology (Intermediaries guidelines) Rules, 2011 that require publishing
             the rules and regulations, privacy policy and Terms of Use for access or usage of domain
-            name __________ including the related mobile site and mobile application (hereinafter
+            name <strong>{domainName}</strong> including the related mobile site and mobile application (hereinafter
             referred to as “Platform”)
           </p>
           <br />
           <p>
-            This Platform i.e. domain name _________ including the related mobile site and mobile
-            application is owned by ____________ (CIN: U62099TN2024PTC169251), having its registered office
+            This Platform i.e. domain name <strong>{domainName}</strong> including the related mobile site and mobile
+            application is owned by Ekarth Ventures (CIN: U62099TN2024PTC169251), having its registered office
             at 46 College Road, Nungambakkam, Chennai, person(s)/entity(ies) associated/connected with it (hereinafter
             referred to as “Altern8”/ “We”/”Us”/Our/”), a technological service provider that
             collects, uses, discloses, and protects your information when you use our platform to
@@ -61,7 +122,7 @@ const PrivacyPolicy = () => {
           <br />
           <p>
             By using Platform and/or registering yourself on Platform You authorize Altern8 to
-            contact You via email, phone call or any other mode and offer You Our services,
+            contact you via email, phone call or any other mode and offer You Our services,
             imparting product knowledge and offer promotional offers running on the Platform for
             which reasons Your information may be collected in the manner as detailed under this
             Policy. You hereby agree that You authorize Altern8 to contact You for the
@@ -312,6 +373,7 @@ const PrivacyPolicy = () => {
       <JoinUsSection />
       <Footer />
       <FloatingButton />
+      </ClothUnrollEffect>
     </div>
   );
 };

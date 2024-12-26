@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import BasicTable from '@/components/global/basic-table';
 import { Budget } from '../types';
-import TableSkeleton from '@/components/ledger/_components/table-skeleton';
 import { fetchTrancheBudget } from '../_actions/tranche-budget.actions';
 import budgetColumns from '../_columns/budget-columns';
+import BasicTableSkeleton from '@/components/global/basic-table-skeleton';
 
 type Props = {
   projectId: number;
@@ -56,7 +56,7 @@ const TrancheBudget = ({ projectId, trancheId }: Props) => {
 
         {isLoading ? (
           <div className="flex justify-center items-center h-full">
-            <TableSkeleton />
+            <BasicTableSkeleton />
           </div>
         ) : error ? (
           <div className="text-red-500 text-center">{error}</div>
@@ -67,6 +67,7 @@ const TrancheBudget = ({ projectId, trancheId }: Props) => {
               columns={budgetColumns}
               filters={[]}
               needFilters={false}
+              tableName='tranche_budget_table'
             />
           </div>
         )}

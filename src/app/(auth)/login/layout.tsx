@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Altern8 Login",
+  title: "Altern8 Admin | Login",
   description: "Login to enter",
 };
 

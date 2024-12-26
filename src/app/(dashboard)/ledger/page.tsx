@@ -7,6 +7,8 @@ import TransactionDownload from "./components/transcation-download"
 
 const Page = async () => {
   const { accounts, otherAccounts, trancheIDs } = await getLedgerDetails()
+  console.log("ledeger detials are as follows: ", accounts)
+
   const allAccounts = [...accounts, ...otherAccounts]
 
   return (
@@ -29,6 +31,7 @@ const Page = async () => {
         columns={accountsColumns}
         filters={[]}
         needFilters={false}
+        tableName="ledger-accounts-view-table"
       />
     </div>
   )

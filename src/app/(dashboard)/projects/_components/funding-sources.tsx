@@ -44,6 +44,7 @@ const Funding = (fundingSource: any) => {
         columns={fundingColumns}
         filters={[]}
         needFilters={false}
+        tableName="funding-sources-view-table"
       />
     </Card>
   );

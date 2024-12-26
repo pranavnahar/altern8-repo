@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import React from "react";
-import { LayoutGrid, LayoutList } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import AddProjectSheet from "./add-project-sheet";
-import BasicTable from "../../../../components/global/basic-table";
-import columns from "../columns";
-import DashboardGrids from "./dashboard-grids";
-import { Button } from "../../../../components/ui/button";
-import { Project } from "../types";
+import React from 'react';
+import { LayoutGrid, LayoutList } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import AddProjectSheet from './add-project-sheet';
+import BasicTable from '../../../../components/global/basic-table';
+import columns from '../columns';
+import DashboardGrids from './dashboard-grids';
+import { Button } from '../../../../components/ui/button';
+import { Project } from '../types';
 
 interface DashboardTableFilterClientProps {
   projects: Project[];
@@ -30,9 +30,9 @@ const Filters = ({ projects }: DashboardTableFilterClientProps) => {
     <div className="flex w-full pr-10">
       <div className="w-full p-4 rounded-lg text-white">
         <div className="flex gap-2 mb-4">
-          <Button>
+          {/* <Button>
             Projects
-          </Button>
+          </Button> */}
           <div className="flex items-center gap-1 w-full p-1 border-b border-b-gray-400">
             <p>Project List</p>
             <div className="flex items-center gap-1 relative bg-black rounded-lg ml-2">
@@ -45,19 +45,13 @@ const Filters = ({ projects }: DashboardTableFilterClientProps) => {
                 className={`p-1 rounded-lg cursor-pointer z-20`}
                 onClick={() => handleViewChange('list')}
               >
-                <LayoutList
-                  size={15}
-                  color={!isGridView ? "white" : "#555"}
-                />
+                <LayoutList size={15} color={!isGridView ? 'white' : '#555'} />
               </div>
               <div
                 className={`p-1 rounded-lg cursor-pointer z-20`}
                 onClick={() => handleViewChange('grid')}
               >
-                <LayoutGrid
-                  size={15}
-                  color={isGridView ? "white" : "#555"}
-                />
+                <LayoutGrid size={15} color={isGridView ? 'white' : '#555'} />
               </div>
             </div>
           </div>
@@ -71,6 +65,7 @@ const Filters = ({ projects }: DashboardTableFilterClientProps) => {
               columns={columns}
               filters={[]}
               needFilters={false}
+              tableName="project_view_client_table"
             />
           ) : (
             <div className="flex gap-2 items-center justify-center flex-wrap p-2">
@@ -85,6 +80,6 @@ const Filters = ({ projects }: DashboardTableFilterClientProps) => {
       </div>
     </div>
   );
-}
+};
 
 export default Filters;

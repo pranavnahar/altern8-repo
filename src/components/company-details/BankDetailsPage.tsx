@@ -2,13 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { parseCookies } from 'nookies';
-import { getAccessToken } from '../../utils/auth';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import { Check } from 'lucide-react';
 import { useToast } from '../../utils/show-toasts';
 import { Button } from '../ui/button';
 import { IconChevronRight } from '@tabler/icons-react';
+import { getAuthToken } from '@/utils/auth-actions';
 
 const BankDetailsPage = () => {
   const [bankAccountsList, setBankAccountsList] = useState<
@@ -46,43 +44,16 @@ const BankDetailsPage = () => {
     });
   };
 
-  // Handle token
-  let accessToken = parseCookies().accessToken; //access token from cookies
-
-  // if not accessToken then ask for refresh token
-  const ReplaceTokenOrRedirect = async () => {
-    // get new access token with help of Refresh token
-    const token = await getAccessToken();
-    // if not able to get the token then redirect to login
-    if (!token) {
-      router.push('/login');
-    } else {
-      accessToken = token;
-    }
-  };
-
   // get the Bank details from backend
   const GetBankDetails = async () => {
     try {
-      if (!accessToken) {
-        await ReplaceTokenOrRedirect();
-      }
+      const token = await getAuthToken()
 
       let response = await fetch(`${apiUrl}/user-dashboard-api/bank-account/`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        // Again try to fetch the data
-        response = await fetch(`${apiUrl}/user-dashboard-api/bank-account/`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-      }
 
       if (response.ok) {
         const responseData = await response.json();
@@ -97,7 +68,6 @@ const BankDetailsPage = () => {
           };
           newBanks.push(newData);
         }
-        // console.log(newBanks);
 
         setBankAccountsList(newBanks);
       } else {
@@ -127,37 +97,20 @@ const BankDetailsPage = () => {
       });
       return;
     }
-
-    // submitting the data to backend
     try {
-      // Set loading to true when starting the fetch
       setLoadingSpinner(true);
 
       let body = newRecord;
-      // console.log(body);
+      const token = await getAuthToken()
       let response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-account/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
 
         body: JSON.stringify(body),
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        // Again try to fetch the data
-        response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-account/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-
-          body: JSON.stringify(body),
-        });
-      }
 
       if (response.ok) {
         await response.json();
@@ -221,29 +174,17 @@ const BankDetailsPage = () => {
     // submitting the data to backend
     try {
       setLoadingSpinner(true);
-
+      const token = await getAuthToken()
       let body = newRecord;
       let response = await fetch(`${apiUrl}/user-dashboard-api/bank-account/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
 
         body: JSON.stringify(body),
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/user-dashboard-api/bank-account/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify(body),
-        });
-      }
 
       if (response.ok) {
         await response.json();
@@ -276,13 +217,6 @@ const BankDetailsPage = () => {
 
   return (
     <div className="max-w-2xl mx-auto mt-8">
-      {loadingSpinner && (
-        <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-full h-full bg-gray-600 bg-opacity-50 ">
-          <div className="relative">
-            <LoadingSpinner />
-          </div>
-        </div>
-      )}
       <div className="pt-6 pb-8 mb-2 rounded ">
         <div className="mb-3 text-lg font-medium text-center text-gray-200">Bank Accounts</div>
         {bankAccountsList.length !== 0 &&

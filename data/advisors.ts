@@ -28,7 +28,7 @@ export const advisors = [
       image: "/advisors/alexandru-min.png",
       first_name: "Alexandru",
       last_name: "Badulescu",
-      role: "Head of Payments and Lending, Advisor to CEO of Digital Ventures",
+      role: "Head Digital Lending, Saudi National Bank",
       country: "Riyadh, Saudi Arabia",
       url: "https://www.linkedin.com/in/alexandru-badulescu/",
     },
@@ -51,7 +51,7 @@ export const advisors = [
     {
       image: "/advisors/alain-min.png",
       first_name: "Alain S.",
-      role: "CFO, Burger King",
+      role: "CFO, Burger King Europe",
       country: "Zug, Switzerland",
       url: "https://www.linkedin.com/in/alain-s-6029b/",
     },

@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { motion } from 'framer-motion';
 import LoadingSpinner from '../LoadingSpinner';
@@ -55,7 +57,7 @@ const ContactUsForm = () => {
   });
 
   const [loading, setLoading] = useState<boolean>(false);
-  const { showToast } = useToast()
+  const { showToast } = useToast();
 
   // Handle input change for text and email fields
   const handleInput = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -84,50 +86,67 @@ const ContactUsForm = () => {
   };
 
   const validateForm = (): boolean => {
+    // Check if the company name is valid
     if (formData.company_name.length < 3) {
       showToast({
         message: `Company name should be at least 3 characters`,
-        type: 'info'
+        type: 'info',
       });
       return false;
     }
-
+  
+    // Check if the company query is valid
     if (formData.company_query.length < 10) {
       showToast({
         message: `Comments and questions should be at least 10 characters`,
-        type: 'info'
+        type: 'info',
       });
       return false;
     }
-
+  
+    // Regular expression for common personal email domains
+    const personalEmailRegex = /@(gmail\.com|yahoo\.com|outlook\.com|hotmail\.com)$/i;
+  
+    // Check if the email is valid and not personal
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     if (!emailRegex.test(formData.company_email)) {
       showToast({
         message: `Invalid email format`,
-        type: 'info'
+        type: 'info',
       });
       return false;
     }
-
+  
+    // Check if the email is a personal email
+    if (personalEmailRegex.test(formData.company_email)) {
+      showToast({
+        message: 'Please enter only work emails',
+        type: 'info',
+      });
+      return false;
+    }
+  
+    // Check if the phone number is valid
     if (formData.company_phone_number.length !== 10) {
       showToast({
         message: `Phone number must be exactly 10 digits`,
-        type: 'info'
+        type: 'info',
       });
       return false;
     }
-
+  
+    // Check if at least one choice is selected
     const isAnyChoiceSelected = choices.some(choice => formData[choice] === true);
     if (!isAnyChoiceSelected) {
       showToast({
         message: `Choose at least one area of interest`,
-        type: 'info'
+        type: 'info',
       });
       return false;
     }
-
+  
     return true;
-  }
+  };
 
   // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -151,7 +170,7 @@ const ContactUsForm = () => {
       if (response?.ok) {
         showToast({
           message: `Form submitted successfully!`,
-          type: 'info'
+          type: 'info',
         });
         setFormData({
           ...initialFormState,
@@ -163,7 +182,7 @@ const ContactUsForm = () => {
     } catch (error) {
       showToast({
         message: `Submission failed, please retry once again!`,
-        type:'error'
+        type: 'error',
       });
     } finally {
       setLoading(false);
@@ -195,9 +214,7 @@ const ContactUsForm = () => {
           </h2>
 
           <div className="mb-4">
-            <label className="block mb-2 text-xs text-gray-400 uppercase">
-              Company Name
-            </label>
+            <label className="block mb-2 text-xs text-gray-400 uppercase">Company Name</label>
             <input
               type="text"
               name="company_name"
@@ -211,9 +228,7 @@ const ContactUsForm = () => {
 
           {/* Email Input */}
           <div className="mb-4">
-            <label className="block mb-2 text-xs text-gray-400 uppercase">
-              Company Email
-            </label>
+            <label className="block mb-2 text-xs text-gray-400 uppercase">Company Email</label>
             <input
               type="email"
               name="company_email"
@@ -276,6 +291,48 @@ const ContactUsForm = () => {
               className="w-full px-3 py-2 text-gray-100 bg-transparent border-b-2 outline-none rounded-t-md focus:border-purple-600 animation"
               required
             />
+          </div>
+
+          <div className="mb-4">
+            <div className="flex items-center space-x-2 ml-2">
+              <Checkbox
+                id="terms_agreement"
+            
+                onCheckedChange={checked =>
+                  setFormData(prev => ({ ...prev, terms_agreement: checked }))
+                }
+              />
+              <label htmlFor="terms_agreement" className="text-sm text-gray-400">
+                By clicking Submit, you agree to our{' '}
+                <a
+                  href="/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-purple-500 hover:text-purple-400"
+                >
+                  Privacy Policy
+                </a>
+                ,{' '}
+                <a
+                  href="/terms-and-conditions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-purple-500 hover:text-purple-400"
+                >
+                  Terms of Service
+                </a>
+                , and{' '}
+                <a
+                  href="/refund-and-cancellations"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-purple-500 hover:text-purple-400"
+                >
+                  Refund Policy
+                </a>
+                .
+              </label>
+            </div>
           </div>
 
           <div className="mt-6 text-center">

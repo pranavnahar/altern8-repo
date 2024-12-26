@@ -1,7 +1,9 @@
 import React from "react";
 import { Button } from "../../../../components/ui/button";
 import ky from "ky";
-import { getAuthToken } from "@/utils/helpers";
+import { getAuthToken } from "@/utils/auth-actions";
+import { redirect } from "next/navigation";
+
 function DownloadButton({
   fileName,
   from,
@@ -14,7 +16,6 @@ function DownloadButton({
       budget: `${process.env.NEXT_PUBLIC_API_URL}/rablet-api/projects/${projectID}/tranches/${projectID}/budget-template/`,
       task: `${process.env.NEXT_PUBLIC_API_URL}/rablet-api/projects/${projectID}/tranches/${projectID}/tasks/export/`
     };
-    console.log(APIUrls[from], ';opo')
     try {
       const token = await getAuthToken();
       const response = await ky.get(APIUrls[from], {
@@ -22,20 +23,14 @@ function DownloadButton({
           Authorization: `Bearer ${token}`,
         },
       });
-
-      if (response.status === 401) {
-        throw new Error("Unauthorized");
-      }
       return await response.blob();
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === "Unauthorized") {
-          throw new Error(
-            "You are not authorized to access this resource. Please log in again."
-          );
+          redirect('/login')
         }
         if (error.name === "TimeoutError") {
-          throw new Error("Request timed out");
+          redirect('/login')
         }
       }
       throw error;

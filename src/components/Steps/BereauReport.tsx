@@ -1,10 +1,10 @@
 import { useContext, useState, useEffect } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
 import { useToast } from '../../utils/show-toasts';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -25,41 +25,63 @@ const BureauReport = ({ demo }: Props) => {
   const [otpSent, setOtpSent] = useState(true);
   const [manualBureauReportNeeded, setManualBureauReportNeeded] = useState(false);
   const [entityType, setEntityType] = useState('');
-  console.log(entityType);
   const [otpTimer, setOtpTimer] = useState(60);
   const [documentFiles, setDocumentFiles] = useState<DocumentFiles>({});
   const { showToast } = useToast();
-
-  // Handle token
-  let accessToken = parseCookies().altern8_useraccess || localStorage.getItem('altern8_useraccess');
   const router = useRouter();
-
+  const openInNewTab = (url: string) => {
+    console.log(url, 'url');
+    
+    Object.assign(document.createElement('a'), {
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      href: url,
+    }).click();
+  };
   // handle form input for phone number and otp
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
     setOtpForm({ ...otpForm, [name]: value });
   };
-
-  const GetBureauResponseId = async () => {
+  const getBureauAgreementUrl = async () => {
     try {
-      setLoading(true);
-      //console.log(accessToken); 
-      let response = await fetch(`${apiUrl}/user-api/bureau-report/`, {
-        method: 'POST',
+      if(demo){
+       return alert('You are in demo mode')
+      }
+      let accessToken = await getAuthToken();
+      const response = await fetch(`${apiUrl}/user-api/get-signing-url/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-
-      // if unauthorized then push to login page
       if (response.status === 401) {
         router.push('/login');
       }
+      if (response.ok) {
+        const data = await response.json();
+        openInNewTab(data?.agreement_url);
+      }
+    } catch (err) {
+      showToast({message:'Cannot get Bureau Agreement Url, please try again later!', type:'error'});
+      console.log(err);
+    } finally {
+      // setSpinner(false);
+    }
+  };
+  const GetBureauResponseId = async () => {
+    try {
+      setLoading(true);
+      const token = await getAuthToken()
+      let response = await fetch(`${apiUrl}/user-api/bureau-report/`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log(responseData);
         if (responseData.is_manual_bureau_report_needed) {
           setManualBureauReportNeeded(true);
           if (responseData.entity_type) {
@@ -126,12 +148,13 @@ const BureauReport = ({ demo }: Props) => {
         try {
           if (newRecord) {
             const body = newRecord;
+            const token = await getAuthToken()
             setLoading(true);
             const response = await fetch(`${apiUrl}/scoreme-api/bda/external/validateotp/`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify(body),
             });
@@ -177,10 +200,11 @@ const BureauReport = ({ demo }: Props) => {
 
         try {
           setLoading(true);
+          const token = await getAuthToken()
           const response = await fetch(`${apiUrl}/user-api/upload-bureau-docs/`, {
             method: 'POST',
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${token}`,
             },
             body: formData,
           });
@@ -348,6 +372,31 @@ const BureauReport = ({ demo }: Props) => {
   return (
     <>
       <div className="p-4">
+      {manualBureauReportNeeded && (
+        <div className="">
+          <div className="flex flex-col">
+            <div className="mb-3 mt-2 flex flex-col justify-center">
+              <div className="text-center font-medium text-xl text-gray-300">
+                Document Signature
+              </div>
+              <div className="text-center font-medium text-base text-gray-300">
+                Please sign the below document for fetching Bureau report
+              </div>
+              <div className="text-center font-medium text-base text-gray-300 py-3">
+                <button className="text-[#1565c0]" onClick={getBureauAgreementUrl}>
+                  Click Here
+                </button>
+              </div>
+            </div>
+
+            {/* drag and drop  */}
+            {entityType === 'Partnership' && renderDropzones()}
+            {(entityType === 'Company' ||
+              (entityType !== 'Sole Proprietorship' && entityType !== 'Partnership')) &&
+              renderDropzones()}
+          </div>
+        </div>
+      )}
         <div className="">
           <div className="grid grid-cols-1 gap-6">
             {manualBureauReportNeeded ? (
@@ -387,7 +436,6 @@ const BureauReport = ({ demo }: Props) => {
                 )}
               </div>
             )}
-
             <div className="flex justify-center items-center">
               <button
                 onClick={() => handleClick('next')}

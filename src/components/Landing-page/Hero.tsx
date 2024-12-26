@@ -1,7 +1,9 @@
+"use client"
+
 import React, { useState, useEffect } from 'react';
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { parseCookies } from 'nookies';
+import { getAuthToken, getDynamicRedirectUrl } from '@/utils/auth-actions';
 
 //For Cursor Animation
 const CursorBlinker: React.FC = () => {
@@ -14,7 +16,7 @@ const CursorBlinker: React.FC = () => {
         repeat: Infinity,
         repeatDelay: 0,
         ease: 'linear',
-        times: [0, 0.5, 0.5, 1],
+        times: [0, 0.5, 0.5],
       },
     },
   };
@@ -58,8 +60,8 @@ const TypingAnimation: React.FC = () => {
   useEffect(() => {
     animate(count, 60, {
       type: 'tween',
-      delay: 0.5,
-      duration: 3.0,
+      delay: 0.1,
+      duration: 1.28,
       ease: 'easeIn',
       repeat: Infinity,
       repeatType: 'reverse',
@@ -77,18 +79,24 @@ const TypingAnimation: React.FC = () => {
         }
       },
     });
-  }, [count, textIndex, taglines, updatedThisRound]);
+  }, []);
 
   return <motion.div className="inline">{displayText}</motion.div>;
 };
 
 // main return function
 const HeroSection: React.FC = () => {
-  const cookies = parseCookies();
-  const accessToken = cookies.altern8_useraccess;
+  const [redirectUrl, setRedirectUrl] = useState<string>("/register"); // Default to /register
 
-  // dynamiaclly create a redirection url based on whether user is logged in already or not
-  const redirectUrl = accessToken && accessToken.length > 5 ? '/dashboard' : '/register';
+  useEffect(() => {
+    const fetchRedirectUrl = async () => {
+      const url = await getDynamicRedirectUrl();
+      setRedirectUrl(url);
+    };
+
+    fetchRedirectUrl();
+  }, []);
+
   return (
     <div>
       <div className="max-w-[1320px] h-[300px] mx-auto px-5 sm:px-0 xl:px-0">
@@ -107,7 +115,7 @@ const HeroSection: React.FC = () => {
             {/* Get Credit button link */}
             <Link
               href={redirectUrl}
-              className="relative inline-flex items-center h-[40px] w-[130px] 
+              className="relative inline-flex items-center h-[40px] w-[130px]
                 sm:h-[50px] sm:w-[200px] mt-[300px] sm:mt-[260px] justify-center p-4 px-6 py-3 overflow-hidden
                 font-medium font-roboto text-white-font transition duration-300 ease-out
                 rounded-full group"

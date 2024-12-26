@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -22,9 +22,6 @@ const PAN = ({ demo }: Props) => {
   const { currentStep, setCurrentStep, steps, setLoading, getRegistrationState } =
     useContext(StepperContext);
   const [showInput, setShowInput] = useState(false);
-
-  // Handle token
-  let accessToken = parseCookies().altern8_useraccess;
   const { showToast } = useToast();
 
   // Handle select change
@@ -42,16 +39,12 @@ const PAN = ({ demo }: Props) => {
   const GetPanList = async () => {
     try {
       setLoading(true);
+      const token = await getAuthToken()
       let response = await fetch(`${apiUrl}/user-api/select-pan/`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      // If unauthorized then push to login page
-      if (response.status === 401) {
-        router.push('/login');
-      }
 
       if (response.ok) {
         const responseData = await response.json();
@@ -65,10 +58,16 @@ const PAN = ({ demo }: Props) => {
         'PQRST5678G'
       ])
       } else {
-        console.log('Unable to fetch PAN numbers list');
+        showToast({
+          message: 'Unable to fetch PAN numbers list',
+          type: "error"
+        })
       }
     } catch (error) {
-      console.log(`Unable to fetch PAN numbers list, (${currentStep}) :`, error);
+      showToast({
+        message: `Unable to fetch PAN numbers list, (${currentStep})`,
+        type: "error"
+      })
     } finally {
       setLoading(false);
     }
@@ -85,7 +84,6 @@ const PAN = ({ demo }: Props) => {
     }
   }, []);
 
-  // Handle click on next and back button
   const handleClick = async (direction?: string) => {
     let newStep = currentStep;
 
@@ -115,12 +113,13 @@ const PAN = ({ demo }: Props) => {
       try {
         if (newRecord) {
           const body = newRecord;
+          const token = await getAuthToken()
           setLoading(true);
           const response = await fetch(`${apiUrl}/user-api/select-pan/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(body),
           });
@@ -232,10 +231,9 @@ const PAN = ({ demo }: Props) => {
               </button>
             )}
 
-            {/* Next button */}
             <button
               onClick={() => handleClick('next')}
-              className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
+              className="bg-[#1565c0] text-white  uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
             >
               Next
             </button>

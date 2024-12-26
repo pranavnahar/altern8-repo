@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { Paperclip, Send, X } from 'lucide-react';
 import { useToast } from '../../utils/show-toasts';
-import { getAccessToken } from '../../utils/auth';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { ScrollArea } from '../ui/scroll-area';
 import { IconSend, IconSend2 } from '@tabler/icons-react';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Message = {
   id: number;
@@ -34,7 +33,6 @@ const ChatBox: React.FC<{
   const [file, setFile] = useState<File | null>(null);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  let accessToken = parseCookies().altern8_useraccess;
 
   const formatTimestamp = (timestamp: string | undefined) => {
     if (!timestamp) return ''; // Handle undefined case
@@ -76,35 +74,15 @@ const ChatBox: React.FC<{
     return groups;
   };
 
-  const ReplaceTokenOrRedirect = async () => {
-    const token = await getAccessToken();
-    if (!token) {
-      router.push('/login');
-    } else {
-      accessToken = token;
-    }
-  };
-
   const GetMessage = async () => {
     try {
-      if (!accessToken) {
-        await ReplaceTokenOrRedirect();
-      }
+      const token = await getAuthToken()
 
       let response = await fetch(`${apiUrl}/chat/user/`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      if (response.status === 401) {
-        await ReplaceTokenOrRedirect();
-        response = await fetch(`${apiUrl}/chat/user/`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-      }
 
       if (response.ok) {
         const responseData = await response.json();
@@ -117,7 +95,6 @@ const ChatBox: React.FC<{
           timestamp: msg.timestamp,
         }));
         setMessages(prevMessages => {
-          // Filter out the initial welcome message if we have actual messages
           const filteredPrev =
             prevMessages.length === 1 && prevMessages[0].id === 0 ? [] : prevMessages;
           return [...filteredPrev, ...addMessage];
@@ -140,25 +117,14 @@ const ChatBox: React.FC<{
           formData.append('file', file);
         }
         formData.append('content', newMessage);
-
+        const token = await getAuthToken()
         let response = await fetch(`${apiUrl}/chat/user/`, {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
           body: formData,
         });
-
-        if (response.status === 401) {
-          await ReplaceTokenOrRedirect();
-          response = await fetch(`${apiUrl}/chat/user/`, {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-            body: formData,
-          });
-        }
 
         if (response.ok) {
           setMessages(prev => [
@@ -259,10 +225,12 @@ const ChatBox: React.FC<{
                       }`}
                     >
                       <div className="">{message.text}</div>
-                      {message.file && (
+                      {message.file
+                      
+                      && (
                         <div className="text-gray-400 text-sm mt-1">
                           <a
-                            href={message.file}
+                            href={apiUrl+message.file}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:underline text-blue-400"
@@ -276,7 +244,7 @@ const ChatBox: React.FC<{
                         {formatTimestamp(message.timestamp)}
                       </div>
                       </div>
-                      
+
                     </div>
 
                     {message.sender === 'user' && (

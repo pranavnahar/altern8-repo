@@ -2,11 +2,10 @@
 
 import { useContext, useState, useEffect } from 'react';
 import { StepperContext } from '../../contexts/stepper-context';
-//import HelpAndLogin from "./stepsComponents/HelpAndLogin";
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';
 import HelpAndLogin from '../Step-Component/HelpAndLogin';
+import { getAuthToken } from '@/utils/auth-actions';
 
 type Props = {
   demo: boolean;
@@ -37,16 +36,12 @@ const GST = ({ demo }: Props) => {
   const [otpTimer, setOtpTimer] = useState(10);
   const { showToast } = useToast();
 
-  // Handle token
-  let accessToken = parseCookies().altern8_useraccess;
-
   // handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
 
-  // handle checkbox change for selecting GST number
   const handleChangeInSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     if (checked) {
@@ -59,20 +54,15 @@ const GST = ({ demo }: Props) => {
   const GetGSTINList = async () => {
     try {
       setLoading(true);
+      const token = await getAuthToken()
       let response = await fetch(`${apiUrl}/user-api/gst-list/`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      // if unauthorized then push to login page
-      if (response.status === 401) {
-        router.push('/login');
-      }
-
       if (response.ok) {
         const responseData = await response.json();
-        console.log(responseData);
         if (responseData.data) {
           const gstinNumbers = responseData.data;
           setCurrentGstinList(gstinNumbers);
@@ -86,7 +76,6 @@ const GST = ({ demo }: Props) => {
         }
       } else {
         let responseData = await response.json();
-        console.log('Unable to fetch gst numbers list', responseData);
         setAlreadyHaveGstin(false);
       }
     } catch (error) {
@@ -146,12 +135,13 @@ const GST = ({ demo }: Props) => {
         try {
           if (newRecord) {
             const body = newRecord;
+            const token = await getAuthToken()
             setLoading(true);
             const response = await fetch(`${apiUrl}/scoreme-api/gst/external/gstgenerateotp/`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify(body),
             });
@@ -194,11 +184,12 @@ const GST = ({ demo }: Props) => {
           if (newRecord) {
             const body = newRecord;
             setLoading(true);
+            const token = await getAuthToken()
             const response = await fetch(`${apiUrl}/user-api/ias-gst/`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify(body),
             });
@@ -229,7 +220,6 @@ const GST = ({ demo }: Props) => {
     }
   };
 
-  // to send the otp
   const handleSendOtp = async () => {
     if (demo) {
       setCurrentStep(9);
@@ -243,9 +233,8 @@ const GST = ({ demo }: Props) => {
     }
 
     try {
-      // Set loading to true when starting the fetch
       setLoading(true);
-
+      const token = await getAuthToken()
       let body = {
         otp: userData.otp.trim(),
         gstin: userData.gstNumber.trim(),
@@ -254,7 +243,7 @@ const GST = ({ demo }: Props) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
 
         body: JSON.stringify(body),
@@ -306,7 +295,6 @@ const GST = ({ demo }: Props) => {
       }, 1000);
     }
 
-    // Clear the interval when the component is unmounted or when otpSent becomes false
     return () => clearInterval(intervalId);
   }, [otpSent]);
 
