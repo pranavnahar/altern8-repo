@@ -60,7 +60,9 @@
 import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
 import './globals.css';
-import RootLayoutClient from './RootLayoutClient';
+import { Toaster } from 'sonner'; 
+import { RecoilRoot } from 'recoil';
+import FloatingButton from '../components/Landing-page/FloatingButton';
 
 const figtree = Figtree({ subsets: ['latin'] });
 
@@ -96,18 +98,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        <meta property="og:title" content="Altern8" />
-        <meta property="og:description" content="Explore powerful insights with Altern8." />
-        <meta property="og:image" content="https://i.ibb.co/jG5kpZR/fdb6722792c6.png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:url" content="https://your-domain.com" />
-        <meta property="og:type" content="website" />
-      </head>
-      <body className={figtree.className}>
-        <RootLayoutClient>{children}</RootLayoutClient>
-      </body>
+      <RecoilRoot>
+        <body className={`${figtree.className}`}>
+          {children}
+          <Toaster position="bottom-center" />
+          <FloatingButton />
+        </body>
+      </RecoilRoot>
     </html>
   );
 }
