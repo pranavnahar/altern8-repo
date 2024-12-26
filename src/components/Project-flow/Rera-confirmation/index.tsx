@@ -6,19 +6,9 @@ import { formTemplate } from '../../../utils/static';
 import { useToast } from '../../../utils/show-toasts';
 import Link from 'next/link';
 import { getAuthToken } from '@/utils/auth-actions';
-
-interface formDataType {
-  basicInfo: { [key: string]: string };
-  //   promoterDetails: { [key: string]: string };
-  //   financialTargets: { [key: string]: string };
-  //   plans: { [key: string]: string };
-  //   caCertificateDetails: { [key: string]: string };
-  //   architect: { [key: string]: string };
-  //   engineer: { [key: string]: string };
-  //   allotment: { [key: string]: string };
-  //   lawyerReport: { [key: string]: string };
-  //   contactDetails: { [key: string]: string };
-}
+import { ApiCall } from './action';
+import { BreadcrumbLink } from '@/components/ui/breadcrumb';
+import { formDataType } from './types';
 
 export function ReraConfirmation() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -26,104 +16,310 @@ export function ReraConfirmation() {
   const [activeSection, setActiveSection] = useState(0);
   const [formData, setFormData] = useState<formDataType>({
     basicInfo: {
-      details_of_encumbrances: 'test details',
-      project_name: 'Rera Project Sample changes',
-      rera_reg_no: 'UPRERAPRJ11647',
+      details_of_encumbrances: '',
+      project_name: '',
+      rera_reg_no: '',
       project_type: 'Commercial', // choice field
-      project_registration_date: '2024-10-02',
-      proposed_period: '2024-10-17',
-      original_start_date: '2024-10-17',
-      modified_start_date: '2024-10-17',
-      declared_date_of_completion: '2024-12-26',
-      project_location: 'Delhi',
+      project_registration_date: '',
+      proposed_period: '',
+      original_start_date: '',
+      modified_start_date: '',
+      declared_date_of_completion: '',
+      project_location: '',
     },
-    // promoterDetails: {
-    //   promoter_name: 'Skyline Builders Ltd',
-    //   promoter_applicant_type: 'Corporate',
-    //   promoter_mobile: '+91-9876543210',
-    //   promoter_email: 'contact@skylinebuilders.com',
-    //   promoter_address: '123 Business Street, City Center, New Delhi, India',
-    //   chairman_address: "456 Chairman's Road, Central Business District, New Delhi, India",
-    //   number_of_projects_of_the_promoter: '25',
-    //   total_complaints_against_the_promoter: '3',
-    //   total_no_of_complaints_in_respect_to_this_project: '1',
-    // },
-    // financialTargets: {
-    //   quarter_name: 'Q1 2024',
-    //   target_in_rupees: '5000000',
-    //   achievements: '4500000',
-    // },
-    // plans: {
-    //   waste_disposal_plan:
-    //     'Regular waste collection every Monday and Thursday, with recycling bins placed throughout the site.',
-    //   water_supply_plan:
-    //     'Onsite water storage tanks with a capacity of 50,000 liters, connected to the municipal water supply.',
-    //   electricity_supply_plan:
-    //     'Solar panels to provide 30% of the electricity needs, supplemented by grid power for peak hours.',
-    //   development_work_plan:
-    //     'Completion of foundation work by March 2024, followed by framing and roofing by June 2024.',
-    // },
-    // caCertificateDetails: {
-    //   ca_name: 'John Doe & Associates',
-    //   ca_contact_number: '+91-9123456789',
-    //   ca_email: 'contact@johndoeassociates.com',
-    //   ca_certificate_url: 'https://example.com/certificates/johndoe_ca_cert.pdf',
-    //   ca_total_cost_estimated: '2000000',
-    //   amount_incurred_till_now: '750000',
-    // },
-    // architect: {
-    //   architect_name: 'Jane Smith Architecture',
-    //   architects_certificate: 'https://example.com/certificates/jane_smith_architecture_cert.pdf',
-    //   architects_contact_number: '+91-9876543210',
-    //   architects_email: 'info@janesmitharchitecture.com',
-    //   architects_address: '789 Design Ave, Creative City, New Delhi, India',
-    //   coa_registration_number: 'COA-123456',
-    //   architect_task: 'Design and oversee the construction of residential units in the project.',
-    //   common_areas_and_facilities_amenities:
-    //     "Swimming pool, gym, garden area, and children's play area.",
-    //   proposed: 'Modern design with eco-friendly materials and energy-efficient systems.',
-    //   details: 'The project aims to create sustainable living spaces with ample green areas.',
-    //   percentage_of_work_done: '65',
-    // },
-    // engineer: {
-    //   engineer_name: 'Michael Brown Engineering Solutions',
-    //   engineers_certificate: 'https://example.com/certificates/michael_brown_engineering_cert.pdf',
-    //   engineers_contact_number: '+91-9988776655',
-    //   engineers_email: 'contact@michaelbrownengineering.com',
-    //   engineers_address: '456 Engineering Way, Tech City, Mumbai, India',
-    // },
-    // allotment: {
-    //   villa_no: 'Villa 101',
-    //   saleable_area: '2500',
-    //   allotment_project: 'Green Valley Residential Complex',
-    //   proforma_of_application_form: 'https://example.com/forms/application_form_villa101.pdf',
-    //   proforma_of_allotment_letter: 'https://example.com/letters/allotment_letter_villa101.pdf',
-    //   proforma_of_conveyance_deed: 'https://example.com/deeds/conveyance_deed_villa101.pdf',
-    // },
-    // lawyerReport: {
-    //   lawyer_name: 'Sarah Johnson',
-    //   lawyer_ref_no: 'LAW123456',
-    //   lawyer_contact_number: '+91-9876543210',
-    //   lawyer_email: 'sarah.johnson@lawfirm.com',
-    //   lawyer_address: '789 Legal Lane, Suite 201, New Delhi, India',
-    //   lawyer_certificate: 'https://example.com/certificates/sarah_johnson_certificate.pdf',
-    //   affidavit: 'https://example.com/documents/affidavit_villa101.pdf',
-    //   authentic_copy_of_approval_of_project:
-    //     'https://example.com/documents/project_approval_villa101.pdf',
-    //   legal_document_of_agreement_in_case_of_other_land:
-    //     'https://example.com/documents/legal_agreement_villa101.pdf',
-    // },
-    // contactDetails: {
-    //   project_coordinator_number: '+91-9876543210',
-    //   state: 'Maharashtra',
-    //   district: 'Mumbai',
-    //   tehsil: 'Bandra',
-    // },
+    promoterDetails: {
+      promoter_name: '',
+      promoter_applicant_type: '',
+      promoter_mobile: '',
+      promoter_email: '',
+      promoter_address: '',
+      chairman_address: '',
+      number_of_projects_of_the_promoter: '',
+      total_complaints_against_the_promoter: '',
+      total_no_of_complaints_in_respect_to_this_project: '',
+    },
+    financialTargets: {
+      quarter_name: '',
+      target_in_rupees: '',
+      achievements: '',
+    },
+    plans: {
+      waste_disposal_plan: '',
+      water_supply_plan: '',
+      electricity_supply_plan: '',
+      development_work_plan: '',
+    },
+    caCertificateDetails: {
+      ca_name: '',
+      ca_contact_number: '',
+      ca_email: '',
+      ca_certificate_url: '',
+      ca_total_cost_estimated: '',
+      amount_incurred_till_now: '',
+    },
+    architect: {
+      architect_name: '',
+      architects_certificate: '',
+      architects_contact_number: '',
+      architects_email: '',
+      architects_address: '',
+      coa_registration_number: '',
+      architect_task: '',
+      common_areas_and_facilities_amenities: '',
+      proposed: '',
+      details: '',
+      percentage_of_work_done: '',
+    },
+    engineer: {
+      engineer_name: '',
+      engineers_certificate: '',
+      engineers_contact_number: '',
+      engineers_email: '',
+      engineers_address: '',
+    },
+    allotment: {
+      villa_no: '',
+      saleable_area: '',
+      allotment_project: '',
+      proforma_of_application_form: '',
+      proforma_of_allotment_letter: '',
+      proforma_of_conveyance_deed: '',
+    },
+    lawyerReport: {
+      lawyer_name: '',
+      lawyer_ref_no: '',
+      lawyer_contact_number: '',
+      lawyer_email: '',
+      lawyer_address: '',
+      lawyer_certificate: '',
+      affidavit: '',
+      authentic_copy_of_approval_of_project: '',
+      legal_document_of_agreement_in_case_of_other_land: '',
+    },
+    contactDetails: {
+      project_coordinator_number: '',
+      state: '',
+      district: '',
+      tehsil: '',
+    },
   });
 
   const [showFileUpload, setShowFileUpload] = useState(false);
   const [file, setFile] = useState<File | null>();
   const { showToast } = useToast();
+  useEffect(() => {
+    switch (activeSection) {
+      case 0: {
+        const reraResponse = async () => {
+          const response = await ApiCall('rablet-api/projects/1/rera-template/', 'reraDetails');
+          if (response.error) {
+            showToast({
+              message: response.message,
+              type: 'error',
+            });
+          }
+          setFormData(prev => ({
+            ...prev,
+            basicInfo: {
+              ...prev.basicInfo,
+              ...response.data,
+            },
+          }));
+        };
+        reraResponse();
+        break;
+      }
+      case 1: {
+        const promoterResponse = async () => {
+          const response = await ApiCall(
+            '/rablet-api/projects/1/promoter-details/',
+            'promoterDetails',
+          );
+          if (response.error) {
+            showToast({
+              message: response.message,
+              type: 'error',
+            });
+          }
+          setFormData(prev => ({
+            ...prev,
+            promoterDetails: {
+              ...prev.promoterDetails,
+              ...response.data,
+            },
+          }));
+        };
+        promoterResponse();
+        break;
+      }
+      case 2: {
+        const financialResponse = async () => {
+          const response = await ApiCall(
+            '/rablet-api/projects/1/financial-targets/',
+            'financialTargets',
+          );
+          if (response.error) {
+            showToast({
+              message: response.message,
+              type: 'error',
+            });
+          }
+          setFormData(prev => ({
+            ...prev,
+            financialTargets: {
+              ...prev.financialTargets,
+              ...response.data,
+            },
+          }));
+        };
+        financialResponse();
+        break;
+      }
+      case 3: {
+        const plansResponse = async () => {
+          const response = await ApiCall('/rablet-api/projects/1/plans/', 'planDetails');
+          if (response.error) {
+            showToast({
+              message: response.message,
+              type: 'error',
+            });
+          }
+          setFormData(prev => ({
+            ...prev,
+            plans: {
+              ...prev.plans,
+              ...response.data,
+            },
+          }));
+        };
+        plansResponse();
+        break;
+      }
+      case 4: {
+        const caResponse = async () => {
+          const response = await ApiCall('/rablet-api/projects/1/ca-certificates/', 'caDetails');
+          if (response.error) {
+            showToast({
+              message: response.message,
+              type: 'error',
+            });
+          }
+          setFormData(prev => ({
+            ...prev,
+            caCertificateDetails: {
+              ...prev.caCertificateDetails,
+              ...response.data,
+            },
+          }));
+        };
+        caResponse();
+        break;
+      }
+      case 5: {
+        const architectResponse = async () => {
+          const response = await ApiCall('/rablet-api/projects/1/architect/', 'architectDetails');
+          if (response.error) {
+            showToast({
+              message: response.message,
+              type: 'error',
+            });
+          }
+          setFormData(prev => ({
+            ...prev,
+            architect: {
+              ...prev.architect,
+              ...response.data,
+            },
+          }));
+        };
+        architectResponse();
+        break;
+      }
+      case 6: {
+        const engineerResponse = async () => {
+          const response = await ApiCall('/rablet-api/projects/1/engineer/', 'engineerDetails');
+          if (response.error) {
+            showToast({
+              message: response.message,
+              type: 'error',
+            });
+          }
+          setFormData(prev => ({
+            ...prev,
+            engineer: {
+              ...prev.engineer,
+              ...response.data,
+            },
+          }));
+        };
+        engineerResponse();
+        break;
+      }
+      case 7: {
+        const allotmentResponse = async () => {
+          const response = await ApiCall('/rablet-api/projects/1/allotment/', 'allotmentDetails');
+          if (response.error) {
+            showToast({
+              message: response.message,
+              type: 'error',
+            });
+          }
+          setFormData(prev => ({
+            ...prev,
+            allotment: {
+              ...prev.allotment,
+              ...response.data,
+            },
+          }));
+        };
+        allotmentResponse();
+        break;
+      }
+      case 8: {
+        const lawyerResponse = async () => {
+          const response = await ApiCall('/rablet-api/projects/1/lawyer-report/', 'lawyerDetails');
+          if (response.error) {
+            showToast({
+              message: response.message,
+              type: 'error',
+            });
+          }
+          setFormData(prev => ({
+            ...prev,
+            lawyerReport: {
+              ...prev.lawyerReport,
+              ...response.data,
+            },
+          }));
+        };
+        lawyerResponse();
+        break;
+      }
+      case 9: {
+        const contactResponse = async () => {
+          const response = await ApiCall(
+            '/rablet-api/projects/1/contact-details/',
+            'contactDetails',
+          );
+          if (response.error) {
+            showToast({
+              message: response.message,
+              type: 'error',
+            });
+          }
+          setFormData(prev => ({
+            ...prev,
+            contactDetails: {
+              ...prev.contactDetails,
+              ...response.data,
+            },
+          }));
+        };
+        contactResponse();
+        break;
+      }
+    }
+  }, [activeSection]);
 
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -141,7 +337,7 @@ export function ReraConfirmation() {
   };
 
   const handleNext = () => {
-    if (activeSection < 5) {
+    if (activeSection < formTemplate.length - 1) {
       setActiveSection(prev => prev + 1);
     }
   };
@@ -203,15 +399,15 @@ export function ReraConfirmation() {
       if (response.ok) {
         setFormData({
           basicInfo: {},
-          //   promoterDetails: {},
-          //   financialTargets: {},
-          //   plans: {},
-          //   caCertificateDetails: {},
-          //   architect: {},
-          //   engineer: {},
-          //   allotment: {},
-          //   lawyerReport: {},
-          //   contactDetails: {},
+          promoterDetails: {},
+          financialTargets: {},
+          plans: {},
+          caCertificateDetails: {},
+          architect: {},
+          engineer: {},
+          allotment: {},
+          lawyerReport: {},
+          contactDetails: {},
         });
         setFile(null);
         showToast({
@@ -313,7 +509,6 @@ export function ReraConfirmation() {
                 type="button"
                 className="p-2  w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] "
                 onClick={handleNext}
-                disabled={activeSection == formTemplate.length}
               >
                 Next
               </button>
