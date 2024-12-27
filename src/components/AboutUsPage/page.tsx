@@ -59,7 +59,7 @@ const AboutUs: FC = () => {
     },
     {
       image: '/advisors/Simon_Ng_Yu_Sum.png',
-      name: 'Yu Sum Simon Ng',
+      name: 'Yu\u00A0Sum Simon Ng',
       position: 'Economic Foreign Policy Analyst',
       location: 'Ontario, Canada',
     },
@@ -71,7 +71,7 @@ const AboutUs: FC = () => {
     },
     {
       image: '/advisors/alain-min.png',
-      name: 'Alain S',
+      name: 'Alain\u00A0S',
       position: 'CFO, Burger King Europe',
       location: 'Zug, Switzerland',
     },
@@ -107,7 +107,7 @@ const AboutUs: FC = () => {
     },
     {
       image: '/advisors/kai_roer-min.png',
-      name: 'Kai Roer',
+      name: 'Kai\u00A0Roer',
       position: 'CEO & Founder at Praxis Security Labs',
       location: 'Oslo, Norway',
     },
@@ -217,7 +217,7 @@ const AboutUs: FC = () => {
                       <h3 className="-mt-3 font-semibold text-md sm:text-base2 md:text-1xl leading-[5px]">
                         {advisor.name.split(' ').slice(1).join(' ') || <br />}
                       </h3>
-                      <p className="text-sm font-medium text-background-black-fade-font">
+                      <p className="text-sm font-normal text-background-black-fade-font">
                         {advisor.position}
                       </p>
                       <p className="text-xs font-medium text-background-black-fade-font">
@@ -249,33 +249,7 @@ const AboutUs: FC = () => {
           </div>
         </div>
 
-        <section className="py-16 px-14">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-8">
-            <div className="w-full text-center">
-              <h2 className="text-5xl text-center font-semibold mb-12">Meet Our Team</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {teams.map((team, index) => (
-                  <div key={index} className="flex flex-col items-center">
-                    <motion.div
-                      whileHover={{ scale: 1.06 }} 
-                      transition={{ duration: 0.45 }} 
-                      className="flex flex-col items-center"
-                    >
-                      <img
-                        src={team.image}
-                        alt={team.name}
-                        className="object-cover w-28 h-28 rounded-full"
-                      />
-                      <h3 className="text-[13px] font-semibold text-center w-full leading-[18px] mt-2">
-                        {team.name}
-                      </h3>
-                    </motion.div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        
         <JoinUsSection />
         <Footer />
         </ClothUnrollEffect>
