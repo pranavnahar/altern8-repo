@@ -26,8 +26,8 @@ export async function getSanctionedLimit(): Promise<number> {
       }
     };
 
-    let limit = await fetchLimit(token);
-    return limit;
+    let limit = await fetchLimit(token!)
+    return limit
   } catch (error) {
     redirect('/login');
   }
