@@ -53,6 +53,7 @@ export async function fetchBorrowersUids(timeoutMs = 60000) {
 }
 
 export async function createProject(formData: FormData) {
+  console.log(formData);
   try {
     const token = await getAuthToken();
     const response = await fetch(`${process.env.SERVER_URL}/rablet-api/projects/`, {
@@ -143,23 +144,21 @@ export async function initiateEmudraFlow(
   }
 }
 
-
-
 export async function checkEsignStatus(projectIds: number[]): Promise<EsignResponse> {
   const token = await getAuthToken();
 
   try {
-    console.log("The call was made to this API with these project IDs:", projectIds);
+    console.log('The call was made to this API with these project IDs:', projectIds);
 
     const body = {
-      projectId: projectIds
+      projectId: projectIds,
     };
 
     const response = await fetch(`${process.env.SERVER_URL}/emudhra-api/checkEsignStatus/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(body),
     });
@@ -168,16 +167,22 @@ export async function checkEsignStatus(projectIds: number[]): Promise<EsignRespo
       throw new Error(`API request failed with status ${response.status}`);
     }
 
-    const data: Record<string, { workflow_status: string | null; url: string | null }> = await response.json();
+    const data: Record<string, { workflow_status: string | null; url: string | null }> =
+      await response.json();
 
-    const parsedData: EsignStatus[] = Object.entries(data).map(([projectId, { workflow_status, url }]) => ({
-      projectId: parseInt(projectId, 10),
-      workflow_status, // Include if required by your type
-      status: workflow_status === null || workflow_status === "incomplete" ? "not started" : workflow_status,
-      url: url || null,
-    }));
+    const parsedData: EsignStatus[] = Object.entries(data).map(
+      ([projectId, { workflow_status, url }]) => ({
+        projectId: parseInt(projectId, 10),
+        workflow_status, // Include if required by your type
+        status:
+          workflow_status === null || workflow_status === 'incomplete'
+            ? 'not started'
+            : workflow_status,
+        url: url || null,
+      }),
+    );
 
-    console.log("Parsed project statuses:", parsedData);
+    console.log('Parsed project statuses:', parsedData);
 
     return { success: true, data: parsedData };
   } catch (error) {
@@ -185,7 +190,6 @@ export async function checkEsignStatus(projectIds: number[]): Promise<EsignRespo
     return { success: false, data: [], error: (error as Error).message };
   }
 }
-
 
 export async function checkAuthentication() {
   try {
