@@ -6,13 +6,15 @@ import { formTemplate } from '../../../utils/static';
 import { useToast } from '../../../utils/show-toasts';
 import Link from 'next/link';
 import { getAuthToken } from '@/utils/auth-actions';
-import { ApiCall } from './action';
+import { getApiCall, patchApiCall } from './action';
 import { BreadcrumbLink } from '@/components/ui/breadcrumb';
 import { formDataType } from './types';
+import { Loader2 } from 'lucide-react';
 
 export function ReraConfirmation() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
   const [formData, setFormData] = useState<formDataType>({
     basicInfo: {
@@ -108,10 +110,11 @@ export function ReraConfirmation() {
   const [file, setFile] = useState<File | null>();
   const { showToast } = useToast();
   useEffect(() => {
+    setIsLoading(true);
     switch (activeSection) {
       case 0: {
         const reraResponse = async () => {
-          const response = await ApiCall('rablet-api/projects/1/rera-template/', 'reraDetails');
+          const response = await getApiCall('rablet-api/projects/1/rera-template/', 'reraDetails');
           if (response.error) {
             showToast({
               message: response.message,
@@ -131,7 +134,7 @@ export function ReraConfirmation() {
       }
       case 1: {
         const promoterResponse = async () => {
-          const response = await ApiCall(
+          const response = await getApiCall(
             '/rablet-api/projects/1/promoter-details/',
             'promoterDetails',
           );
@@ -154,7 +157,7 @@ export function ReraConfirmation() {
       }
       case 2: {
         const financialResponse = async () => {
-          const response = await ApiCall(
+          const response = await getApiCall(
             '/rablet-api/projects/1/financial-targets/',
             'financialTargets',
           );
@@ -177,7 +180,7 @@ export function ReraConfirmation() {
       }
       case 3: {
         const plansResponse = async () => {
-          const response = await ApiCall('/rablet-api/projects/1/plans/', 'planDetails');
+          const response = await getApiCall('/rablet-api/projects/1/plans/', 'planDetails');
           if (response.error) {
             showToast({
               message: response.message,
@@ -197,7 +200,7 @@ export function ReraConfirmation() {
       }
       case 4: {
         const caResponse = async () => {
-          const response = await ApiCall('/rablet-api/projects/1/ca-certificates/', 'caDetails');
+          const response = await getApiCall('/rablet-api/projects/1/ca-certificates/', 'caDetails');
           if (response.error) {
             showToast({
               message: response.message,
@@ -217,7 +220,10 @@ export function ReraConfirmation() {
       }
       case 5: {
         const architectResponse = async () => {
-          const response = await ApiCall('/rablet-api/projects/1/architect/', 'architectDetails');
+          const response = await getApiCall(
+            '/rablet-api/projects/1/architect/',
+            'architectDetails',
+          );
           if (response.error) {
             showToast({
               message: response.message,
@@ -237,7 +243,7 @@ export function ReraConfirmation() {
       }
       case 6: {
         const engineerResponse = async () => {
-          const response = await ApiCall('/rablet-api/projects/1/engineer/', 'engineerDetails');
+          const response = await getApiCall('/rablet-api/projects/1/engineer/', 'engineerDetails');
           if (response.error) {
             showToast({
               message: response.message,
@@ -257,7 +263,10 @@ export function ReraConfirmation() {
       }
       case 7: {
         const allotmentResponse = async () => {
-          const response = await ApiCall('/rablet-api/projects/1/allotment/', 'allotmentDetails');
+          const response = await getApiCall(
+            '/rablet-api/projects/1/allotment/',
+            'allotmentDetails',
+          );
           if (response.error) {
             showToast({
               message: response.message,
@@ -277,7 +286,10 @@ export function ReraConfirmation() {
       }
       case 8: {
         const lawyerResponse = async () => {
-          const response = await ApiCall('/rablet-api/projects/1/lawyer-report/', 'lawyerDetails');
+          const response = await getApiCall(
+            '/rablet-api/projects/1/lawyer-report/',
+            'lawyerDetails',
+          );
           if (response.error) {
             showToast({
               message: response.message,
@@ -297,7 +309,7 @@ export function ReraConfirmation() {
       }
       case 9: {
         const contactResponse = async () => {
-          const response = await ApiCall(
+          const response = await getApiCall(
             '/rablet-api/projects/1/contact-details/',
             'contactDetails',
           );
@@ -319,6 +331,7 @@ export function ReraConfirmation() {
         break;
       }
     }
+    setIsLoading(false);
   }, [activeSection]);
 
   const onChange = (
@@ -337,9 +350,222 @@ export function ReraConfirmation() {
   };
 
   const handleNext = () => {
+    setIsLoading(true);
     if (activeSection < formTemplate.length - 1) {
       setActiveSection(prev => prev + 1);
     }
+
+    //depending on which formtemplate is called api call is made accordingly
+    switch (activeSection) {
+      case 0: {
+        const reraResponse = async () => {
+          const response = await patchApiCall(
+            'rablet-api/projects/1/rera-template/',
+            formData.basicInfo,
+          );
+          if (response.error) {
+            showToast({
+              message: response.message,
+              type: 'error',
+            });
+            return;
+          }
+          showToast({
+            message: response?.message,
+            type: 'success',
+          });
+        };
+        reraResponse();
+        break;
+      }
+      case 1: {
+        const promoterResponse = async () => {
+          const response = await patchApiCall(
+            '/rablet-api/projects/1/promoter-details/',
+            formData.promoterDetails,
+          );
+          if (response.error) {
+            showToast({
+              message: response?.message,
+              type: 'error',
+            });
+            return;
+          }
+          showToast({
+            message: response?.message,
+            type: 'success',
+          });
+        };
+        promoterResponse();
+        break;
+      }
+      case 2: {
+        const financialResponse = async () => {
+          const response = await patchApiCall(
+            '/rablet-api/projects/1/financial-targets/',
+            formData.financialTargets,
+          );
+          if (response.error) {
+            showToast({
+              message: response?.message,
+              type: 'error',
+            });
+            return;
+          }
+          showToast({
+            message: response?.message,
+            type: 'success',
+          });
+        };
+        financialResponse();
+        break;
+      }
+      case 3: {
+        const plansResponse = async () => {
+          const response = await patchApiCall('/rablet-api/projects/1/plans/', formData.plans);
+          if (response.error) {
+            showToast({
+              message: response?.message,
+              type: 'error',
+            });
+            return;
+          }
+          showToast({
+            message: response?.message,
+            type: 'success',
+          });
+        };
+        plansResponse();
+        break;
+      }
+      case 4: {
+        const caResponse = async () => {
+          const response = await patchApiCall(
+            '/rablet-api/projects/1/ca-certificates/',
+            formData.caCertificateDetails,
+          );
+          if (response.error) {
+            showToast({
+              message: response?.message,
+              type: 'error',
+            });
+            return;
+          }
+          showToast({
+            message: response?.message,
+            type: 'success',
+          });
+        };
+        caResponse();
+        break;
+      }
+      case 5: {
+        const architectResponse = async () => {
+          const response = await patchApiCall(
+            '/rablet-api/projects/1/architect/',
+            formData.architect,
+          );
+          if (response.error) {
+            showToast({
+              message: response?.message,
+              type: 'error',
+            });
+            return;
+          }
+          showToast({
+            message: response?.message,
+            type: 'success',
+          });
+        };
+        architectResponse();
+        break;
+      }
+      case 6: {
+        const engineerResponse = async () => {
+          const response = await patchApiCall(
+            '/rablet-api/projects/1/engineer/',
+            formData.engineer,
+          );
+          if (response.error) {
+            showToast({
+              message: response?.message,
+              type: 'error',
+            });
+            return;
+          }
+          showToast({
+            message: response?.message,
+            type: 'success',
+          });
+        };
+        engineerResponse();
+        break;
+      }
+      case 7: {
+        const allotmentResponse = async () => {
+          const response = await patchApiCall(
+            '/rablet-api/projects/1/allotment/',
+            formData.allotment,
+          );
+          if (response.error) {
+            showToast({
+              message: response?.message,
+              type: 'error',
+            });
+            return;
+          }
+          showToast({
+            message: response?.message,
+            type: 'success',
+          });
+        };
+        allotmentResponse();
+        break;
+      }
+      case 8: {
+        const lawyerResponse = async () => {
+          const response = await patchApiCall(
+            '/rablet-api/projects/1/lawyer-report/',
+            formData.lawyerReport,
+          );
+          if (response.error) {
+            showToast({
+              message: response?.message,
+              type: 'error',
+            });
+            return;
+          }
+          showToast({
+            message: response?.message,
+            type: 'success',
+          });
+        };
+        lawyerResponse();
+        break;
+      }
+      case 9: {
+        const contactResponse = async () => {
+          const response = await patchApiCall(
+            '/rablet-api/projects/1/contact-details/',
+            formData.contactDetails,
+          );
+          if (response.error) {
+            showToast({
+              message: response?.message,
+              type: 'error',
+            });
+            return;
+          }
+          showToast({
+            message: response?.message,
+            type: 'success',
+          });
+        };
+        contactResponse();
+        break;
+      }
+    }
+    setIsLoading(false);
   };
 
   const handlePrev = () => {
@@ -489,46 +715,54 @@ export function ReraConfirmation() {
   };
 
   return (
-    <div className="min-h-screen w-full ">
-      <div className="flex justify-between items-center">
-        <form onSubmit={saveReraTemplate}>
-          <div className="p-6 w-full grid grid-cols-3 ">
-            {formTemplate[activeSection].template.map(item => renderFormField(item))}
+    <>
+      {isLoading ? (
+        <div className="w-full h-96 mt-28 bg-white/10 flex justify-center items-center">
+          <Loader2 className="h-10 w-10 animate-spin text-white" />
+        </div>
+      ) : (
+        <div className="w-full ">
+          <div className="flex justify-between items-center">
+            <form onSubmit={saveReraTemplate}>
+              <div className="p-6 w-full grid grid-cols-3 ">
+                {formTemplate[activeSection].template.map(item => renderFormField(item))}
+              </div>
+              {formTemplate && (
+                <div className="w-full px-6 py-4 flex justify-between ">
+                  <button
+                    type="button"
+                    className="p-2  w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] "
+                    onClick={handlePrev}
+                    disabled={activeSection == 0}
+                  >
+                    Previous
+                  </button>
+                  <button
+                    type="button"
+                    className="p-2  w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] "
+                    onClick={handleNext}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+              {
+                //whenever active seciton is at the last element than only submit will get enabled
+                formTemplate.length == activeSection && (
+                  <Link href={`/project-verification/1?tab=legal-flow`}>
+                    <button
+                      type="submit"
+                      className="p-2 mx-auto w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] flex item-center justify-center"
+                    >
+                      Submit
+                    </button>
+                  </Link>
+                )
+              }
+            </form>
           </div>
-          {formTemplate && (
-            <div className="w-full px-6 py-4 flex justify-between ">
-              <button
-                type="button"
-                className="p-2  w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] "
-                onClick={handlePrev}
-                disabled={activeSection == 0}
-              >
-                Previous
-              </button>
-              <button
-                type="button"
-                className="p-2  w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] "
-                onClick={handleNext}
-              >
-                Next
-              </button>
-            </div>
-          )}
-          {
-            //whenever active seciton is at the last element than only submit will get enabled
-            formTemplate.length == activeSection && (
-              <Link href={`/project-verification/1?tab=legal-flow`}>
-                <button
-                  type="submit"
-                  className="p-2 mx-auto w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] flex item-center justify-center"
-                >
-                  Submit
-                </button>
-              </Link>
-            )
-          }
-        </form>
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }

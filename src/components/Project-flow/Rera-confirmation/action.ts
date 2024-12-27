@@ -13,7 +13,8 @@ import {
 } from './types';
 import { error } from 'console';
 
-export const ApiCall = async (url: string, templateName: string) => {
+//get api calls
+export const getApiCall = async (url: string, templateName: string) => {
   try {
     const token = await getAuthToken();
     const response = await fetch(`${process.env.SERVER_URL}/${url}`, {
@@ -44,7 +45,6 @@ export const ApiCall = async (url: string, templateName: string) => {
         break;
       case 'promoterDetails':
         data = (await response.json()) as promoterDetailsResponse;
-        console.log(data);
         return {
           error: false,
           message: 'Data fetched successfully!',
@@ -134,6 +134,42 @@ export const ApiCall = async (url: string, templateName: string) => {
       error: true,
       message: 'Something went wrong. Please try again',
       data: null,
+    };
+  }
+};
+
+//patch api calls
+export const patchApiCall = async (url: string, userData: { [key: string]: string }) => {
+  try {
+    console.log('-----------ERROR_____');
+    console.log(`${process.env.SERVER_URL}/${url}`);
+    console.log(userData);
+    const token = await getAuthToken();
+    const response = await fetch(`${process.env.SERVER_URL}/${url}`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+    console.log('---------RESPONSE-------');
+    console.log(response);
+    if (!response.ok) {
+      const errData = await response.json();
+      return {
+        error: true,
+        message: 'Your data could not be updated.',
+      };
+    }
+    return {
+      error: false,
+      message: 'Your data is updated successfully!',
+    };
+  } catch (error) {
+    return {
+      error: true,
+      message: 'Something went wrong. Please try again',
     };
   }
 };
