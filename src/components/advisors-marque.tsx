@@ -102,8 +102,7 @@ const categories = [
   },
 ];
 
-const firstRow = categories.slice(0, categories.length / 2);
-const secondRow = categories.slice(categories.length / 2);
+
 
 const CategoryCard = ({
   title,
@@ -141,12 +140,7 @@ export function MarqueeDemo() {
   return (
     <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-lg  bg-background ">
       <Marquee pauseOnHover className="[--duration:20s]">
-        {firstRow.map((category, index) => (
-          <CategoryCard key={index} {...category} />
-        ))}
-      </Marquee>
-      <Marquee reverse pauseOnHover className="[--duration:20s]">
-        {secondRow.map((category, index) => (
+        {categories.map((category, index) => (
           <CategoryCard key={index} {...category} />
         ))}
       </Marquee>
