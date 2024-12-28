@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { getAuthToken } from '@/utils/auth-actions';
 import { getApiCall, patchApiCall } from './action';
 import { BreadcrumbLink } from '@/components/ui/breadcrumb';
-import { formDataType } from './types';
+import { formDataType, reraDetailsResponse } from './types';
 import { Loader2 } from 'lucide-react';
 
 export function ReraConfirmation() {
@@ -121,11 +121,13 @@ export function ReraConfirmation() {
               type: 'error',
             });
           }
+          //form field without file property
+          const { file, user, ...responseWithoutFile } = response.data;
           setFormData(prev => ({
             ...prev,
             basicInfo: {
               ...prev.basicInfo,
-              ...response.data,
+              ...responseWithoutFile,
             },
           }));
         };
@@ -158,7 +160,7 @@ export function ReraConfirmation() {
       case 2: {
         const financialResponse = async () => {
           const response = await getApiCall(
-            '/rablet-api/projects/1/financial-targets/',
+            'rablet-api/projects/1/financial-targets/',
             'financialTargets',
           );
           if (response.error) {
@@ -167,6 +169,7 @@ export function ReraConfirmation() {
               type: 'error',
             });
           }
+          //form field without file property
           setFormData(prev => ({
             ...prev,
             financialTargets: {
@@ -349,7 +352,28 @@ export function ReraConfirmation() {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const requiredFields = [
+      // { field: 'user_id', label: 'User ID' },
+      { field: 'project_name', label: 'Project Name' },
+      { field: 'project_type', label: 'Project Type' },
+      { field: 'original_start_date', label: 'Original Start Date' },
+      { field: 'declared_date_of_completion', label: 'Declared Date of Completion' },
+      { field: 'project_location', label: 'Project Location' },
+    ];
+
+    for (const { field, label } of requiredFields) {
+      const value = formData.basicInfo[field];
+      if (!value || value.trim() === '') {
+        console.log('some fields were missing, need to be entered');
+        showToast({
+          message: `Please enter ${label}`,
+          type: 'warning',
+        });
+        return;
+      }
+    }
     setIsLoading(true);
     if (activeSection < formTemplate.length - 1) {
       setActiveSection(prev => prev + 1);
@@ -371,7 +395,7 @@ export function ReraConfirmation() {
             return;
           }
           showToast({
-            message: response?.message,
+            message: 'RERA Details is updated successfully!',
             type: 'success',
           });
         };
@@ -392,7 +416,7 @@ export function ReraConfirmation() {
             return;
           }
           showToast({
-            message: response?.message,
+            message: 'Promoter Details Updated Successfully!',
             type: 'success',
           });
         };
@@ -413,7 +437,7 @@ export function ReraConfirmation() {
             return;
           }
           showToast({
-            message: response?.message,
+            message: 'Financial Targets Updated Successfully!',
             type: 'success',
           });
         };
@@ -431,7 +455,7 @@ export function ReraConfirmation() {
             return;
           }
           showToast({
-            message: response?.message,
+            message: 'Plan Details Updated Successfully!',
             type: 'success',
           });
         };
@@ -452,7 +476,7 @@ export function ReraConfirmation() {
             return;
           }
           showToast({
-            message: response?.message,
+            message: 'CA Details Updated Successfully!',
             type: 'success',
           });
         };
@@ -473,7 +497,7 @@ export function ReraConfirmation() {
             return;
           }
           showToast({
-            message: response?.message,
+            message: 'Architect Details Updated Successfully!',
             type: 'success',
           });
         };
@@ -494,7 +518,7 @@ export function ReraConfirmation() {
             return;
           }
           showToast({
-            message: response?.message,
+            message: 'Engineer Details  Updated Successfully!',
             type: 'success',
           });
         };
@@ -515,7 +539,7 @@ export function ReraConfirmation() {
             return;
           }
           showToast({
-            message: response?.message,
+            message: 'Allotment Details Updated Successfully!',
             type: 'success',
           });
         };
@@ -536,7 +560,7 @@ export function ReraConfirmation() {
             return;
           }
           showToast({
-            message: response?.message,
+            message: 'Lawyer Details Updated Successfully!',
             type: 'success',
           });
         };
@@ -557,7 +581,7 @@ export function ReraConfirmation() {
             return;
           }
           showToast({
-            message: response?.message,
+            message: 'Contact Details Updated Successfully!',
             type: 'success',
           });
         };
@@ -574,80 +598,80 @@ export function ReraConfirmation() {
     }
   };
 
-  const saveReraTemplate = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log('submitting the form');
+  // const saveReraTemplate = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   console.log('submitting the form');
 
-    try {
-      const token = await getAuthToken();
+  //   try {
+  //     const token = await getAuthToken();
 
-      const formDataToSend = new FormData();
+  //     const formDataToSend = new FormData();
 
-      if (file) {
-        formDataToSend.append('file', file);
-      } else {
-        const requiredFields = [
-          { field: 'user_id', label: 'User ID' },
-          { field: 'project_name', label: 'Project Name' },
-          { field: 'project_type', label: 'Project Type' },
-          { field: 'original_start_date', label: 'Original Start Date' },
-          { field: 'declared_date_of_completion', label: 'Declared Date of Completion' },
-          { field: 'project_location', label: 'Project Location' },
-        ];
+  //     if (file) {
+  //       formDataToSend.append('file', file);
+  //     } else {
+  //       const requiredFields = [
+  //         // { field: 'user_id', label: 'User ID' },
+  //         { field: 'project_name', label: 'Project Name' },
+  //         { field: 'project_type', label: 'Project Type' },
+  //         { field: 'original_start_date', label: 'Original Start Date' },
+  //         { field: 'declared_date_of_completion', label: 'Declared Date of Completion' },
+  //         { field: 'project_location', label: 'Project Location' },
+  //       ];
 
-        for (const { field, label } of requiredFields) {
-          const value = formData.basicInfo[field];
-          if (!value || value.trim() === '') {
-            console.log('some fields were missing, need to be entered');
-            showToast({
-              message: `Please enter ${label}`,
-              type: 'warning',
-            });
-            return;
-          }
-        }
-      }
+  //       for (const { field, label } of requiredFields) {
+  //         const value = formData.basicInfo[field];
+  //         if (!value || value.trim() === '') {
+  //           console.log('some fields were missing, need to be entered');
+  //           showToast({
+  //             message: `Please enter ${label}`,
+  //             type: 'warning',
+  //           });
+  //           return;
+  //         }
+  //       }
+  //     }
 
-      const formDataHeaders = {
-        Authorization: `Bearer ${token}`,
-      };
-      const defaultHeaders = {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      };
+  //     const formDataHeaders = {
+  //       Authorization: `Bearer ${token}`,
+  //     };
+  //     const defaultHeaders = {
+  //       Authorization: `Bearer ${token}`,
+  //       'Content-Type': 'application/json',
+  //     };
 
-      const response = await fetch(`${apiUrl}/rera-api/rera-templates/`, {
-        method: 'POST',
-        headers: file ? formDataHeaders : defaultHeaders,
-        body: file ? formDataToSend : JSON.stringify(formData),
-      });
+  //     const response = await fetch(`${apiUrl}/rera-api/rera-templates/`, {
+  //       method: 'POST',
+  //       headers: file ? formDataHeaders : defaultHeaders,
+  //       body: file ? formDataToSend : JSON.stringify(formData),
+  //     });
 
-      if (response.ok) {
-        setFormData({
-          basicInfo: {},
-          promoterDetails: {},
-          financialTargets: {},
-          plans: {},
-          caCertificateDetails: {},
-          architect: {},
-          engineer: {},
-          allotment: {},
-          lawyerReport: {},
-          contactDetails: {},
-        });
-        setFile(null);
-        showToast({
-          message: 'File and all the data uploaded successfully!',
-          type: 'success',
-        });
-      }
-    } catch (err) {
-      showToast({
-        message: 'Error! Something went wrong.',
-        type: 'warning',
-      });
-    }
-  };
+  //     if (response.ok) {
+  //       setFormData({
+  //         basicInfo: {},
+  //         promoterDetails: {},
+  //         financialTargets: {},
+  //         plans: {},
+  //         caCertificateDetails: {},
+  //         architect: {},
+  //         engineer: {},
+  //         allotment: {},
+  //         lawyerReport: {},
+  //         contactDetails: {},
+  //       });
+  //       setFile(null);
+  //       showToast({
+  //         message: 'File and all the data uploaded successfully!',
+  //         type: 'success',
+  //       });
+  //     }
+  //   } catch (err) {
+  //     showToast({
+  //       message: 'Error! Something went wrong.',
+  //       type: 'warning',
+  //     });
+  //   }
+  // };
 
   const renderFormField = (item: any) => {
     // Add type checking for item
@@ -723,7 +747,10 @@ export function ReraConfirmation() {
       ) : (
         <div className="w-full ">
           <div className="flex justify-between items-center">
-            <form onSubmit={saveReraTemplate}>
+            <form onSubmit={handleNext}>
+              <div className="w-full flex justify-center items-center mt-3">
+                <h2 className="text-gray-200 text-2xl">{formTemplate[activeSection]?.title}</h2>
+              </div>
               <div className="p-6 w-full grid grid-cols-3 ">
                 {formTemplate[activeSection].template.map(item => renderFormField(item))}
               </div>
@@ -738,9 +765,8 @@ export function ReraConfirmation() {
                     Previous
                   </button>
                   <button
-                    type="button"
+                    type="submit"
                     className="p-2  w-24 bg-[#1565c0] text-white rounded-3xl m-l-[30px] "
-                    onClick={handleNext}
                   >
                     Next
                   </button>
@@ -748,7 +774,7 @@ export function ReraConfirmation() {
               )}
               {
                 //whenever active seciton is at the last element than only submit will get enabled
-                formTemplate.length == activeSection && (
+                formTemplate.length - 1 == activeSection && (
                   <Link href={`/project-verification/1?tab=legal-flow`}>
                     <button
                       type="submit"

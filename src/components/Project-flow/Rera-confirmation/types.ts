@@ -23,8 +23,6 @@ export interface reraDetailsResponse {
   declared_date_of_completion: string;
   project_location: string;
   commencement_certificate: string;
-  file: string;
-  user: string;
 }
 
 export interface promoterDetailsResponse {
@@ -40,6 +38,14 @@ export interface promoterDetailsResponse {
   total_no_of_complaints_in_respect_to_this_project: number;
   rera: number;
 }
+export interface FinancialDetailsResponse {
+  id: number;
+  quarter_name: string;
+  target_in_rupees: number;
+  achievements: number;
+  rera: number;
+}
+
 export interface planDetailResponse {
   id: number;
   waste_disposal_plan: string;

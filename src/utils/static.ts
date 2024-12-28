@@ -191,7 +191,7 @@ export const formTemplate = [
         name: 'quarter_name',
         placeholder: 'Quarter Name',
         required: false,
-        formData: 'finacialTargets',
+        formData: 'financialTargets',
       },
       {
         type: 'number',
@@ -199,7 +199,7 @@ export const formTemplate = [
         name: 'target_in_rupees',
         placeholder: 'Target in Rupees',
         required: false,
-        formData: 'finacialTargets',
+        formData: 'financialTargets',
       },
       {
         type: 'number',
@@ -207,7 +207,7 @@ export const formTemplate = [
         name: 'achievements',
         placeholder: 'Achievement',
         required: false,
-        formData: 'finacialTargets',
+        formData: 'financialTargets',
       },
     ],
   },
@@ -440,7 +440,7 @@ export const formTemplate = [
     ],
   },
   {
-    tilte: 'Allotment Details',
+    title: 'Allotment Details',
     template: [
       {
         type: 'text',

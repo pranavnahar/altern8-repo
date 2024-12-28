@@ -10,6 +10,7 @@ import {
   allotmentDetailsResponse,
   lawyerDetailsResponse,
   contactDetailsResponse,
+  FinancialDetailsResponse,
 } from './types';
 import { error } from 'console';
 
@@ -55,7 +56,7 @@ export const getApiCall = async (url: string, templateName: string) => {
         //financialTargets api not working
         //error response sometimes it comes as details and sometimes it comes as error in respnose
         //add a response type
-        data = await response.json();
+        data = (await response.json()) as FinancialDetailsResponse;
         return {
           error: false,
           message: 'Data fetched successfully!',
@@ -141,9 +142,6 @@ export const getApiCall = async (url: string, templateName: string) => {
 //patch api calls
 export const patchApiCall = async (url: string, userData: { [key: string]: string }) => {
   try {
-    console.log('-----------ERROR_____');
-    console.log(`${process.env.SERVER_URL}/${url}`);
-    console.log(userData);
     const token = await getAuthToken();
     const response = await fetch(`${process.env.SERVER_URL}/${url}`, {
       method: 'PATCH',
@@ -153,8 +151,6 @@ export const patchApiCall = async (url: string, userData: { [key: string]: strin
       },
       body: JSON.stringify(userData),
     });
-    console.log('---------RESPONSE-------');
-    console.log(response);
     if (!response.ok) {
       const errData = await response.json();
       return {
