@@ -62,7 +62,10 @@ export function FoundersSection() {
       }}
     >
       <div className="container mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-300">Meet Our Team</h2>
+        <h2 className="text-3xl font-bold text-center mb-8 ">Meet Our Team</h2>
+        <p className="text-sm font-normal text-center text-gray-400 leading-relaxed mx-auto max-w-xl">
+              A group of passionate individuals committed to pushing the boundaries of conscious capitalism, blending purpose with profit, and driving positive impact in everything we do.
+              </p>
 
         <section className="py-16 px-14">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-8">
