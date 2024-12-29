@@ -80,12 +80,12 @@ const RefundAndCancellations: FC = () => {
           <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-md px-6">
             <p className={contentClassName}>
               The Terms and Conditions contained herein shall apply to any person (“User”) using the
-              services of Ekarth Ventures Private Limited (“Altern8 Club”) and its Affiliates for
+              services of Ekarth Ventures Private Limited (“Altern8”) and its Affiliates for
               making payments through an online payment gateway service offered by various payment
-              service providers (“Payment Service Provider(s)”), through the Altern8 Club portal
+              service providers (“Payment Service Provider(s)”), through the Altern8 portal
               hosted at <strong> {domainName} </strong>.(“Website”). Each User is therefore deemed
               to have read and accepted these Terms and Conditions. Any notice, intimation or
-              communication to be made to Altern8 Club under this policy shall be made to{' '}
+              communication to be made to Altern8 under this policy shall be made to{' '}
               <strong> blend@nahar.om </strong>.
             </p>
 
@@ -102,9 +102,9 @@ const RefundAndCancellations: FC = () => {
               </p>
               <p className={contentClassName}>
                 1.2 In the event there is any claim for/ of charge back by the User for any reason
-                whatsoever, such user shall immediately intimate Altern8 Club of the same. Such
-                refund (if any) shall be effected by Altern8 Club via payment gateway or such other
-                means as Altern8 Club, deems appropriate. No claims for refund/chargeback shall be
+                whatsoever, such user shall immediately intimate Altern8 of the same. Such
+                refund (if any) shall be effected by Altern8 via payment gateway or such other
+                means as Altern8, deems appropriate. No claims for refund/chargeback shall be
                 made by any User to the Payment Service Provider(s) and in the event such claim is
                 made it shall not be entertained.
               </p>
@@ -114,21 +114,21 @@ const RefundAndCancellations: FC = () => {
                   2. Refund for fraudulent/duplicate transaction(s):
                 </h2>
                 <p className={contentClassName}>
-                  2.1 The User shall contact Altern8 Club for any fraudulent transaction(s) on
+                  2.1 The User shall contact Altern8 for any fraudulent transaction(s) on
                   account of misuse of card/ Bank details by a fraudulent individual/party and such
-                  issues shall be suitably addressed by Altern8 Club in line with their policies and
+                  issues shall be suitably addressed by Altern8 in line with their policies and
                   rules.
                 </p>
                 <p className={contentClassName}>
                   2.2 The time required to process a refund may vary depending on factors such as
                   the payment method, financial institution processing times, and the complexity of
                   the refund request. Provided that no refund request in respect of a transaction
-                  settled by Altern8 Club to the final beneficiary will be considered.
+                  settled by Altern8 to the final beneficiary will be considered.
                 </p>
                 <p className={contentClassName}>
-                  2.3 Subject to the above, Altern8 Club will make reasonable efforts to process
+                  2.3 Subject to the above, Altern8 will make reasonable efforts to process
                   refunds within 5-7 business days from the date on which the refund request was
-                  initiated. Once the User's refund request is raised, Altern8 Club will send an
+                  initiated. Once the User's refund request is raised, Altern8 will send an
                   email to notify the User of the approval or rejection of the refund request. If
                   the request is approved, then the User's refund will be processed within 5-7
                   business days from the date on which the request for refund was approved by us.
@@ -147,9 +147,9 @@ const RefundAndCancellations: FC = () => {
                 </p>
                 <p className={contentClassName}>
                   1.2 In the event there is any claim for/ of charge back by the User for any reason
-                  whatsoever, such user shall immediately intimate Altern8 Club of the same. Such
-                  refund (if any) shall be effected by Altern8 Club via payment gateway or such
-                  other means as Altern8 Club, deems appropriate. No claims for refund/chargeback
+                  whatsoever, such user shall immediately intimate Altern8 of the same. Such
+                  refund (if any) shall be effected by Altern8 via payment gateway or such
+                  other means as Altern8, deems appropriate. No claims for refund/chargeback
                   shall be made by any User to the Payment Service Provider(s) and in the event such
                   claim is made it shall not be entertained.
                 </p>
@@ -167,8 +167,8 @@ const RefundAndCancellations: FC = () => {
                 <ol className="list-[lower-alpha] ml-6 list-inside space-y-4">
                   <li className={`${contentClassName} ml-6`}>
                     1. In case the bank account appears to be debited, ensure that he/she does not
-                    make the payment twice and immediately thereafter contact Altern8 Club via
-                    e-mail or any other mode of contact as provided by Altern8 Club to confirm
+                    make the payment twice and immediately thereafter contact Altern8 via
+                    e-mail or any other mode of contact as provided by Altern8 to confirm
                     payment.
                   </li>
                   <li className={`${contentClassName} ml-6`}>
@@ -187,11 +187,11 @@ const RefundAndCancellations: FC = () => {
               <div className="my-10">
                 <h2 className={headingClassName}>4. Cancellation:</h2>
                 <p className={contentClassName}>
-                  4.1 Please contact Altern8 Club via<strong> {domainName} </strong>, or call us
+                  4.1 Please contact Altern8 via<strong> {domainName} </strong>, or call us
                   using the information provided on the Website.
                 </p>
                 <p className={contentClassName}>
-                  4.2 Altern8 Club will revert back to the User regarding Cancellation requests made
+                  4.2 Altern8 will revert back to the User regarding Cancellation requests made
                   within 5 business days from the date of request.
                 </p>
                 <ol className="list-[lower-alpha] ml-6 list-inside space-y-4">
@@ -210,7 +210,7 @@ const RefundAndCancellations: FC = () => {
                     in this regard. These charges are non-refundable.
                   </li>
                   <li className={`${contentClassName} ml-6`}>
-                    In case Altern8 Club fails to open an account within 10 days of submission of
+                    In case Altern8 fails to open an account within 10 days of submission of
                     all the necessary supporting documentation and authorisations by the Patron,
                     such Patrons may request a full refund of all the charges paid towards account
                     opening.
@@ -218,21 +218,21 @@ const RefundAndCancellations: FC = () => {
                   <li className={`${contentClassName} ml-6`}>
                     In case a Patron has paid the charges relating to account opening multiple
                     times, such Patrons are requested to create a ticket via{' '}
-                    <strong>blend@nahar.om</strong>. Upon being so intimated, Altern8 Club shall
+                    <strong>blend@nahar.om</strong>. Upon being so intimated, Altern8 shall
                     initiate the necessary procedure to refund these amounts to the Patron.
                   </li>
                   <li className={`${contentClassName} ml-6`}>
                     In case the account opening fee is paid, but the account has not been activated
                     (a Patron ID and password have not yet been generated), a request to initiate a
-                    refund with a clear reason can be sent by the Patron to Altern8 Club. As the
+                    refund with a clear reason can be sent by the Patron to Altern8. As the
                     account opening fee includes various charges to initiate the account opening
                     process itself, as stated in the first point above, no charges are refunded
-                    automatically. All refund requests will be considered by Altern8 Club on a case
+                    automatically. All refund requests will be considered by Altern8 on a case
                     to case basis.
                     <br />
                     <br />
                     Patrons understand that completion of all refund procedures initiated by Altern8
-                    Club is subject to fulfilment by the relevant third party agencies including
+                    is subject to fulfilment by the relevant third party agencies including
                     banks and payment gateways.
                   </li>
                 </ol>
