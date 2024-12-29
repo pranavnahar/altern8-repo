@@ -1,6 +1,6 @@
 'use client';
 import Header from '../Landing-page/Header';
-import JoinUsSection from '../Landing-page/JoinUsSection';
+import CTASection from '../Landing-page/GetStartedCTA';
 import Footer from '../Landing-page/Footer';
 import FloatingButton from '../Landing-page/FloatingButton';
 import React, {useState, useEffect} from 'react';
@@ -370,7 +370,7 @@ const PrivacyPolicy = () => {
         </div>
       </div>
 
-      <JoinUsSection />
+      <CTASection />
       <Footer />
       <FloatingButton />
       </ClothUnrollEffect>

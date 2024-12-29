@@ -2,7 +2,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import Header from '../Landing-page/Header';
 import Footer from '../Landing-page/Footer';
-import JoinUsSection from '../Landing-page/JoinUsSection';
+import CTASection from '../Landing-page/GetStartedCTA';
 import { ArrowLeftCircle } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -243,7 +243,7 @@ const RefundAndCancellations: FC = () => {
           
         </div>
 
-        <JoinUsSection />
+        <CTASection />
         <Footer />
       </ClothUnrollEffect>
     </div>
