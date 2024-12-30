@@ -59,8 +59,7 @@ export type Product = {
   payment_type: string;
   interest_only_period_in_days: string;
   balloon_payment_after_in_days: string;
-}
-
+};
 
 export interface SummaryResponse {
   count: number;
@@ -69,17 +68,17 @@ export interface SummaryResponse {
   results: SummaryItem[];
 }
 
-
 export type Project = {
   id: number;
   user: string;
   project_name: string;
   project_type: string | null;
-  project_state: string | null,
+  project_state: string | null;
   location: string;
   pin_code: string | null;
   rera_regd_no: string | null;
   start_date: string;
+  expected_completion_date: string;
   current_tranche_name: string | null;
   current_tranche_status: string | null;
   current_project_status: string | null;
@@ -119,7 +118,7 @@ export type Inventory = {
   contingent_sales_count: number;
   contingent_sales_amount: string;
   approved_by_admin: boolean;
-}
+};
 
 export type InventoryResponse = {
   count: number;
@@ -139,4 +138,4 @@ export type EsignResponse = {
   success: boolean;
   data: EsignStatus[];
   error?: string;
-}
+};
