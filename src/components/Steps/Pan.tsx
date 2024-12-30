@@ -231,10 +231,9 @@ const PAN = ({ demo }: Props) => {
               </button>
             )}
 
-            {/* Next button */}
             <button
               onClick={() => handleClick('next')}
-              className="bg-[#1565c0] text-white uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
+              className="bg-[#1565c0] text-white  uppercase py-2 px-4 rounded-xl font-semibold cursor-pointer hover:bg-[#2680e6] hover:text-white transition duration-200 ease-in-out"
             >
               Next
             </button>

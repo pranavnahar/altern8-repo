@@ -105,8 +105,6 @@ const categories = [
   },
 ];
 
-const firstRow = categories.slice(0, categories.length / 2);
-const secondRow = categories.slice(categories.length / 2);
 
 const CategoryCard: React.FC<CategoryCardProps>  = ({ title, description }) => {
   return (
@@ -144,17 +142,13 @@ export function MarqueeDemo() {
         </div>
       </div>
 
-      <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background">
+      <div className="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-background">
         <Marquee pauseOnHover className="[--duration:70s]">
-          {firstRow.map((category, index) => (
+          {categories.map((category, index) => (
             <CategoryCard key={index} {...category} />
           ))}
         </Marquee>
-        <Marquee reverse pauseOnHover className="[--duration:70s]">
-          {secondRow.map((category, index) => (
-            <CategoryCard key={index} {...category} />
-          ))}
-        </Marquee>
+
         <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background dark:from-background"></div>
         <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-background dark:from-background"></div>
       </div>

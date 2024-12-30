@@ -42,7 +42,6 @@ const GST = ({ demo }: Props) => {
     setUserData({ ...userData, [name]: value });
   };
 
-  // handle checkbox change for selecting GST number
   const handleChangeInSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     if (checked) {
@@ -221,7 +220,6 @@ const GST = ({ demo }: Props) => {
     }
   };
 
-  // to send the otp
   const handleSendOtp = async () => {
     if (demo) {
       setCurrentStep(9);
@@ -297,7 +295,6 @@ const GST = ({ demo }: Props) => {
       }, 1000);
     }
 
-    // Clear the interval when the component is unmounted or when otpSent becomes false
     return () => clearInterval(intervalId);
   }, [otpSent]);
 
