@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/dialog';
 import { DirectionAwareHover } from './direction-aware-hover';
 import teams from '../AboutUsPage/constant';
-
 
 export function FoundersSection() {
   const cards = [
@@ -64,8 +63,9 @@ export function FoundersSection() {
       <div className="container mx-auto">
         <h2 className="text-3xl font-bold text-center mb-8 ">Meet Our Team</h2>
         <p className="text-sm font-normal text-center text-gray-400 leading-relaxed mx-auto max-w-xl">
-              A group of passionate individuals committed to pushing the boundaries of conscious capitalism, blending purpose with profit, and driving positive impact in everything we do.
-              </p>
+          A group of passionate individuals committed to pushing the boundaries of conscious
+          capitalism, blending purpose with profit, and driving positive impact in everything we do.
+        </p>
 
         <section className="py-16 px-14">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-8">
@@ -74,8 +74,8 @@ export function FoundersSection() {
                 {teams.map((team, index) => (
                   <div key={index} className="flex flex-col items-center">
                     <motion.div
-                      whileHover={{ scale: 1.06 }} 
-                      transition={{ duration: 0.45 }} 
+                      whileHover={{ scale: 1.06 }}
+                      transition={{ duration: 0.45 }}
                       className="flex flex-col items-center"
                     >
                       <img
@@ -117,27 +117,37 @@ export function FoundersSection() {
                   Our Founding Team's Journey
                 </DialogTitle>
                 <DialogDescription className="text-gray-400 mt-4">
-                <p className="mb-4">
-                Our founding team has a proven track record of scaling successful ventures
-                across diverse industries. At a young age, one of our founders launched a
-                business that expanded to 32 countries within three years, culminating in a
-                profitable exit. Their experience includes transactions exceeding $700 million
-                and spearheading the Indian operations of a €200 million carbon finance firm
-                listed on the London Stock Exchange. Another founder brings deep expertise in HR
-                and organizational development, having implemented innovative talent acquisition
-                strategies, HR policies, and diversity initiatives for startups and large
-                corporations. <br /> <br /> They co-created over 20 international workshops and
-                retreats, blending modern coaching techniques with traditional practices to
-                revolutionize personal and professional growth. With over 20 years of experience
-                in technology leadership, another founder has developed SaaS products generating
-                millions in revenue and engineered fault-tolerant systems with 100% uptime.
-                Their technical innovations have driven substantial business value, contributing
-                to tens of millions in revenue.
-                <br /> <br />
-                Together, this dynamic team's diverse expertise in business expansion, HR
-                innovation, and technological leadership uniquely equips them to drive growth
-                and create exceptional value in their ventures.
-              </p>
+                  <p className="mb-4">
+                    The Team has Expertise in Financial Acumen, Technology, Human Resources,
+                    Organizational Transformation, Innovation, Sustainability, Conscious Growth,
+                    Entrepreneurship, Transformative initiates.
+                    <br />
+                    <br />
+                    The team's entrepreneurial vision has seen the successful launch and expansion
+                    of businesses across 32 countries, with over $700 million in transactions. Their
+                    efforts have included establishing operations for a €200 million LSE-listed
+                    carbon finance firm and leading social enterprise private equity initiatives in
+                    Asia. With a passion for conscious capitalism, they have combined modern
+                    business strategies with ancient practices, dedicating significant time to
+                    meditation and personal growth.
+                    <br /> <br />
+                    In the realm of HR and coaching, the team has extensive experience in talent
+                    acquisition, policy consulting, and fostering Diversity & Inclusion initiatives.
+                    They have created inclusive workplaces, facilitated performance appraisals for
+                    organizations of varying scales, and led over 20 workshops and retreats
+                    globally. By integrating modern coaching techniques with practices like NLP,
+                    hypnotherapy, and meditation, they address complex analytical, operational, and
+                    relational challenges effectively.
+                    <br /> <br />
+                    On the technology front, the team brings 24 years of collective expertise in
+                    developing scalable solutions, including SaaS products generating $10 million in
+                    revenue and modernizing tech platforms. They specialize in building
+                    fault-tolerant systems with 100% uptime and delivering high-traffic websites,
+                    B2B applications, and CRM systems that have collectively achieved $42 million in
+                    revenue. By leveraging technology and strategic roadmaps, they address key
+                    business challenges and capitalize on emerging opportunities while cultivating
+                    high-performing, globally distributed teams.
+                  </p>
                 </DialogDescription>
               </DialogHeader>
             </DialogContent>
