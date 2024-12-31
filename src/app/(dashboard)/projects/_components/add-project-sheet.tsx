@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '../../../../components/ui/button';
@@ -43,14 +44,17 @@ type Borrower = {
 type BorrowersList = Borrower[];
 
 const formSchema = z.object({
-  user: z.string().min(2, {
-    message: 'Select a valid user',
-  }),
+  // user: z.string().min(2, {
+  //   message: 'Select a valid user',
+  // }),
   location: z.string().min(2, {
     message: 'Location Field is required',
   }),
-  percentage_complete_net: z.string().min(2, {
-    message: '',
+  pin_code: z.string().min(6, {
+    message: 'Pincode is required',
+  }),
+  percentage_complete_net: z.string().min(1, {
+    message: 'Enter vaid Percentage completion date',
   }),
   project_name: z.string().min(2, {
     message: 'Project Name Field is required',
@@ -62,9 +66,21 @@ const formSchema = z.object({
     message: 'Project Type Field is required',
   }),
   start_date: z.coerce.date(),
+  expected_completion_date: z.coerce.date(),
 });
 
-const projectTypes = ['Residential', 'Commercial', 'Industrial', 'Mixed-use'];
+const projectTypes = [
+  'Residential',
+  'Commercial',
+  'Industrial',
+  'Raw Land',
+  'Warehouse',
+  'Plotted Land',
+  'Hospitality',
+  'Affordable Housing',
+  'Student Housing',
+  'Others',
+];
 const projectStatuses = ['Not Started', 'In Progress', 'Completed', 'On Hold'];
 
 const AddProjectSheet = () => {
@@ -83,24 +99,25 @@ const AddProjectSheet = () => {
       percentage_complete_net: '',
       rera_regd_no: '',
       start_date: null,
-      current_tranche_name: '',
-      current_tranche_status: '',
-      current_project_status: '',
-      line_of_credit: '',
-      equity_commitment: '',
-      debt_commitment: '',
-      other_commitment: '',
+      // current_tranche_name: '',
+      // current_tranche_status: '',
+      // current_project_status: '',
+      // line_of_credit: '',
+      // equity_commitment: '',
+      // debt_commitment: '',
+      // other_commitment: '',
       project_total: '',
-      document_option: 'fetch',
-      sale_deed: null,
-      encumbrance_certificate: null,
-      title_deed: null,
-      fmb: null,
-      tslr_records: null,
-      patta_chitta: null,
-      guideline_value: null,
-      mortage_report: null,
-      property_tax_receipt: null,
+      expected_completion_date: '',
+      // document_option: 'fetch',
+      // sale_deed: null,
+      // encumbrance_certificate: null,
+      // title_deed: null,
+      // fmb: null,
+      // tslr_records: null,
+      // patta_chitta: null,
+      // guideline_value: null,
+      // mortage_report: null,
+      // property_tax_receipt: null,
     },
   });
 
@@ -125,7 +142,6 @@ const AddProjectSheet = () => {
   }, []);
   const onSubmit = async (data: Record<string, any>) => {
     const formData = new FormData();
-    console.log('This is from the formdata');
     Object.entries(data).forEach(([key, value]) => {
       if (value !== null && value !== undefined && value !== '') {
         // Check if the value is an array of files
@@ -139,8 +155,13 @@ const AddProjectSheet = () => {
 
     if (data.start_date) {
       formData.set('start_date', format(new Date(data.start_date), 'yyyy-MM-dd'));
+    } else if (data.expected_completion_date) {
+      formData.set(
+        'expected_completion_date',
+        format(new Date(data.expected_completion_date), 'yyyy-MM-dd'),
+      );
     }
-
+    console.log(formData);
     console.log('Processed FormData to be sent:');
     // for (let pair of formData.entries()) {
     //   const key = pair[0];
@@ -151,7 +172,6 @@ const AddProjectSheet = () => {
     //     console.log(key, value);
     //   }
     // }
-
     try {
       const response = await createProject(formData);
       console.log('createProject response', response);
@@ -201,7 +221,7 @@ const AddProjectSheet = () => {
         </SheetHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
-            <FormField
+            {/* <FormField
               control={form.control}
               name="user"
               render={({ field }) => (
@@ -230,7 +250,7 @@ const AddProjectSheet = () => {
                   <FormMessage className="text-red-500" />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="project_name"
@@ -295,7 +315,7 @@ const AddProjectSheet = () => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="rera_regd_no"
               render={({ field }) => (
@@ -307,25 +327,57 @@ const AddProjectSheet = () => {
                   <FormMessage className="text-red-500" />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="start_date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel className="text-white">Start Date</FormLabel>
-                  <Calendar
+                  <input
+                    type="date"
+                    name="start_date"
+                    className="p-2 border-2 border-white/30 rounded mb-2 text-white bg-transparent [&::-webkit-calendar-picker-indicator]:invert"
+                    value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
+                    onChange={e => field.onChange(e.target.value ? new Date(e.target.value) : null)}
+                  />
+                  {/* <Calendar
                     mode="single"
                     className="text-white"
                     selected={field.value ? new Date(field.value) : undefined}
                     onSelect={field.onChange}
                     disabled={date => date > new Date() || date < new Date('1900-01-01')}
-                  />
+                  /> */}
                   <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
             <FormField
+              control={form.control}
+              name="expected_completion_date"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-white">Expected Completion Date</FormLabel>
+                  <input
+                    type="date"
+                    name="expected_completion_date"
+                    className="p-2 border-2 border-white/30  rounded mb-2 text-white bg-transparent [&::-webkit-calendar-picker-indicator]:invert"
+                    value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
+                    onChange={e => field.onChange(e.target.value ? new Date(e.target.value) : null)}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                  {/* <Calendar
+                    mode="single"
+                    className="text-white"
+                    selected={field.value ? new Date(field.value) : undefined}
+                    onSelect={field.onChange}
+                    disabled={date => date > new Date() || date < new Date('1900-01-01')}
+                  /> */}
+                  <FormMessage className="text-red-500" />
+                </FormItem>
+              )}
+            />
+            {/* <FormField
               control={form.control}
               name="current_tranche_name"
               render={({ field }) => (
@@ -337,8 +389,8 @@ const AddProjectSheet = () => {
                   <FormMessage className="text-red-500" />
                 </FormItem>
               )}
-            />
-            <FormField
+            /> */}
+            {/* <FormField
               control={form.control}
               name="current_tranche_status"
               render={({ field }) => (
@@ -361,8 +413,8 @@ const AddProjectSheet = () => {
                   <FormMessage className="text-red-500" />
                 </FormItem>
               )}
-            />
-            <FormField
+            /> */}
+            {/* <FormField
               control={form.control}
               name="current_project_status"
               render={({ field }) => (
@@ -437,13 +489,13 @@ const AddProjectSheet = () => {
                   <FormMessage className="text-red-500" />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="project_total"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white">Project Total</FormLabel>
+                  <FormLabel className="text-white">Project Total Cost</FormLabel>
                   <FormControl>
                     <Input {...field} type="number" />
                   </FormControl>
@@ -464,7 +516,7 @@ const AddProjectSheet = () => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="sale_deed"
               render={({ field }) => (
@@ -532,9 +584,9 @@ const AddProjectSheet = () => {
                   <FormMessage className="text-red-500" />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            {form.watch('document_option') === 'upload' && (
+            {/* {form.watch('document_option') === 'upload' && (
               <>
                 <FormField
                   control={form.control}
@@ -655,7 +707,7 @@ const AddProjectSheet = () => {
                   )}
                 />
               </>
-            )}
+            )} */}
 
             <Button type="submit" className="w-full">
               Submit

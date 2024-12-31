@@ -2,6 +2,7 @@ import Image from 'next/image';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { FileText, FileSpreadsheet } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface FileUploadProps {
   onDrop: (acceptedFiles: File[]) => void;
@@ -11,6 +12,12 @@ interface FileUploadProps {
 
 interface FileWithPreview extends File {
   preview: string;
+}
+
+interface CustomFilePreviewProps {
+  file: FileWithPreview;
+  index: number;
+  removeFile: (index: number) => void;
 }
 
 const getFileType = (file: File) => {
@@ -26,9 +33,10 @@ const getFileType = (file: File) => {
   return 'other';
 };
 
-const CustomFilePreview = ({ file }: { file: FileWithPreview }) => {
+const CustomFilePreview = ({ file, index, removeFile }: CustomFilePreviewProps) => {
   const fileType = getFileType(file);
-
+  console.log(file);
+  const handleFileRemove = () => {};
   return (
     <div className="flex w-24 flex-col items-center justify-center mx-auto">
       {fileType === 'image' ? (
@@ -44,12 +52,13 @@ const CustomFilePreview = ({ file }: { file: FileWithPreview }) => {
         <div className="w-24 h-24 flex items-center justify-center bg-gray-200 rounded">
           {fileType === 'excel' && <FileSpreadsheet className="text-4xl text-green-600" />}
           {fileType === 'other' && <FileText className="text-4xl text-gray-600" />}
+          <X
+            onClick={() => removeFile(index)}
+            className="absolute  translate-x-12 translate-y-[-48px] text-black rounded-full bg-gray-200 z-30 w-4 h-4 cursor-pointer"
+          />
         </div>
       )}
-      <p
-        title={file.name}
-        className="text-white text-center my-1 text-xs truncate w-[90%] mx-auto"
-      >
+      <p title={file.name} className="text-white text-center my-1 text-xs truncate w-[90%] mx-auto">
         {file.name}
       </p>
     </div>
@@ -59,26 +68,29 @@ const CustomFilePreview = ({ file }: { file: FileWithPreview }) => {
 const FileUpload = ({ onDrop: handleChange, className, label }: FileUploadProps) => {
   const [files, setFiles] = useState<FileWithPreview[]>([]); // Initialize files as an empty array
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    console.log('Files dropped:', acceptedFiles); // Log dropped files
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      console.log('Files dropped:', acceptedFiles); // Log dropped files
 
-    const newFiles = acceptedFiles.map(file =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      }),
-    );
+      const newFiles = acceptedFiles.map(file =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        }),
+      );
 
-    console.log('New files with preview URLs:', newFiles); // Log new files with previews
-    
-    // Update files state and log the previous and new files
-    setFiles(prevFiles => {
-      const updatedFiles = [...prevFiles, ...newFiles];
-      console.log('Updated files state:', updatedFiles); // Log updated files state
-      return updatedFiles; // Return updated files array
-    });
-    
-    handleChange(newFiles); // Call the parent function with the new files
-  }, [handleChange]);
+      console.log('New files with preview URLs:', newFiles); // Log new files with previews
+
+      // Update files state and log the previous and new files
+      setFiles(prevFiles => {
+        const updatedFiles = [...prevFiles, ...newFiles];
+        console.log('Updated files state:', updatedFiles); // Log updated files state
+        return updatedFiles; // Return updated files array
+      });
+
+      handleChange(newFiles); // Call the parent function with the new files
+    },
+    [handleChange],
+  );
 
   // Log the files whenever they change
   useEffect(() => {
@@ -86,6 +98,11 @@ const FileUpload = ({ onDrop: handleChange, className, label }: FileUploadProps)
   }, [files]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const handleRemoveFile = (indexNo: number) => {
+    //removing a particular file
+    setFiles(prevItems => [...prevItems.slice(0, indexNo), ...prevItems.slice(indexNo + 1)]);
+  };
 
   return (
     <div>
@@ -106,7 +123,12 @@ const FileUpload = ({ onDrop: handleChange, className, label }: FileUploadProps)
       </div>
       <div className="mt-4 flex flex-wrap gap-3 items-center grid-cols-3">
         {files.map((file, fileIndex) => (
-          <CustomFilePreview file={file} key={`${file.name}-${fileIndex}`} />
+          <CustomFilePreview
+            file={file}
+            key={`${file.name}-${fileIndex}`}
+            index={fileIndex}
+            removeFile={handleRemoveFile}
+          />
         ))}
       </div>
     </div>
