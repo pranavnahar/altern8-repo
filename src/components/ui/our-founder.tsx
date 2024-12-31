@@ -118,25 +118,11 @@ export function FoundersSection() {
                 </DialogTitle>
                 <DialogDescription className="text-gray-400 mt-4">
                 <p className="mb-4">
-                Our founding team has a proven track record of scaling successful ventures
-                across diverse industries. At a young age, one of our founders launched a
-                business that expanded to 32 countries within three years, culminating in a
-                profitable exit. Their experience includes transactions exceeding $700 million
-                and spearheading the Indian operations of a €200 million carbon finance firm
-                listed on the London Stock Exchange. Another founder brings deep expertise in HR
-                and organizational development, having implemented innovative talent acquisition
-                strategies, HR policies, and diversity initiatives for startups and large
-                corporations. <br /> <br /> They co-created over 20 international workshops and
-                retreats, blending modern coaching techniques with traditional practices to
-                revolutionize personal and professional growth. With over 20 years of experience
-                in technology leadership, another founder has developed SaaS products generating
-                millions in revenue and engineered fault-tolerant systems with 100% uptime.
-                Their technical innovations have driven substantial business value, contributing
-                to tens of millions in revenue.
+                The Team has Expertise in Financial Acumen, Technology, Human Resources, Organizational Transformation, Innovation, Sustainability, Conscious Growth, Entrepreneurship, Transformative initiates.
+                <br/><br/>The team's entrepreneurial vision has seen the successful launch and expansion of businesses across 32 countries, with over $700 million in transactions. Their efforts have included establishing operations for a €200 million LSE-listed carbon finance firm and leading social enterprise private equity initiatives in Asia. With a passion for conscious capitalism, they have combined modern business strategies with ancient practices, dedicating significant time to meditation and personal growth.<br /> <br /> 
+                In the realm of HR and coaching, the team has extensive experience in talent acquisition, policy consulting, and fostering Diversity & Inclusion initiatives. They have created inclusive workplaces, facilitated performance appraisals for organizations of varying scales, and led over 20 workshops and retreats globally. By integrating modern coaching techniques with practices like NLP, hypnotherapy, and meditation, they address complex analytical, operational, and relational challenges effectively.
                 <br /> <br />
-                Together, this dynamic team's diverse expertise in business expansion, HR
-                innovation, and technological leadership uniquely equips them to drive growth
-                and create exceptional value in their ventures.
+                On the technology front, the team brings 24 years of collective expertise in developing scalable solutions, including SaaS products generating $10 million in revenue and modernizing tech platforms. They specialize in building fault-tolerant systems with 100% uptime and delivering high-traffic websites, B2B applications, and CRM systems that have collectively achieved $42 million in revenue. By leveraging technology and strategic roadmaps, they address key business challenges and capitalize on emerging opportunities while cultivating high-performing, globally distributed teams.
               </p>
                 </DialogDescription>
               </DialogHeader>
