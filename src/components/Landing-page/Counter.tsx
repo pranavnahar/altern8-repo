@@ -1,43 +1,44 @@
-"use client"
-
-import { useEffect, useRef } from "react";
-import { useInView, useMotionValue, useSpring } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { useMotionValue, useSpring, animate } from "framer-motion";
 
 interface CounterProps {
     value: number;
-    direction?: "up" | "down";
+    restartTrigger: number;
     className?: string;
 }
 
 export default function Counter({
     value,
-    direction = "up",
+    restartTrigger,
     className,
 }: CounterProps) {
     const ref = useRef<HTMLSpanElement>(null);
-    const motionValue = useMotionValue(direction === "down" ? value : 0);
-    const springValue = useSpring(motionValue, {
-        damping: 100,
-        stiffness: 100,
-    });
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
-
+    const [key, setKey] = useState(0); // Key to force complete component reset
+    
     useEffect(() => {
-        if (isInView) {
-            motionValue.set(direction === "down" ? 0 : value);
+        // Force a complete reset of the component
+        setKey(prev => prev + 1);
+        
+        if (ref.current) {
+            // First set to 0
+            ref.current.textContent = "0";
+            
+            // Then start animation after a brief delay
+            const timer = setTimeout(() => {
+                let startValue = 0;
+                animate(startValue, value, {
+                    duration: 3,
+                    onUpdate: (latest) => {
+                        if (ref.current) {
+                            ref.current.textContent = Math.round(latest).toLocaleString();
+                        }
+                    },
+                });
+            }, 50);
+
+            return () => clearTimeout(timer);
         }
-    }, [motionValue, isInView, direction, value]);
+    }, [restartTrigger, value]);
 
-    useEffect(() => {
-        return springValue.on("change", (latest) => {
-            if (ref.current) {
-                ref.current.textContent = Intl.NumberFormat("en-US").format(
-                    // @ts-ignore
-                    latest.toFixed(0)
-                );
-            }
-        });
-    }, [springValue]);
-
-    return <span className={className} ref={ref} />;
+    return <span key={key} ref={ref} className={className}>0</span>;
 }
