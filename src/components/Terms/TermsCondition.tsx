@@ -80,7 +80,7 @@ const TermsCondition = () => {
 
         {/* Text Area for Terms and Conditions */}
 
-        <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-md px-6 text-justify">
+        <div className="phone:w-[90%] md:w-[70%] xl:w-[60%] xxl:w-[55%] my-10 mx-auto text-background-black-font text-sm px-6 text-justify">
           <p>
             This document is an electronic record in terms of Information Technology Act, 2000 and
             rules there under as applicable and the amended provisions pertaining to electronic
@@ -98,13 +98,13 @@ const TermsCondition = () => {
           </p>
           <br />
           <p>
-            These terms and conditions of use ("Terms of Use") of the Platform between Ekarth Ventures, a
+            These terms and conditions of use ("Terms of Use") of the Platform between <strong>Ekarth Ventures</strong>, a
             private company limited by shares incorporated under the provisions of Companies Act,
-            2013 (Act No. 18 of 2013) with corporate identification number (CIN) U62099TN2024PTC169251, and
-            having its registered office at 46 College Road, Nungambakkam, Chennai (hereinafter referred to as “Altern8” which
+            2013 (Act No. 18 of 2013) with <strong>corporate identification number (CIN) U62099TN2024PTC169251</strong>, and
+            having its registered office at <strong>46 College Road, Nungambakkam, Chennai</strong> (hereinafter referred to as <strong>Altern8</strong> which
             includes the person(s)/entity(ies) associated/connected with it) and users registering
             itself/himself on the Platform ("You" or "Your" or "Yourself" or "User") describe the
-            terms on which Altern8 offers You access to the Platform and the Services (as defined
+            terms on which <strong>Altern8</strong> offers You access to the Platform and the Services (as defined
             below) through the Platform.
           </p>
           <br />
@@ -117,7 +117,7 @@ const TermsCondition = () => {
           <br />
           <p>
             By implicitly or expressly accepting these Terms of Use, You also accept and agree to be
-            bound by all Altern8 Policies (including but not limited to the Privacy Policy available
+            bound by all <strong>Altern8</strong> Policies (including but not limited to the Privacy Policy available
             on our Platform as amended from time to time).
           </p>
           <br />
@@ -136,7 +136,7 @@ const TermsCondition = () => {
             service provider assisting the borrowers, essentially real estate entities to seek debt
             funding from the willing patrons through the NBFC. Use of the Platform is offered to You
             conditioned on acceptance of all the terms, conditions and notices contained in these
-            Terms along with any amendments made by Altern8 at its sole discretion and posted on the
+            Terms along with any amendments made by <strong>Altern8</strong> at its sole discretion and posted on the
             Platform, including by way of imposing an additional charge for access to or use of a
             Service.
           </p>
@@ -153,7 +153,7 @@ const TermsCondition = () => {
           <h2 className="font-bold mt-4">• Definitions and Interpretations</h2>
           <br />
           <p>
-            "Altern8", "The Company", "Ourselves", "We", "Our" and "Us", refers to Ekarth Ventures
+            "<strong>Altern8</strong>", "The Company", "Ourselves", "We", "Our" and "Us", refers to Ekarth Ventures
             Private Limited bearing CIN: U62099TN2024PTC169251, and other assignees, group and sister firms being the
             primary platform for real estate borrowers intending to seek debt funding through
             issuance of debt securities.
@@ -204,12 +204,12 @@ const TermsCondition = () => {
             either marked ‘confidential’ or is by its nature intended to be exclusively for the
             knowledge of the recipient alone, and any information concerning the affairs, the
             business, customer details, business transactions or the financial arrangements of
-            Altern8 or of any Person with whom any of them is in a confidential relationship and
+            <strong>Altern8</strong> or of any Person with whom any of them is in a confidential relationship and
             shall include the terms of this Agreement and all connected documents and/or writings.
           </p>
           <br />
           <p>
-            “Platform Fee” shall mean the fee due and payable to Altern8 by the borrowers as per
+            “Platform Fee” shall mean the fee due and payable to <strong>Altern8</strong> by the borrowers as per
             terms hereof for enabling, managing, facilitating and rendering requisite technical
             services for the Debt funding transaction through the Platform.
           </p>
@@ -257,14 +257,14 @@ const TermsCondition = () => {
           <br />
           <p>
             All lending happens through the escrow/virtual or nodal account of the patrons and the
-            borrowersand sometimes the NBFCmay bring the loans on their books and sell the loans.
-            Altern8 is in no way involved in the flow of funds, repayments, collections etc. and it
+            borrowersand sometimes the NBFC may bring the loans on their books and sell the loans.
+            <strong>Altern8</strong> is in no way involved in the flow of funds, repayments, collections etc. and it
             is the sole responsibility of the borrowers to issue the debentures to the patrons
             directly in or through the NBFC in accordance with applicable laws and regulations.
           </p>
           <br />
           <p>
-            Role of Altern8 is limited to borrower identification and registration, basic due
+            Role of <strong>Altern8</strong> is limited to borrower identification and registration, basic due
             diligence of the borrowers, credit assessment, customer service etc. with the ultimate
             responsibility being that of the NBFC.
           </p>
@@ -291,13 +291,13 @@ const TermsCondition = () => {
             Any company registered under the companies act or any other law for the time being in
             force, engaged primary in real estate business that is capable of issuing debt
             instruments in order to seek funding from retail patrons and is capable/competent to
-            form a binding contract can register as “borrower” on the Platform.
+            form a binding contract can register as “<strong>borrower</strong>” on the Platform.
           </p>
           <br />
           <p>
             The Services are not available to any borrower that is under insolvency or liquidation
             proceedings and has been prohibited to issue such securities by any regulatory or other
-            authority or has been suspended or removed from Altern8 system by Altern8 for any reason
+            authority or has been suspended or removed from <strong>Altern8</strong> system by <strong>Altern8</strong> for any reason
             whatsoever. If You are removed, You shall not be permitted to avail the Services or use
             the Platform. The services are not available to patron who has been restricted or
             prohibited from investing in securities by SEBI, RBI or any other regulatory authority
@@ -305,7 +305,7 @@ const TermsCondition = () => {
           </p>
           <br />
           <p>
-            You acknowledge that Altern8 reserves the right to refuse access to use the Services
+            You acknowledge that <strong>Altern8</strong> reserves the right to refuse access to use the Services
             offered at the Platform to new Users or to terminate access granted to existing Users at
             any time without according any reasons for doing so.
           </p>
@@ -319,9 +319,9 @@ const TermsCondition = () => {
           <h2 className="font-bold mt-4">• User Account, Password and Security </h2>
           <br />
           <p>
-            In order to fully avail the services provided by Altern8, the borrower entity needs to
+            In order to fully avail the services provided by <strong>Altern8</strong>, the borrower entity needs to
             create a separate account by providing several information like Company name, registered
-            address, CIN details, person of contact etc. Unless otherwise permitted by Altern8 in
+            address, CIN details, person of contact etc. Unless otherwise permitted by <strong>Altern8</strong> in
             writing, one entity may only possess one account at a time.{' '}
           </p>
           <br />
@@ -332,27 +332,27 @@ const TermsCondition = () => {
             <br />
             You agree to: <br />
             <br />
-            (a) immediately notify Altern8 of any unauthorized use of Your Account Information or
+            (a) immediately notify <strong>Altern8</strong> of any unauthorized use of Your Account Information or
             any other breach of security, and <br />
-            (b) ensure that You exit from Your User Account at the end of each session. Altern8
+            (b) ensure that You exit from Your User Account at the end of each session. <strong>Altern8</strong>
             cannot and shall not be liable for any loss or damage arising from Your failure to
             comply with this Section. Further, You understand that You may be held liable for losses
-            incurred by Altern8 or any other user of or visitor to the Platform due to authorized or
+            incurred by <strong>Altern8</strong> or any other user of or visitor to the Platform due to authorized or
             unauthorized use of Your Account as a result of Your failure in keeping Your Account
             Information secure and confidential.
           </p>
           <br />
           <p>
-            Altern8 reserves the right to refuse to offer access to or use of the Platform to any
+          <strong>Altern8</strong> reserves the right to refuse to offer access to or use of the Platform to any
             entity at its sole discretion including by changing its eligibility criteria at any
             time.
           </p>
           <br />
           <p>
             If You provide any information that is untrue, inaccurate, not current or incomplete (or
-            becomes untrue, inaccurate, not current or incomplete), or Altern8 has reasonable
+            becomes untrue, inaccurate, not current or incomplete), or <strong>Altern8</strong> has reasonable
             grounds to suspect that such information is untrue, inaccurate, not current or
-            incomplete, Altern8 has the right to suspend or terminate Your User Account and refuse
+            incomplete, <strong>Altern8</strong> has the right to suspend or terminate Your User Account and refuse
             any and all current or future use of the Platform (or any portion thereof) without
             providing any notice or according reasons for the same.
           </p>
@@ -378,7 +378,7 @@ const TermsCondition = () => {
             transaction, activity, event or other matter, including any rule, order, judgment,
             directive or other requirement or guideline issued by any domestic or foreign federal,
             provincial or state, municipal, local or other governmental, regulatory, judicial or
-            administrative authority having jurisdiction over Altern8, you, the Website or the
+            administrative authority having jurisdiction over <strong>Altern8</strong>, you, the Website or the
             Services, or as otherwise duly enacted, enforceable by law, the common law or equity;
             and (b) does not contribute to or facilitate any illegal activity.
           </p>
@@ -410,21 +410,21 @@ const TermsCondition = () => {
           <br />
           <p>
             The user hereby agrees and warrants that the Platform, Services, Content and other
-            materials are provided by Altern8 on an "as is" basis without warranty of any kind,
+            materials are provided by <strong>Altern8</strong> on an "as is" basis without warranty of any kind,
             express, implied, statutory or otherwise, including the implied warranties of accuracy,
             reliability or fitness for a particular purpose. To the fullest extent permissible
-            pursuant to applicable law, Altern8 disclaims all warranties, express or implied,
+            pursuant to applicable law, <strong>Altern8</strong> disclaims all warranties, express or implied,
             including but not limited to, implied warranties of merchantability and fitness for a
-            particular purpose. Altern8 does not warrant that the website or the server that makes
+            particular purpose. <strong>Altern8</strong> does not warrant that the website or the server that makes
             it available is free from viruses or other harmful components. Without limiting the
-            foregoing, Altern8 makes no warranty that (i) the Platform or the Services will meet
+            foregoing, <strong>Altern8</strong> makes no warranty that (i) the Platform or the Services will meet
             Your requirements or Your use of the Platform or the Services will be uninterrupted,
             timely, secure or error-free; (ii) the results that may be obtained from the use of the
             Platform, Services or materials will be effective, accurate or reliable; (iii) the
             quality of the Platform, Services or other materials will meet your expectations; or
             that (iv) any errors or defects in the Platform, Services or other materials will be
             corrected. No advice or information, whether oral or written, obtained by You from
-            Altern8 or through or from use of the Services shall create any warranty not expressly
+            <strong>Altern8</strong> or through or from use of the Services shall create any warranty not expressly
             stated in the Terms of Use.
           </p>
           <br />
@@ -451,7 +451,7 @@ const TermsCondition = () => {
             <br />• The terms of the debenture issue have been duly notified in accordance with the
             applicable laws and are not prejudicial to the interest of the patrons to such issue.
             <br />• It will provide the Platform a Post dated Cheque for each transaction executed
-            through the Platform as a guarantee against the repayments. Altern8 shall have the sole
+            through the Platform as a guarantee against the repayments. <strong>Altern8</strong> shall have the sole
             right to enforce these PDCs in case of any default in repayment or other terms of issue.
           </p>
           <br />
@@ -466,7 +466,7 @@ const TermsCondition = () => {
             The borrower the need to provide the details and pricing about its debentures that may
             be a discounted or premium price along with all the terms of issue including but not
             limited to the terms of repayment, interest payment, interest cutoff date, maturity
-            period, redemption date etc. Altern8 is responsible to share all these details with the
+            period, redemption date etc. <strong>Altern8</strong> is responsible to share all these details with the
             patrons registered on the secondary platform to enable the potential patrons invest in
             these debentures. The payment transactions between the borrower and the patron or the
             NBFC will solely be facilitated through the escrow account. A specific debenture
@@ -479,31 +479,31 @@ const TermsCondition = () => {
           <br />
           <p>
             Unless otherwise expressly provided by the terms of the platform, all the Intellectual
-            Property Rights in the Platform and its content are owned by Altern8 and no user is
+            Property Rights in the Platform and its content are owned by <strong>Altern8</strong> and no user is
             entitled to use these intellectual property rights except as consented by the platform
             through these terms or any other policy for the time being. All content and materials
             including but not limited to text, graphics, website name, code, images, and logos are
-            the intellectual property of Altern8 and are protected by applicable copyright and
+            the intellectual property of <strong>Altern8</strong> and are protected by applicable copyright and
             trademark law. Any inappropriate use or transmission of any content on this site is
             strictly prohibited unless specifically authorized to do so. Except as expressly
             provided herein, You acknowledge and agree that You shall not use, in any manner
             whatsoever, any Content through any medium without obtaining the necessary authorization
-            from Altern8 or thirty party owners of such Content. You agree that by use of the
+            from <strong>Altern8</strong> or thirty party owners of such Content. You agree that by use of the
             Platform or by availing the Services You shall not obtain any right or interest on the
-            materials and Content. However, Altern8 may assign or license its trademark or other
+            materials and Content. However, <strong>Altern8</strong> may assign or license its trademark or other
             intellectual property rights to any third party for promotional or marketing purposes.
           </p>
           <br />
           <h2 className="font-bold mt-4">• Royalty </h2>
           <br />
           <p>
-            Altern8 reserves exclusive ownership rights over the Intellectual Property associated
+          <strong>Altern8</strong> reserves exclusive ownership rights over the Intellectual Property associated
             with the platform and the Patron acknowledges that they are granted a limited,
             non-exclusive license to use the Platform in accordance with these Terms of Use. This
             license does not transfer any ownership rights of the IP to the users. Users of the
             platform are required to pay specific royalties to the platform for using the technical
             services and the IPs of the platform. The royalties are fees for the service of using
-            Altern8’s proprietary technology and intellectual property, which facilitate the
+            <strong>Altern8</strong>'s proprietary technology and intellectual property, which facilitate the
             transactions between borrowers and patrons.Royalties provided for availing the services
             of the Platform shall be exclusive of any taxes since the same is exempted in accordance
             with the Provisions of the Income Tax Act.
@@ -517,7 +517,7 @@ const TermsCondition = () => {
             such facilitation shall not be construed as an agent-principal relationship between the
             Platform and the borrower.
             <br />
-            By availing the services of the Platform, the borrower acknowledges to provide Altern8
+            By availing the services of the Platform, the borrower acknowledges to provide <strong>Altern8</strong>
             special power of attorney to manage its escrow account just for the sake of convenience.
             By consenting the same, the Platform shall have the absolute authority to enter into
             specific agreements with the escrow or virtual account provider for the creation of such
@@ -527,18 +527,18 @@ const TermsCondition = () => {
           <h2 className="font-bold mt-4">• Modification of terms </h2>
           <br />
           <p>
-            Altern8 reserves the rights, at its sole discretion, to amend, alter, modify, change,
+          <strong>Altern8</strong> reserves the rights, at its sole discretion, to amend, alter, modify, change,
             add or remove any portion of the Terms of Use or the Privacy Policy, in whole or in
             part, at any time.
             <br />
             The revised Terms of Use shall be made available on the Platform. You agree to take the
             responsibility to be aware of the updated terms of use by frequently visiting the
-            website and Altern8 shall not be responsible to communicate you about any changes made
+            website and <strong>Altern8</strong> shall not be responsible to communicate you about any changes made
             to the terms and conditions of use.
             <br />
             Your continued use of the Platform and/or the Services made available on or through the
             Platform after any changes to the Terms of Use or the Privacy Policy are posted will be
-            considered acceptance of such changes. You can determine when Altern8 last modified the
+            considered acceptance of such changes. You can determine when <strong>Altern8</strong> last modified the
             Terms of Use by referring to the "Last Updated" legend herein.
           </p>
           <br />
@@ -556,12 +556,12 @@ const TermsCondition = () => {
           <br />
           <p>
             The User hereby consents, expresses and agrees that they have read and fully understands
-            the Privacy Policy of Altern8 in respect of access to the Platform.
+            the Privacy Policy of <strong>Altern8</strong> in respect of access to the Platform.
             <br />
             You further consent that the terms and contents of such Privacy Policy are acceptable to
             You and the platform reserves the right to collect and process user data from you.{' '}
             <br />
-            Altern8 hereby undertakes to protect your data with integrity and safety measures and
+            <strong>Altern8</strong> hereby undertakes to protect your data with integrity and safety measures and
             shall implement and maintain appropriate technical and organizational measures to
             protect personal data against unauthorized or unlawful processing, accidental loss,
             destruction, or damage.
@@ -602,7 +602,7 @@ const TermsCondition = () => {
           <br />
           <p>
             The determination of existence of any disputes, the nature of the disputes and how it
-            should be handled relating to these terms and conditions shall be decided by Altern8.
+            should be handled relating to these terms and conditions shall be decided by <strong>Altern8</strong>.
             Subject to the above, any dispute arising out of the services provided by the platform,
             be it between the patron and the platform or between borrower and the platform or
             between the NBFC and the platform, the dispute shall be resolved through award of sole
@@ -616,20 +616,20 @@ const TermsCondition = () => {
           <h2 className="font-bold mt-4">• Limitation of Liability </h2>
           <br />
           <p>
-            Altern8 does not guarantee that the borrower will be capable of getting the potential
+          <strong>Altern8</strong> does not guarantee that the borrower will be capable of getting the potential
             investor as per its expectations. The Platform merely acts as a facilitator between the
             borrower and the patron and has no liability to compensate if the borrower fails to get
             any potential patron for its debenture issue or fails to get the minimum subscription as
             per the applicable law.
             <br />
-            Altern8 will not be liable for any direct, indirect, incidental, consequential or
+            <strong>Altern8</strong> will not be liable for any direct, indirect, incidental, consequential or
             exemplary loss or damages which may be incurred by you as a result of using our
             Resources, or as a result of any changes, data loss or corruption, cancellation, loss of
             access, or downtime to the full extent that applicable limitation of liability laws
             apply.
             <br />
             <br />
-            To the fullest extent permitted by applicable law, Altern8 shall not be liable to you
+            To the fullest extent permitted by applicable law, <strong>Altern8</strong> shall not be liable to you
             for any damages arising from:
             <br />
             <br /> (i) errors, mistakes, or inaccuracies in content, <br />
@@ -660,7 +660,7 @@ const TermsCondition = () => {
           <br />
           <p>
             The borrower agrees and undertakes to severally keep and hold the Patron(s), and/or
-            Altern8 and their respective directors, officers, shareholders, employees, agents and
+            <strong>Altern8</strong> and their respective directors, officers, shareholders, employees, agents and
             representatives (collectively, the “Indemnified Parties”) indemnified and harmless
             against all costs, expenses, claims (including third party claims), liabilities,
             demands, prosecutions, damages and proceedings which may be caused to or suffered by or
@@ -674,13 +674,13 @@ const TermsCondition = () => {
           <h2 className="font-bold mt-4">• Termination </h2>
           <br />
           <p>
-            Altern8 may terminate your access to all or any part of the platform at any time with or
+          <strong>Altern8</strong> may terminate your access to all or any part of the platform at any time with or
             without cause, with or without notice, effective immediately, which may result in the
             loss and damage of all the information and ongoing transactions you may have in
             connection with the platform.
             <br />
             <br />
-            Subject to the generality of the foregoing, Altern8 may terminate your access to the
+            Subject to the generality of the foregoing, <strong>Altern8</strong> may terminate your access to the
             platform if-
             <br />
             <br />
@@ -695,25 +695,25 @@ const TermsCondition = () => {
             <br />• Any suspected illegal, fraudulent or abusive activity through your user account
             shall also be a ground for termination.
             <br />• Any other activity incidental to the above stated activities, which in the
-            opinion of Altern8, is liable for termination.
+            opinion of <strong>Altern8</strong>, is liable for termination.
             <br />
             <br />
             If you object to any Terms and Conditions, your only recourse is to: (a) discontinue use
-            of the Platform or the Services; and (b) notify Altern8 of such discontinuance. Please
+            of the Platform or the Services; and (b) notify <strong>Altern8</strong> of such discontinuance. Please
             note that such termination shall only govern Your usage of the Platform and any Services
-            offered to You by an affiliate of Altern8 (be it NBFC) or a third party shall continue
+            offered to You by an affiliate of <strong>Altern8</strong> (be it NBFC) or a third party shall continue
             to be governed by the terms agreed in such individual service agreements.
           </p>
           <br />
           <h2 className="font-bold mt-4">• Report Abuse </h2><br/>
           <p>In the event You come across any abuse or violation of these Terms of Use including any
           Privacy Policy or Additional Terms or if You become aware of any objectionable content on
-          the Platform, please report immediately to Altern8 customer support.</p><br/>
+          the Platform, please report immediately to <strong>Altern8</strong> customer support.</p><br/>
           <h2 className="font-bold mt-4">• Communications</h2><br/>
           <p>
             Upon your express consent by way of clicking on the check box provided on the platform
             for this purpose, You expressly agree to receive communications (including promotional
-            materials) by way of telephones, WhatsApp, RCS, SMS, e-mails, etc., from Altern8
+            materials) by way of telephones, WhatsApp, RCS, SMS, e-mails, etc., from <strong>Altern8</strong>
             relating to any Services provided through the Platform.
           </p><br/>
           <h2 className="font-bold mt-4">• Third party sites </h2><br/>
@@ -723,20 +723,20 @@ const TermsCondition = () => {
             company has no connection or affiliation with any of these third party sites or their
             products. The company neither provides for the endorsement of any other product or
             services through its platform. The provision of Third-Party Content is for general
-            informational or advertisement purposes only. In no event shall Altern8 be responsible
+            informational or advertisement purposes only. In no event shall <strong>Altern8</strong> be responsible
             for the information contained on any Third-Party Sites or your use of or inability to
-            use any Third-Party Sites. You acknowledge and agree that Altern8 shall not be liable or
+            use any Third-Party Sites. You acknowledge and agree that <strong>Altern8</strong> shall not be liable or
             responsible, directly or indirectly, for any damage or loss caused through any
             third-party website or resource.
           </p><br/>
           <h2 className="font-bold mt-4">• Miscellaneous </h2><br/>
           <p>
-          <strong> Notice:</strong> All notices to Altern8 shall be served by email or by general notification on
-            the Platform. Any notice to be provided to Altern8 pursuant to the Terms of Use should
+          <strong> Notice:</strong> All notices to <strong>Altern8</strong> shall be served by email or by general notification on
+            the Platform. Any notice to be provided to <strong>Altern8</strong> pursuant to the Terms of Use should
             be sent to customer support <strong>grievance@nahar.om</strong>. <br /><br />
 
-             <strong> Severability: </strong>Entire Agreement:These Terms of Use, together
-            with the Privacy Policy constitute the entire agreement between you and Altern8 in
+             <strong> Entire Agreement: </strong>These Terms of Use, together
+            with the Privacy Policy constitute the entire agreement between you and <strong>Altern8</strong> in
             relation to your use of the Platform and supersede all previous agreements in respect of
             your use of the Platform. Please note, however, that other aspects of your use of
             Services may be governed by additional agreements. If any term of this Terms of Use
@@ -748,12 +748,12 @@ const TermsCondition = () => {
             enforced to the maximum extent permissible so as to give effect to the intent of the
             parties as reflected by that provision, and the remainder of the Terms of Use shall 
             continue in full force and effect. <br /> <br />
-            Waiver: Altern8's failure to enforce any provision of
+            <strong>Waiver:</strong> <strong>Altern8</strong>'s failure to enforce any provision of
             this Terms of Use shall not be deemed to be a waiver of such provision nor of the right
             to enforce such provision.
-          </p>
+          </p><br/>
           <strong>Contact:</strong> If you have any queries or doubt regarding the terms of use, please reach the
-          customer support of Altern8 at <strong>grievance@nahar.om</strong>.
+          customer support of <strong>Altern8</strong> at <strong>grievance@nahar.om</strong>.
           <br />
         </div>  
 
