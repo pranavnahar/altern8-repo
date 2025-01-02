@@ -13,6 +13,8 @@ interface FormState {
   company_query: string;
   company_phone_number: string;
   [key: string]: string | boolean; // For dynamic checkbox fields
+  terms_agreement: boolean;
+  
 }
 
 const ContactUsForm = () => {
@@ -21,6 +23,7 @@ const ContactUsForm = () => {
     company_email: '',
     company_query: '',
     company_phone_number: '',
+    terms_agreement: true,
   };
 
   const choices = [
@@ -304,9 +307,9 @@ const ContactUsForm = () => {
             <div className="flex items-center space-x-2 ml-2">
               <Checkbox
                 id="terms_agreement"
-            
+                checked={formData.terms_agreement as boolean}
                 onCheckedChange={checked =>
-                  setFormData(prev => ({ ...prev, terms_agreement: checked }))
+                  setFormData(prev => ({ ...prev, terms_agreement: checked === true }))
                 }
               />
               <label htmlFor="terms_agreement" className="text-sm text-gray-400">
