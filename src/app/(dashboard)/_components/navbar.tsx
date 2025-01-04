@@ -9,7 +9,7 @@ import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/global/Chatbox';
 import { fetchWithAuth } from '../../../utils/fetch-with-auth';
 import { DashboardContext } from '../../../contexts/dashboard-context';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '../../../components/ui/dialog';
 import { useToast } from '@/utils/show-toasts';
@@ -320,6 +320,7 @@ export const Navbar: FC = () => {
         GetOldCredit();
         setShowGetMoreCreditBox(false);
         setIsDialogOpen(false);
+        router.push("/checkout");
       } else {
         const serverError = await response.json();
         showToast({
