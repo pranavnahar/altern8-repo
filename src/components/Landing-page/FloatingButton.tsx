@@ -16,12 +16,13 @@ const FloatingButton = () => {
         { name: 'LinkedIn', bg: ' bg-blue-700', icon: '/icons/linkedIn.png' },
         { name: 'Twitter', bg: ' bg-black', icon: '/icons/twitter.png' },
         { name: 'Facebook', bg: 'bg-blue-600', icon: '/icons/facebook.svg' },
-        {
-          name: 'Instagram',
-          bg: 'bg-gradient-to-r from-purple-400 via-pink-500 to-red-500',
-          icon: '/icons/instagram.png',
+        { name: 'Mail', bg: 'bg-gray-400', icon: '/mail.png' },
+        // {
+        //   name: 'Instagram',
+        //   bg: 'bg-gradient-to-r from-purple-400 via-pink-500 to-red-500',
+        //   icon: '/icons/instagram.png',
 
-        },
+        // },
 
     ];
 
@@ -49,9 +50,15 @@ const FloatingButton = () => {
                     linkUrl as string,
                 )}`;
                 break;
-            case 'Instagram':
-              shareUrl = `https://www.instagram.com/`;
-              break;
+            // case 'Instagram':
+            //   shareUrl = `https://www.instagram.com/`;
+            //   break;
+            case 'Mail' : 
+                shareUrl = 
+                  `mailto:?subject=Check this out!&body=${shareText}${encodeURIComponent(
+                    linkUrl as string,
+                )}`
+                break;
             default:
                 return;
         }
@@ -96,7 +103,7 @@ const FloatingButton = () => {
                     variants={itemVariants}
                     className={`rounded-full h-10 w-10 ${links?.bg} text-white flex items-center justify-center cursor-pointer`}
                 >
-                    <img src={links?.icon} alt={links?.name} className="object-center" />
+                    <img src={links?.icon} alt={links?.name} className={links?.name === "Mail" ? "object-cover w-7 h-7" : "object-center"} />
                 </motion.a>
             ))}
         </motion.div>
