@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import LoadingSpinner from '../LoadingSpinner';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Button } from '../ui/button';
-import { fetchWithAuth } from '../../utils/fetch-with-auth';
 import { useToast } from '../../utils/show-toasts';
 
 interface FormState {
@@ -14,6 +13,8 @@ interface FormState {
   company_query: string;
   company_phone_number: string;
   [key: string]: string | boolean; // For dynamic checkbox fields
+  terms_agreement: boolean;
+  
 }
 
 const ContactUsForm = () => {
@@ -22,6 +23,7 @@ const ContactUsForm = () => {
     company_email: '',
     company_query: '',
     company_phone_number: '',
+    terms_agreement: true,
   };
 
   const choices = [
@@ -144,6 +146,14 @@ const ContactUsForm = () => {
       });
       return false;
     }
+
+    if (!formData.terms_agreement) {
+      showToast({
+        message: `You must agree to our terms of service before submitting.`,
+        type: 'error',
+      });
+      return false;
+    }
   
     return true;
   };
@@ -161,7 +171,7 @@ const ContactUsForm = () => {
     setLoading(true);
     try {
       // console.log("test------------");
-      const response = await fetchWithAuth('/landing-page/contact-us/', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/landing-page/contact-us/`, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(formData),
@@ -297,9 +307,9 @@ const ContactUsForm = () => {
             <div className="flex items-center space-x-2 ml-2">
               <Checkbox
                 id="terms_agreement"
-            
+                checked={formData.terms_agreement as boolean}
                 onCheckedChange={checked =>
-                  setFormData(prev => ({ ...prev, terms_agreement: checked }))
+                  setFormData(prev => ({ ...prev, terms_agreement: checked === true }))
                 }
               />
               <label htmlFor="terms_agreement" className="text-sm text-gray-400">

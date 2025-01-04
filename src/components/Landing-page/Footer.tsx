@@ -7,7 +7,7 @@ const Footer = () => {
     <footer>
       <div className="container  max-w-[1320px] py-10 mx-auto text-gray-600">
         <div className=" mx-7 ">
-          <div className="grid grid-cols-1 md:grid-cols-3 justify-between  gap-2 text-center sm:text-left">
+        <div className="grid grid-cols-1 md:grid-cols-3 justify-between gap-2 text-center sm:text-left items-start">
             {/* contact us section  */}
             <div className="mb-5 leading-[25px]">
               <div className="text-5xl  font-medium font-roboto text-gray-300 my-5">Contact Us</div>
@@ -59,7 +59,7 @@ const Footer = () => {
               </Link>
             </div>
 
-            <div className="mb-5 ">
+            <div className="mb-5 leading-[25px]">
               <div className="text-5xl font-medium font-roboto text-gray-300 my-5">
                About Us
               </div>

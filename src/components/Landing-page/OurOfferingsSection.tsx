@@ -7,34 +7,32 @@ import Link from 'next/link';
 const offeringsCards = [
   {
     headingFront: 'Advance Loans',
-    headingBack: 'Advance Loans For Real-Estate',
     description: [
       {
         heading: 'How It Works?',
-        body: 'Get loans for your real estate projects by issuing debt instruments to a pool of interested patrons and fund your projects',
+        body: 'Secure funding for your real estate projects by offering debt instruments to a diverse pool of interested Patrons',
       },
     ],
     icon: '/images/altern8logo.png',
   },
   {
     headingFront: 'Fractional Ownership',
-    headingBack: 'Fractional Ownership For Real-Estate',
+
     description: [
       {
         heading: 'How It Works?',
-        body: 'Offer a portion of your high-value real estate as equity ownership to patrons who can invest in factorial units',
+        body: 'Offer a portion of your high-value Real Estate as equity ownership to patrons who can invest in Factorial Units.',
       },
     ],
     link: 'https://www.nahar.om/transactions',
     icon: '/images/altern8logo.png',
   },
   {
-    headingFront: 'Real Estate Investment Trusts(SMREIT)',
-    headingBack: 'Real Estate Investment Trusts(SMREIT)',
+    headingFront: 'Real Estate Investment Trusts (SMREIT)',
     description: [
       {
         heading: 'How It Works?',
-        body: 'Offer a portfolio of income generating and real estate assets such as shopping malls, office buildings, warehouses in the form of Real estate investment trusts',
+        body: 'Offer access to a portfolio of income-generating Real Estate assets, including shopping malls, office buildings, and warehouses, through Real Estate Investment Trusts (REITs)',
       },
     ],
     link: 'http://www.ethyx.club/',
@@ -42,11 +40,10 @@ const offeringsCards = [
   },
   {
     headingFront: 'Debentures',
-    headingBack: 'Debentures',
     description: [
       {
         heading: 'How It Works?',
-        body: 'Offer patrons secured debentures and raise capital for your real estate project',
+        body: 'Offer Patrons secured Debentures and raise capital for your Real Estate Projects.',
       },
     ],
     link: 'https://www.nahar.om/ott-media-financing',
@@ -54,11 +51,10 @@ const offeringsCards = [
   },
   {
     headingFront: 'Secured Debt',
-    headingBack: 'Secured Debt',
     description: [
       {
         heading: 'How It Works?',
-        body: 'Receive loans backed by collatoral such as land, buildings and properties',
+        body: 'Receive loans backed by collateral such as land, buildings, and properties.',
       },
     ],
     link: 'http://www.ethyx.club/',
@@ -66,11 +62,10 @@ const offeringsCards = [
   },
   {
     headingFront: 'Structured Notes',
-    headingBack: 'Structured Notes',
     description: [
       {
         heading: 'How It Works?',
-        body: 'Our customised financial products linked to real estate performance , combining debt and equity elements to offer variable returns to patrons, to offer variables returns based on property market conditions',
+        body: 'Structured notes allow Real Estate Project owners to access flexible funding options while aligning with market dynamics while offering benefits like tailored repayment structures, potential cost savings, and enhanced funding flexibility.',
       },
     ],
     link: 'https://www.nahar.om/contact',
@@ -78,11 +73,10 @@ const offeringsCards = [
   },
   {
     headingFront: 'Commercial Papers',
-    headingBack: 'Commercial Papers',
     description: [
       {
         heading: 'How It Works?',
-        body: 'Offer short term debt instruments of less than a year to finance immediate operational needs',
+        body: 'Offer short-term debt instruments of less than a year to finance immediate operational needs.',
       },
     ],
     link: 'https://www.nahar.om/contact',
@@ -91,11 +85,10 @@ const offeringsCards = [
   ,
   {
     headingFront: 'Distressed Situations Finance',
-    headingBack: 'Distressed Situations Finance',
     description: [
       {
         heading: 'How It Works?',
-        body: 'Get urgent finance over stuck projects, over leveraged or NCLT case projects with innovative financial innovations to our risk taking patrons',
+        body: 'Get urgent Finance for stuck Projects, over-leveraged, or NCLT case Projects with innovative financial solutions for our risk-taking Patrons.',
       },
     ],
     link: 'https://www.nahar.om/contact',
@@ -105,7 +98,6 @@ const offeringsCards = [
 
 interface OfferingsData {
   headingFront: string;
-  headingBack: string;
   description: {
     heading: string;
     body: string;
@@ -120,7 +112,7 @@ interface FlipAnimationCardProps {
 
 const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const { headingFront, headingBack, icon, description, link } = data;
+  const { headingFront, icon, description, link } = data;
   const image = icon || '/nahar_conscious_capital.jpg';
 
   return (
@@ -184,7 +176,7 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
             boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
           }}
         >
-          <h6 className="text-[1.50] font-medium text-center text-zinc-500">{headingBack}</h6>
+          {/* <h6 className="text-[1.50] font-medium text-center text-zinc-500">{headingBack}</h6> */}
           <div className="flex-grow overflow-auto">
             {description.map((item, index) => (
               <div key={index} className="my-2 mt-10">
@@ -243,7 +235,7 @@ function OurOfferingsSection() {
     >
       <div className="phone:w-[90%] md:w-[70%] xl:w-[76%] xxl:w-[55%] my-10 mx-auto">
         <h1 className="py-5 mb-3 font-semibold tracking-tighter text-center text-21xl lg:mb-3 text-white-font">
-          Ready to invest in Real-Estate?
+          Ready to invest in Real Estate?
         </h1>
 
         <div className="px-7">

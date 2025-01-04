@@ -240,7 +240,7 @@ export const TimelineTab = () => {
           <h1 className="text-3xl text-white font-semibold text-center">TaskList</h1>
           <AddTaskSheet />
         </div>
-        <BasicTable data={taskList} columns={taskColumns} filters={[]} needFilters={false} />
+        <BasicTable data={taskList} columns={taskColumns} filters={[]} needFilters={false} tableName="timeline_tab_table"/>
       </div>
       <Link href={`/project-verification/1?tab=funding-source`}>
 

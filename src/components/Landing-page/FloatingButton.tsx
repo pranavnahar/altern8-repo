@@ -13,8 +13,8 @@ const FloatingButton = () => {
 
     const socialLinks = [
         { name: 'WhatsApp', bg: 'bg-green-500', icon: '/icons/whatsapp.png' },
-        { name: 'LinkedIn', bg: ' bg-blue-700', icon: '/icons/linkedIn.png' },
-        { name: 'Twitter', bg: ' bg-black', icon: '/icons/twitter.png' },
+        { name: 'LinkedIn', bg: 'bg-blue-700', icon: '/icons/linkedIn.png' },
+        { name: 'Twitter', bg: 'bg-black', icon: '/icons/twitter.png' },
         { name: 'Facebook', bg: 'bg-blue-600', icon: '/icons/facebook.svg' },
         { name: 'Mail', bg: 'bg-gray-400', icon: '/mail.png' },
         // {
@@ -27,28 +27,22 @@ const FloatingButton = () => {
     ];
 
     const handleShare = (platform: string) => {
+        const shareText = "Check out this page!";
+        const linkUrl = window.location.href; 
         let shareUrl = '';
-        let shareText = process.env.NEXT_PUBLIC_DESCRIPTION;
-        let linkUrl = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
         switch (platform) {
             case 'WhatsApp':
-                shareUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText} : ${linkUrl}`)}`;
+                shareUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText} ${linkUrl}`)}`;
                 break;
             case 'LinkedIn':
-                shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-                    linkUrl as string,
-                )}`;
+                shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(linkUrl)}`;
                 break;
             case 'Twitter':
-                shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                    linkUrl as string,
-                )}&text=${encodeURIComponent(shareText as string)}`;
+                shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(linkUrl)}&text=${encodeURIComponent(shareText)}`;
                 break;
             case 'Facebook':
-                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                    linkUrl as string,
-                )}`;
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(linkUrl)}`;
                 break;
             // case 'Instagram':
             //   shareUrl = `https://www.instagram.com/`;
@@ -99,9 +93,9 @@ const FloatingButton = () => {
             {socialLinks.map((links, index) => (
                 <motion.a
                     key={index}
-                    onClick={() => handleShare(links?.name)}
+                    onClick={() => handleShare(links.name)}
                     variants={itemVariants}
-                    className={`rounded-full h-10 w-10 ${links?.bg} text-white flex items-center justify-center cursor-pointer`}
+                    className={`rounded-full h-10 w-10 ${links.bg} text-white flex items-center justify-center cursor-pointer`}
                 >
                     <img src={links?.icon} alt={links?.name} className={links?.name === "Mail" ? "object-cover w-7 h-7" : "object-center"} />
                 </motion.a>

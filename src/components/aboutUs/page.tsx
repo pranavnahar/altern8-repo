@@ -132,10 +132,6 @@ const AboutUsPage: React.FC = () => {
 
   return (
     <>
-
-
-
-
       <div className="text-background-black-font">
 
       <div className="flex  justify-between items-center ml-12 mb-4">
@@ -188,10 +184,10 @@ const AboutUsPage: React.FC = () => {
                         {advisor.name}
                       </h3>
                       <div className="mt-2 ">
-                        <p className="text-[12px] font-medium  leading-[13px] ">
+                        <p className="text-[12px] font-light leading-[13px] ">
                           {advisor.position}
                         </p>
-                        <p className="text-xs   font-light">
+                        <p className="text-xs font-light">
                           {advisor.location}
                         </p>
                       </div>

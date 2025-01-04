@@ -67,6 +67,7 @@ const TrancheBudget = ({ projectId, trancheId }: Props) => {
               columns={budgetColumns}
               filters={[]}
               needFilters={false}
+              tableName='tranche_budget_table'
             />
           </div>
         )}

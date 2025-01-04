@@ -61,6 +61,7 @@ import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
 import './globals.css';
 import RootLayoutClient from './RootLayoutClient';
+import FloatingButton from '../components/Landing-page/FloatingButton';
 
 const figtree = Figtree({ subsets: ['latin'] });
 
@@ -107,6 +108,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={figtree.className}>
         <RootLayoutClient>{children}</RootLayoutClient>
+        <FloatingButton /> 
       </body>
     </html>
   );

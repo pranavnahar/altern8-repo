@@ -152,7 +152,7 @@ const InventoryTable = (inventory: any) => {
       <div className="flex items-center justify-between text-sm">
         <h2 className="text-nowrap py-2 text-2xl tracking-tight">Inventory</h2>
       </div>
-      <BasicTable data={inventory.inventory || []} columns={InventoryColumns} filters={[]} needFilters={false} />
+      <BasicTable data={inventory.inventory || []} columns={InventoryColumns} filters={[]} needFilters={false} tableName="basic_table_inventory_view"/>
     </Card>
   );
 };
@@ -177,6 +177,7 @@ const Funding = (fundingSource: any) => {
         columns={fundingColumns}
         filters={[]}
         needFilters={false}
+        tableName="basic-table-funding-sources-overview"
       />
     </Card>
   );
@@ -186,7 +187,7 @@ const TasksSection = ({ tasks, setOpen }: any) => {
   return (
     <Card className="p-5 border-none text-white [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] mt-3">
       <div className="flex items-center justify-between pl-2 border-b-gray-100 text-2xl">Tasks</div>
-      <BasicTable data={tasks} columns={taskColumns} filters={[]} needFilters={false} />
+      <BasicTable data={tasks} columns={taskColumns} filters={[]} needFilters={false} tableName="basic-table-task-section-table"/>
     </Card>
   );
 };

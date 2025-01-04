@@ -11,13 +11,44 @@ const toTitleCase = (str: string) => {
     .join(' ');
 };
 
-export const columns: ColumnDef<any>[] = [
+export const columns = (
+  projectIds: string[],
+  setProjectIdsToFund: (projectIds: string[]) => void,
+): ColumnDef<any>[] => [
   {
     header: 'ID',
     accessorKey: 'id',
     cell: ({ getValue }) => {
       const value = getValue();
       return typeof value === 'number' ? value : '-';
+    },
+  },
+  {
+    header: 'Selected For Funding',
+    accessorKey: 'selected_for_funding',
+    cell: ({ row }) => {
+      const projectId: string = row.original.id;
+      const isChecked = projectIds.includes(projectId);
+      const handleCheckboxChange = () => {
+        let freshArray: string[];
+        if (isChecked) {
+          freshArray = projectIds.filter(prId => prId !== projectId);
+        } else {
+          freshArray = [...projectIds, projectId];
+        }
+        setProjectIdsToFund(freshArray);
+      };
+
+      //if the checkbox is already checked than uncheck it
+
+      return (
+        <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+          className="w-5  h-5 outline-none hover:cursor-pointer"
+        />
+      );
     },
   },
   {

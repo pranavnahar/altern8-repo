@@ -2,11 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../../utils/show-toasts';
 import { Button } from '../ui/button';
-import { IconChevronRight, IconPlus } from '@tabler/icons-react';
+import { IconChevronRight, IconLoader2, IconPlus } from '@tabler/icons-react';
 import { getAuthToken } from '@/utils/auth-actions';
+import { IconLoader } from '@tabler/icons-react';
+
+type OtpResponse = {
+  message: string;
+  otp_id: number;
+  is_email_verified: boolean;
+};
 
 // main return page
 const PocForm = () => {
+  const [otpState, setOtpState] = useState({ showOtpField: false, otp: '' });
+  const [otpId, setOtpId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,7 +44,6 @@ const PocForm = () => {
   const router = useRouter();
   const { showToast } = useToast();
 
-
   // handle form input for phone number and otp
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
@@ -48,7 +59,7 @@ const PocForm = () => {
   // get the POC detail from backend
   const GetPoc = async () => {
     try {
-      const token = await getAuthToken()
+      const token = await getAuthToken();
 
       let response = await fetch(`${apiUrl}/user-api/poc/`, {
         headers: {
@@ -91,6 +102,89 @@ const PocForm = () => {
   useEffect(() => {
     GetPoc();
   }, []);
+
+  const handleVerifyEmail = async () => {
+    // API call logic to send OTP can go here
+    setIsLoading(true);
+    const email = formData['email'];
+    console.log('teh email to send otp for is this: ', email);
+    try {
+      const token = await getAuthToken();
+      const response = await fetch(`${apiUrl}/surepass-api/register/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        showToast({
+          message: `Email verification failed, please retry..`,
+          type: 'error',
+        });
+        return;
+      }
+
+      const data: OtpResponse = await response.json();
+
+      if (data.is_email_verified) {
+        showToast({
+          message: `Email is already verified.`,
+          type: 'success',
+        });
+        setIsVerified(true);
+        return;
+      }
+
+      setOtpState({ ...otpState, showOtpField: true });
+      setOtpId(data.otp_id);
+      showToast({
+        message: `An OTP was sent to the email you entered, please enter that below`,
+        type: 'success',
+      });
+    } catch (error) {
+      showToast({
+        message: `An unexpected error occurred, please retry..`,
+        type: 'error',
+      });
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false); // Stop loading spinner
+    }
+  };
+
+  const handleSubmitEmailOtp = async () => {
+    // API call logic to verify OTP can go here
+    console.log('Submitted OTP:', otpState.otp);
+    // Reset OTP state or handle verified state logic
+    setIsVerified(true);
+    setOtpState({ showOtpField: false, otp: '' });
+    try {
+      const token = await getAuthToken();
+      const response = await fetch(`${apiUrl}/surepass-api/verify_otp/${otpId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email_otp: otpState.otp, email: formData['email'] }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        showToast({ message: errorData.message || 'OTP verification failed.', type: 'error' });
+        setIsVerified(false);
+      } else {
+        const data = await response.json();
+        showToast({ message: 'OTP verified successfully!', type: 'success' });
+        setIsVerified(true);
+      }
+    } catch (error) {
+      showToast({ message: 'Something went wrong. Please try again.', type: 'error' });
+    }
+  };
 
   // handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -162,7 +256,7 @@ const PocForm = () => {
       setLoadingSpinner(true);
 
       let body = newRecord;
-      const token = await getAuthToken()
+      const token = await getAuthToken();
       let response = await fetch(`${apiUrl}/user-dashboard-api/generate-otp-poc/`, {
         method: 'POST',
         headers: {
@@ -221,7 +315,7 @@ const PocForm = () => {
         phone_number: formData['phoneNumber'].trim(),
         designation: formData['designation'].trim(),
       };
-      const token = await getAuthToken()
+      const token = await getAuthToken();
       let response = await fetch(`${apiUrl}/user-dashboard-api/submit-poc/`, {
         method: 'POST',
         headers: {
@@ -290,7 +384,7 @@ const PocForm = () => {
 
     try {
       setLoadingSpinner(true);
-      const token = await getAuthToken()
+      const token = await getAuthToken();
       let body = newRecord;
       let response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-poc/`, {
         method: 'POST',
@@ -454,6 +548,35 @@ const PocForm = () => {
               />
             </div>
           </div>
+          {!isVerified && !otpState.showOtpField && (
+            <button
+              onClick={handleVerifyEmail}
+              disabled={isLoading}
+              className="px-3 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
+            >
+              {isLoading ? <IconLoader2 className="animate-spin mr-2" size={18} /> : 'Verify'}
+            </button>
+          )}
+          {!isVerified && otpState.showOtpField && (
+            <div className="mt-2">
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                value={otpState.otp}
+                onChange={e => setOtpState({ ...otpState, otp: e.target.value })}
+                className="px-0 py-1 text-gray-200 transition-colors bg-transparent border-b-2 outline-none appearance-none focus:outline-none focus:border-purple-600"
+              />
+              <button
+                onClick={handleSubmitEmailOtp}
+                className="ml-1 px-3 py-1 text-sm text-white bg-blue-500 rounded hover:bg-blue-600"
+              >
+                Submit OTP
+              </button>
+            </div>
+          )}
+          {isVerified && (
+            <div className="mt-2 text-sm text-green-500">Email has been successfully verified!</div>
+          )}
 
           {/* phone number field  */}
           <div className="flex-1 w-full">
