@@ -367,8 +367,9 @@ export const Navbar: FC = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleLogout = async () => {
+    console.log("-------Token running removal start----");
     await removeAuthCookies(); 
-    router.push('/login'); 
+    router.push('/'); 
   };
 
   return (
@@ -646,7 +647,6 @@ export const Navbar: FC = () => {
                           </div>
                         </div>
                         <Separator className="opacity-70" />
-                        <Link href="/login" className="w">
                           <Button
                             size="sm"
                             className="text-xs text-white w-full"
@@ -657,7 +657,6 @@ export const Navbar: FC = () => {
                           >
                             Sign Out
                           </Button>
-                        </Link>
                       </div>
                     </div>
                   </motion.div>
