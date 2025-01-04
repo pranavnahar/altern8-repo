@@ -168,7 +168,7 @@ const Register = ({ demo }: Props) => {
               type: 'info'
             });
 
-            router.push('/register?demo=false&step=2');
+            router.push('/register?demo=true&step=2');
 
             let data = serverMessage;
 
