@@ -1,7 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -13,6 +13,57 @@ import {
 } from '@/components/ui/dialog';
 import { DirectionAwareHover } from './direction-aware-hover';
 import teams from '../AboutUsPage/constant';
+
+
+const TypingAnimation = () => {
+  //animating taglines
+  const taglines = [
+    'Financial Acumen',
+    'Technology',
+    'Human Resources',
+    'Organizational Transformation',
+    'Innovation',
+    'Sustainability',
+    'Conscious Growth',
+    'Entrepreneurship',
+    'Transformative initiates',
+  ];
+  //
+  const textIndex = useMotionValue(0);
+  const baseText = useTransform(textIndex, latest => taglines[latest] || '');
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, latest => Math.round(latest));
+  const displayText = useTransform(rounded, latest => baseText.get().slice(0, latest));
+  const updatedThisRound = useMotionValue(true);
+
+  //useffect to trigger animation
+  useEffect(() => {
+    animate(count, 60, {
+      type: 'tween',
+      delay: 0.5,
+      duration: 1.3,
+      ease: 'easeIn',
+      repeat: Infinity,
+      repeatType: 'reverse',
+      repeatDelay: 0.1,
+      onUpdate(latest) {
+        if (updatedThisRound.get() === true && latest > 0) {
+          updatedThisRound.set(false);
+        } else if (updatedThisRound.get() === false && latest === 0) {
+          if (textIndex.get() === taglines.length - 1) {
+            textIndex.set(0);
+          } else {
+            textIndex.set(textIndex.get() + 1);
+          }
+          updatedThisRound.set(true);
+        }
+      },
+    });
+  }, []);
+
+  return <motion.div className="inline">{displayText}</motion.div>;
+};
+
 
 export function FoundersSection() {
   const cards = [
@@ -118,9 +169,7 @@ export function FoundersSection() {
                 </DialogTitle>
                 <DialogDescription className="text-gray-400 mt-4">
                   <p className="mb-4">
-                    The Team has Expertise in Financial Acumen, Technology, Human Resources,
-                    Organizational Transformation, Innovation, Sustainability, Conscious Growth,
-                    Entrepreneurship, Transformative initiates.
+                    The Team has Expertise in{' '}<b><TypingAnimation /></b>
                     <br />
                     <br />
                     The team's entrepreneurial vision has seen the successful launch and expansion
