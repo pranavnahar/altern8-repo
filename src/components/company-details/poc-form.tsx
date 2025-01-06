@@ -369,59 +369,7 @@ const PocForm = () => {
     return () => clearInterval(intervalId);
   }, [otpSent]);
 
-  const handleChangePrimaryPOC = async () => {
-    if (currentPrimaryPoc === '') {
-      showToast({
-        message: `Please select a valid poc`,
-        type: 'info',
-      });
-      return;
-    }
 
-    let newRecord = {
-      id: currentPrimaryPoc.trim(),
-    };
-
-    try {
-      setLoadingSpinner(true);
-      const token = await getAuthToken();
-      let body = newRecord;
-      let response = await fetch(`${apiUrl}/user-dashboard-api/change-primary-poc/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-
-        body: JSON.stringify(body),
-      });
-
-      if (response.ok) {
-        await response.json();
-        await GetPoc();
-        showToast({
-          message: `Primary POC updated successfully.`,
-          type: 'info',
-        });
-      } else {
-        let server_error = await response.json();
-
-        console.error('Failed to updated primary poc', server_error);
-
-        showToast({
-          message: `${server_error.message} `,
-          type: 'info',
-        });
-      }
-    } catch (error) {
-      showToast({
-        message: `Server Connection Error updating primary POC`,
-        type: 'info',
-      });
-    } finally {
-      setLoadingSpinner(false);
-    }
-  };
 
   return (
     <div className="max-w-2xl mx-auto mt-8">
@@ -467,47 +415,7 @@ const PocForm = () => {
         </table>
       </div>
 
-      {/* change primary poc  */}
-      {pocDetails.length !== 0 && (
-        <div>
-          <div className="mt-10 font-medium text-gray-200 text-base2 ">
-            Change primary point of contact:
-          </div>
-          <div className="flex py-1 my-2 ">
-            <select
-              onChange={handleSelectChange}
-              value={currentPrimaryPoc || ''}
-              name="primary poc"
-              className="w-full py-1 text-gray-100 transition-colors bg-transparent border-b-2 outline-none focus:outline-none focus:border-purple-600"
-              required
-            >
-              <option
-                className="bg-[#2c173c] text-gray-100 w-full rounded-md outline-none hover:bg-[#602b4c]"
-                value=""
-                disabled
-              >
-                Select a contact detail
-              </option>
-              {pocDetails
-                .filter(poc => !poc.is_primary) // Filter out primary accounts
-                .map((poc, index) => (
-                  <option
-                    className="bg-[#2c173c] text-gray-100 tracking-wider rounded-md outline-none hover:bg-[#602b4c]"
-                    key={index}
-                    value={poc.id}
-                  >
-                    {poc.name} - {poc.phone_number}
-                  </option>
-                ))}
-            </select>
-          </div>
-          <div className="flex justify-center pt-5">
-            <Button onClick={handleChangePrimaryPOC} size="sm" type="submit">
-              Proceed
-            </Button>
-          </div>
-        </div>
-      )}
+
 
       {/* add new poc details  */}
       {!otpSent && (
