@@ -118,7 +118,7 @@ export const transactionColumns: ColumnDef<any>[] = [
       const { accounts, otherAccounts } = useLedgerDetails();
       const allAccounts = [...accounts, ...otherAccounts];
       const account = allAccounts.find(acc => acc.id === getValue());
-      return account ? account.name : '~';
+      return account ? account.name : '-';
     },
   },
   {
@@ -128,7 +128,7 @@ export const transactionColumns: ColumnDef<any>[] = [
       const { accounts, otherAccounts } = useLedgerDetails();
       const allAccounts = [...accounts, ...otherAccounts];
       const account = allAccounts.find(acc => acc.id === getValue());
-      return account ? account.name : '~';
+      return account ? account.name : '-';
     },
   },
   {
@@ -137,6 +137,14 @@ export const transactionColumns: ColumnDef<any>[] = [
     cell: ({ getValue }) => {
       const value = getValue() as string;
       return formatINR(value);
+    },
+  },
+  {
+    header: 'Status',
+    accessorKey: 'approved',
+    cell: ({ getValue }) => {
+      const value = getValue() as boolean;
+      return value ? 'Approved' : 'Pending';
     },
   },
   {
