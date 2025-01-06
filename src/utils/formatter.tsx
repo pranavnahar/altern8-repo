@@ -1,15 +1,28 @@
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString);
-  const options: Intl.DateTimeFormatOptions = {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   };
-  return new Intl.DateTimeFormat('en-GB', options).format(date).replace(/(\d+)(st|nd|rd|th)/, '$1<sup>$2</sup>');
-};
 
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  };
+
+  const formattedDate = new Intl.DateTimeFormat('en-GB', dateOptions)
+    .format(date)
+    .replace(/(\d+)(st|nd|rd|th)/, '$1<sup>$2</sup>');
+
+  const formattedTime = new Intl.DateTimeFormat('en-GB', timeOptions).format(date);
+
+  return `${formattedDate}, ${formattedTime}`;
+};
 export const toTitleCase = (str: string) => {
-  return str.split('_')
+  return str
+    .split('_')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 };
