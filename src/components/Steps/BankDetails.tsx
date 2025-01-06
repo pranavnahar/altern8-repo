@@ -434,7 +434,7 @@ const BankDetails = ({ demo }: Props) => {
               <div className="flex justify-center items-center">
                 <button
                   onClick={handleConnectClick}
-                  className=" bg-teal-400 text-white px-4 mx-3 py-2 rounded-full transition-transform transform hover:scale-110"
+                  className="bg-[#FF5733] text-white px-6 py-3 rounded-full transition-transform transform hover:scale-105 hover:bg-[#FF4500] shadow-lg"
                   disabled={isLoading}
                 >
                   {isLoading ? '' : 'Connect Bank Accounts'}

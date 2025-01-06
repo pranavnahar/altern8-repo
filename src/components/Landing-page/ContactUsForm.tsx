@@ -14,12 +14,15 @@ interface FormState {
   company_phone_number: string;
   [key: string]: string | boolean; // For dynamic checkbox fields
   terms_agreement: boolean;
-  
+  first_name: string;
+  last_name: string;
 }
 
 const ContactUsForm = () => {
   const initialFormState: FormState = {
     company_name: '',
+    first_name: '',
+    last_name: '',
     company_email: '',
     company_query: '',
     company_phone_number: '',
@@ -96,6 +99,24 @@ const ContactUsForm = () => {
       });
       return false;
     }
+
+    if (!formData.first_name) {
+      showToast({
+        message: `Please enter your first name`,
+        type: 'info',
+      });
+      return false;
+    }
+
+    if (!formData.last_name) {
+      showToast({
+        message: `Please enter your last name`,
+        type: 'info',
+      });
+      return false;
+    }
+
+
   
     // Check if the company query is valid
     if (formData.company_query.length < 10) {
@@ -222,6 +243,32 @@ const ContactUsForm = () => {
           <h2 className="mb-5 text-5xl font-medium text-center font-roboto text-white-font">
             Contact us
           </h2>
+
+          <div className="mb-4">
+            <label className="block mb-2 text-xs text-gray-400 uppercase">First Name</label>
+            <input
+              type="text"
+              name="first_name"
+              value={formData.first_name}
+              onChange={handleInput}
+              placeholder="Enter your first name"
+              className="w-full px-2 py-1 text-sm text-gray-100 bg-transparent border-b-2 outline-none focus:border-purple-600 placeholder:text-sm"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-2 text-xs text-gray-400 uppercase">Last Name</label>
+            <input
+              type="text"
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleInput}
+              placeholder="Enter your last name"
+              className="w-full px-2 py-1 text-sm text-gray-100 bg-transparent border-b-2 outline-none focus:border-purple-600 placeholder:text-sm"
+              required
+            />
+          </div>
 
           <div className="mb-4">
             <label className="block mb-2 text-xs text-gray-400 uppercase">Company Name</label>
