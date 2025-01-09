@@ -165,12 +165,12 @@ export function FoundersSection() {
             >
               <DialogHeader>
                 <DialogTitle className="text-2xl font-bold text-gray-200">
-                  Our Founding Team's Journey
+                  Our Founding Team's Expertise
                 </DialogTitle>
                 <DialogDescription className="text-gray-400 mt-4">
                   <p className="mb-4">
-                    The Team has Expertise in{' '}<b><TypingAnimation /></b>
-                    <br />
+                    <p className="text-base">
+                    The Team has Expertise in{' '}<b><TypingAnimation /></b></p>
                     <br />
                     The team's entrepreneurial vision has seen the successful launch and expansion
                     of businesses across 32 countries, with over $700 million in transactions. Their

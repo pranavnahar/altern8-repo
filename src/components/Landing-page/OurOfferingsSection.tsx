@@ -9,7 +9,7 @@ const offeringsCards = [
     headingFront: 'Advance Loans',
     description: [
       {
-        heading: 'How It Works?',
+        // heading: 'How It Works?', //ON 9 Jan pranav sir told to remove this heading
         body: 'Secure funding for your real estate projects by offering debt instruments to a diverse pool of interested Patrons',
       },
     ],
@@ -20,7 +20,7 @@ const offeringsCards = [
 
     description: [
       {
-        heading: 'How It Works?',
+        // heading: 'How It Works?',
         body: 'Offer a portion of your high-value Real Estate as equity ownership to patrons who can invest in Factorial Units.',
       },
     ],
@@ -31,7 +31,7 @@ const offeringsCards = [
     headingFront: 'Real Estate Investment Trusts (SMREIT)',
     description: [
       {
-        heading: 'How It Works?',
+        // heading: 'How It Works?',
         body: 'Offer access to a portfolio of income-generating Real Estate assets, including shopping malls, office buildings, and warehouses, through Real Estate Investment Trusts (REITs)',
       },
     ],
@@ -42,7 +42,7 @@ const offeringsCards = [
     headingFront: 'Debentures',
     description: [
       {
-        heading: 'How It Works?',
+        // heading: 'How It Works?',
         body: 'Offer Patrons secured Debentures and raise capital for your Real Estate Projects.',
       },
     ],
@@ -53,7 +53,7 @@ const offeringsCards = [
     headingFront: 'Secured Debt',
     description: [
       {
-        heading: 'How It Works?',
+        // heading: 'How It Works?',
         body: 'Receive loans backed by collateral such as land, buildings, and properties.',
       },
     ],
@@ -64,7 +64,7 @@ const offeringsCards = [
     headingFront: 'Structured Notes',
     description: [
       {
-        heading: 'How It Works?',
+        // heading: 'How It Works?',
         body: 'Structured notes allow Real Estate Project owners to access flexible funding options while aligning with market dynamics while offering benefits like tailored repayment structures, potential cost savings, and enhanced funding flexibility.',
       },
     ],
@@ -75,7 +75,7 @@ const offeringsCards = [
     headingFront: 'Commercial Papers',
     description: [
       {
-        heading: 'How It Works?',
+        // heading: 'How It Works?',
         body: 'Offer short-term debt instruments of less than a year to finance immediate operational needs.',
       },
     ],
@@ -87,7 +87,7 @@ const offeringsCards = [
     headingFront: 'Distressed Situations Finance',
     description: [
       {
-        heading: 'How It Works?',
+        // heading: 'How It Works?',
         body: 'Get urgent Finance for stuck Projects, over-leveraged, or NCLT case Projects with innovative financial solutions for our risk-taking Patrons.',
       },
     ],
@@ -99,7 +99,7 @@ const offeringsCards = [
 interface OfferingsData {
   headingFront: string;
   description: {
-    heading: string;
+    // heading: string;
     body: string;
   }[];
   icon?: string;
@@ -180,7 +180,7 @@ const FlipAnimationCard: React.FC<FlipAnimationCardProps> = ({ data }) => {
           <div className="flex-grow overflow-auto">
             {description.map((item, index) => (
               <div key={index} className="my-2 mt-10">
-                <h6 className="font-semibold text-center">{item.heading}</h6>
+                {/* <h6 className="font-semibold text-center">{item.heading}</h6> */}
                 <p className="text-sm text-center mt-3">{item.body}</p>
               </div>
             ))}

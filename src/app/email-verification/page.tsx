@@ -1,13 +1,13 @@
-"use client";
-import React, { useState, useEffect } from "react";
+'use client';
+
+import React, { useState, useEffect, FC } from "react";
 import { useSearchParams } from "next/navigation";
 import { IconLoader2 } from "@tabler/icons-react";
 import { useToast } from "@/utils/show-toasts";
 import { Button } from "@/components/ui/button";
 import { verifyEmail, verifyOtp } from "./actions";
 
-
-const EmailVerificationPage = () => {
+const EmailVerificationPage: FC = () => {
   const searchParams = useSearchParams();
   const [emailId, setEmailId] = useState("");
   const [userName, setUserName] = useState("");
@@ -19,20 +19,23 @@ const EmailVerificationPage = () => {
   const [otp, setOtp] = useState("");
 
   useEffect(() => {
-    const emailParam = searchParams.get("emailid");
-    const userName = searchParams.get("userName");
-    const companyName = searchParams.get("companyName");
-    if (emailParam && userName && companyName) {
-      setEmailId(emailParam);
-      setCompanyName(companyName);
-      setUserName(userName);
+    // Ensure this runs only on client side
+    if (typeof window !== 'undefined') {
+      const emailParam = searchParams.get("emailid");
+      const userNameParam = searchParams.get("userName");
+      const companyNameParam = searchParams.get("companyName");
+      
+      if (emailParam && userNameParam && companyNameParam) {
+        setEmailId(emailParam);
+        setUserName(userNameParam);
+        setCompanyName(companyNameParam);
+      }
     }
   }, [searchParams]);
 
   const handleVerify = async () => {
-    setIsVerifying(true);
-
     try {
+      setIsVerifying(true);
       await verifyEmail(emailId);
       showToast({ message: "Email verification initiated. Please enter OTP.", type: "success" });
       setOtpFieldVisible(true);
@@ -42,11 +45,10 @@ const EmailVerificationPage = () => {
       setIsVerifying(false);
     }
   };
-
+  
   const handleOtpSubmit = async () => {
-    setIsRequestingOtp(true);
-
     try {
+      setIsRequestingOtp(true);
       await verifyOtp(emailId, otp);
       showToast({ message: "OTP verified successfully!", type: "success" });
     } catch (error: any) {
@@ -56,6 +58,18 @@ const EmailVerificationPage = () => {
     }
   };
 
+  // Return early if no email provided
+  if (typeof window !== 'undefined' && !emailId) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-transparent px-4">
+        <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md md:max-w-sm">
+          <h1 className="text-2xl font-bold text-center mb-6">Invalid Request</h1>
+          <p className="text-center text-gray-700">No email address provided.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-transparent px-4">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md md:max-w-sm">
@@ -64,7 +78,7 @@ const EmailVerificationPage = () => {
           {userName} from {companyName} added you as a POC, please verify your email to approve this.
         </p>
         <p className="text-gray-800 mb-6">
-          <strong>Email:</strong> <span className="select-none">{emailId || "Not provided"}</span>
+          <strong>Email:</strong> <span className="select-none">{emailId}</span>
         </p>
 
         <Button

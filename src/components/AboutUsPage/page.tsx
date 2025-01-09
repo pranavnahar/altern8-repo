@@ -163,7 +163,7 @@ const AboutUs: FC = () => {
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-100/90 mb-4">
                   About Us&#xff0d;Altern8
                 </h1>
-                <p className="text-gray-300/90 max-w-full md:max-w-96 text-xs md:text-sm px-4">
+                <p className="text-gray-100 max-w-full md:max-w-96 text-xs md:text-sm px-4">
                   Altern8 serves as the end-to-end originator and distributor of real estate assets
                   and loans, leveraging cutting-edge data science, AI/ML techniques.
                 </p>
