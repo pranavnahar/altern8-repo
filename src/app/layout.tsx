@@ -100,6 +100,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Altern8",
+    site: "https://altern8.vercel.app/",
     description: "Real Estate lending platform that connects investors with real estate projects.",
     images: [
       {
@@ -114,7 +115,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Altern8",
     description: "Real Estate lending platform that connects investors with real estate projects.",
-    url: "https://altern8.vercel.app/", // Absolute URL
+    url: "https://altern8.vercel.app", // Absolute URL
     type: "website",
     images: [
       {
@@ -127,6 +128,7 @@ export const metadata: Metadata = {
     ],
   },
 };
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
