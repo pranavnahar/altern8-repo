@@ -9,7 +9,7 @@ import { Button } from '../../../components/ui/button';
 import ChatBox from '../../../components/global/Chatbox';
 import { fetchWithAuth } from '../../../utils/fetch-with-auth';
 import { DashboardContext } from '../../../contexts/dashboard-context';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useDropzone } from 'react-dropzone';
 import { Dialog, DialogContent, DialogTrigger } from '../../../components/ui/dialog';
 import { useToast } from '@/utils/show-toasts';
@@ -320,6 +320,7 @@ export const Navbar: FC = () => {
         GetOldCredit();
         setShowGetMoreCreditBox(false);
         setIsDialogOpen(false);
+        router.push("/checkout");
       } else {
         const serverError = await response.json();
         showToast({
@@ -366,8 +367,9 @@ export const Navbar: FC = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleLogout = async () => {
+    console.log("-------Token running removal start----");
     await removeAuthCookies(); 
-    router.push('/login'); 
+    router.push('/'); 
   };
 
   return (
@@ -645,7 +647,6 @@ export const Navbar: FC = () => {
                           </div>
                         </div>
                         <Separator className="opacity-70" />
-                        <Link href="/login" className="w">
                           <Button
                             size="sm"
                             className="text-xs text-white w-full"
@@ -656,7 +657,6 @@ export const Navbar: FC = () => {
                           >
                             Sign Out
                           </Button>
-                        </Link>
                       </div>
                     </div>
                   </motion.div>

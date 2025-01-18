@@ -39,7 +39,7 @@ const fetchProjects = async (altern8_useraccess: string): Promise<ProjectsRespon
 export async function getCalendarEvents(): Promise<{ projects: Project[], error?: string }> {
   try {
     const token = await getAuthToken()
-    const response: ProjectsResponse = await fetchProjects(token)
+    const response: ProjectsResponse = await fetchProjects(token!)
     return { projects: response.project_data }
   } catch (error) {
     return { projects: [], error: "Error fetching calendar projects" }

@@ -2,61 +2,75 @@
 
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ShareMessageDialog from '../shareInstaMessageDialog';
 
 const FloatingButton = () => {
     const [isOpen, setIsOpen] = useState(true);
     const floater = useRef(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const toggleOpen = () => {
         setIsOpen(!isOpen);
     };
 
+    const toggleDialog = () => {
+        setIsDialogOpen(!isDialogOpen);
+      };
+    
+    
+    const redirectToInstagram = () => {
+        window.open('https://www.instagram.com', '_blank');
+  };
+
     const socialLinks = [
         { name: 'WhatsApp', bg: 'bg-green-500', icon: '/icons/whatsapp.png' },
-        { name: 'LinkedIn', bg: ' bg-blue-700', icon: '/icons/linkedIn.png' },
-        { name: 'Twitter', bg: ' bg-black', icon: '/icons/twitter.png' },
+        { name: 'LinkedIn', bg: 'bg-blue-700', icon: '/icons/linkedIn.png' },
+        { name: 'Twitter', bg: 'bg-black', icon: '/icons/twitter.png' },
         { name: 'Facebook', bg: 'bg-blue-600', icon: '/icons/facebook.svg' },
+        // { name: 'Mail', bg: 'bg-gray-400', icon: '/mail.png' },
         {
           name: 'Instagram',
           bg: 'bg-gradient-to-r from-purple-400 via-pink-500 to-red-500',
           icon: '/icons/instagram.png',
-
         },
+        
 
     ];
 
     const handleShare = (platform: string) => {
+        const shareText = "Check out this page!";
+        const linkUrl = window.location.href; 
         let shareUrl = '';
-        let shareText = process.env.NEXT_PUBLIC_DESCRIPTION;
-        let linkUrl = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
         switch (platform) {
             case 'WhatsApp':
-                shareUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText} : ${linkUrl}`)}`;
+                shareUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText} ${linkUrl}`)}`;
+                window.open(shareUrl, '_blank');
                 break;
             case 'LinkedIn':
-                shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-                    linkUrl as string,
-                )}`;
+                shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(linkUrl)}`;
+                window.open(shareUrl, '_blank');
                 break;
             case 'Twitter':
-                shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-                    linkUrl as string,
-                )}&text=${encodeURIComponent(shareText as string)}`;
+                shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(linkUrl)}&text=${encodeURIComponent(shareText)}`;
+                window.open(shareUrl, '_blank');
                 break;
             case 'Facebook':
-                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                    linkUrl as string,
-                )}`;
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(linkUrl)}`;
+                window.open(shareUrl, '_blank');
                 break;
             case 'Instagram':
-              shareUrl = `https://www.instagram.com/`;
+              toggleDialog();
               break;
+            // case 'Mail' : 
+            //     shareUrl = 
+            //       `mailto:?subject=Check this out!&body=${shareText}${encodeURIComponent(
+            //         linkUrl as string,
+            //     )}`
+            //     break;
             default:
                 return;
         }
-
-        window.open(shareUrl, '_blank');
     };
 
     const sidebarVariants = {
@@ -92,13 +106,15 @@ const FloatingButton = () => {
             {socialLinks.map((links, index) => (
                 <motion.a
                     key={index}
-                    onClick={() => handleShare(links?.name)}
+                    onClick={() => handleShare(links.name)}
                     variants={itemVariants}
-                    className={`rounded-full h-10 w-10 ${links?.bg} text-white flex items-center justify-center cursor-pointer`}
+                    className={`rounded-full h-10 w-10 ${links.bg} text-white flex items-center justify-center cursor-pointer`}
                 >
-                    <img src={links?.icon} alt={links?.name} className="object-center" />
+                    <img src={links?.icon} alt={links?.name} className={links?.name === "Mail" ? "object-cover w-7 h-7" : "object-center"} />
                 </motion.a>
+                
             ))}
+            <ShareMessageDialog isOpen={isDialogOpen} onClose={toggleDialog} onRedirectToInstagram={redirectToInstagram} />
         </motion.div>
     );
 };

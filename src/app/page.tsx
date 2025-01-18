@@ -12,6 +12,7 @@ import ContactUsForm from '../components/Landing-page/ContactUsForm'
 import JoinUsSection from '../components/Landing-page/JoinUsSection'
 import Footer from '../components/Landing-page/Footer'
 import FloatingButton from '../components/Landing-page/FloatingButton'
+import CTASection from '@/components/Landing-page/GetStartedCTA'
 
 
 const Page = () => {
@@ -30,7 +31,8 @@ const Page = () => {
       <ComplaintRegulated />
       <ReviewSection />
       <ContactUsForm />
-      <JoinUsSection />
+      {/* <JoinUsSection /> */}
+      <CTASection/>
       <Footer />
       <FloatingButton />
     </div>

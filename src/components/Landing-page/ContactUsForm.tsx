@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import LoadingSpinner from '../LoadingSpinner';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Button } from '../ui/button';
-import { fetchWithAuth } from '../../utils/fetch-with-auth';
 import { useToast } from '../../utils/show-toasts';
 
 interface FormState {
@@ -14,14 +13,20 @@ interface FormState {
   company_query: string;
   company_phone_number: string;
   [key: string]: string | boolean; // For dynamic checkbox fields
+  terms_agreement: boolean;
+  first_name: string;
+  last_name: string;
 }
 
 const ContactUsForm = () => {
   const initialFormState: FormState = {
     company_name: '',
+    first_name: '',
+    last_name: '',
     company_email: '',
     company_query: '',
     company_phone_number: '',
+    terms_agreement: true,
   };
 
   const choices = [
@@ -94,6 +99,24 @@ const ContactUsForm = () => {
       });
       return false;
     }
+
+    if (!formData.first_name) {
+      showToast({
+        message: `Please enter your first name`,
+        type: 'info',
+      });
+      return false;
+    }
+
+    if (!formData.last_name) {
+      showToast({
+        message: `Please enter your last name`,
+        type: 'info',
+      });
+      return false;
+    }
+
+
   
     // Check if the company query is valid
     if (formData.company_query.length < 10) {
@@ -144,6 +167,14 @@ const ContactUsForm = () => {
       });
       return false;
     }
+
+    if (!formData.terms_agreement) {
+      showToast({
+        message: `You must agree to our terms of service before submitting.`,
+        type: 'error',
+      });
+      return false;
+    }
   
     return true;
   };
@@ -161,7 +192,7 @@ const ContactUsForm = () => {
     setLoading(true);
     try {
       // console.log("test------------");
-      const response = await fetchWithAuth('/landing-page/contact-us/', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/landing-page/contact-us/`, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(formData),
@@ -212,6 +243,32 @@ const ContactUsForm = () => {
           <h2 className="mb-5 text-5xl font-medium text-center font-roboto text-white-font">
             Contact us
           </h2>
+
+          <div className="mb-4">
+            <label className="block mb-2 text-xs text-gray-400 uppercase">First Name</label>
+            <input
+              type="text"
+              name="first_name"
+              value={formData.first_name}
+              onChange={handleInput}
+              placeholder="Enter your first name"
+              className="w-full px-2 py-1 text-sm text-gray-100 bg-transparent border-b-2 outline-none focus:border-purple-600 placeholder:text-sm"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block mb-2 text-xs text-gray-400 uppercase">Last Name</label>
+            <input
+              type="text"
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleInput}
+              placeholder="Enter your last name"
+              className="w-full px-2 py-1 text-sm text-gray-100 bg-transparent border-b-2 outline-none focus:border-purple-600 placeholder:text-sm"
+              required
+            />
+          </div>
 
           <div className="mb-4">
             <label className="block mb-2 text-xs text-gray-400 uppercase">Company Name</label>
@@ -297,9 +354,9 @@ const ContactUsForm = () => {
             <div className="flex items-center space-x-2 ml-2">
               <Checkbox
                 id="terms_agreement"
-            
+                checked={formData.terms_agreement as boolean}
                 onCheckedChange={checked =>
-                  setFormData(prev => ({ ...prev, terms_agreement: checked }))
+                  setFormData(prev => ({ ...prev, terms_agreement: checked === true }))
                 }
               />
               <label htmlFor="terms_agreement" className="text-sm text-gray-400">

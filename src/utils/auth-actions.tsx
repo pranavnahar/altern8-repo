@@ -10,15 +10,21 @@ export async function getAuthToken() {
   if (!authCookie) {
     const refreshToken = cookieStore.get('altern8_userrefresh');
     if (refreshToken) {
-      const newToken = await refreshAccessToken(refreshToken.value);
+      const newToken = await refreshAccessToken(refreshToken?.value);
       if (newToken) {
+        cookieStore.set('altern8_useraccess', newToken, {
+          maxAge: 5 * 24 * 60 * 60,
+          path: '/',
+          httpOnly: true,
+          sameSite: 'lax'
+        });
         authCookie = { name: 'altern8_useraccess', value: newToken };
       }
     }
   }
 
   if (!authCookie) {
-    redirect('/login');
+    return;
   }
 
   let isValid = await validateToken(authCookie.value);
@@ -26,31 +32,38 @@ export async function getAuthToken() {
   if (!isValid) {
     const refreshToken = cookieStore.get('altern8_userrefresh');
     if (refreshToken) {
-      const newToken = await refreshAccessToken(refreshToken.value);
+      const newToken = await refreshAccessToken(refreshToken?.value);
       if (newToken) {
         isValid = await validateToken(newToken);
         if (isValid) {
+          cookieStore.set('altern8_useraccess', newToken, {
+            maxAge: 5 * 24 * 60 * 60,
+            path: '/',
+            httpOnly: true,
+            sameSite: 'lax'
+          });
           authCookie = { name: 'altern8_useraccess', value: newToken };
         }
       }
     } else {
-      redirect('/login')
+      redirect('/login');
+      return;
     }
   }
 
-  return authCookie.value;
+  return authCookie?.value;
 }
 
 export async function getRefreshToken(): Promise<string | undefined> {
-  const cookieStore = cookies()
-  const refreshToken = cookieStore.get('altern8_userrefresh')
-  return refreshToken?.value
+  const cookieStore = cookies();
+  const refreshToken = cookieStore.get('altern8_userrefresh');
+  return refreshToken?.value;
 }
 
 export async function removeAuthCookies() {
-  const cookieStore = cookies()
-  cookieStore.delete('altern8_useraccess')
-  cookieStore.delete('altern8_userrefresh')
+  const cookieStore = cookies();
+  cookieStore.delete('altern8_useraccess');
+  cookieStore.delete('altern8_userrefresh');
 }
 
 async function validateToken(token: string): Promise<boolean> {
@@ -117,9 +130,9 @@ async function refreshAccessToken(refreshToken: string): Promise<string | null> 
 }
 
 export async function checkAuthServer() {
-  const cookieStore = cookies()
-  let accessToken = cookieStore.get('altern8_useraccess')
-  const refreshToken = cookieStore.get('altern8_userrefresh')
+  const cookieStore = cookies();
+  let accessToken = cookieStore.get('altern8_useraccess');
+  const refreshToken = cookieStore.get('altern8_userrefresh');
 
   if (!refreshToken) {
     return false;
@@ -186,3 +199,23 @@ export async function getDynamicRedirectUrl() {
   return token ? "/dashboard" : "/register";
 }
 
+
+
+//Registration step separate auth token logic as getAuthToekn was redirecting...
+//even new users who visit register page for first time to login page
+export async function getRegistrationAuthToken() {
+  const cookieStore = cookies();
+  let authCookie = cookieStore.get('altern8_useraccess');
+
+  if (!authCookie) {
+    const refreshToken = cookieStore.get('altern8_userrefresh');
+    if (refreshToken) {
+      const newToken = await refreshAccessToken(refreshToken.value);
+      if (newToken) {
+        authCookie = { name: 'altern8_useraccess', value: newToken };
+      }
+    }
+  }
+
+  return authCookie?.value || null;
+}

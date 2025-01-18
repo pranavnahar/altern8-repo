@@ -12,6 +12,21 @@ const teams = [
   // { image: '/images/ketan.png', name: 'Ketan' },
   {
     image:
+      'pranav.png',
+    name: 'Pranav',
+  },
+  {
+    image:
+      '/poonam.avif',
+    name: 'Poonam',
+  },
+  {
+    image:
+      'images/ketan.png',
+    name: 'Ketan',
+  },
+  {
+    image:
       'https://static.wixstatic.com/media/72f1e4_39b0b240d24b4ffd91197ab14d69bf35~mv2.jpeg/v1/fill/w_206,h_200,fp_0.47_0.42,lg_1,q_80,enc_avif,quality_auto/vivek.jpeg',
     name: 'Vivek',
   },

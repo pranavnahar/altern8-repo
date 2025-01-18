@@ -1,7 +1,7 @@
-"use client";
-import React, { useState } from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -12,6 +12,57 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { DirectionAwareHover } from './direction-aware-hover';
+import teams from '../AboutUsPage/constant';
+
+
+const TypingAnimation = () => {
+  //animating taglines
+  const taglines = [
+    'Financial Acumen',
+    'Technology',
+    'Human Resources',
+    'Organizational Transformation',
+    'Innovation',
+    'Sustainability',
+    'Conscious Growth',
+    'Entrepreneurship',
+    'Transformative initiates',
+  ];
+  //
+  const textIndex = useMotionValue(0);
+  const baseText = useTransform(textIndex, latest => taglines[latest] || '');
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, latest => Math.round(latest));
+  const displayText = useTransform(rounded, latest => baseText.get().slice(0, latest));
+  const updatedThisRound = useMotionValue(true);
+
+  //useffect to trigger animation
+  useEffect(() => {
+    animate(count, 60, {
+      type: 'tween',
+      delay: 0.5,
+      duration: 1.3,
+      ease: 'easeIn',
+      repeat: Infinity,
+      repeatType: 'reverse',
+      repeatDelay: 0.1,
+      onUpdate(latest) {
+        if (updatedThisRound.get() === true && latest > 0) {
+          updatedThisRound.set(false);
+        } else if (updatedThisRound.get() === false && latest === 0) {
+          if (textIndex.get() === taglines.length - 1) {
+            textIndex.set(0);
+          } else {
+            textIndex.set(textIndex.get() + 1);
+          }
+          updatedThisRound.set(true);
+        }
+      },
+    });
+  }, []);
+
+  return <motion.div className="inline">{displayText}</motion.div>;
+};
 
 
 export function FoundersSection() {
@@ -61,23 +112,38 @@ export function FoundersSection() {
       }}
     >
       <div className="container mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-300">Our Founders</h2>
+        <h2 className="text-3xl font-bold text-center mb-8 ">Meet Our Team</h2>
+        <p className="text-sm font-normal text-center text-gray-400 leading-relaxed mx-auto max-w-xl">
+          A group of passionate individuals committed to pushing the boundaries of conscious
+          capitalism, blending purpose with profit, and driving positive impact in everything we do.
+        </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {cards.map(card => (
-            <div
-              key={card.title}
-              className="h-[24.5rem] relative flex items-center justify-center backdrop-brightness-90"
-            >
-              <DirectionAwareHover imageUrl={card.src}>
-                <div className="text-left">
-                  <p className="font-bold text-xl">{card.title}</p>
-                  <p className="font-normal text-sm">{card.role}</p>
-                </div>
-              </DirectionAwareHover>
+        <section className="py-16 px-14">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-8">
+            <div className="w-full text-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {teams.map((team, index) => (
+                  <div key={index} className="flex flex-col items-center">
+                    <motion.div
+                      whileHover={{ scale: 1.06 }}
+                      transition={{ duration: 0.45 }}
+                      className="flex flex-col items-center"
+                    >
+                      <img
+                        src={team.image}
+                        alt={team.name}
+                        className="object-cover w-28 h-28 rounded-full"
+                      />
+                      <h3 className="text-[13px] font-semibold text-center w-full leading-[18px] mt-2">
+                        {team.name}
+                      </h3>
+                    </motion.div>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        </section>
 
         <div className="text-center mt-12">
           <Dialog>
@@ -86,7 +152,7 @@ export function FoundersSection() {
                 variant="outline"
                 className="px-10 py-4 text-base pt-1.5 text-gray-300 border-gray-500 hover:bg-[#6e3050]/30 hover:text-white transition-colors"
               >
-                More on our Founders
+                Get to know our Founding Team
               </Button>
             </DialogTrigger>
             <DialogContent
@@ -98,37 +164,37 @@ export function FoundersSection() {
               }}
             >
               <DialogHeader>
-                <DialogTitle className="text-2xl font-bold text-gray-200">
-                  Our Founder's Journey
-                </DialogTitle>
+                {/* <DialogTitle className="text-2xl font-bold text-gray-200">
+                  Our Founding Team's Expertise
+                </DialogTitle> */}
                 <DialogDescription className="text-gray-400 mt-4">
                   <p className="mb-4">
-                    Our founding team has a proven track record in scaling successful ventures
-                    across industries:
+                  <p className="text-base font-medium">The founding team has Expertise in{' '}<b><TypingAnimation /></b></p>
                     <br />
-                    <br />
-                    <strong>Pranav</strong>: At 19, Pranav launched his first business in Oslo,
-                    expanding to 32 countries within three years before executing a profitable exit.
-                    He has been involved in transactions exceeding $700 million and led the launch
-                    of Indian operations for a €200 million carbon finance firm listed on the London
-                    Stock Exchange.
-                    <br />
-                    <br />
-                    <strong>Poonam</strong>: With extensive expertise in HR and organizational
-                    development, Poonam has implemented talent acquisition strategies, HR policies,
-                    and diversity initiatives for startups and large corporations. She co-created
-                    20+ international workshops and retreats that blend contemporary coaching with
-                    traditional practices, revolutionizing personal and professional development.
-                    <br />
-                    <br />
-                    <strong>Ketan</strong>: Ketan brings over 20 years of technology leadership
-                    experience. He developed a SaaS product generating $10 million in revenue and
-                    created fault-tolerant systems ensuring 100% uptime. His technical innovations
-                    have contributed to $42 million in total revenue, underscoring his ability to
-                    transform technology into tangible business value. <br/><br/>Together, this dynamic team's
-                    diverse expertise in business expansion, HR innovation, and technology
-                    leadership makes them uniquely equipped to drive growth and create value in
-                    their future ventures.
+                    The team's entrepreneurial vision has seen the successful launch and expansion
+                    of businesses across 32 countries, with over $700 million in transactions. Their
+                    efforts have included establishing operations for a €200 million LSE-listed
+                    carbon finance firm and leading social enterprise private equity initiatives in
+                    Asia. With a passion for conscious capitalism, they have combined modern
+                    business strategies with ancient practices, dedicating significant time to
+                    meditation and personal growth.
+                    <br /> <br />
+                    In the realm of HR and coaching, the team has extensive experience in talent
+                    acquisition, policy consulting, and fostering Diversity & Inclusion initiatives.
+                    They have created inclusive workplaces, facilitated performance appraisals for
+                    organizations of varying scales, and led over 20 workshops and retreats
+                    globally. By integrating modern coaching techniques with practices like NLP,
+                    hypnotherapy, and meditation, they address complex analytical, operational, and
+                    relational challenges effectively.
+                    <br /> <br />
+                    On the technology front, the team brings 24 years of collective expertise in
+                    developing scalable solutions, including SaaS products generating $10 million in
+                    revenue and modernizing tech platforms. They specialize in building
+                    fault-tolerant systems with 100% uptime and delivering high-traffic websites,
+                    B2B applications, and CRM systems that have collectively achieved $42 million in
+                    revenue. By leveraging technology and strategic roadmaps, they address key
+                    business challenges and capitalize on emerging opportunities while cultivating
+                    high-performing, globally distributed teams.
                   </p>
                 </DialogDescription>
               </DialogHeader>

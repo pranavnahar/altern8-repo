@@ -120,7 +120,7 @@ export function ExpandableCardDemo() {
       </AnimatePresence>
      <div >
 
-    <h2 className="text-background-black-font text-center py-8 px-4  text-[40px] font-semibold">Our Founders</h2>
+    <h2 className="text-background-black-font text-center py-8 px-4  text-[40px] font-semibold">Our Team</h2>
       <ul className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-3 items-start gap-4 px-6">
         {cards.map((card, index) => (
           <motion.div

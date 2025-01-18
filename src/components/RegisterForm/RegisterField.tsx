@@ -47,6 +47,7 @@ const Register = ({ demo }: Props) => {
     ) {
       handleConfirmButtonClick()
     }
+
   }, [userData, termsAccepted]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,9 +79,11 @@ const Register = ({ demo }: Props) => {
       router.push('/');
     } else if (direction === 'next') {
       if (demo) {
+        console.log("-----------yes i am in demo mode")
         router.push('/register?demo=true&step=2');
         return;
       } else {
+        console.log("I -------- AM -------- NOT IN DEMO MODE -------")
         const updatedRecord = {
           first_name: userData.firstName ? userData.firstName.trim() : '',
           phone_number: userData.phoneNumber ? userData.phoneNumber.trim() : '',
@@ -89,6 +92,8 @@ const Register = ({ demo }: Props) => {
           referred_by: userData.referredBy ? userData.referredBy.trim() : '',
           entity_type: currentEntity ? currentEntity.trim() : '',
         };
+
+        console.log("the entity type might or mgiht not be this", currentEntity )
 
         // password validation
         const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#:])[A-Za-z\d@$!%*?&#:]{8,}$/;
@@ -113,6 +118,8 @@ const Register = ({ demo }: Props) => {
           return;
         }
         if (!updatedRecord.entity_type) return showToast({ message: 'Select entity type', type: 'info'});
+
+        
         if (!isValidPassword) {
           showToast(
             {message: `Password must be at least 8 characters long and include at least one letter, one digit, and one special character. Allowed special characters are: @$!%*?&#:`,
@@ -161,12 +168,40 @@ const Register = ({ demo }: Props) => {
               type: 'info'
             });
 
+            router.push('/register?demo=true&step=2');
+
             let data = serverMessage;
 
             // setCookie(null, 'altern8_useraccess', data.access, {
             //   maxAge: 60 * 60,
             //   path: '/',
             // });
+
+            try {
+              const superadmin_body =  { ...updatedRecord, is_active: true };
+              console.log("relogging the api urls; ", superadmin_body)
+              const secondApiResponse = await fetch(`${process.env.NEXT_PUBLIC_SUPERADMIN_SERVER_URL}/auth-service/register/altern8/`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(superadmin_body)
+              });
+        
+              if (secondApiResponse.ok) {
+                let secondApiData = await secondApiResponse.json();
+                console.log('Second super admin API response:', secondApiData);
+              } else {
+                let secondApiError = await secondApiResponse.json();
+                console.log('Error in second super admin API call:', secondApiError);
+                showToast({
+                  message: `Error in second super admin API call: ${secondApiError.message}`,
+                  type: 'error'
+                });
+              }
+            } catch (secondError) {
+              console.error('Error in second super admin API call:', secondError);
+            }
 
             getRegistrationState();
           } else {
@@ -183,6 +218,8 @@ const Register = ({ demo }: Props) => {
               });
             }
           }
+
+
         } catch (error) {
           console.error(
             `Error submitting register form data, Error in fetching api (${currentStep}) :`,
@@ -209,15 +246,20 @@ const Register = ({ demo }: Props) => {
 
   const handleConfirmButtonClick = async () => {
     console.log('first', 1);
+    console.log("----------THE USER DATA FULL IS THIS: ", userData)
     if (
+
       userData.firstName.length &&
       userData.phoneNumber.length &&
-      userData.entityType.length &&
+      currentEntity.length &&
       userData.password.length &&
       userData.password2.length
     ) {
+      console.log("the first if blick triggered......");
+      console.log("the values are being set to this stuff: 1", userData)
       setShowConfirmationModal(true);
     } else {
+      console.log("the values are being set to this stuff: 11111", userData)
       await handleSubmission('next');
     }
   };
@@ -478,11 +520,12 @@ const Register = ({ demo }: Props) => {
                       </div>
                     </div>
                     {/* Footer */}
-                    <div className="flex items-center justify-end p-6  rounded-b">
+                    <div className="flex items-center justify-end p-6 rounded-b">
                       <div>
                         <Button
                           onClick={handleNoButtonClick}
                           size="sm"
+                          className='mr-1'
                         >
                           No
                         </Button>
