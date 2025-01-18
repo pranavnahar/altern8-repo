@@ -103,7 +103,7 @@ export const metadata: Metadata = {
     description: "Real Estate lending platform that connects investors with real estate projects.",
     images: [
       {
-        url: "https://altern8.vercel.app/altern8-user-og.png", // Absolute URL
+        url: "/altern8-user-og.png", // Absolute URL
         width: 1200,
         height: 675,
         type: "image/png",
@@ -114,11 +114,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Altern8",
     description: "Real Estate lending platform that connects investors with real estate projects.",
-    url: "https://altern8.vercel.app/altern8-user-og.png", // Absolute URL
+    url: "/altern8-user-og.png", // Absolute URL
     type: "website",
     images: [
       {
-        url: "https://altern8.vercel.app/altern8-user-og.png", // Absolute URL
+        url: "/altern8-user-og.png", // Absolute URL
         width: 1200,
         height: 675,
         type: "image/png",
