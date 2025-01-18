@@ -103,7 +103,7 @@ export const metadata: Metadata = {
     description: "Real Estate lending platform that connects investors with real estate projects.",
     images: [
       {
-        url: "/altern8-user-og.png", // Absolute URL
+        url: "https://altern8-git-ayush-pranav-nahars-projects.vercel.app/altern8-user-og.png", // Absolute URL
         width: 1200,
         height: 675,
         type: "image/png",
@@ -114,11 +114,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Altern8",
     description: "Real Estate lending platform that connects investors with real estate projects.",
-    url: "/altern8-user-og.png", // Absolute URL
+    url: "https://altern8-git-ayush-pranav-nahars-projects.vercel.app/altern8-user-og.png", // Absolute URL
     type: "website",
     images: [
       {
-        url: "/altern8-user-og.png", // Absolute URL
+        url: "https://altern8-git-ayush-pranav-nahars-projects.vercel.app/altern8-user-og.png", // Absolute URL
         width: 1200,
         height: 675,
         type: "image/png",
@@ -134,10 +134,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta property="og:title" content="Altern8" />
         <meta property="og:description" content="Explore powerful insights with Altern8." />
-        <meta property="og:image" content="https://i.ibb.co/jG5kpZR/fdb6722792c6.png" />
+        <meta property="og:image" content="https://altern8-git-ayush-pranav-nahars-projects.vercel.app/altern8-user-og.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:url" content="https://your-domain.com" />
+        <meta property="og:url" content="https://altern8.vercel.app/" />
         <meta property="og:type" content="website" />
       </head>
       <body className={figtree.className}>
