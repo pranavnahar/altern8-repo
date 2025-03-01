@@ -31,13 +31,29 @@ const Funding = (fundingSource: any) => {
       <div className="flex items-center justify-between text-sm">
         <p className="text-nowrap text-2xl">Funding Sources Overview</p>
         <Button
-          variant="default"
-          size="xs"
-          className="text-zinc-100 text-xs"
-          onClick={() => router.push("/draw/3?current_tab=Funding%20Sources")}
-        >
-          Funding Source Details
-        </Button>
+            variant="default"
+            size="xs"
+            className="text-zinc-100 text-xs"
+            onClick={() => {/* Add download logic */}}
+          >
+            Download
+          </Button>
+          <Button
+            variant="default"
+            size="xs"
+            className="text-zinc-100 text-xs"
+            onClick={() => {/* Add upload logic */}}
+          >
+            Upload
+          </Button>
+          <Button
+            variant="default"
+            size="xs"
+            className="text-zinc-100 text-xs"
+            onClick={() => router.push("/draw/3?current_tab=Funding%20Sources")}
+          >
+            Funding Source Details
+          </Button>
       </div>
       <BasicTable
         data={fundingSource.fundingSource}

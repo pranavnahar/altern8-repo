@@ -1,6 +1,8 @@
 import React from 'react';
 import { ColumnDef } from "@tanstack/react-table";
 import { CheckCircle, X, Clock, AlertCircle } from 'lucide-react';
+import { IconEdit } from '@tabler/icons-react';
+
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -12,7 +14,7 @@ const formatDate = (dateString: string) => {
   return new Intl.DateTimeFormat('en-GB', options).format(date);
 };
 
-const taskColumns: ColumnDef<any>[] = [
+const taskColumns = (onEditTimeline: (taskId: number) => void): ColumnDef<any>[] => [
   {
     header: 'ID',
     accessorKey: 'id',
@@ -69,6 +71,25 @@ const taskColumns: ColumnDef<any>[] = [
       const endDate = new Date(row.original.endDate);
       const duration = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
       return duration.toString();
+    },
+  },
+  {
+    header: 'Change Timeline Duration',
+    accessorKey: 'change_timeline_duration',
+    cell: ({ row }) => {
+      const startDate = new Date(row.original.startDate);
+      const endDate = new Date(row.original.endDate);
+      const duration = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+      
+      return (
+        <div className="flex items-center gap-2">
+          <span>{duration} days</span>
+          <IconEdit
+            className="w-4 h-4 cursor-pointer text-blue-500 hover:text-blue-700"
+            onClick={() => onEditTimeline(row.original.id)}
+          />
+        </div>
+      );
     },
   },
 ];

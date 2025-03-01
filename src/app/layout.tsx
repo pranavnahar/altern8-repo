@@ -65,47 +65,74 @@ import FloatingButton from '../components/Landing-page/FloatingButton';
 
 const figtree = Figtree({ subsets: ['latin'] });
 
+// export const metadata: Metadata = {
+//   metadataBase: new URL('https://your-domain.com'),
+//   title: {
+//     template: '%s | Altern8',
+//     default: 'Altern8 - Explore Powerful Insights',
+//   },
+//   description: 'Explore powerful insights with Altern8.',
+//   openGraph: {
+//     title: 'Altern8 - Explore Powerful Insights',
+//     description: 'Explore powerful insights with Altern8.',
+//     url: 'https://your-domain.com',
+//     type: 'website',
+//     images: [
+//       {
+//         url: 'https://i.ibb.co/jG5kpZR/fdb6722792c6.png',
+//         width: 1200,
+//         height: 630,
+//         alt: 'Altern8 Insights',
+//       },
+//     ],
+//   },
+//   twitter: {
+//     card: 'summary_large_image',
+//     title: 'Altern8 - Explore Powerful Insights',
+//     description: 'Explore powerful insights with Altern8.',
+//     images: 'https://i.ibb.co/jG5kpZR/fdb6722792c6.png',
+//   },
+// };
+
 export const metadata: Metadata = {
-  metadataBase: new URL('https://your-domain.com'),
-  title: {
-    template: '%s | Altern8',
-    default: 'Altern8 - Explore Powerful Insights',
-  },
-  description: 'Explore powerful insights with Altern8.',
-  openGraph: {
-    title: 'Altern8 - Explore Powerful Insights',
-    description: 'Explore powerful insights with Altern8.',
-    url: 'https://your-domain.com',
-    type: 'website',
+  title: "Altern8",
+  description: "Real Estate lending platform that connects investors with real estate projects.",
+  twitter: {
+    card: "summary_large_image",
+    title: "Altern8",
+    site: "https://altern8.vercel.app/",
+    description: "Real Estate lending platform that connects investors with real estate projects.",
     images: [
       {
-        url: 'https://i.ibb.co/jG5kpZR/fdb6722792c6.png',
+        url: "https://altern8-git-ayush-pranav-nahars-projects.vercel.app/altern8-user-og.png", // Absolute URL
         width: 1200,
-        height: 630,
-        alt: 'Altern8 Insights',
+        height: 675,
+        type: "image/png",
+        alt: "Altern8",
       },
     ],
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Altern8 - Explore Powerful Insights',
-    description: 'Explore powerful insights with Altern8.',
-    images: 'https://i.ibb.co/jG5kpZR/fdb6722792c6.png',
+  openGraph: {
+    title: "Altern8",
+    description: "Real Estate lending platform that connects investors with real estate projects.",
+    url: "https://altern8.vercel.app", // Absolute URL
+    type: "website",
+    images: [
+      {
+        url: "https://altern8-git-ayush-pranav-nahars-projects.vercel.app/altern8-user-og.png", // Absolute URL
+        width: 1200,
+        height: 675,
+        type: "image/png",
+        alt: "Altern8",
+      },
+    ],
   },
 };
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        <meta property="og:title" content="Altern8" />
-        <meta property="og:description" content="Explore powerful insights with Altern8." />
-        <meta property="og:image" content="https://i.ibb.co/jG5kpZR/fdb6722792c6.png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:url" content="https://your-domain.com" />
-        <meta property="og:type" content="website" />
-      </head>
       <body className={figtree.className}>
         <RootLayoutClient>{children}</RootLayoutClient>
         <FloatingButton /> 

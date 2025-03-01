@@ -12,6 +12,7 @@ import AddTaskSheet from "./AddTaskSheet";
 import taskColumns from "./columns/task-columns";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { IconEdit } from "@tabler/icons-react";
 
 export interface TaskData {
   Task: string;
@@ -105,10 +106,11 @@ export const TimelineTab = () => {
   const params = useParams();
   const projectId = Number(params.id);
   const [taskList, setTaskList] = useState<any[]>([]);
+  const [selectedTask, setSelectedTask] = useState<any>(null);
 
   useEffect(() => {
     const handleFetchTask = async () => {
-      const data: any = await fetchProjectTask(projectId)
+      // const data: any = await fetchProjectTask(projectId)
       setTaskList([
         {
           id: 1,
@@ -182,6 +184,15 @@ export const TimelineTab = () => {
     setFormUsage("edit");
   };
 
+  const handleTimelineEdit = (taskId: number) => {
+    const task = taskList.find(t => t.id === taskId);
+    if (task) {
+      setSelectedTask(task);
+      setOpen(true);
+      setFormUsage("edit");
+    }
+  };
+
   return (
     <section>
       <div className="px-5">
@@ -235,12 +246,20 @@ export const TimelineTab = () => {
         )}
       </div>
       <div className="grid w-[95%] mx-auto mt-10">
-        <div className="grid grid-cols-3">
+        <div className="flex items-center justify-between mb-4">
           <div></div>
           <h1 className="text-3xl text-white font-semibold text-center">TaskList</h1>
-          <AddTaskSheet />
+          <div className="flex gap-2">
+            <AddTaskSheet />
+            <Button variant="default" size="sm" className="text-white">
+              Download
+            </Button>
+            <Button variant="default" size="sm" className="text-white">
+              Upload
+            </Button>
+          </div>
         </div>
-        <BasicTable data={taskList} columns={taskColumns} filters={[]} needFilters={false} tableName="timeline_tab_table"/>
+        <BasicTable data={taskList}  columns={taskColumns(handleTimelineEdit)}  filters={[]} needFilters={false} tableName="timeline_tab_table"/>
       </div>
       <Link href={`/project-verification/1?tab=funding-source`}>
 

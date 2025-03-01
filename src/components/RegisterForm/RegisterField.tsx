@@ -77,162 +77,99 @@ const Register = ({ demo }: Props) => {
   const handleSubmission = async (direction?: string) => {
     if (direction !== 'next') {
       router.push('/');
-    } else if (direction === 'next') {
-      if (demo) {
-        console.log("-----------yes i am in demo mode")
+      return;
+    }
+  
+    if (demo) {
+      console.log("-----------yes I am in demo mode");
+      router.push('/register?demo=true&step=2');
+      return;
+    }
+  
+    console.log("I -------- AM -------- NOT IN DEMO MODE -------");
+  
+    const updatedRecord = {
+      first_name: userData.firstName ? userData.firstName.trim() : '',
+      phone_number: userData.phoneNumber ? userData.phoneNumber.trim() : '',
+      password: userData.password ? userData.password.trim() : '',
+      reenter_password: userData.password2 ? userData.password2.trim() : '',
+      referred_by: userData.referredBy ? userData.referredBy.trim() : '',
+      entity_type: currentEntity ? currentEntity.trim() : '',
+    };
+  
+    console.log("The entity type might or might not be this:", currentEntity);
+  
+    // Password validation
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#:])[A-Za-z\d@$!%*?&#:]{8,}$/;
+    const isValidPassword = passwordRegex.test(updatedRecord.password);
+  
+    if (updatedRecord.first_name.length < 3) {
+      showToast({ message: "Please enter a valid name", type: "info" });
+      return;
+    }
+  
+    if (updatedRecord.phone_number.length !== 10) {
+      showToast({ message: "Phone number must be a 10-digit number", type: "info" });
+      setUserData((prevUserData) => ({ ...prevUserData, phoneNumber: '' }));
+      return;
+    }
+  
+    if (!updatedRecord.entity_type) {
+      showToast({ message: "Select entity type", type: "info" });
+      return;
+    }
+  
+    if (!isValidPassword) {
+      showToast({
+        message:
+          "Password must be at least 8 characters long and include at least one letter, one digit, and one special character. Allowed special characters are: @$!%*?&#:",
+        type: "info",
+      });
+      return;
+    }
+  
+    if (updatedRecord.password !== updatedRecord.reenter_password) {
+      showToast({ message: "Both passwords should match", type: "info" });
+      return;
+    }
+  
+    if (!termsAccepted) {
+      showToast({ message: "You must accept the terms and conditions", type: "info" });
+      return;
+    }
+  
+    try {
+      setLoading(true);
+      console.log("callifng the superamdin url")
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SUPERADMIN_SERVER_URL}/auth-service/register/altern8/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedRecord),
+        }
+      );
+  
+      if (response.ok) {
+        let serverMessage = await response.json();
+        console.log("serverMessage", serverMessage);
+        showToast({ message: "Submission Successful", type: "info" });
         router.push('/register?demo=true&step=2');
-        return;
+        getRegistrationState();
       } else {
-        console.log("I -------- AM -------- NOT IN DEMO MODE -------")
-        const updatedRecord = {
-          first_name: userData.firstName ? userData.firstName.trim() : '',
-          phone_number: userData.phoneNumber ? userData.phoneNumber.trim() : '',
-          password: userData.password ? userData.password.trim() : '',
-          reenter_password: userData.password2 ? userData.password2.trim() : '',
-          referred_by: userData.referredBy ? userData.referredBy.trim() : '',
-          entity_type: currentEntity ? currentEntity.trim() : '',
-        };
-
-        console.log("the entity type might or mgiht not be this", currentEntity )
-
-        // password validation
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#:])[A-Za-z\d@$!%*?&#:]{8,}$/;
-        const isValidPassword = passwordRegex.test(updatedRecord.password);
-
-        if (updatedRecord.first_name.length < 3) {
-          showToast({
-            message: `Please enter a valid name`,
-            type: 'info'
-          });
-          return;
-        }
-        if (updatedRecord.phone_number.length !== 10) {
-          showToast({
-            message: `Phone number must be a 10-digit number`,
-            type: 'info'
-          });
-          setUserData(prevUserData => ({
-            ...prevUserData,
-            phoneNumber: '',
-          }));
-          return;
-        }
-        if (!updatedRecord.entity_type) return showToast({ message: 'Select entity type', type: 'info'});
-
-        
-        if (!isValidPassword) {
-          showToast(
-            {message: `Password must be at least 8 characters long and include at least one letter, one digit, and one special character. Allowed special characters are: @$!%*?&#:`,
-            type: 'info',
-          });
-          return;
-        }
-        if (updatedRecord.password !== updatedRecord.reenter_password) {
-          showToast({
-            message: `Both password should match`,
-            type: 'info'
-          });
-          return;
-        }
-        if (!termsAccepted) {
-          showToast({
-            message: `You must accept the terms and conditions`,
-            type :'info'
-          });
-          return;
-        }
-
-        try {
-          const body = updatedRecord;
-          setLoading(true);
-          const response = await fetch(`${apiUrl}/user-api/register/`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-          });
-
-          if (response.status === 409) {
-            showToast({
-              message: `Phone number is already registered. Please login`,
-              type: 'info'
-            });
-            setTimeout(() => {
-              router.push('/login');
-            }, 3000);
-          } else if (response.ok) {
-            let serverMessage = await response.json();
-            showToast({
-              message: `Submission Successful`,
-              type: 'info'
-            });
-
-            router.push('/register?demo=true&step=2');
-
-            let data = serverMessage;
-
-            // setCookie(null, 'altern8_useraccess', data.access, {
-            //   maxAge: 60 * 60,
-            //   path: '/',
-            // });
-
-            try {
-              const superadmin_body =  { ...updatedRecord, is_active: true };
-              console.log("relogging the api urls; ", superadmin_body)
-              const secondApiResponse = await fetch(`${process.env.NEXT_PUBLIC_SUPERADMIN_SERVER_URL}/auth-service/register/altern8/`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(superadmin_body)
-              });
-        
-              if (secondApiResponse.ok) {
-                let secondApiData = await secondApiResponse.json();
-                console.log('Second super admin API response:', secondApiData);
-              } else {
-                let secondApiError = await secondApiResponse.json();
-                console.log('Error in second super admin API call:', secondApiError);
-                showToast({
-                  message: `Error in second super admin API call: ${secondApiError.message}`,
-                  type: 'error'
-                });
-              }
-            } catch (secondError) {
-              console.error('Error in second super admin API call:', secondError);
-            }
-
-            getRegistrationState();
-          } else {
-            let server_error = await response.json();
-            showToast({
-              message: `${server_error.message.phone_number[0]}`,
-              type: 'info'
-            });
-
-            if (!server_error.message.phone_number) {
-              showToast({
-                message: `Submission Failed`,
-                type: 'info'
-              });
-            }
-          }
-
-
-        } catch (error) {
-          console.error(
-            `Error submitting register form data, Error in fetching api (${currentStep}) :`,
-            error,
-          );
-          showToast({
-            message: `Submission failed, system error!`,
-            type: 'error'
-          });
-        } finally {
-          setLoading(false);
-        }
+        let server_error = await response.json();
+        showToast({
+          message: server_error.message.phone_number
+            ? `${server_error.message.phone_number[0]}`
+            : "Submission Failed",
+          type: "info",
+        });
       }
+    } catch (error) {
+      console.error(`Error submitting register form data:`, error);
+      showToast({ message: "Submission failed, system error!", type: "error" });
+    } finally {
+      setLoading(false);
     }
   };
 
