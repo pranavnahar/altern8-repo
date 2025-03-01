@@ -187,7 +187,7 @@ const TasksSection = ({ tasks, setOpen }: any) => {
   return (
     <Card className="p-5 border-none text-white [background:linear-gradient(243.52deg,_#021457,_#19112f_31.84%,_#251431_51.79%,_#301941_64.24%,_#6e3050),_#0f1212] mt-3">
       <div className="flex items-center justify-between pl-2 border-b-gray-100 text-2xl">Tasks</div>
-      <BasicTable data={tasks} columns={taskColumns} filters={[]} needFilters={false} tableName="basic-table-task-section-table"/>
+      <BasicTable data={tasks} columns={taskColumns as any} filters={[]} needFilters={false} tableName="basic-table-task-section-table"/>
     </Card>
   );
 };
